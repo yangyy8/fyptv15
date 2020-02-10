@@ -1,0 +1,190 @@
+<template lang="html">
+<div>
+    <el-row class="ah-40">
+              <el-col :span="12">
+               <span class="yy-input-text trt"><font class="red">*</font>姓名：</span>
+                <el-input placeholder="请输入内容" size="small" clearable v-model="pd.personName"  class="yy-input-input" ></el-input>
+             </el-col>
+              <el-col :span="12">
+               <span class="yy-input-text trt">性别：</span>
+             <el-select v-model="pd.sex" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                  <el-option
+                    v-for="(item,ind) in $store.state.xb"
+                    :key="ind"
+                    :label="item.mc"
+                    :value="item.dm">
+                   </el-option>
+              </el-select>
+             </el-col>
+              <el-col :span="12">
+               <span class="yy-input-text trt" >籍贯：</span>
+                  <el-select v-model="pd.birthPlace" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                            <el-option
+                                                v-for="(item,ind) in $store.state.jg"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.dm">
+                                            </el-option>
+                    </el-select>
+             </el-col>
+              <el-col :span="12">
+               <span class="yy-input-text trt">出生日期：</span>
+                <el-date-picker 
+                                            v-model="pd.birthday" format="yyyy-MM-dd"
+                                            type="date" size="small" value-format="yyyy-MM-dd"
+                                            placeholder="选择日期" class="yy-input-input" >
+                     </el-date-picker>
+             </el-col>
+              <el-col :span="12">
+               <span class="yy-input-text trt">手机号码：</span>
+                <el-input placeholder="请输入内容" size="small" clearable v-model="pd.mobilePhone"  class="yy-input-input"></el-input>
+             </el-col>
+           
+              <el-col :span="12">
+               <span class="yy-input-text trt" >固定电话：</span>
+                <el-input placeholder="请输入内容" size="small" clearable v-model="pd.fixedPhone"  class="yy-input-input"></el-input>
+             </el-col>
+          
+               <el-col :span="24" style="text-align:center">
+                 <el-button type="success"  size="small" @click="pdsearch(pd)"> 查 询</el-button>
+                 </el-col>
+             </el-row>
+                        <el-table
+                              :data="tableData"
+                              ref="multipleTable"
+                              @row-click="clickRow"
+                              @selection-change="handleSelectionChange"
+                              >
+                            <el-table-column
+                                type="selection"
+                                width="50">
+                            </el-table-column>
+                              <el-table-column
+                                  type="index"
+                                  label="序号">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="personName"
+                                  label="姓名">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="sexName"
+                                  label="性别">
+                              </el-table-column>
+                                <el-table-column
+                                  prop="birthday"
+                                  label="出生日期">
+                              </el-table-column>
+                                <el-table-column
+                                  prop="birthPlaceName"
+                                  label="籍贯">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="orgName"
+                                  label="所属">
+                              </el-table-column>
+                             <el-table-column
+                                  prop="periodTypeName"
+                                  label="届别">
+                              </el-table-column>
+                               <el-table-column
+                                  prop="cardNumber"
+                                  label="团(界)别">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="partisanName"
+                                  label="党派">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="mobilePhone"
+                                  label="手机">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="fixedPhone"
+                                  label="固定电话">
+                              </el-table-column>
+                             <el-table-column
+                                label="代表照片">
+                                <template slot-scope="scope">
+                                    <div v-if="scope.row.photoUrl">
+                                    <el-popover placement="right" title="" trigger="hover">
+                                    <img :src="scope.row.photoUrl"  style="max-width:600px; max-height:600px;"/>
+                                    <img slot="reference" :src="scope.row.photoUrl"   width="50" height="50">
+                                    </el-popover>
+                                    </div>
+                                </template>
+                                </el-table-column>
+                  </el-table>
+              <div slot="footer" style="text-align:center;border-top:1px solid #cccccc; padding-top:10px;">
+              <el-button type="success"  size="small" @click="submit">提 交</el-button> 
+              <el-button  size="small" @click="submit(0)">取 消</el-button>           
+        </div> 
+          </div> 
+</template>
+<script>
+
+export default {
+    name:'RGZN',
+    props:['data','type','random'],
+    data(){
+        return{
+           tableData:[],
+           pd:{},
+           id:'',
+           multipleSelection:[],
+        }
+    },
+
+    mounted(){
+        this.$store.dispatch("getXb");
+        this.$store.dispatch("getJg");
+        this.getinit();
+    },
+    watch:{
+      random:function(newVal,oldVal){
+         this.getinit();
+      },
+    },
+    methods:{
+    pdchange(){},
+        getinit(){
+            this.pdsearch(this.data)
+        },
+       clickRow(row){
+        this.$refs.multipleTable.toggleRowSelection(row)
+        //  this.id=row.id;
+        //  this.$emit('ZNfatherMethod',row,this.type); 
+        },
+        handleSelectionChange(val){
+           this.multipleSelection = val;
+        },
+       pdsearch(pp){
+        //this.$set(this.pd,'personName',pp.personName)
+        this.pd=pp;
+        if(this.pd.personName==undefined || this.pd.personName=="")
+            {
+            this.$message.error("姓名不能为空！");return;
+            }   
+        this.$api.post(this.Global.aport2+'/PersonIdentifyInfoController/queryPerson',pp,
+                r =>{
+                    if(r.code==1){
+                        this.tableData=r.data;
+                    }
+           });
+       },
+       submit(t){
+           if(t!=0){
+                if(this.multipleSelection.length==0){
+                    this.$message.error("请选择一条数据！");return;
+                }else if(this.multipleSelection.length>1){
+                    this.$message.error("只能选择一条数据！");return;
+                }
+                this.$emit('ZNfatherMethod',this.multipleSelection[0],this.type); 
+           }else{
+               this.$emit('ZNfatherMethod','99',this.type); 
+           }
+       },
+    },
+}
+</script>
+
