@@ -206,14 +206,29 @@
                         </el-select> -->
                     </el-col>
                      <el-col :span="24">
-                          <span class="yy-input-text trt"><font class="red">*</font> 外线电话：</span>
+                          <span class="yy-input-text trt">部门：</span>
+                            <el-select v-model="form.subOrgId" @change="getSelectName(form.isOutContactPerson,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in cbbm"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.orgid">
+                                 </el-option>
+                     </el-select>
+                    </el-col>
+                     <el-col :span="24">
+                          <span class="yy-input-text trt"><font class="red">*</font> 职务：</span>
+                         <el-input   placeholder="请输入内容"  v-model="form.contactResponsibilityType" class="yy-input-input" maxlength="13" size="small"></el-input>
+                    </el-col>
+                     <el-col :span="24">
+                          <span class="yy-input-text trt"><font class="red">*</font> 固定电话：</span>
                          <el-input   placeholder="请输入内容" v-on:input="getZNSB" v-model="form.outsideLine" class="yy-input-input" maxlength="13" size="small"></el-input>
                     </el-col>
                      <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 手机号码：</span>
                         <el-input placeholder="请输入内容" v-on:input="getZNSB"  size="small"  clearable v-model="form.mobilePhone" maxlength="11"  class="yy-input-input" ></el-input>
                     </el-col>
-                    <el-col :span="24">
+                    <!-- <el-col :span="24">
                     <span class="yy-input-text trt">职责分类：</span>
                      <el-select v-model="form.contactResponsibilityType" @change="getSelectName(form.contactResponsibilityType,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
@@ -223,8 +238,8 @@
                                  :value="item.dm">
                           </el-option>
                      </el-select>
-                    </el-col>
-                     <el-col :span="24">
+                    </el-col> -->
+                     <!-- <el-col :span="24">
                     <span class="yy-input-text trt">对外联系人：</span>
                      <el-select v-model="form.isOutContactPerson" @change="getSelectName(form.isOutContactPerson,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -234,11 +249,11 @@
                                  :value="item.dm">
                                  </el-option>
                      </el-select>
-                    </el-col>
-                    <el-col :span="24">
+                    </el-col> -->
+                    <!-- <el-col :span="24">
                           <span class="yy-input-text trt">电子邮箱：</span>
                          <el-input  placeholder="请输入内容" v-model="form.email" class="yy-input-input" size="small"></el-input>
-                    </el-col>
+                    </el-col> -->
                 </el-row>
              </el-form>
             <div slot="footer" class="dialog-footer">
@@ -290,8 +305,7 @@ export default {
             codemc:'',
             lvl:'',
             xzqhdata:[],
-          
-            
+            cbbm:[],
         }
     },
    
@@ -399,6 +413,7 @@ export default {
                       break;
               }
                this.getxzqh('1','');
+               this.getcbbm();
                this.getList();
 
         },
@@ -555,11 +570,14 @@ export default {
             if(this.form.contactPersonName==undefined || this.form.contactPersonName==""){
                 this.$message.error("姓名不能为空！");return;
             }
+             if(this.form.contactResponsibilityType==undefined || this.form.contactResponsibilityType==""){
+                this.$message.error("职务不能为空！");return;
+            }
              if(this.form.outsideLine==undefined || this.form.outsideLine==""){
-                this.$message.error("外线电话不能为空！");return;
+                this.$message.error("固定电话不能为空！");return;
             }
              if(this.form.outsideLine.length<=4){
-                this.$message.error("外线电话不正确，请加上区号！");return;
+                this.$message.error("固定电话不正确，请加上区号！");return;
             }
             if(this.form.mobilePhone==undefined || this.form.mobilePhone==""){
                 this.$message.error("手机号码不能为空！");return;
@@ -820,6 +838,19 @@ export default {
                          break;
                  }
          },
+           //承办部门
+        getcbbm(){
+          let p={
+            "orgId":this.$store.state.orgid
+          };
+             this.$api.get(this.Global.aport1+'/org/getSubOrg',p,
+                r =>{
+                    if(r.code==1){
+                        this.cbbm=r.data;
+                      
+                    }
+                });
+        },
        
     },
 }

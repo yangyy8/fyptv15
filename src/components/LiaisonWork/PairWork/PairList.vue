@@ -68,7 +68,7 @@
                         </el-col>
                         
                         <el-col :sm="24" :md="12" :lg="8">
-                        <span class="yy-input-text"  style="min-width:160px;">代表、委员以及特约人员</span>
+                        <span class="yy-input-text"  style="min-width:160px;">代表、委员、特约人员、法院领导</span>
                         <el-select v-model="pd.courtOutsiderId"    filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input pairinput">
                          <el-option
                           v-for="(item,ind) in xmdata"

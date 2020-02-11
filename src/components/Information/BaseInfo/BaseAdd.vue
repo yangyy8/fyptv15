@@ -141,7 +141,7 @@
                                          </el-select>
                                      </el-col>
                                       <el-col :span="12" v-if="ntype!='4'">
-                                        <span class="yy-input-text">
+                                        <span class="yy-input-text" :title='label1'>
                                   <font class="red">*</font> {{label1}}
                                             </span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form1.cardNumber"  class="yy-input-input" ></el-input>
@@ -280,7 +280,7 @@
                                          </el-select>   
                                          <div style="padding-left:14%;font-size:12px; color:red;">最多只能选择2个类别</div>
                                      </el-col>                                
-                                      <el-col :span="24" >
+                                      <el-col :span="24" v-if="ntype!='3'">
                                         <span class="yy-input-text" style="width:13.5%!important"><font class="red">*</font> 单位职务</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.job"  class="yy-input-input" style="width:80%!important;"></el-input>
                                      </el-col>
@@ -2140,11 +2140,12 @@ export default {
                         this.$message.error("推荐单位不能为空!");return;
                     }
                   }
-                     if(this.form.job==undefined || this.form.job=="")
-                  {
-                      this.$message.error("单位职务不能为空!");return;
-                  }
-
+                  if(this.ntype!='3'){
+                        if(this.form.job==undefined || this.form.job=="")
+                        {
+                            this.$message.error("单位职务不能为空!");return;
+                        }
+                    }
                   if(this.pd.is5){
                        if(this.form1.reelectionNum==undefined || this.form1.reelectionNum=="")
                         {

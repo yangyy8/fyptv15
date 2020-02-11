@@ -509,6 +509,7 @@ export default {
                  this.form={};
                  this.fits=[];
                  this.bd=true;
+                 this.tb=0;
             if(t==0){
                  this.diatxt="法院要闻录入";
                  
@@ -537,8 +538,8 @@ export default {
                 r =>{
                     if(r.data.code==1){
                          this.form=r.data.data[0];
-                         console.log(this.form.courtNewsSource,'====');
                          
+                         this.fits=r.data.data[0].imageList;
                          if(this.form.courtNewsSource=='0241000001'){
                              this.bd=true;
                          }else if(this.form.courtNewsSource=='0241000002'){this.bd=false;}
