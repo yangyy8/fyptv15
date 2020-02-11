@@ -506,11 +506,12 @@ export default {
 
         },
         getCK(t){
-            if(t==0){
-                 this.diatxt="法院要闻录入";
                  this.form={};
                  this.fits=[];
                  this.bd=true;
+            if(t==0){
+                 this.diatxt="法院要闻录入";
+                 
                  this.$set(this.form,'courtNewsSource','0241000001')
             }else if(t==1){
                  this.diatxt="法院要闻修改";
@@ -536,11 +537,11 @@ export default {
                 r =>{
                     if(r.data.code==1){
                          this.form=r.data.data[0];
-                         console.log(this.form.courtNewsSourceId,'====');
+                         console.log(this.form.courtNewsSource,'====');
                          
-                         if(this.form.courtNewsSourceId=='0241000001'){
+                         if(this.form.courtNewsSource=='0241000001'){
                              this.bd=true;
-                         }else if(this.form.courtNewsSourceId=='0241000002'){this.bd=false;}
+                         }else if(this.form.courtNewsSource=='0241000002'){this.bd=false;}
                       }
                 });
           }
