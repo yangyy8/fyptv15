@@ -27,6 +27,9 @@
                                   </el-col>
                                 </el-row>
                            </el-col>
+
+
+                           
                              <el-col :span="24" v-for="(t,ind) in $store.state.jjb" :key="ind" v-if="addtype=='2'">
                                     <span class="area" @click="gopro(t.dm,'jjb',t.mc)">{{t.mc}}</span>
                            </el-col>
@@ -41,7 +44,9 @@
                         <div style="margin:20px 20px 0 20px;">共<span style="color:red"> {{count}} </span>名{{mname}}</div>
                    </el-col>
                     <el-col :span="10" style="text-align:right">
-                          <el-button type="primary"  @click="goBase()">录入</el-button>
+                          <el-button type="primary"  @click="goBase()">
+                              <span v-if="addtype=='1' || addtype=='3'">编辑</span><span v-else>录入</span>
+                            </el-button>
                           <el-button >导入</el-button>
                           <el-button @click="goseach()">查询</el-button>
                     </el-col>
