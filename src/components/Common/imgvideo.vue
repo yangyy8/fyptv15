@@ -71,7 +71,7 @@ export default {
     props:['url','type','urlErr','random'],
     data(){
         return{
-            actions:this.Global.uploads+'/FileUploadController/uploadImageData',
+            actions:this.Global.uploads+this.url,
             videoFlag: false,
             //是否显示进度条
             videoUploadPercent: "",
@@ -96,6 +96,7 @@ export default {
       this.imglist=[];
       this.list=[];
       this.result=0;
+      
       },
     },
      methods: {

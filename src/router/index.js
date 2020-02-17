@@ -97,6 +97,12 @@ export default new Router({
           component: resolve => require(['@/components/Information/BaseInfo/SpecialPerson'], resolve),
         },
         {
+          path: 'SpecialPersonDeatil',
+          name: 'SpecialPersonDeatil',
+          meta:{title:['基本信息库','特约人员详情']},
+          component: resolve => require(['@/components/Information/BaseInfo/SpecialPersonDeatil'], resolve),
+        },
+        {
           path: 'Delegation',
           name: 'Delegation',
           meta:{title:['基本信息库','代表团']},

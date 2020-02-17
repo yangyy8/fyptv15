@@ -1,79 +1,57 @@
 <template>
     <div class="personnel">
           <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-            <span> 基本信息库 <span class="mlr_10">/</span> 联络对象 
-            <span class="mlr_10">/</span>  {{cname}}</span>
-            <span class="mlr_10" v-if="xzqhmc != ''">/</span> <span v-if="xzqhmc != ''"> {{xzqhmc}}</span>
-            <span class="mlr_10" v-if="cname1 != ''">/</span><span v-if="cname1 != ''"><b>{{cname1}}</b></span>
+            <span> 基本信息库
+            <span class="mlr_10">/</span>联络对象</span>
+            <span class="mlr_10" >/</span><span ><i class="iflast">特约人员</i></span>
+            <span class="mlr_10" v-if="cname1!= ''">/</span><span v-if="cname1!= ''">{{cname1}}</span>
+            <span class="mlr_10" v-if="lbmc!= ''">/</span><span v-if="lbmc!= ''">{{lbmc}}</span>
           </div>
           <div class="content">
         <el-row>
-             <el-col :span="21" class="ptit">
+           
+             <el-col :span="18">
                <el-row >
-                   <el-col :span="16">
-                       <div class="title">{{xzqhmc}}{{title}}</div>
+                   <el-col :span="14">
+                     <div class="title"><span >{{jmc==null?'':jmc}}{{lbmc}}</span>名单</div>
+                        <div style="margin:20px 20px 0 20px;">共<span style="color:red"> {{count}} </span>名特约人员</div>
                    </el-col>
-                    <el-col :span="8" style="text-align:right">
-                          <el-button type="primary"  @click="goBase()">录入</el-button>
-                          <!-- <el-button >导入</el-button> -->
+                    <el-col :span="10" style="text-align:right">
+                          <el-button type="primary"  @click="goBase()">
+                              <span @click="goBase()">编辑</span>
+                            </el-button>
                           <el-button  @click="openfile">相关文件</el-button>
-                          <el-button @click="$router.push({name:'tyBaseList'})">查询</el-button>
+                          <el-button @click="goseach()">查询</el-button>
                     </el-col>
                </el-row>
-               <el-row  class="ah-50 pborder mt-20" v-if="qgshow">
-                 <el-col :span='8' v-for="(te,indm) in $store.state.tylb" :key="indm">
-                    <span style="font-weight:bold;cursor:pointer" @click="getline(te.dm,te.mc)"> {{te.mc}}</span>
-                    <!-- <el-row :gutter="2" style="margin-left:50px;"  v-if="te.dm=='0185000001'">
-                               <el-col :sm="24" :md="12" :lg="4" v-for="(t,inde) in tydata1" :key="inde">
-                                 <el-tooltip  placement="right" popper-class="test"  >
-                                     <div slot="content">
-                                             <el-row style="margin-top:20px;width:300px;">
-                                                  <el-col :span="24" style="border-bottom:2px #eeeeee solid;">
-                                                      <img :src="t.photoUrl==null?tximg:t.photoUrl" width="150" height="180">
-                                                  <br/><span style="font-size:20px;font-weight: bold;color: #0168B5;line-height:50px;" >{{t.personName}}</span></el-col>
-                                                   <el-col :span="24"  class="tabg">
-                                                        <el-tag v-for="(value,key) in t.tags" :key="key" style="margin:3px">{{value==null?"无":value}} </el-tag>
-                                                    </el-col>
-                                             </el-row>
-                                         </div>
-                                    <span style="color:#0168B5;cursor:pointer" @click="goto(t.pbId,t.specialPersonId)">{{t.personName}}</span>
-                               </el-tooltip>
-                           </el-col>
-                     </el-row>
-                    <el-row :gutter="2" style="margin-left:50px;"  v-if="te.dm=='0185000002'">
-                        <el-col :sm="24" :md="12" :lg="4" v-for="(t,inds) in tydata2" :key="inds" >
+               <el-row :gutter="2" class="ah-50 pdz">
+                           <el-col :sm="24" :md="12" :lg="6" v-for="(t,ind) in RYData" :key="ind">
                                  <el-tooltip  placement="right" popper-class="test">
                                      <div slot="content">
-                                             <el-row style="margin-top:20px;width:300px;">
+                                             <el-row style="margin-top:20px;width:300px">
                                                   <el-col :span="24" style="border-bottom:2px #eeeeee solid;">
-                                                      <img :src="t.photoUrl==null?tximg:t.photoUrl" width="150" height="180">
+                                                     <img :src="t.photoUrl==null?tximg:t.photoUrl" width="150" height="180">
                                                   <br/><span style="font-size:20px;font-weight: bold;color: #0168B5;line-height:50px;" >{{t.personName}}</span></el-col>
                                                    <el-col :span="24"  class="tabg">
                                                         <el-tag v-for="(value,key) in t.tags" :key="key" style="margin:3px">{{value==null?"无":value}} </el-tag>
                                                     </el-col>
                                              </el-row>
                                          </div>
-                                    <span  style="color:#0168B5;cursor:pointer" @click="goto(t.pbId,t.specialPersonId)">{{t.personName}}</span>
+                                    <span class="address" @click="goto(t)">{{t.personName}}{{getSN(t.sex,t.nationality)}}</span>
                                </el-tooltip>
-
                            </el-col>
-                    </el-row> -->
-                </el-col>
-               </el-row>
-
-                <el-row  class="ah-50 pborder mt-20" v-else>
-                 <el-col :sm="24" :md="12" :lg="6" v-for="(ts,inds) in leveldata" :key="inds">
-                     <div  v-if="jb=='sj' || jb=='ds' || jb=='xq'">
-                        <span class="address"  @click="goxj(ts.dm,'jjb',ts.mc,jb)">{{ts.mc}}</span>
-                        </div>
-                  </el-col>
                 </el-row>
              </el-col>
+             <el-col :span="6" style="padding-left:45px;">
+                     <div class="title mb-20">历届名单</div>
+                     <div v-for='(tt,ind) in $store.state.jb' :key="ind" class="ljinfo">
+                         <span @click="gopro(tt.mc,tt.dm)">{{tt.mc}}{{lbmc}}</span>
+                     </div>
+             </el-col>
         </el-row>
-           <br/>  <br/>
+          <br/>
         </div>
-
-         <el-dialog title="特约人员相关文件" :visible.sync="fileDialogVisible" width="700px">
+  <el-dialog title="特约人员相关文件" :visible.sync="fileDialogVisible" width="700px">
              <el-row class="ah-50">
                <el-col :span="24">
                   <span class="yy-input-text trt" style="width:200px;">届别：</span>
@@ -181,52 +159,60 @@
                         </el-col>
                 </el-row>
         </el-dialog>
-<el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
+  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
       <UPLOAD :url="uurl" :type="ptype" :periodType='periodType' :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
 
     </div>
 </template>
+<style>
+  .iflast{font-style: normal}
+</style>
 <script>
 import UPLOAD from "../../Common/upload"
 export default {
     components:{UPLOAD},
     data(){
+        
         return{
-          cname:'',
+          cname:'代表名单',
+          title:'代表名单',
           cname1:'',
-          cinfo:'特约人员',
-          title:'特约人员',
-          Data:[],
-          Lydata:[],
-          addtype:'1',
-          jb:'qg',
-          tydata1:[],
-          tydata2:[],
-          qgshow:false,
-          leveldata:[],
-          uurl:'/specialPerson/savepersonfile',
-          uurlErr:'',
-          num:0,
+          RYData:[],
           imgs:"",
+          count:0,
+          group:'',
+          type:'',
+          cinfo:'',
+          mc:'',
+          leveldata:[],
+          code:'',
+          codemc:'',
+          ifZx:'1',
+          tximg:require("../../../assets/img/mrt.png"),
+          lbmc:'',
+          lb:'',
+          jmc:'',
+          jblv:'',
+          jkey:'',
+          periodType:'',
+          ptype:'',
+          fileDialogVisible:false,
+          uploadDialogVisible:false,
           filedata0:[],
           filedata1:[],
           filedata2:[],
-          ptype:'',
-          tximg:require("../../../assets/img/mrt.png"),
-          fileDialogVisible:false,
-          uploadDialogVisible:false,
-          periodType:'',
-          xzqh:'',
-          xzqhmc:'',
-          lvltype:'',//级别
-        }
+          uurl:'/specialPerson/savepersonfile',
+          uurlErr:'',
+          jb:'',
+            
+       }
     },
     mounted(){
-    this.getinit(this.$route);
-     this.$store.dispatch("getTylb");
-
-     this.$store.dispatch("getJb");
+        this.$store.dispatch("getJb");
+        this.$store.dispatch("getTb");
+        this.$store.dispatch("getJjb");
+        this.getinit(this.$route);
     },
     watch:{
         $route:function(val){
@@ -235,72 +221,40 @@ export default {
     },
     methods:{
         getinit(val){
-              this.xzqhmc='';this.xzqh='';
-              this.addtype=val.query.type;
-              this.jb=val.query.jb;
-              this.qgshow=false; this.num=0;
-              switch (this.addtype) {
-                   case '1':
-                          if(this.jb=='qg'){
-                             this.lvltype="0222000001";
-                            this.qgshow=true;
-                            this.title="最高法人民法院特约人员";
-                            this.cname="特约人员";
-                            this.cname1 = "最高法人民法院特约人员";
-                            this.getry();
-                        }else if(this.jb=='sj'){
-                            // this.title="高级人民法院特约人员";
-                            this.lvltype="0222000002";
-                            this.title="省级行政区划";
-                            this.getLevel('1','');
-                            this.cname="特约人员";
-                            this.cname1 = "高级人民法院特约人员";
-                        }else if(this.jb=='ds'){
-                            // this.title="中级人民法院特约人员";
-                             this.lvltype="0222000003";
-                            this.cname="特约人员";
-                            this.cname1 = "中级人民法院特约人员";
-                            this.title="省级行政区划";
-                            this.getLevel('1','');
-                        }
-                        else if(this.jb=='xq'){
-                            // this.title="基层人民法院特约人员";
-                            this.lvltype="0222000004";
-                            this.cname="特约人员";
-                            this.cname1 = "基层人民法院特约人员";
-                            this.title="省级行政区划";
-                            this.getLevel('1','');
-                        }
-                      break;
-                  default:
-                      break;
+            this.count=0;
+            this.cname1=val.query.mc;
+            this.code=val.query.code;
+            this.codemc=val.query.codemc;
+            this.lbmc=val.query.lbmc;
+            this.lb=val.query.lb;
+            this.jmc=val.query.jmc;
+            this.jblv=val.query.jblv;
+            this.jb=val.query.jb;
+            this.jkey=val.query.jkey==null?'0156000013':val.query.jkey;
+            console.log(this.jkey,'---');
+            
+            if(this.jmc==null)
+              {
+                this.jmc=this.$store.state.jmc;
               }
-
+            this.getList(this.lb,this.code,this.jkey);
         },
-        goBase(){
-              this.$router.push({name:'BaseAdd',query:{type:'3',jb:this.jb,xzqh:this.xzqh,xzqhmc:this.xzqhmc}})
+        
+        getSN(s,n){
+            var sum="";
+          if(s=="女性" && n!="汉族" && n!=null && s!=null){
+              sum="(女，"+n+")";
+          }else{
+              if(s=='女性' && n!=null){
+                 sum="（女）";
+               }
+              if(n!="汉族" && n!=null){
+                 sum="（"+n+"）";
+               }
+           }
+           return sum;
         },
-        openfile()
-        {
-            this.periodType="";
-            this.filedata0=[];
-            this.filedata1=[];
-            this.filedata2=[];
-            this.fileDialogVisible=true;
-        },
-        getUpload(t){
-          if(this.periodType=="" || this.periodType==undefined)
-          {
-            this.$message.error("届别不能为空！");return;
-          }
-            this.ptype=t;
-            this.uploadDialogVisible=true;
-        },
-        getline(dm,mc){
-              console.log('----',dm);
-              this.$router.push({name:'SpecialPersonDeatil',query:{lb:dm,lbmc:mc,mc:this.cname1,jb:this.jb,jblv:this.lvltype,code:this.xzqh,codemc:this.xzqhmc}});
-        },
-        getFile(val){
+         getFile(val){
           this.filedata0=[];
           this.filedata1=[];
           this.filedata2=[];
@@ -344,37 +298,23 @@ export default {
                           }
                   });
         },
-        del(n){
-          this.$confirm('此操作将删除该信息, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-                }).then(() => {
-
-                      let p={
-                          'fileId':n.specialPersonRelFileId,
-                          'token':this.$store.state.token
-                        };
-                        this.$api.post(this.Global.aport1+'/specialPerson/delpersonfile',p,
-                        r =>{
-                                if(r.code==1){
-                                     this.$message({
-                                      message: r.message,
-                                      type: 'success'
-                                     });
-                                     this.getFile(this.periodType);
-                                }else{
-                                  this.$message.error(r.message);
-                                }
-                        });
-                     }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
+         getUpload(t){
+          if(this.periodType=="" || this.periodType==undefined)
+          {
+            this.$message.error("届别不能为空！");return;
+          }
+            this.ptype=t;
+            this.uploadDialogVisible=true;
         },
-            fatherMethod(data,t){
+         openfile()
+        {
+            this.periodType="";
+            this.filedata0=[];
+            this.filedata1=[];
+            this.filedata2=[];
+            this.fileDialogVisible=true;
+        },
+          fatherMethod(data,t){
 
          if(t=='0171000001')
          {
@@ -418,37 +358,20 @@ export default {
          this.getFile(this.periodType);
         this.uploadDialogVisible = false;
             },
-      goxj(d,t,mc,jb){
-            this.xzqh=d;
-            this.xzqhmc=mc;
-            if(jb=='sj'){
-                 this.getry(d);
-                 this.qgshow=true;
-                this.title="高级人民法院特约人员";
-            }else if(jb=='ds'){
-                if(this.num==2){
-                    this.getry(d);
-                   this.qgshow=true;
-                  this.title="中级人民法院特约人员";
-                }else{
-                  this.title="市级行政规划";
-                    this.getLevel('2',d);
-                }
-            }else if(jb=='xq'){
-                if(this.num==3){
-                    this.getry(d);
-                    this.qgshow=true;
-                  this.title="基层人民法院特约人员";
-                }else if(this.num==2){
-                  this.getLevel('3',d);
-                  this.title="县区行政规划";
-                }else{
-                 this.getLevel('3',d);
-                  this.title="市级行政规划";
-                }
-            }
+         getTB(l,v){
+            let p={
+                    'code':v,
+                    'level':l
+               };
+             this.$api.get(this.Global.aport4+'/service/getGroupType',p,
+              r =>{
+                   if(r.code==1){
+                     this.leveldata=r.data;
+
+                    }
+            });
         },
-      getLevel(l,v){
+        getLevel(l,v){
                let p={
                     'code':v,
                     'level':l
@@ -459,50 +382,47 @@ export default {
                                 this.num++;
                                 this.leveldata=r.data;
                           }
-
                    });
         },
-        downData(n){
-          // window.location.href=n.serverpath;
-          var alink = document.createElement("a");
-          alink.href = n.serverPath
-          alink.setAttribute('download',n.fileName)
-          document.body.appendChild(alink)
-          alink.click()
-        },
-        getry(s){
-             this.getTY('0185000001',s);
-             this.getTY('0185000002',s);
-        },
-        getTY(t,s){
-        
+        getList(dm,code,jb)
+        {
+            
+            var url="/baseinfo/listbytype";
             let p={
-                  'periodType':'0156000013',//届别
+                  'periodType':jb,//届别0156000013
                   'personType':this.Global.SPECIALPERSON,
-                  'specialType':t,
-                  'xzqh':s,
-                  'levelType':this.lvltype
+                  'specialType':dm,
+                  'xzqh':code,
+                  'levelType':this.jblv
                   
             };
-             this.$api.post(this.Global.aport1+'/baseinfo/listbytype',p,
-                r =>{
-
-                      if(r.code==1){
-                         if(t=="0185000002"){
-                             this.tydata2=r.data;
-                         }else{
-                             this.tydata1=r.data;
-                         }
-                      }
-                });
-
+            this.$api.post(this.Global.aport1+url,p,
+             r =>{
+                  this.RYData=r.data;
+                  this.count=r.data.length;
+                  this.labellist=r.data.tags;
+            });
         },
-        goto(t,n){
-            console.log(n);
-
-            this.$router.push({name:'BaseAdd',query:{type:'3',status:'1', pbid:t,reid:n}});
+        gopro(mc,dm){
+           this.$router.push({name:'SpecialPersonDeatil',query:{lb:this.lb,lbmc:this.lbmc,mc:this.cname1,jblv:this.jblv,code:this.code,codemc:this.codemc,jmc:mc,jkey:dm}});
         },
-
+        goto(t){
+            var reid=t.specialPersonId;
+          
+            this.$router.push({name:'BaseAdd',query:{type:'3',status:'1',pbid:t.pbId,reid:reid}});
+        },
+         goBase(){
+              this.$router.push({name:'BaseAdd',query:{type:'3',jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,lb:this.lb}})
+        },
+        goseach(){
+         
+              this.$router.push({name:'tyBaseList'});
+           
+        
+        },
     },
 }
 </script>
+
+
+

@@ -47,7 +47,7 @@
                           <el-button type="primary"  @click="goBase()">
                               <span v-if="addtype=='1' || addtype=='3'">编辑</span><span v-else>录入</span>
                             </el-button>
-                          <el-button >导入</el-button>
+                          <el-button @click="getDR()">导入</el-button>
                           <el-button @click="goseach()">查询</el-button>
                     </el-col>
                </el-row>
@@ -78,14 +78,18 @@
         </el-row>
           <br/>
         </div>
-
+  <el-dialog title="导入文件" :visible.sync="uploadDialogVisible"  width="630px">
+      <UPLOAD :url="uurl" :type="11"  :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
+   </el-dialog>
     </div>
 </template>
 <style>
   .iflast{font-style: normal}
 </style>
 <script>
+import UPLOAD from "../../Common/upload"
 export default {
+   components:{UPLOAD},
     data(){
         return{
           cname:'代表名单',
@@ -111,6 +115,9 @@ export default {
           tximg:require("../../../assets/img/mrt.png"),
           jkey:'',
           jmc:'',
+          uurl:'/representative/import',
+          uurlErr:'',
+          uploadDialogVisible:false,
        }
     },
     mounted(){
@@ -160,15 +167,22 @@ export default {
             return "font-weight:normal"
           }
         },
+        getDR(){
+          this.uploadDialogVisible=true;
+        },
+         fatherMethod(data,t){
+                  
+                this.uploadDialogVisible=false;
+            },
         getSN(s,n){
             var sum="";
-          if(s=="女性" && n!="汉" && n!=null && s!=null){
+          if(s=="女性" && n!="汉族" && n!=null && s!=null){
               sum="(女，"+n+")";
           }else{
               if(s=='女性' && n!=null){
                  sum="（女）";
                }
-              if(n!="汉" && n!=null){
+              if(n!="汉族" && n!=null){
                  sum="（"+n+"）";
                }
            }
@@ -211,6 +225,7 @@ export default {
                     this.ifZx = '1';
                     this.cname2 = '人大代表';
                     this.cname1 = '联络对象';
+                    this.uurl='/representative/import';
                     // console.log(jb1)
                     if(jb1=='qg'){
                       this.cname3 = '全国人大代表';
@@ -255,6 +270,7 @@ export default {
                     this.cname1 = '联络对象';
                     this.cname2 = '政协委员';
                    this.ifZx = '';
+                   this.uurl='/cppcMember/import';
                     if(jb1=='qg'){
                      
                       this.cname3 = '全国政协委员';

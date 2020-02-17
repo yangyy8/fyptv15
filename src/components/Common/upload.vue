@@ -92,6 +92,16 @@ export default {
                 });
                 return
               }
+
+              if(this.type=='11'){
+                if (this.$refs.upload.uploadFiles.length != 1){
+                this.$message({
+                  message: '此模块只能上传一个文件',
+                  type: 'warning'
+                });
+                return
+                }
+              }
                 
                 var array=this.$refs.upload.uploadFiles;
                   for (let n = 0; n < array.length; n++) {

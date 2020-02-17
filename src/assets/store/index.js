@@ -104,6 +104,7 @@ export default new Vuex.Store({
         fyywlx:[],//法院要闻类型
         fyywly:[],//法院要闻来源
         qxnbj:[],//期限内办结
+        tjdw:[],//推荐单位
       },
       mutations: {
         //state代表了最开始存放的区域，即驱动应用的数据源
@@ -411,6 +412,9 @@ export default new Vuex.Store({
         },
         getQxnbj(state,data){
           state.qxnbj = data;
+        },
+        getTjdw(state,data){
+          state.tjdw = data;
         },
       },
       actions: {
@@ -909,6 +913,12 @@ export default new Vuex.Store({
           api.get(global_.aport4 + global_.qxnbj, null,
             r => {
               context.commit('getQxnbj', ToArray(r.data))
+          })
+        },
+        getTjdw(context) {
+          api.get(global_.aport4 + global_.tjdw, null,
+            r => {
+              context.commit('getTjdw', ToArray(r.data))
           })
         },
       }

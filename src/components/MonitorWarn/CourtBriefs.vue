@@ -377,7 +377,7 @@ export default {
             openurl:'',
             shurl:'',
             fburl:'',
-            vvurl:'/courtNewsEntry/uploadImageData',
+            vvurl:'/courtNewsEntry/uploadCourtImageData',
             urlErr:'',
             diatxt:'法院要闻录入',
             tb:0,
@@ -602,7 +602,7 @@ export default {
                            this.getList(this.CurrentPage, this.pageSize, this.pd);  
                       
                       }else{
-                         this.$message.error(r.message);
+                         this.$message.error(r.data.message);
                       }
                    
                 });

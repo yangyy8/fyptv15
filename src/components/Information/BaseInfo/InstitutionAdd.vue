@@ -17,8 +17,12 @@
                             <span class="yy-input-text"><font class="red">*</font> 机构名称</span>
                             <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.mc"  class="yy-input-input" ></el-input>
                         </el-col>
+                         <el-col :sm="24" :md="12" :lg="8">
+                            <span class="yy-input-text"><font class="red">&ensp;</font> 简称</span>
+                            <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.jc"  class="yy-input-input" ></el-input>
+                        </el-col>
                          
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <!-- <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text"><font class="red">*</font> 是否部门</span>
                            <el-select v-model="pd.sfbm" :disabled="jb=='qg'|| jb=='1' ||status=='1' || ck || xzqh!=null" @change="getLWDW(pd.sfbm,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -28,7 +32,7 @@
                                  :value="item.dm">
                                  </el-option>
                             </el-select>
-                        </el-col>
+                        </el-col> -->
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text"><font class="red" v-if='pd.sfbm=="0223000002"'>*</font> 机构隶属</span>
                             <el-cascader  :disabled="ck"
@@ -40,7 +44,7 @@
                             </el-col>
                             </el-row>
                           <el-row class="lh con" :gutter="2">
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <!-- <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text"><font class="red">*</font> 级别</span>
                            <el-select v-model="pd.lvl" v-if="addtype!='7'" :disabled="pd.sfbm=='0223000002' || (pd.lvl!=null &&  pd.lvl!='') || ck || jb!=null" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -61,7 +65,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text"><font class="red">*</font> 行政区划</span>
-                            <!-- 机构隶属和是否部门 -->
+                            
                            <el-select v-model="pd.xzqh" :disabled="pd.sfbm=='0223000002' || ck || xzqh!=null" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in  xzqhlist"
@@ -70,7 +74,7 @@
                                  :value="item.dm">
                                  </el-option>
                             </el-select>
-                        </el-col>
+                        </el-col> -->
                           <el-col :sm="24" :md="12" :lg="8"  v-if="addtype=='7'">
                             <span class="yy-input-text"> 巡回法庭</span>
                            <el-select v-model="pd.xhft" :disabled="ck" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -82,7 +86,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8" v-if="addtype=='1' || addtype=='2'">
+                         <!-- <el-col :sm="24" :md="12" :lg="8" v-if="addtype=='1' || addtype=='2'">
                             <span class="yy-input-text"> 专门委员会</span>
                            <el-select v-model="pd.zmwyh" :disabled="ck || pd.sfbm=='0223000001'"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -96,11 +100,8 @@
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text"><font class="red">&ensp;</font> 编码</span>
                             <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.bm"  class="yy-input-input" ></el-input>
-                        </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text"><font class="red">&ensp;</font> 简称</span>
-                            <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.jc"  class="yy-input-input" ></el-input>
-                        </el-col>
+                        </el-col> -->
+                       
                        
                             <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text"><font class="red">&ensp;</font> 区号</span>
@@ -119,11 +120,12 @@
                             <span class="yy-input-text"><font class="red">&ensp;</font> 邮编</span>
                             <el-input placeholder="请输入内容" :disabled="ck" size="small" maxlength="6" clearable v-model="pd.yb"  class="yy-input-input" ></el-input>
                         </el-col>
-                    </el-row>
-                     <el-row class="lh con" >
-                          <el-col :sm="24" :md="12" :lg="24">
-                            <span class="yy-input-text" style="width:9%;"><font class="red">*</font> 地址</span>
-                             <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.dz"  class="yy-input-input" style="width:53.5%!important;"></el-input>
+                       
+                    <!-- </el-row>
+                     <el-row class="lh con"> -->
+                          <el-col :sm="24" :md="12" :lg="16">
+                            <span class="yy-input-text" style="width:13.5%;"><font class="red">*</font> 地址</span>
+                             <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.dz"  class="yy-input-input" style="width:80%!important;"></el-input>
                         </el-col>
                     </el-row>
                 
@@ -157,24 +159,28 @@
                             </el-table-column>
                             <el-table-column
                                 prop="outsideLine"
-                                label="外线电话">
+                                label="固定电话">
                             </el-table-column>
                             <el-table-column
                                 prop="contactResponsibilityTypeName"
                                 label="职责分类">
                             </el-table-column>
                               <el-table-column
+                                prop="position"
+                                label="职务">
+                            </el-table-column>
+                              <el-table-column
                                 prop="mobilePhone"
                                 label="手机号码">
                             </el-table-column>
-                              <el-table-column
+                              <!-- <el-table-column
                                 prop="email"
                                 label="电子邮箱">
-                            </el-table-column>
-                             <el-table-column
+                            </el-table-column> -->
+                             <!-- <el-table-column
                                 prop="isOutContactPersonName"
                                 label="是否对外联系人">
-                            </el-table-column>
+                            </el-table-column> -->
                            </el-table>
                 </div>
                 </div>
@@ -218,7 +224,7 @@
                     </el-col>
                      <el-col :span="24">
                           <span class="yy-input-text trt"><font class="red">*</font> 职务：</span>
-                         <el-input   placeholder="请输入内容"  v-model="form.contactResponsibilityType" class="yy-input-input" maxlength="13" size="small"></el-input>
+                         <el-input   placeholder="请输入内容"  v-model="form.position" class="yy-input-input" maxlength="13" size="small"></el-input>
                     </el-col>
                      <el-col :span="24">
                           <span class="yy-input-text trt"><font class="red">*</font> 固定电话：</span>
@@ -228,7 +234,7 @@
                         <span class="yy-input-text trt"><font class="red">*</font> 手机号码：</span>
                         <el-input placeholder="请输入内容" v-on:input="getZNSB"  size="small"  clearable v-model="form.mobilePhone" maxlength="11"  class="yy-input-input" ></el-input>
                     </el-col>
-                    <!-- <el-col :span="24">
+                    <el-col :span="24">
                     <span class="yy-input-text trt">职责分类：</span>
                      <el-select v-model="form.contactResponsibilityType" @change="getSelectName(form.contactResponsibilityType,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
@@ -238,7 +244,7 @@
                                  :value="item.dm">
                           </el-option>
                      </el-select>
-                    </el-col> -->
+                    </el-col>
                      <!-- <el-col :span="24">
                     <span class="yy-input-text trt">对外联系人：</span>
                      <el-select v-model="form.isOutContactPerson" @change="getSelectName(form.isOutContactPerson,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -391,7 +397,6 @@ export default {
                    case '3':
                         this.cname="统战部系统";
                         this.lb=this.Global.TZB;
-                       
                       break;
                  case '4':
                         this.cname="民主党派系统";

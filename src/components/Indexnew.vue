@@ -76,9 +76,9 @@
               <el-col :span="(this.show2 || this.show3 || this.show4 || this.show5)?(show1?12:24):0" v-if="this.show2 || this.show3 || this.show4 || this.show5">
                     <el-row v-if="show2 || show3">
                       <el-col :span="(show2 && show3)?12:(show3?0:24)">
-                          <div class="jkyj  mr-10" @click="getZX('c7529d831b0f11eaabae00155dbaef87')"> 
-                            <img  src="../assets/img/newindex/img20.png" v-if='show4 || show5' alt="监控预警">
-                           <img  src="../assets/img/newindex/img200.png" v-else alt="监控预警">
+                          <div class="llgz  mr-10" @click="getZX('c7533b751b0f11eaabae00155dbaef87')"> 
+                            <img  src="../assets/img/newindex/img40.png" v-if='show4 || show5' alt="联络工作">
+                           <img  src="../assets/img/newindex/img400.png" v-else alt="联络工作">
                           </div>
                       </el-col>
                       <el-col :span="(show2 && show3)?12:(show2?0:24)">
@@ -90,9 +90,9 @@
                     </el-row>
                     <el-row :class="(show2 || show3)?'mt-10':''" v-if="show4 || show5">
                       <el-col :span="(show4 && show5)?8:(show5?0:24)">
-                          <div class="llgz  mr-10" @click="getZX('c7533b751b0f11eaabae00155dbaef87')">
-                           <img src="../assets/img/newindex/img40.png" v-if='show2 || show3' alt="联络工作">
-                          <img src="../assets/img/newindex/img400.png" v-else alt="联络工作">
+                          <div class="jkyj  mr-10" @click="getZX('c7529d831b0f11eaabae00155dbaef87')">
+                           <img src="../assets/img/newindex/img20.png" v-if='show2 || show3' alt="监控预警">
+                          <img src="../assets/img/newindex/img200.png" v-else alt="监控预警">
                           </div>
                       </el-col>
                       <el-col :span="(show4 && show5)?16:(show4?0:24)">

@@ -2,8 +2,6 @@
     <div class="pairadd subtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 联络工作 <span class="mlr_10">/</span>  <b>联络工作信息</b></span> </div>
          <div class="content">
-             
-             
                <div class="ptitle  mb-20">联络工作信息</div>
                <div class="pborder">
                    <el-row class="ah-50">
@@ -27,7 +25,6 @@
                            <div class="yy-input-input">
                                <el-button type="primary" plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="upload()">上传文件</el-button> <span class="ts"></span>
                            </div>
-                      
                        </el-col>
                         <el-col :span="24" class="mb-20" v-if="fileList && fileList.length>0">
                             <el-table
@@ -82,7 +79,7 @@
             <br/>
          </div>
   <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="640px">
-   <UPLOAD :url="uurl" :type="0" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
+   <UPLOAD :url="uurl" :type="11" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
  
   
@@ -163,7 +160,12 @@ export default {
             }else{
                this.fileList=data;
             }
-
+                 
+                 if(this.fileList.length>0 && (this.form.theme==null || this.form.theme=='')){
+                  console.log('---',this.fileList[0].filename);
+                 this.form.theme=this.fileList[0].filename
+                 }
+                 
             this.uploadDialogVisible=false;
        },
        submit(){

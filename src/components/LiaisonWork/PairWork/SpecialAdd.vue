@@ -179,11 +179,11 @@
                             </el-table-column>
                              <el-table-column
                                 prop="inspectOrg"
-                                label="被视察单位">
+                                label="视察单位">
                             </el-table-column>
                             <el-table-column
                                 prop="inspectType"
-                                label="被视察内容">
+                                label="视察内容">
                             </el-table-column>
                               <el-table-column
                                   label="操作">
@@ -242,11 +242,11 @@
                             </el-table-column>
                              <el-table-column
                                 prop="inspectOrg"
-                                label="被调研单位">
+                                label="调研单位">
                             </el-table-column>
                              <el-table-column
                                 prop="inspectType"
-                                label="被调研内容">
+                                label="调研内容">
                             </el-table-column>
                               <el-table-column
                                   label="操作">
@@ -1769,20 +1769,20 @@ export default {
              if(t==1){ //视察列表
             
                  if(this.pd1.inspectOrgId==undefined || this.pd1.inspectOrgId==''){
-                     this.$message.error("被视察单位不能为空!");return;
+                     this.$message.error("视察单位不能为空!");return;
                  }
                  if(this.pd1.inspectTypeId==undefined || this.pd1.inspectTypeId==''){
-                     this.$message.error("被视察内容不能为空!");return;
+                     this.$message.error("视察内容不能为空!");return;
                  }
                  this.ListData1.push(val);
                
                  this.pd1={};
              }else if(t==2){
                   if(this.pd2.inspectOrgId==undefined || this.pd2.inspectOrgId==''){
-                     this.$message.error("被调研单位不能为空!");return;
+                     this.$message.error("调研单位不能为空!");return;
                  }
                  if(this.pd2.inspectTypeId==undefined || this.pd2.inspectTypeId==''){
-                     this.$message.error("被调研内容不能为空!");return;
+                     this.$message.error("调研内容不能为空!");return;
                  }
                  this.ListData2.push(val);
                

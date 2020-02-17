@@ -58,7 +58,7 @@
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" @blur="getZNSB()" clearable v-model="form.fixedPhone" maxlength="15"  class="yy-input-input" ></el-input>
                                      </el-col>
                                         <el-col :span="12" >
-                                        <span class="yy-input-text"><font class="red" v-if="ntype=='1'">*</font> 手机号码</span>
+                                        <span class="yy-input-text"><font class="red" v-if="ntype!='2'">*</font> 手机号码</span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" @blur="getZNSB()" clearable v-model="form.mobilePhone" maxlength="11"  class="yy-input-input" ></el-input>
                                      </el-col>
                                     
@@ -146,26 +146,25 @@
                                             </span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form1.cardNumber"  class="yy-input-input" ></el-input>
                                      </el-col>
-                                      <!-- <el-col :span="12" v-if="ntype=='3'">
+                                      <el-col :span="12" v-if="ntype=='3' && lbshow">
                                         <span class="yy-input-text"><font class="red">*</font>  特约职务</span>
                                           <el-select v-model="form1.specialType" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.tylb"
                                                 :key="ind"
                                                 :label="item.mc"
-
                                                 :value="item.dm">
                                             </el-option>
                                          </el-select>
-                                     </el-col> -->
+                                     </el-col>
                                     <el-col :span="12" v-if="ntype=='3'">
                                         <span class="yy-input-text"><font class="red">*</font>  推荐单位</span>
                                           <el-select v-model="form1.recommendedUnitsID" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
-                                                v-for="(item,ind) in $store.state.sydw"
+                                                v-for="(item,ind) in $store.state.tjdw"
                                                 :key="ind"
                                                 :label="item.mc"
-                                                :value="item.orgid">
+                                                :value="item.dm">
                                             </el-option>
                                          </el-select>
                                      </el-col>
@@ -280,7 +279,7 @@
                                          </el-select>   
                                          <div style="padding-left:14%;font-size:12px; color:red;">最多只能选择2个类别</div>
                                      </el-col>                                
-                                      <el-col :span="24" v-if="ntype!='3'">
+                                      <el-col :span="24">
                                         <span class="yy-input-text" style="width:13.5%!important"><font class="red">*</font> 单位职务</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.job"  class="yy-input-input" style="width:80%!important;"></el-input>
                                      </el-col>
@@ -322,6 +321,14 @@
                                     <el-col :span="12">
                                           <el-checkbox v-model="pd.is1" :disabled="ckshow">省部级以上领导</el-checkbox>
                                      </el-col>
+
+                                    <el-col :span="12">
+                                          <el-checkbox v-model="pd.is4" :disabled="ckshow">
+                                              <span v-if="ntype=='1'">在京代表</span>
+                                            <span v-if="ntype=='2'">在京委员</span>
+                                            <span v-if="ntype=='3'">在京特约人员</span>
+                                          </el-checkbox>
+                                     </el-col>
                                     <el-col :span="12">
                                           <el-checkbox v-model="pd.is5" :disabled="ckshow">
                                             <span v-if="ntype=='1'">连任代表</span>
@@ -348,13 +355,7 @@
                                      </el-col>
                                      
                                        
-                                      <el-col :span="12">
-                                          <el-checkbox v-model="pd.is4" :disabled="ckshow">
-                                              <span v-if="ntype=='1'">在京代表</span>
-                                            <span v-if="ntype=='2'">在京委员</span>
-                                            <span v-if="ntype=='3'">在京特约人员</span>
-                                          </el-checkbox>
-                                     </el-col>
+                                    
                                      
                                        
                                      
@@ -1097,6 +1098,8 @@ export default {
             hackReset:false,//标记
             psid:'',//personId
             limit:2,
+            lbshow:true,
+            lb:'',
         };
     },
     mounted()
@@ -1120,6 +1123,7 @@ export default {
         this.$store.dispatch('getZw');
         this.$store.dispatch('getTylb');
         this.$store.dispatch('getFyjb');
+        this.$store.dispatch('getTjdw');
         
         this.getinit(this.$route);
        
@@ -1204,9 +1208,7 @@ export default {
             },
 
         getLRinfo(n,t){
-          
-
-               var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
+              var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
                 if(n==2){
                   if(t==99){
                   this.$router.push({name:'CaseInfo',query:{type:'0',ctitle:"登记",baseid:baseid}});
@@ -1324,6 +1326,7 @@ export default {
                 this.state=val.query.status==null?'0':val.query.status;
                 this.xzqh=val.query.xzqh;
                 this.cname2=val.query.codemc;
+                this.lb=val.query.lb;
                 if(val.name=='BaseAdd'){
                      window.addEventListener('scroll', this.getscroll,true)
                 }
@@ -1405,6 +1408,12 @@ export default {
                             this.cname1="基层";
                             this.form1.levelType="0222000004";
                         }
+
+                        if(this.lb!=null)
+                        {
+                            this.form1.specialType=this.lb;
+                            this.lbshow=false;
+                        }
                         break;
                     case '4':
                         this.cname="人员";
@@ -1442,6 +1451,7 @@ export default {
                      
            });
           },
+         
           getZNSB(){
       
               if(this.state!="0"){
@@ -2076,10 +2086,10 @@ export default {
                 //   {
                 //       this.$message.error("固定电话不能为空!");return;
                 //   }
-                //    if((this.form.mobilePhone==undefined || this.form.mobilePhone=="") && this.ntype=='1')
-                //   {
-                //       this.$message.error("手机号码不能为空!");return;
-                //   }
+                   if((this.form.mobilePhone==undefined || this.form.mobilePhone=="") && this.ntype!='2')
+                  {
+                      this.$message.error("手机号码不能为空!");return;
+                  }
                    if(this.form1.orgId==undefined || this.form1.orgId=="")
                   {
                       this.$message.error("所属单位不能为空!");return;
@@ -2130,22 +2140,22 @@ export default {
                 //       this.$message.error("学历不能为空!");return;
                 //   }
                   if(this.ntype=='3'){
-                    // if(this.form1.specialType==undefined || this.form1.specialType=="")
-                    // {
-                    //     this.$message.error("特约职务不能为空!");return;
-                    // }
+                    if((this.form1.specialType==undefined || this.form1.specialType=="") && this.lbshow==true)
+                    {
+                        this.$message.error("特约职务不能为空!");return;
+                    }
 
                      if(this.form1.recommendedUnitsID==undefined || this.form1.recommendedUnitsID=="")
                     {
                         this.$message.error("推荐单位不能为空!");return;
                     }
                   }
-                  if(this.ntype!='3'){
+                  
                         if(this.form.job==undefined || this.form.job=="")
                         {
                             this.$message.error("单位职务不能为空!");return;
                         }
-                    }
+                    
                   if(this.pd.is5){
                        if(this.form1.reelectionNum==undefined || this.form1.reelectionNum=="")
                         {
