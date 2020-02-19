@@ -224,10 +224,10 @@ export default {
                     'pageSize':showCount
                 }
             }
-            this.$api.post(this.Global.aport1+'',p,
+            this.$api.post(this.Global.aport1+'/menu/getAllShortcutMenu',p,
                 r =>{
                       if(r.code==1){
-                         this.tableData=r.data.courtPersonList;
+                         this.tableData=r.data;
                          this.TotalResult=r.data.pageInfo.total;
                       }
                 });

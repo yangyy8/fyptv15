@@ -12,11 +12,11 @@
                           </el-col>
                            <el-col :span="24">
                            <span class="yy-input-text txtr">新密码：</span>
-                           <el-input placeholder="请输入新密码" size="small" clearable v-model="pd.newPassword"  show-password class="yy-input-input" ></el-input>
+                           <el-input placeholder="请输入新密码" size="small" clearable v-model="pd.password"  show-password class="yy-input-input" ></el-input>
                           </el-col>
                            <el-col :span="24">
                            <span class="yy-input-text txtr">确认密码：</span>
-                           <el-input placeholder="请输入确认密码" size="small" clearable v-model="pd.unnewPassword" show-password  class="yy-input-input" ></el-input>
+                           <el-input placeholder="请输入确认密码" size="small" clearable v-model="pd.confirmPwd" show-password  class="yy-input-input" ></el-input>
                           </el-col>
                        </el-row>
                   <div slot="footer" class="dialog-footer">
@@ -44,20 +44,18 @@ export default {
             if(this.pd.oldPassword==undefined || this.pd.oldPassword==""){
                 this.$message.error("旧密码不能为空！");return;
             }
-            if(this.pd.newPassword==undefined || this.pd.newPassword==""){
+            if(this.pd.password==undefined || this.pd.password==""){
                 this.$message.error("新密码不能为空！");return;
             }
-            if(this.pd.unnewPassword==undefined || this.pd.unnewPassword==""){
+            if(this.pd.confirmPwd==undefined || this.pd.confirmPwd==""){
                 this.$message.error("确认密码不能为空！");return;
             }
-             if(this.pd.unnewPassword!=this.pd.newPassword){
+             if(this.pd.confirmPwd!=this.pd.password){
                 this.$message.error("新密码跟确认密码不一致，请重新输入！");return;
             }
              
-                let p = {
-                    'password':this.pd.newPassword
-                };
-            this.$api.post(this.Global.aport1+'/user/changePwd',p,
+              
+            this.$api.post(this.Global.aport1+'/user/changePwd',this.pd,
             r=>{
                       if(r.code==1){
                          this.msg="修改成功";

@@ -141,7 +141,9 @@
               <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
             </div>
         </el-dialog>
-
+        <el-dialog title="解冻信息" :visible.sync="jdDialogVisible" width="700px">
+           
+        </el-dialog>
     </div>
  </template>
 <script>
@@ -166,6 +168,7 @@ export default {
                 label: 'label'
             },
             addDialogVisible:false,
+            jdDialogVisible:false,
             tableData:[],
             tb:0,
             rolelist:[],//角色列表
@@ -400,7 +403,7 @@ export default {
                 ff.append("use",bb);
                 ff.append("id",this.mselect);
                 let p = ff;
-                  this.$api.post(this.Global.aport4+'/user/changeUser',p,
+                  this.$api.post(this.Global.aport4+'/user/unLockUser',p,
                 r =>{
                       if(r.code==1){
                           this.$message({
@@ -461,7 +464,6 @@ export default {
                                 obj.userId=array[i].courtPersonId;
                                 obj.orgId=array[i].orgId;
                                 srr.push(obj);
-                                
                             }
            
             var url = this.Global.aport1 + '/user/reset';

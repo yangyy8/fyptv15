@@ -89,7 +89,8 @@ const fyywlx=zddz+"dic_ioex_courtnewstype";//法院要闻类型
 const fyywly=zddz+"dic_ioex_courtnewssource";//法院要闻来源
 
 const qxnbj=zddz+"dic_osbu_intimecompleteddistinguish";//期限内办结区分
-const tjdw=zddz+"dic_ioex_recommendedunits";//推荐单位
+const tyjdytjdw=zddz+"dic_ioex_supervisorrecommendedunit";//特约监督员推荐单位
+const tyzxytjdw=zddz+"dic_ioex_consultantrecommendedunit";//特邀咨询员推荐单位
 const sydw="/org/getAllOrg";//所有单位
 const fydw="/org/getCourtOrg";//法院单位
 const rddw="/org/getCourtOrg";//人大单位
@@ -126,7 +127,7 @@ export default
     ajzt,xxcz,spjg,jgydbyj,gtxs,gtxg,dfxs,dfxz,cbxs,lwlylb,xzqh,tyry,tb,jjb,dp,jbb,
     mz,xl,zylb,zmwyh,bzdr,hdlx,hdfs,tylb,zzfl,dwlxr,jg,sfbm,taywzl,yalx,cblb,cbxz,taxs,
     dflx,zdywfl,tgxs,gkqf,zdqf,scfl,xwdwfl,xwdwjb,xw,sydw,fydw,rddw,zxdw,tazz,zdaj,imgformat,
-    docformat,jgwyh,qtb,zddz,gkzt,zsqf,zszt,shqf,shzt,fbqf,fbzt,fyywlx,fyywly,qxnbj,tjdw,
+    docformat,jgwyh,qtb,zddz,gkzt,zsqf,zszt,shqf,shzt,fbqf,fbzt,fyywlx,fyywly,qxnbj,tyzxytjdw,tyjdytjdw,
     cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,
     REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL
 }

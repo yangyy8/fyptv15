@@ -45,7 +45,7 @@
                    </el-col>
                     <el-col :span="10" style="text-align:right">
                           <el-button type="primary"  @click="goBase()">
-                              <span v-if="addtype=='1' || addtype=='3'">编辑</span><span v-else>录入</span>
+                              编辑
                             </el-button>
                           <el-button @click="getDR()">导入</el-button>
                           <el-button @click="goseach()">查询</el-button>
@@ -133,6 +133,7 @@ export default {
     },
     methods:{
         getinit(val){
+            this.count=0;
             this.addtype=val.query.type;
             this.group=val.query.key;
             this.type=val.query.vv;

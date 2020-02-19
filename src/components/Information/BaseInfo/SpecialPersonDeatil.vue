@@ -20,6 +20,7 @@
                           <el-button type="primary"  @click="goBase()">
                               <span @click="goBase()">编辑</span>
                             </el-button>
+                            <el-button  @click="getDR">导入</el-button>
                           <el-button  @click="openfile">相关文件</el-button>
                           <el-button @click="goseach()">查询</el-button>
                     </el-col>
@@ -162,7 +163,9 @@
   <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
       <UPLOAD :url="uurl" :type="ptype" :periodType='periodType' :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
-
+ <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+      <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+   </el-dialog>
     </div>
 </template>
 <style>
@@ -199,11 +202,14 @@ export default {
           ptype:'',
           fileDialogVisible:false,
           uploadDialogVisible:false,
+          drDialogVisible:false,
           filedata0:[],
           filedata1:[],
           filedata2:[],
           uurl:'/specialPerson/savepersonfile',
           uurlErr:'',
+          vvurl:'/specialPerson/import',
+          vvurlErr:'',
           jb:'',
             
        }
@@ -314,6 +320,12 @@ export default {
             this.filedata2=[];
             this.fileDialogVisible=true;
         },
+        getDR(){
+            this.drDialogVisible=true;
+        },
+          drfatherMethod(data,t){
+this.drDialogVisible=false;
+          },
           fatherMethod(data,t){
 
          if(t=='0171000001')

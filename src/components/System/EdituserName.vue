@@ -8,7 +8,7 @@
                        <el-row>
                            <el-col :span="24">
                            <span class="yy-input-text txtr">新的账号：</span>
-                           <el-input placeholder="请输入旧密码" size="small" clearable v-model="pd.account"   class="yy-input-input" ></el-input>
+                           <el-input placeholder="请输入" size="small" clearable v-model="pd.account"   class="yy-input-input" ></el-input>
                           </el-col>                          
                        </el-row>
                   <div slot="footer" class="dialog-footer">

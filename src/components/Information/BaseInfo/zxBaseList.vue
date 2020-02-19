@@ -192,8 +192,8 @@
                               <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9','查看')">查看</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1','修改')">修改</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()">删除</el-button>
-                              <!-- <el-button type="primary" size="small"  >导入</el-button>
-                              <el-button type="primary"  size="small" @click="download">下载全部</el-button>
+                               <el-button type="primary" size="small"  @click="getDR">导入</el-button>
+                             <!-- <el-button type="primary"  size="small" @click="download">下载全部</el-button>
                               <el-button type="primary"  size="small" @click="download">下载当页</el-button> -->
                                 </el-col>
                               <el-col :span="10" class="trt">
@@ -265,13 +265,17 @@
 
 <br/>
          </div>
+          <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+      <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+   </el-dialog>
     </div>
 </template>
 <script>
 import {format} from '@/assets/js/date.js'
 import {ToArray,sortByKey} from '@/assets/js/ToArray.js'
+import UPLOAD from "../../Common/upload"
 export default {
-    
+     components:{UPLOAD},
     data(){
         return{
             CurrentPage: 1,
@@ -298,6 +302,9 @@ export default {
             xhftdata:[],
             activeNum:0,
             inactiveNum:0,
+            drDialogVisible:false, 
+           vvurl:'/cppcMember/import',
+           vvurlErr:'',
         }
     },
     watch:{
@@ -600,6 +607,13 @@ export default {
                 });
                        
            },
+             getDR(){
+            this.drDialogVisible=true;
+        },
+          drfatherMethod(data,t){
+            this.drDialogVisible=false;
+          },
+    
     },
 }
 </script>

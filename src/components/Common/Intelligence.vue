@@ -89,7 +89,7 @@
                               </el-table-column>
                                <el-table-column
                                   prop="cardNumber"
-                                  label="团(界)别">
+                                  label="证号">
                               </el-table-column>
                               <el-table-column
                                   prop="partisanName"

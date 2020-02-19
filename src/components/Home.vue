@@ -10,8 +10,8 @@
                     <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item command="b">修改账号</el-dropdown-item>
                     <el-dropdown-item command="a">修改密码</el-dropdown-item>
-                    <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
-                    <el-dropdown-item command="d">权限切换</el-dropdown-item>
+                    <!-- <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
+                    <el-dropdown-item command="d">权限切换</el-dropdown-item> -->
                   </el-dropdown-menu>
                 </el-dropdown> 
 

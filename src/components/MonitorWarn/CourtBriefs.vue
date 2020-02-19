@@ -332,14 +332,15 @@
    <el-dialog title="影像资料" :visible.sync="uploadDialogVisible"  width="640px">
         <VIDEONEW :url="vvurl" :type="2" :urlErr="urlErr" @DfatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEONEW>
   </el-dialog>
-  <el-dialog title="公开" :visible.sync="openDialogVisible"  width="660px">
-       <OPEN :url="openurl" :type="99" :urlErr="urlErr" @GKfatherMethod="GKfatherMethod" :random="new Date().getTime()"></OPEN>
+   <el-dialog title="公开" :visible.sync="openDialogVisible"  width="660px">
+   <OPEN :url="openurl" :type="0" :data="opendata" @GKfatherMethod="GKfatherMethod" :random="new Date().getTime()"></OPEN>
   </el-dialog>
-  <el-dialog title="审核" :visible.sync="shDialogVisible"  width="660px">
-        <EXAMINE :url="shurl" :type="99" :urlErr="urlErr" @SHfatherMethod="SHfatherMethod" :random="new Date().getTime()"></EXAMINE>
+  <el-dialog  :title="txtname" :visible.sync="shDialogVisible"  width="660px">
+   <EXAMINE :url="shurl" :type="sendtype" :data="opendata" @SHfatherMethod="SHfatherMethod" :random="new Date().getTime()"></EXAMINE>
   </el-dialog>
-    <el-dialog title="内容发布" :visible.sync="fbDialogVisible"  width="800px">
-       <RELEASE :url="fburl" :type="99" :urlErr="urlErr" @FBfatherMethod="FBfatherMethod" :random="new Date().getTime()"></RELEASE>
+ 
+  <el-dialog title="内容发布" :visible.sync="fbDialogVisible"  width="800px">
+     <RELEASE :url="fburl" :type="0"  :data="opendata" @FBfatherMethod="FBfatherMethod" :random="new Date().getTime()"></RELEASE>
   </el-dialog>
     </div>
 </template>
@@ -374,14 +375,22 @@ export default {
             fbDialogVisible:false,
             uploadDialogVisible:false,
             addDialogVisible:false,
-            openurl:'',
-            shurl:'',
-            fburl:'',
+            
             vvurl:'/courtNewsEntry/uploadCourtImageData',
             urlErr:'',
+
             diatxt:'法院要闻录入',
             tb:0,
             bd:true,
+            openurl:'/contentPublic/openContent',
+            shurl:'/contentPublic/auditContent',
+            fburl:'/contentPublic/releaseContent',
+            openDialogVisible:false,
+            shDialogVisible:false,
+            fbDialogVisible:false,
+            opendata:[],//需要传的对象
+            txtname:'审核',
+            sendtype:'0',//审核
 
         }
     },
@@ -442,7 +451,7 @@ export default {
         },
           getCheckList(){
              let p={
-                   'type':'0246000013'
+                   'type':'0246000014'
              };
               this.$api.post(this.Global.aport2+'/CaseHomeController/getCaseListInfo',p,
                 r =>{
@@ -632,15 +641,7 @@ export default {
             　})
              this.fits.splice(index,1)
        },
-        getopen(t){
-             if(t==1){
-                 this.openDialogVisible=true;
-             }else if(t==2){
-                  this.shDialogVisible=true;
-             }else if(t==3){
-                 this.fbDialogVisible=true;
-             }
-        },
+      
       getAll(n){
             if(n==1){
                 this.open=true;
@@ -649,6 +650,58 @@ export default {
                 this.open=false;
                 this.all=true;
             }
+        },
+        getopen(t){
+            if(this.multipleSelection.length==0){
+                this.$message.error("请选择至少一条数据!");return;
+            }
+            if(this.multipleSelection.length>1 && t==3){
+                this.$message.error("只能选择一条数据!");return;
+            }
+            var contentPublicList=[];
+            var array=this.multipleSelection;
+            for (let i = 0; i < array.length; i++) {
+            
+                var obj={};
+                obj.contentPublicId=array[i].courtNewsId;
+                obj.contentPublicType="0134000003";
+                switch (t) {
+                    case 1://公开
+                         obj.publicProcessType="0133000001";
+                        break;
+                    case 2://审核
+                         obj.publicProcessType="0133000002";
+                        break;
+                    case 3://发布
+                         obj.publicProcessType="0133000003";
+                        break;
+                    case 4://回收
+                         obj.publicProcessType="0133000004";
+                        break;
+                    default:
+                        break;
+                }
+             
+                contentPublicList.push(obj);
+            }
+            this.opendata=contentPublicList;
+
+             if(t==1){
+                 this.openDialogVisible=true;
+             }else if(t==2){
+                   this.txtname="审核";
+                   this.shurl="/contentPublic/auditContent";
+                   this.sendtype='0'
+                   this.shDialogVisible=true;
+             }else if(t==3){
+                 this.fbDialogVisible=true;
+             }
+             else if(t==4){
+                 this.txtname="回收";
+                 this.shurl="/contentPublic/recycleContent";
+                 this.sendtype='1'
+                 this.shDialogVisible=true;
+             }
         },
         GKfatherMethod(data,t){
             

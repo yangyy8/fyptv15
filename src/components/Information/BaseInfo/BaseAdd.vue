@@ -148,7 +148,7 @@
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='3' && lbshow">
                                         <span class="yy-input-text"><font class="red">*</font>  特约职务</span>
-                                          <el-select v-model="form1.specialType" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                          <el-select v-model="form1.specialType" @change="getTJ(form1.specialType)" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.tylb"
                                                 :key="ind"
@@ -159,13 +159,23 @@
                                      </el-col>
                                     <el-col :span="12" v-if="ntype=='3'">
                                         <span class="yy-input-text"><font class="red">*</font>  推荐单位</span>
-                                          <el-select v-model="form1.recommendedUnitsID" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                          <el-select v-model="form1.recommendedUnitsID" v-if='tjshow' :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
-                                                v-for="(item,ind) in $store.state.tjdw"
+                                                v-for="(item,ind) in $store.state.tyjdytjdw"
                                                 :key="ind"
                                                 :label="item.mc"
                                                 :value="item.dm">
                                             </el-option>
+                                           
+                                         </el-select>
+                                         <el-select v-model="form1.recommendedUnitsID" v-else :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                            <el-option
+                                                v-for="(item,ind) in $store.state.tyzxytjdw"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.dm">
+                                            </el-option>
+                                           
                                          </el-select>
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='1'">
@@ -224,28 +234,7 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                                       <el-col :span="12" v-if="ntype=='1'">
-                                        <span class="yy-input-text">结对信息</span>
-                                      <el-select v-model="form1.pairPersonId" :disabled="ckshow" filterable clearable default-first-option placeholder="请先选择所属人大"  size="small" class="yy-input-input" >
-                                            <el-option
-                                                v-for="(item,ind) in fyrydata"
-                                                :key="ind"
-                                                :label="item.fullName"
-                                                :value="item.courtPersonId">
-                                            </el-option>
-                                         </el-select>
-                                     </el-col>
-                                    <el-col :span="12" v-if="ntype!='4'">
-                                        <span class="yy-input-text">所属巡回法庭</span>
-                                        <el-select v-model="form1.circuitCourtId" :disabled="ckshow" filterable clearable default-first-option placeholder="请先选择所属单位"  size="small" class="yy-input-input" >
-                                            <el-option
-                                                v-for="(item,ind) in xhftdata"
-                                                :key="ind"
-                                                :label="item.mc"
-                                                :value="item.orgid">
-                                            </el-option>
-                                         </el-select>
-                                     </el-col>
+                                     
                                      
                                       <!-- <el-col :span="12" v-if="ntype=='4'">
                                         <span class="yy-input-text">账号</span>
@@ -279,7 +268,7 @@
                                          </el-select>   
                                          <div style="padding-left:14%;font-size:12px; color:red;">最多只能选择2个类别</div>
                                      </el-col>                                
-                                      <el-col :span="24">
+                                      <el-col :span="24" v-if='addtype!="4"'>
                                         <span class="yy-input-text" style="width:13.5%!important"><font class="red">*</font> 单位职务</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.job"  class="yy-input-input" style="width:80%!important;"></el-input>
                                      </el-col>
@@ -303,43 +292,90 @@
                                         <span class="yy-input-text" style="width:13.5%!important">关注领域</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.focusareas"  class="yy-input-input" style="width:80%!important;" ></el-input>
                                      </el-col>
-
+                                 <el-col :span="12" v-if="ntype=='1'">
+                                        <span class="yy-input-text">结对信息</span>
+                                      <el-select v-model="form1.pairPersonId" :disabled="ckshow" filterable clearable default-first-option placeholder="请先选择所属人大"  size="small" class="yy-input-input" >
+                                            <el-option
+                                                v-for="(item,ind) in fyrydata"
+                                                :key="ind"
+                                                :label="item.fullName"
+                                                :value="item.courtPersonId">
+                                            </el-option>
+                                         </el-select>
+                                     </el-col>
+                                    <el-col :span="12" v-if="ntype!='4'">
+                                        <span class="yy-input-text">所属巡回法庭</span>
+                                        <el-select v-model="form1.circuitCourtId" :disabled="ckshow" filterable clearable default-first-option placeholder="请先选择所属单位"  size="small" class="yy-input-input" >
+                                            <el-option
+                                                v-for="(item,ind) in xhftdata"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.orgid">
+                                            </el-option>
+                                         </el-select>
+                                     </el-col>
                                      </el-row>
                                       <el-row :gutter="2" class="context" v-if="ntype!='4'">
                                     
-                                     
-                                      <el-col :span="12" v-if="ntype!='3'">
-                                          <el-checkbox v-model="pd.is3" :disabled="ckshow">常委会委员</el-checkbox>
-                                     </el-col>
-                                      
                                       <el-col :span="12" v-if="ntype=='3'">
                                           <el-checkbox v-model="pd.is9" :disabled="ckshow">人大代表</el-checkbox>
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='3'">
                                           <el-checkbox v-model="pd.is8" :disabled="ckshow">政协委员</el-checkbox>
                                      </el-col>
-                                    <el-col :span="12">
-                                          <el-checkbox v-model="pd.is1" :disabled="ckshow">省部级以上领导</el-checkbox>
+                                     <el-col :span="12">
+                                          <el-checkbox v-model="pd.is1" :disabled="ckshow">省部级以上</el-checkbox>
                                      </el-col>
-
+                                       <el-col :span="12">
+                                          <el-checkbox v-model="pd.is5" :disabled="ckshow">
+                                              连任
+                                            <!-- <span v-if="ntype=='1'">连任代表</span>
+                                            <span v-if="ntype=='2'">连任委员</span>
+                                            <span v-if="ntype=='3'">连任人员</span> -->
+                                              </el-checkbox>  
+                                          <!-- <span class="lfont ml-20" v-if='pd.is5'>连任</span> -->
+                                          <el-select v-model="form1.wj" :disabled="ckshow" v-if='pd.is5' multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
+                                            <el-option label="第十三届" value="第十三届">
+                                            </el-option>
+                                            <el-option label="第十二届" value="第十二届">
+                                            </el-option>
+                                          </el-select>
+                                          <el-input-number v-model="form1.reelectionNum" :disabled="ckshow"  v-if='pd.is5' controls-position="right" size="mini"  :min="1" :max="10" style="width:80px"></el-input-number>
+                                          <span class="lfont" v-if='pd.is5'>届</span>
+                                     </el-col>
+                                      <el-col :span="12" v-if="ntype!='3'">
+                                          <el-checkbox v-model="pd.is3" :disabled="ckshow">常委会委员</el-checkbox>
+                                     </el-col>
+                                     <el-col :span="12">
+                                          <el-checkbox v-model="pd.is12" :disabled="ckshow">
+                                              曾任
+                                              </el-checkbox>  
+                                          
+                                          <el-select v-model="form1.cr" :disabled="ckshow" v-if='pd.is12' multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
+                                            <el-option label="第八届" value="第八届">
+                                            </el-option>
+                                            <el-option label="第十届" value="第十届">
+                                            </el-option>
+                                          </el-select>
+                                         
+                                     </el-col>
                                     <el-col :span="12">
                                           <el-checkbox v-model="pd.is4" :disabled="ckshow">
-                                              <span v-if="ntype=='1'">在京代表</span>
+                                            <span v-if="ntype=='1'">在京代表</span>
                                             <span v-if="ntype=='2'">在京委员</span>
                                             <span v-if="ntype=='3'">在京特约人员</span>
                                           </el-checkbox>
                                      </el-col>
-                                    <el-col :span="12">
-                                          <el-checkbox v-model="pd.is5" :disabled="ckshow">
-                                            <span v-if="ntype=='1'">连任代表</span>
-                                            <span v-if="ntype=='2'">连任委员</span>
-                                            <span v-if="ntype=='3'">连任人员</span>
-                                              </el-checkbox>  
-                                          <span class="lfont ml-20" v-if='pd.is5'>连任</span>
-                                          <el-input-number v-model="form1.reelectionNum" :disabled="ckshow"  v-if='pd.is5' controls-position="right" size="mini"  :min="1" :max="10" style="width:80px"></el-input-number>
-                                          <span class="lfont" v-if='pd.is5'>届</span>
+                                      <el-col :span="12" v-if="ntype!='3'" :disabled="ckshow">
+                                          <el-checkbox v-model="pd.is11">补选</el-checkbox>
+                                          <span style="font-size:12px;" v-if='pd.is11'>补选时间</span>
+                                           <el-date-picker v-if='pd.is11'
+                                            v-model="form1.birthday2" format="yyyy-MM-dd"
+                                            type="date" size="mini" value-format="yyyy-MM-dd"
+                                            placeholder="选择日期"  :disabled="ckshow" style="width:50%">
+                                        </el-date-picker>
+                                          
                                      </el-col>
-
                                        <el-col :span="12" v-if="ntype!='3'">
                                           <el-checkbox v-model="pd.is6" :disabled="ckshow">专门委员会委员</el-checkbox>
                                           <span class="lfont ml-20" v-if='pd.is6'>专门委员会</span>
@@ -354,16 +390,11 @@
                                        
                                      </el-col>
                                      
-                                       
-                                    
-                                     
-                                       
-                                     
-                                    
                                      <!-- <el-col :span="12" v-if="ntype!='3'" :disabled="ckshow">
                                           <el-checkbox v-model="pd.is6">专门委员会</el-checkbox>
                                            
                                      </el-col> -->
+                                   
                                      <el-col :span="12" v-if="ntype!='3'">
                                           <el-checkbox v-model="pd.is7" :disabled="ckshow">不再担任</el-checkbox>
                                           <span class="lfont ml-20" v-if='pd.is7' >原因</span>
@@ -379,15 +410,36 @@
                                       <el-col :span="12" v-if="ntype=='1' || ntype=='2'">
                                           <el-checkbox v-model="pd.is10" :disabled="true">特约人员</el-checkbox>
                                       
-                                         <el-select v-model="form1.specialType" v-if="pd.is10"  filterable clearable default-first-option placeholder="请选择" size="mini" class="ml-20" style="width:57%;">
+                                         <!-- <el-select v-model="form1.specialType" v-if="pd.is10"  filterable clearable default-first-option placeholder="请选择" size="mini" class="ml-20" style="width:57%;">
                                             <el-option
                                                 v-for="(item,ind) in $store.state.tylb"
                                                 :key="ind"
                                                 :label="item.mc"
-                                                :value="item.orgid">
+                                                :value="item.dm">
                                             </el-option>
-                                         </el-select>
+                                         </el-select> -->
                                      </el-col>
+                                     <el-col :span="12" class="input-item">
+                        <span class="yy-input-text" style="width:18%"><font class="red">*</font> 届次</span>
+                        <div  class="yy-input-input">
+                        <el-select v-model="form1.session" :disabled="editshow" filterable clearable default-first-option placeholder="请选择届"  size="mini" style="width:49%">
+                         <el-option
+                           v-for="(item,ind) in $store.state.jb"
+                           :key="ind"
+                           :label="item.mc"
+                           :value="item.dm">
+                           </el-option>
+                        </el-select> 
+                        <el-select v-model="form1.times" :disabled="editshow" filterable clearable default-first-option placeholder="请选择次"  size="mini" style="width:46%">
+                         <el-option
+                           v-for="(item,ind) in $store.state.cb"
+                           :key="ind"
+                           :label="item.mc"
+                           :value="item.dm">
+                           </el-option>
+                        </el-select>
+                        </div>
+                      </el-col>
                                   </el-row>
                              
                            </el-col>
@@ -1007,7 +1059,7 @@ export default {
         return{
             form:{},
             form1:{reelectionNum:'1',levelType:''},
-            pd:{is2:false,is1:false,is3:false,is4:false,is6:false,is7:false,is8:false,is9:false,is10:false},
+            pd:{is2:false,is1:false,is3:false,is4:false,is6:false,is7:false,is8:false,is9:false,is10:false,is11:false},
             cname:"",
             zwdia:'新增职务变动',
             zwform:{},
@@ -1100,6 +1152,7 @@ export default {
             limit:2,
             lbshow:true,
             lb:'',
+            tjshow:true,
         };
     },
     mounted()
@@ -1115,6 +1168,7 @@ export default {
         this.$store.dispatch('getZmwyh');
         this.$store.dispatch('getBzdr');
         this.$store.dispatch('getJb');
+                this.$store.dispatch('getCb');
         this.$store.dispatch('getJjb');
         this.$store.dispatch('getXw');
         this.$store.dispatch('getJg');
@@ -1123,8 +1177,8 @@ export default {
         this.$store.dispatch('getZw');
         this.$store.dispatch('getTylb');
         this.$store.dispatch('getFyjb');
-        this.$store.dispatch('getTjdw');
-        
+        this.$store.dispatch('getTyzxytjdw');
+         this.$store.dispatch('getTyjdytjdw');
         this.getinit(this.$route);
        
     },
@@ -1190,6 +1244,13 @@ export default {
                  }
               }
             },
+         getTJ(dm){
+             if(dm=='0185000001'){
+                  this.tjshow=true;
+             }else{
+                 this.tjshow=false;
+             }
+         },
         goadd(){
                 this.hdDialogVisible=false;
                  var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
@@ -1412,6 +1473,13 @@ export default {
                         if(this.lb!=null)
                         {
                             this.form1.specialType=this.lb;
+                            console.log(this.lb,'=====');
+                            
+                              if(this.lb=='0185000001'){
+                                    this.tjshow=true;
+                                }else{
+                                    this.tjshow=false;
+                                }
                             this.lbshow=false;
                         }
                         break;
@@ -1911,7 +1979,15 @@ export default {
              if(data.isInBeijing=='0209000001'){
                     this.pd.is4=true;
                 }
-
+            if(data.isSpecialPerson=='1'){
+                    this.pd.is10=true;
+                }
+            if(data.isCppcMember=='1'){
+                this.pd.is8=true;
+            }
+            if(data.isRepresentative=='1'){
+                this.pd.is9=true;
+            }
 
             }
             this.znDialogVisible=false;
@@ -2150,12 +2226,12 @@ export default {
                         this.$message.error("推荐单位不能为空!");return;
                     }
                   }
-                  
+                  if(this.addtype!='4'){
                         if(this.form.job==undefined || this.form.job=="")
                         {
                             this.$message.error("单位职务不能为空!");return;
                         }
-                    
+                    }
                   if(this.pd.is5){
                        if(this.form1.reelectionNum==undefined || this.form1.reelectionNum=="")
                         {

@@ -478,7 +478,7 @@
                                           v-for="(item,ind) in jbrdata"
                                           :key="ind"
                                           :label="item.fullName"
-                                          :value="item.pbId">
+                                          :value="item.personId">
                                         </el-option>
                         </el-select>
                       </el-col>

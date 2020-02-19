@@ -30,11 +30,11 @@
                          </el-option>
                         </el-select>
                       </el-col>
-                      <el-col :span="6">
+                      <el-col :span="5">
                           <span class="yy-input-text">结对时间</span>
                             {{pd.beginBJSJ}}
                       </el-col>
-                      <el-col :span="3" v-if='!llbnt'>
+                      <el-col :span="4" v-if='!llbnt'>
                         <el-button type="info" plain size="small" @click="jdreset">重置</el-button>
                         <el-button type="primary" plain size="small"  @click="getPair()" v-if='pd.courtOutsiderId!="" || pd.courtOutUserId!=""'>
                           {{hdlabel}}
@@ -412,7 +412,6 @@
                                 prop="pairName"
                                 label="结对人员">
                             </el-table-column>
-                         
                                <el-table-column
                                   label="操作" width="100">
                                   <template slot-scope="scope">
@@ -1005,9 +1004,8 @@ export default {
             this.listdatatemp=[];
             this.remark="";
             this.oldcourtid="";
-           
             this.getLmName(this.pd.courtOutsiderIdName);
-         
+            
             
             if(this.pd.courtOutUserId!=null && this.pd.courtOutUserId!=undefined){
                this.$set(this.form1,'courtInsiderId',this.pd.courtOutUserId);
@@ -1430,7 +1428,8 @@ export default {
         getYjdxx(val,t){
             this.remark='';
            if(val!=''){
-             
+               console.log(this.fyrydata,val,'-----');
+               
                  var obj = {};
                      obj = this.fyrydata.find(item =>{
                         return item.courtPersonId === val

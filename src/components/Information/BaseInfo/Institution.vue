@@ -19,7 +19,7 @@
                     <el-col :span="8" style="text-align:right">
                           <el-button type="primary" @click="goto(0)">录入</el-button>
                           <el-button type="success" @click="goto('1',orgid)" v-if='orgid!=""'>编辑</el-button>
-                          <el-button >导入</el-button>
+                          <el-button @click='getDR'>导入</el-button>
                           <el-button  @click="goseach">查询</el-button>
                     </el-col>
                </el-row>
@@ -32,13 +32,17 @@
                            </el-col>
               </el-row>
              </el-col>
-          
         </el-row>
         </div>
+         <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+      <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+   </el-dialog>
     </div>
 </template>
 <script>
+import UPLOAD from "../../Common/upload"
 export default {
+    components:{UPLOAD},
     data(){
         return{
           cname:'全国人民代表大会',
@@ -56,6 +60,9 @@ export default {
           lvl:'',
           orgmc:'',
           orgid:'',
+           drDialogVisible:false, 
+           vvurl:'/org/import',
+           vvurlErr:'',
 
         }
     },
@@ -318,6 +325,12 @@ export default {
         goseach(){
             this.$router.push({name:'InstitutionList',query:{type:this.addtype}})
         },
+         getDR(){
+            this.drDialogVisible=true;
+        },
+          drfatherMethod(data,t){
+            this.drDialogVisible=false;
+          },
     },
 }
 </script>

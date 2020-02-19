@@ -5,8 +5,8 @@
              <div class="ptitle mb-20">联络活动信息</div>
              <div class="pborder">
                 <el-row class="lh" :gutter="2">
-                    <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text" style="width:19%;">开始年月</span>
+                    <el-col :sm="24" :md="12" :lg="12" class="input-item">
+                            <span class="yy-input-text" style="width:19%;"><font class="red">*</font> 开始年月</span>
                             <div class="yy-input-input">
                            <el-select v-model="pd.startYear" filterable clearable default-first-option placeholder="请选择"  size="small" style="width:49%;">
                                <el-option
@@ -26,8 +26,8 @@
                             </el-select>
                             </div>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text" style="width:19%;">结束年月</span>
+                         <el-col :sm="24" :md="12" :lg="12" class="input-item">
+                            <span class="yy-input-text" style="width:19%;"><font class="red">*</font> 结束年月</span>
                             <div class="yy-input-input">
                            <el-select v-model="pd.endYear" filterable clearable default-first-option placeholder="请选择"  size="small" style="width:49%;">
                                <el-option
@@ -63,7 +63,7 @@
                         </el-date-picker>
                      </div>
                      </el-col> -->
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="12">
                             <span class="yy-input-text" style="width:18%!important;">组织单位</span>
                            <el-select v-model="pd.orgUnitId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -74,10 +74,8 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                      
-                    </el-row>
-                    <el-row class="lh" :gutter="2">
-                         <el-col :sm="24" :md="12" :lg="8">
+                     
+                         <el-col :sm="24" :md="12" :lg="12">
                             <span class="yy-input-text" style="width:18%">录入单位</span>
                            <el-select v-model="pd.entryUnitId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -88,9 +86,9 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="16">
-                            <span class="yy-input-text" style="width:8.5%">地点</span>
-                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.location"  class="yy-input-input" style="width:81%!important" ></el-input>
+                        <el-col :sm="24" :md="12" :lg="24">
+                            <span class="yy-input-text" style="width:9%">地点</span>
+                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.location"  class="yy-input-input" style="width:80%!important" ></el-input>
                         </el-col>
                         
                     </el-row>
@@ -110,53 +108,50 @@
                  width="150"
                 >
                 <el-table-column
-                    prop="date"
+                    prop="yearAndMonth"
                     label="月份"
                     width="120">
                 </el-table-column>
             </el-table-column>
             <el-table-column
-                prop="结对活动"
+                prop="pair"
                 label="结对活动">
             </el-table-column>
             <el-table-column
-                prop="count"
+                prop="inspect"
                 label="专项视察">
             </el-table-column>
              <el-table-column
-                prop="count"
+                prop="research"
                 label="专题调研">
             </el-table-column>
             <el-table-column
-                prop="count"
+                prop="listen"
                 label="旁听庭审">
             </el-table-column>
              <el-table-column
-                prop="count"
+                prop="witness"
                 label="见证执行">
             </el-table-column>
             <el-table-column
-                prop="count"
+                prop="meeting"
                 label="会议座谈">
             </el-table-column>
             <el-table-column
-                prop="count"
+                prop="daliyVisit"
                 label="日常走访">
             </el-table-column>
             <el-table-column
-                prop="count"
+                prop="daliyReception"
                 label="日常接待">
             </el-table-column>
               <el-table-column
-                prop="count"
+                prop="newsMedia"
                 label="新闻宣传">
             </el-table-column>
+           
             <el-table-column
-                prop="count"
-                label="年度工作计划和总结">
-            </el-table-column>
-            <el-table-column
-                prop="count"
+                prop="others"
                 label="其他">
             </el-table-column>
          </el-table>

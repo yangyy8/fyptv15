@@ -14,9 +14,9 @@
                        <div class="title">{{xzqhmc}}{{title}}</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
-                          <el-button type="primary"  @click="goBase()">录入</el-button>
+                          <el-button type="primary"  @click="goBase()">编辑</el-button>
                           <!-- <el-button >导入</el-button> -->
-                          <el-button  @click="openfile">相关文件</el-button>
+                          <!-- <el-button  @click="openfile">相关文件</el-button> -->
                           <el-button @click="$router.push({name:'tyBaseList'})">查询</el-button>
                     </el-col>
                </el-row>

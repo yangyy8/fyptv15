@@ -181,8 +181,8 @@ export default {
             bnt:true,
             checkedList:[],
             addtype:'1',
-            cname:'年度工作总结与计划查询',
-            cinfo:'年度工作总结与计划',
+            cname:'联络工作信息查询',
+            cinfo:'联络工作信息',
             yearlist:getYear(),
             uploadDialogVisible:false,
             addDialogVisible:false,
@@ -269,7 +269,7 @@ export default {
         },
          getCheckList(){
                let p={
-                  'type':'0246000010'
+                  'type':'0246000013'
               };
               this.$api.post(this.Global.aport2+'/CaseHomeController/getCaseListInfo',p,
                 r =>{

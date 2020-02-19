@@ -57,7 +57,7 @@
                           <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">结对人</span>
                            
-                        <el-select v-model="pd.courtInsiderId"    filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd.courtInsiderId" clearable   filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                           v-for="(item,ind) in cdrdata"
                           :key="ind"
@@ -68,8 +68,8 @@
                         </el-col>
                         
                         <el-col :sm="24" :md="12" :lg="8">
-                        <span class="yy-input-text"  style="min-width:160px;">代表、委员、特约人员、法院领导</span>
-                        <el-select v-model="pd.courtOutsiderId"    filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input pairinput">
+                        <span class="yy-input-text"  style="min-width:160px;">代表、委员、特约人员</span>
+                        <el-select v-model="pd.courtOutsiderId"  clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input pairinput">
                          <el-option
                           v-for="(item,ind) in xmdata"
                           :key="ind"
@@ -80,7 +80,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">法院领导</span>
-                         <el-select v-model="pd.courtPersonId"   filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input">
+                         <el-select v-model="pd.courtPersonId" clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input">
                          <el-option
                           v-for="(item,ind) in fydata"
                           :key="ind"
@@ -260,7 +260,6 @@
                 <el-radio v-model="addtype" label="4" border>旁听庭审录入</el-radio>
                 <el-radio v-model="addtype" label="5" border>见证执行录入</el-radio>
              </div><div style="text-align:center">
-
                 <el-radio v-model="addtype" label="6" border>会议座谈录入</el-radio>
                 <el-radio v-model="addtype" label="7" border>日常走访录入</el-radio>
                 <el-radio v-model="addtype" label="8" border>新闻宣传录入</el-radio>
@@ -361,7 +360,7 @@ export default {
         },
         getinit(val){
           this.tableData=[];
-          this.getCheckList();
+         
           this.getFY();this.getJBR();
           this.getName();
           this.getList(this.CurrentPage, this.pageSize, this.pd);
@@ -461,9 +460,10 @@ export default {
         },
          getCheckList(){
                let p={
-                  'type':'0246000010'
+                  'type':'0246000010',
+                  'activityType':this.pd.activityType,
               };
-              this.$api.post(this.Global.aport2+'/CaseHomeController/getCaseListInfo',p,
+              this.$api.post(this.Global.aport2+'/ActivityInfoController/getCaseListInfo',p,
                 r =>{
 
                       if(r.code==1){
@@ -505,6 +505,7 @@ export default {
         this.configHeader=sortByKey(this.configHeader,'sort');
         },
         getList(currentPage, showCount, pd){
+             this.getCheckList();
            this.changeList();
            this.getJDXXAB();
           let p={
