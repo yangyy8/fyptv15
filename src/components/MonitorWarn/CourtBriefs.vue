@@ -34,13 +34,13 @@
                             <span class="yy-input-text" style="width:27.6%!important;">录入时间</span>
                             <div class="yy-input-input  t-flex  t-date">
                                 <el-date-picker
-                                v-model="pd.startTime1" format="yyyy-MM-dd"
+                                v-model="pd.startCreateTime" format="yyyy-MM-dd"
                                 type="date" size="small" value-format="yyyy-MM-dd"
                                 placeholder="开始时间" >
                                 </el-date-picker>
                                 <span class="septum">-</span>
                                 <el-date-picker
-                                    v-model="pd.endTime2" format="yyyy-MM-dd"
+                                    v-model="pd.endCreateTime" format="yyyy-MM-dd"
                                     type="date" size="small" value-format="yyyy-MM-dd"
                                     placeholder="结束时间" >
                                 </el-date-picker>
@@ -120,7 +120,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">发布区分</span>
-                           <el-select v-model="pd.IsPush" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.isPush" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.fbqf"
                                  :key="ind"
@@ -144,13 +144,13 @@
                             <span class="yy-input-text" style="width:27.6%!important;">发布时间</span>
                             <div class="yy-input-input  t-flex  t-date">
                                 <el-date-picker
-                                v-model="pd.startTime" format="yyyy-MM-dd"
+                                v-model="pd.startPushTime" format="yyyy-MM-dd"
                                 type="date" size="small" value-format="yyyy-MM-dd"
                                 placeholder="开始时间" >
                                 </el-date-picker>
                                 <span class="septum">-</span>
                                 <el-date-picker
-                                    v-model="pd.endTime" format="yyyy-MM-dd"
+                                    v-model="pd.endPushTime" format="yyyy-MM-dd"
                                     type="date" size="small" value-format="yyyy-MM-dd"
                                     placeholder="结束时间" >
                                 </el-date-picker>
@@ -414,11 +414,15 @@ export default {
     },
     methods:{
         getbd(val){
-            console.log('---',val);
-
+      
             if(val=='0241000001'){
+               
+                this.$set(this.form,'url','');
                 this.bd=true;
             }else{
+                 this.fits=[];
+                 this.$set(this.form,'title','');
+                this.$set(this.form,'contents','');
                 this.bd=false;
             }
             
@@ -597,6 +601,26 @@ export default {
 
         },
         addsave(){
+            if(this.form.courtNewsType=='' || this.form.courtNewsType==undefined || this.form.courtNewsType==null){
+                this.$message.error("要闻类型不能为空！");return;
+            }
+            if(this.form.courtNewsSource=='' || this.form.courtNewsSource==undefined || this.form.courtNewsSource==null){
+                this.$message.error("要闻来源不能为空！");return;
+            }
+            if(this.form.courtNewsSource=="0241000001"){
+              if(this.form.title=='' || this.form.title==undefined || this.form.title==null){
+                this.$message.error("标题不能为空！");return;
+              }
+               if(this.form.contents=='' || this.form.contents==undefined || this.form.contents==null){
+                this.$message.error("内容不能为空！");return;
+              }
+            }
+            else{
+                if(this.form.url=='' || this.form.url==undefined || this.form.url==null){
+                this.$message.error("连接不能为空！");return;
+              }
+            }
+
                this.form.list=this.fits;
                this.$api.post(this.Global.aport2+'/courtNewsEntry/saveCourtnews',this.form,
                 r =>{
@@ -651,6 +675,7 @@ export default {
                 this.all=true;
             }
         },
+        
         getopen(t){
             if(this.multipleSelection.length==0){
                 this.$message.error("请选择至少一条数据!");return;
@@ -659,12 +684,16 @@ export default {
                 this.$message.error("只能选择一条数据!");return;
             }
             var contentPublicList=[];
+            
+            
             var array=this.multipleSelection;
             for (let i = 0; i < array.length; i++) {
             
                 var obj={};
                 obj.contentPublicId=array[i].courtNewsId;
                 obj.contentPublicType="0134000003";
+                obj.contents=array[i].contents;
+                
                 switch (t) {
                     case 1://公开
                          obj.publicProcessType="0133000001";
@@ -673,6 +702,7 @@ export default {
                          obj.publicProcessType="0133000002";
                         break;
                     case 3://发布
+                    
                          obj.publicProcessType="0133000003";
                         break;
                     case 4://回收
@@ -685,6 +715,7 @@ export default {
                 contentPublicList.push(obj);
             }
             this.opendata=contentPublicList;
+console.log(this.opendata,'======');
 
              if(t==1){
                  this.openDialogVisible=true;

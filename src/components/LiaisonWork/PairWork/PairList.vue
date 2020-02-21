@@ -120,13 +120,21 @@
                             <span class="yy-input-text">批示单位</span>
                              <el-input placeholder="请输入内容" size="small" clearable v-model="pd.instructionUnit"  class="yy-input-input" ></el-input>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">批示时间</span>
-                           <el-date-picker class="yy-input-input"
-                           v-model="pd.instructionTime" format="yyyy-MM-dd"
+                            <div class="yy-input-input  t-flex  t-date">
+                        <el-date-picker
+                           v-model="pd.instructionStartTime" format="yyyy-MM-dd"
                            type="date" size="small" value-format="yyyy-MM-dd"
-                           placeholder="选择时间">
+                           placeholder="开始时间" >
                         </el-date-picker>
+                        <span class="septum">-</span>
+                        <el-date-picker
+                            v-model="pd.instructionEndTime" format="yyyy-MM-dd"
+                            type="date" size="small" value-format="yyyy-MM-dd"
+                            placeholder="结束时间" >
+                        </el-date-picker>
+                     </div>
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">录入单位</span>
@@ -150,13 +158,21 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">录入时间</span>
-                           <el-date-picker class="yy-input-input"
-                           v-model="pd.entryTime" format="yyyy-MM-dd"
+                              <div class="yy-input-input  t-flex  t-date">
+                        <el-date-picker
+                           v-model="pd.entryStartTime" format="yyyy-MM-dd"
                            type="date" size="small" value-format="yyyy-MM-dd"
-                           placeholder="选择时间">
+                           placeholder="开始时间" >
                         </el-date-picker>
+                        <span class="septum">-</span>
+                        <el-date-picker
+                            v-model="pd.entryEndTime" format="yyyy-MM-dd"
+                            type="date" size="small" value-format="yyyy-MM-dd"
+                            placeholder="结束时间" >
+                        </el-date-picker>
+                     </div>
                         </el-col>
                     </el-row>
 
@@ -360,7 +376,7 @@ export default {
         },
         getinit(val){
           this.tableData=[];
-         
+           this.getCheckList();
           this.getFY();this.getJBR();
           this.getName();
           this.getList(this.CurrentPage, this.pageSize, this.pd);
@@ -459,6 +475,7 @@ export default {
             }
         },
          getCheckList(){
+               
                let p={
                   'type':'0246000010',
                   'activityType':this.pd.activityType,
@@ -467,8 +484,7 @@ export default {
                 r =>{
 
                       if(r.code==1){
-                        
-                          
+                       
                           this.checkItem=r.data;
                           this.configHeader=[];
                             for(var j=0;j<this.checkItem.length;j++){
@@ -486,9 +502,8 @@ export default {
                 });
         },
         changeList(){
-          this.configHeader=[];
-         
-
+         this.configHeader=[];
+        
             for(var i=0;i<this.checkedList.length;i++){
             for(var j=0;j<this.checkItem.length;j++){
               if(this.checkedList[i] == this.checkItem[j].code){
@@ -505,8 +520,9 @@ export default {
         this.configHeader=sortByKey(this.configHeader,'sort');
         },
         getList(currentPage, showCount, pd){
-             this.getCheckList();
-           this.changeList();
+        
+          // this.getCheckList();
+          this.changeList();
            this.getJDXXAB();
           let p={
              "pd":this.pd,

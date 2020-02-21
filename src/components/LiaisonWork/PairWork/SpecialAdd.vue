@@ -1364,7 +1364,7 @@ export default {
                if(srr[i].pbId==arr[0])
                {
                    ff=true;
-                this.$confirm(srr[i].personName+'已经存在，是否切换?', '提示', {
+                this.$confirm(srr[i].personName+'已经存在?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'
@@ -1402,14 +1402,39 @@ export default {
         ChangeFYNameList(val){
              if(this.fyld==undefined || this.fyld==""){
                this.$message.error("法院领导不能为空！");return;
-           }
+             }
           var obj = {};
                  obj = this.fydata.find(item =>{
                      return item.pbId ===val   
                 });
             
+           var srr=this.ListData5;
+            var ff=false;
+            for (let i = 0; i < srr.length; i++) {
+               if(srr[i].pbId==val)
+               {
+                   ff=true;
+                this.$confirm(srr[i].personName+'已经存在?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                  this.delAdd(12,srr[i]);
+                  this.ListData5.push(obj);
+                  this.count2=this.ListData5.length;
+                }).catch(() => {
+                     this.$message({
+                         type: 'info',
+                         message: '已取消操作'
+                      }); 
+
+                 }); 
+               }
+            }
+            if(!ff){
            this.ListData5.push(obj);
            this.count2++;
+           }
            this.fyld='';
          
         },
@@ -1481,6 +1506,8 @@ export default {
             this.pdData3=[];
             this.filedata0=[];
             this.dbtableData=[];
+            this.count1=0;
+            this.count2=0;
         },
         getinit(val){
               
@@ -1941,6 +1968,19 @@ export default {
             　　　　　　　　})
             　　　　　 this.ListData8.splice(index,1);
                 
+                 }
+              }else if(t==12){
+                var arr=[];
+                arr.push(n);
+                for (let i = 0; i < arr.length; i++) {
+                        var index = this.ListData5.findIndex(item =>{
+    　　　　　　　　　  　 if(item.pbId==arr[i].pbId){
+            　　　　　　　　　　　　return true
+            　　　　　　　　　　}
+            　　　　　　　　})
+            　　　this.ListData5.splice(index,1);
+                 this.count2=this.ListData5.length;
+                    
                  }
               }
         },

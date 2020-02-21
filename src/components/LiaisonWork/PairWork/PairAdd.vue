@@ -1198,7 +1198,6 @@ export default {
         addlist(val){
              this.listdata2.push(val);
              this.listdatatemp.push(val);
-            
              const res = new Map();
              var arr=this.listdata2;
              this.listdata2=arr.filter((arr) => !res.has(arr.pbId) && res.set(arr.pbId, 1));
@@ -1316,8 +1315,14 @@ export default {
         //结对人
         getJDXX(id,t)
         { 
-            console.log(this.jdstate,'this.jdstate');
-            this.jdstate=0;
+           
+            if(this.pd.courtOutsiderId=="" && this.pd.courtOutUserId==""){
+                this.jdreset();
+                
+                return;
+            }
+
+            this.jdstate=0;  
              let  p={
              'courtOutsiderId':id,
              };
@@ -1399,6 +1404,7 @@ export default {
             }
         },
         getJDXXAB(name){
+            if(name==undefined || name==null){name='';}
             let  p={
              'personName':name,
              };

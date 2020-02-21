@@ -250,8 +250,8 @@ export default {
              }else if(this.multipleSelection.length==0){
                this.$message.error("请选择一条数据!");return;
              }
-            var array=this.multipleSelection[0].activityTypeId;
-            this.$router.push({name:'AnnualWork',query:{type:types,state:t,activityInfoId:this.multipleSelection[0].activityInfoId}});
+            var array=this.multipleSelection[0].workRelFilesId;
+            this.$router.push({name:'AnnualWork',query:{state:t,workRelFilesId:this.multipleSelection[0].workRelFilesId}});
          }
         },
        
@@ -344,13 +344,13 @@ export default {
                            var arr=[];
                            
                             for (let i = 0; i < this.multipleSelection.length; i++) {
-                                obj.activityInfoId=this.multipleSelection[i].activityInfoId;
+                                obj.workRelFilesId=this.multipleSelection[i].workRelFilesId;
                                 arr.push(obj);
                             }
                             let p = {
-                                'activityInfoIdList':arr
+                                'idList':arr
                             };
-                            this.$api.post(this.Global.aport2+'/ActivityInfoController/deleteActivityInfo',p,
+                            this.$api.post(this.Global.aport2+'/WorkRelFilesController/delete',p,
                             r =>{
                                 if(r.code==1){
                                      this.$message({
@@ -430,7 +430,7 @@ export default {
                     }
                 });
         },
-      
+        
       
     },
 }

@@ -549,154 +549,67 @@
               <el-button @click="cbDialogVisible = false" size="small">取 消</el-button>
             </div>
 </el-dialog>
-<el-dialog title="办公流程" :visible.sync="addDialogVisible"> 
+<el-dialog title="办公流程" :visible.sync="addDialogVisible" width="850px"> 
   <el-form :model="form">
         <el-collapse v-model="activeNames" @change="handleChange" style="height:600px;overflow-y:auto;" accordion>
-         <el-collapse-item title="交办单 123456" name="1">
+        <div v-for="(item,ind) in bldata" :key="ind">
+           <el-collapse-item :title="item.title" :name="item.serialNum">
               <el-row class="ah-40 border" >
                    <el-col :span="24" class="borderb">
                          <span class="yy-input-text borderr" style="width:13%;">标题</span>
-                         <span class="yy-input-input">关于关注案件事件</span>
+                         <span class="yy-input-input">{{item.title}}</span>
                    </el-col>
                       <el-col :span="24" class="borderb">
                          <span class="yy-input-text">交办意见</span><br>
-                         <span class="padingl">关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件</span>
+                         <span class="padingl"></span>
                    </el-col>
                     <el-col :span="12" class="borderb">
                          <span class="yy-input-text borderr">交办部门</span>
-                         <span class="yy-input-input">最高人民法院</span>
+                         <span class="yy-input-input">{{item.assignedDepartment}}</span>
                    </el-col>
                     <el-col :span="12" class="borderb">
                          <span class="yy-input-text borderr borderl">交办时间</span>
-                         <span class="yy-input-input">2020-01-09</span>
+                         <span class="yy-input-input">{{item.assignedTime}}</span>
                    </el-col>
-                   <el-col :span="24" class="borderb">
+                   <el-col :span="24" class="borderb"  v-for="(t,i) in item.subdata" :key='i'>
                        <el-row class="borderb backcolor">
                             <el-col :span="24" class="borderb">
-                         <span class="yy-input-text">领导意见(一)</span><br>
-                           <span class="padingl">关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件</span>
-                         </el-col>
-                            <el-col :span="8">
-                         <span class="yy-input-text borderr">审批结果</span>
-                         <span class="yy-input-input">通过</span>
+                         <span class="yy-input-text">领导意见{{i+1}}</span><br>
+                           <span class="padingl">{{t.checkContents}}</span>
+                    </el-col>
+                    <el-col :span="6">
+                         <span class="yy-input-text borderr" style='width:40%'>审批结果</span>
+                         <span class="yy-input-text" style='width:33%!important'>{{t.checkResult}}</span>
                    </el-col>
-                    <el-col :span="8">
+                    <el-col :span="10">
                          <span class="yy-input-text borderr borderl">审批领导</span>
-                         <span class="yy-input-input">杨万明(最高人民法院-法院人员)</span>
+                         <span class="yy-input-input">{{t.nodePerson}}</span>
                    </el-col>
                     <el-col :span="8">
                          <span class="yy-input-text borderr borderl">审批时间</span>
-                         <span class="yy-input-input">2020-01-22</span>
+                         <span class="yy-input-input">{{t.nodeTime}}</span>
                    </el-col>
                        </el-row>
-                        <el-row class="backcolor">
-                            <el-col :span="24" class="borderb">
-                         <span class="yy-input-text">领导意见(二)</span><br>
-                           <span class="padingl">关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件</span>
-                         </el-col>
-                            <el-col :span="8">
-                         <span class="yy-input-text borderr">审批结果</span>
-                         <span class="yy-input-input">通过</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">审批领导</span>
-                         <span class="yy-input-input">杨万明(最高人民法院-法院人员)</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">审批时间</span>
-                         <span class="yy-input-input">2020-01-22</span>
-                   </el-col>
-                       </el-row>
+                       
 
                    </el-col>
                    <el-col :span="8">
                          <span class="yy-input-text borderr">流程</span>
-                         <span class="yy-input-input">办理</span>
+                         <span class="yy-input-input">{{item.processType}}</span>
                    </el-col>
                     <el-col :span="8">
                          <span class="yy-input-text borderr borderl">公示</span>
-                         <span class="yy-input-input">否</span>
+                         <span class="yy-input-input">{{item.isPublic}}</span>
                    </el-col>
                     <el-col :span="8">
                          <span class="yy-input-text borderr borderl">沟通</span>
-                         <span class="yy-input-input">否</span>
+                         <span class="yy-input-input">{{item.isCommunicate}}</span>
                    </el-col>
 
               </el-row>
          </el-collapse-item>
-
-             <el-collapse-item title="交办单 678910" name="2">
-              <el-row class="ah-40 border" >
-                   <el-col :span="24" class="borderb">
-                         <span class="yy-input-text borderr" style="width:13%;">标题</span>
-                         <span class="yy-input-input">关于关注案件事件</span>
-                   </el-col>
-                      <el-col :span="24" class="borderb">
-                         <span class="yy-input-text">交办意见</span><br>
-                         <span class="padingl">关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件</span>
-                   </el-col>
-                    <el-col :span="12" class="borderb">
-                         <span class="yy-input-text borderr">交办部门</span>
-                         <span class="yy-input-input">最高人民法院</span>
-                   </el-col>
-                    <el-col :span="12" class="borderb">
-                         <span class="yy-input-text borderr borderl">交办时间</span>
-                         <span class="yy-input-input">2020-01-09</span>
-                   </el-col>
-                   <el-col :span="24" class="borderb">
-                       <el-row class="borderb backcolor">
-                            <el-col :span="24" class="borderb">
-                         <span class="yy-input-text">领导意见(一)</span><br>
-                           <span class="padingl">关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件</span>
-                         </el-col>
-                            <el-col :span="8">
-                         <span class="yy-input-text borderr">审批结果</span>
-                         <span class="yy-input-input">通过</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">审批领导</span>
-                         <span class="yy-input-input">杨万明(最高人民法院-法院人员)</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">审批时间</span>
-                         <span class="yy-input-input">2020-01-22</span>
-                   </el-col>
-                       </el-row>
-                        <el-row class="backcolor">
-                            <el-col :span="24" class="borderb">
-                         <span class="yy-input-text">领导意见(二)</span><br>
-                           <span class="padingl">关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件关于关注案件事件</span>
-                         </el-col>
-                            <el-col :span="8">
-                         <span class="yy-input-text borderr">审批结果</span>
-                         <span class="yy-input-input">通过</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">审批领导</span>
-                         <span class="yy-input-input">杨万明(最高人民法院-法院人员)</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">审批时间</span>
-                         <span class="yy-input-input">2020-01-22</span>
-                   </el-col>
-                       </el-row>
-
-                   </el-col>
-                   <el-col :span="8">
-                         <span class="yy-input-text borderr">流程</span>
-                         <span class="yy-input-input">办理</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">公示</span>
-                         <span class="yy-input-input">否</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">沟通</span>
-                         <span class="yy-input-input">否</span>
-                   </el-col>
-
-              </el-row>
-         </el-collapse-item>
+</div>
+            
     </el-collapse>
   </el-form>
 </el-dialog>
@@ -736,7 +649,10 @@ export default {
             cbform:{},
             addDialogVisible:false,
             cbDialogVisible:false,
-            activeNames:['1'],
+            activeNames:['2'],
+            bldata:[],//办理流程
+            lcdata:[],//办理流程
+           sbdata:[],
         }
     },
     mounted(){
@@ -761,7 +677,15 @@ export default {
      watch:{
           $route:function(val){
             this.getinit(val);
-          }
+          },
+          bldata:function(newVal,oldVal){
+            
+              for(let i = 0; i < newVal.length; i++) {
+                  var obj=newVal[i];
+                  this.$set(obj,'subdata',[]);
+                  this.getSubInfo(newVal[i].id,obj);
+              }
+          },
        },
     methods:{
          clickRow(row){
@@ -791,14 +715,43 @@ export default {
                  if(this.multipleSelection.length>1){
                     this.$message.error("只能选择一条数据！");return;
                  }
+                 
+             let p={
+                 'type':'2',
+                 'billId':this.multipleSelection[0].focuscaseid
+             };
+              this.$api.post('http://10.0.30.69:9404/supremeCourtOffice/getOAProcessList',p,
+                r =>{
+                       if(r.code==1){
+                        this.bldata=r.data;
+                        }
+                });
+
+
                 this.addDialogVisible=true;
             }else if(t==1){
                 this.cbform={};
                 this.cbDialogVisible=true;
             }
         },
+       getSubInfo(id,obj){
+              let p={
+              
+                 'id':id
+             };
+          this.$api.post('http://10.0.30.69:9404/supremeCourtOffice/getOAProcessNodeById',p,
+                r =>{
+                       if(r.code==1){
+                           
+                           this.$set(obj,'subdata',r.data);
+                      
+                       
+                        }
+                });
+              
+        },
         handleChange(val) {
-            console.log(val);
+           // console.log(val);
         },
           handleSelectionChange(val) {
           this.multipleSelection = val;
@@ -807,6 +760,44 @@ export default {
           }else{
              this.bnt=true; 
           }
+        },
+        addsave(){
+             if(this.multipleSelection.length==0){
+                 this.$message.error("至少选择一条数据！");return;
+             }
+             //console.log(this.multipleSelection);
+             
+             var array=this.multipleSelection;
+             var frr=[];
+            for (let i = 0; i < array.length; i++) {
+                var obj={};
+                obj.focuscaseid=array[i].focuscaseid;
+                frr.push(obj);
+            }
+
+            let p={
+                'focuscaseList':frr,
+                'caseurgent':this.cbform,
+                'token':this.$store.state.token
+            }
+              
+              this.$api.post(this.Global.aport1+'/CaseUrgentController/bathSaveCaseUrgent',p,
+                r =>{
+                     
+                     if(r.code==1){
+                         
+                           this.$message({
+                            message: r.message,
+                            type: 'success'
+                            });
+                            this.cbDialogVisible=false;
+                          this.getList(this.CurrentPage, this.pageSize, this.pd);
+                     }else{
+                       this.$message.error(r.message);
+                     }
+                       
+                });
+
         },
         pageSizeChange(val) {
           this.pageSize=val;
@@ -854,7 +845,7 @@ export default {
         },
         changeList(){
           this.configHeader=[];
-          console.log('this.checkedList',this.checkedList.length,this.checkItem.length);
+         // console.log('this.checkedList',this.checkedList.length,this.checkItem.length);
           
             for(var i=0;i<this.checkedList.length;i++){
             for(var j=0;j<this.checkItem.length;j++){
@@ -874,7 +865,7 @@ export default {
         },
         getList(currentPage, showCount, pd){
            
-             console.log(this.pd.lettersourceorgid);
+            // console.log(this.pd.lettersourceorgid);
              
            this.changeList();
            if(this.pd.lettersourceorgid && this.pd.lettersourceorgid.length>0){

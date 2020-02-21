@@ -29,8 +29,8 @@
                     <el-dropdown-menu slot="dropdown" style="margin-top:-15px;">
                     <el-dropdown-item  command="b">修改账号</el-dropdown-item>
                     <el-dropdown-item command="a">修改密码</el-dropdown-item>
-                    <!-- <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
-                    <el-dropdown-item command="d">权限切换</el-dropdown-item> -->
+                    <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
+                    <!-- <el-dropdown-item command="d">权限切换</el-dropdown-item> -->
                   </el-dropdown-menu>
                 </el-dropdown>      
               
@@ -129,9 +129,9 @@
         <div class="gfooter" v-if='footshow'>
             <el-row type="flex">
                 <el-col :span="4" style="border-right: 1px solid #4B688A;" v-for="(t,inds) in Shortlist" :key="inds" @click="goto(i.name)">
-                    <i class="el-icon-folder" style="font-size:20px;" v-if="t.icon==null"></i>
+                  <div @click="getLine(t)"> <i class="el-icon-folder" style="font-size:20px;" v-if="t.icon==null"></i>
                      <i :class="t.icon" style="font-size:22px;" v-else></i>
-                      {{t.alias}}
+                      {{t.alias}}</div>
                     </el-col>
                  <!-- <el-col :span="4"><div  @click="goto('/Home/BaseList')"><img src="../assets/img/index/ic_rddbxx.png" alt="人大代表信息"><span>人大代表信息</span></div></el-col>
                 <el-col :span="4" ><div @click="goto('/Home/zxBaseList')"><img src="../assets/img/index/ic_zxwyxx.png" alt="政协委员信息"><span>政协委员信息</span></div></el-col>
@@ -279,6 +279,12 @@ export default {
 
             this.getZX(len,this.type,this.url);
         }
+    },
+    getLine(t){
+           var name=t.name.split('/');
+           
+           this.$router.push({name:name[name.length-1]});
+           
     },
     getfooter(){
         this.$api.get(this.Global.aport1+'/menu/getShortcutMenu', null,

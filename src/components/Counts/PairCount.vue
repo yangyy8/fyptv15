@@ -99,6 +99,9 @@
  </div>
          <div style="text-align:center;font-size:25px;line-height:60px;">最高院联络办联络工作统计</div>
           <!-- :span-method="objectSpanMethod" -->
+          <el-row class="mt-15" style="text-align: right">
+              <el-button size="small" @click="download()">导出</el-button>
+          </el-row>
          <el-table
             :data="tableData"
             style="width: 100%"
@@ -161,6 +164,7 @@
      </div>
 </template>
 <script>
+import {format} from '@/assets/js/date.js'
 export default {
     data(){
         return{
@@ -296,6 +300,38 @@ export default {
                     arr.push(obj);
                 }
             this.monthdata=arr;
+        },
+         download(t){
+             
+            if(this.pd.startYear==undefined || this.pd.startYear=="" || this.pd.startYear==null){
+              this.$message.error("开始年必选！");return;
+          }
+          if(this.pd.startMonth==undefined || this.pd.startMonth=="" || this.pd.startMonth==null){
+              this.$message.error("开始月必选！");return;
+          }
+          if(this.pd.endYear==undefined || this.pd.endYear=="" || this.pd.endYear==null){
+              this.$message.error("结束年必选！");return;
+          }
+          if(this.pd.endMonth==undefined || this.pd.endMonth=="" || this.pd.endMonth==null){
+              this.$message.error("结束月必选！");return;
+          }
+            this.$api.post(this.Global.aport2+'/ActivityInfoController/exportExcel',this.pd,
+                r =>{
+                      this.downloadM(r);
+                },e=>{},{},'blob')
+          },
+            downloadM (data) {
+            if (!data) {
+                return
+            }       
+            var name='联络工作统计'+format(new Date(),'yyyyMMddhhmmss')+'.xls';
+            let url = window.URL.createObjectURL(new Blob([data],{type:"application/xls"}))
+            let link = document.createElement('a')
+            link.style.display = 'none'
+            link.href = url
+            link.setAttribute('download',name)
+            document.body.appendChild(link)
+            link.click()
         },
     },
 }

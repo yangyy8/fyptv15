@@ -520,6 +520,7 @@ export default {
             pd3:{bnt0:false,bnt1:true,bnt2:true,bnt3:true,bnt4:true,bnt5:true,bnt6:true},
             focusCaseId:'',
             lvdw:[],
+            year:'',
         }
     },
     mounted(){
@@ -605,6 +606,7 @@ export default {
         getinit(val){
              
              this.pd.year=val.query.year;
+             this.year=val.query.year;
              this.getCheckList();
              this.getcbdw();
              //this.getLWDW();
@@ -612,7 +614,7 @@ export default {
              this.getJBR();
              this.getLrdw();
              this.pd.type=val.query.type==null?'0':val.query.type;
-             this.type=this.pd.type;
+             this.type=val.query.type==null?'0':val.query.type;
              this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
           handleSelectionChange(val) {
@@ -637,6 +639,8 @@ export default {
         },
         reset(){
             this.pd={};
+            this.pd.year=this.year;
+            this.pd.type=this.type;
         },
         getAll(n){
             if(n==1){
