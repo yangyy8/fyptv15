@@ -38,7 +38,7 @@
                </el-row>
              </el-col>
              <el-col :span="6" style="padding-left:45px;">
-                     <div class="title mb-20">历届代表名单</div>
+                     <div class="title mb-20">历届{{ltitle}}名单</div>
                      <div v-for='(tt,index) in $store.state.jb' class="ljinfo" :key="index">
                          <!-- <span @click="gopro(tt.dm,'jb',tt.mc)">{{tt.mc}}{{cinfo}}</span> -->
                           <span @click="goto(tt.dm,tt.mc)">{{tt.mc}}{{cinfo}}</span>
@@ -66,7 +66,7 @@ export default {
           codemc:'',
           jjb:'',
           jjbmc:'',
-       
+          ltitle:'',
           xzqh:'',
           xzqhmc:'',
 
@@ -103,6 +103,7 @@ export default {
                   case '1':
                         this.cname="人大代表";
                         this.cinfo="人民代表大会";
+                        this.ltitle='代表';
 
                         // if(this.jb=='qg'){
                         //     this.title="全国人大代表团";
@@ -139,6 +140,7 @@ export default {
                    case '2':
                         this.cname="政协委员";
                         this.cinfo="政治协商会议委员";
+                         this.ltitle='委员';
                         //  if(this.jb=='qg'){
                         //     this.title="全国政协委员界";
                         // }else if(this.jb=='sj'){

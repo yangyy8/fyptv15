@@ -9,7 +9,6 @@
           </div>
           <div class="content">
         <el-row>
-           
              <el-col :span="18">
                <el-row >
                    <el-col :span="14">

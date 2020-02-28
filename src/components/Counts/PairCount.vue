@@ -1,8 +1,8 @@
 <template>
       <div class="pairadd tjqtable">
-         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 统计信息 <span class="mlr_10">/</span>  <b>关注案件统计信息</b></span> </div>
+         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 统计信息 <span class="mlr_10">/</span>  <b>联络工作信息</b></span> </div>
          <div class="content">
-             <div class="ptitle mb-20">联络活动信息</div>
+             <div class="ptitle mb-20">联络工作信息</div>
              <div class="pborder">
                 <el-row class="lh" :gutter="2">
                     <el-col :sm="24" :md="12" :lg="12" class="input-item">

@@ -422,7 +422,7 @@
                                      <el-col :span="12" class="input-item">
                         <span class="yy-input-text" style="width:18%"><font class="red">*</font> 届次</span>
                         <div  class="yy-input-input">
-                        <el-select v-model="form1.session" :disabled="editshow" filterable clearable default-first-option placeholder="请选择届"  size="mini" style="width:49%">
+                        <el-select v-model="form1.session" filterable clearable default-first-option placeholder="请选择届"  size="mini" style="width:49%">
                          <el-option
                            v-for="(item,ind) in $store.state.jb"
                            :key="ind"
@@ -430,7 +430,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <el-select v-model="form1.times" :disabled="editshow" filterable clearable default-first-option placeholder="请选择次"  size="mini" style="width:46%">
+                        <el-select v-model="form1.times"  filterable clearable default-first-option placeholder="请选择次"  size="mini" style="width:46%">
                          <el-option
                            v-for="(item,ind) in $store.state.cb"
                            :key="ind"
@@ -1703,6 +1703,8 @@ export default {
             //团别
            getTB(code,jb)
            {       
+               console.log('----',code);
+               
                if(code==null || code==undefined){
                    code="";
                }
@@ -1738,11 +1740,13 @@ export default {
                       this.form1=r.data;
                       this.personId=r.data.personId;
                       this.getSSDW(this.form1.orgId,1);//所属单位
+                      this.getTB(this.form1.orgId,this.form1.levelType);
                       if(this.form.birthday==null){
                           this.form.birthday='';
                       }
                       this.zwTableData=r.data.positionList;
                       this.hjTableData=r.data.awardsList;
+
                       if(this.addtype=='1' || this.addtype=='2'){
                             
                              if(r.data.isProvincial=='0181000001'){

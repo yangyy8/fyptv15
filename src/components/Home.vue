@@ -1,6 +1,7 @@
 <template lang="html">
   <div class="home"  id="box1">
      <div class="hometop">
+       <div id='nav'>
       <div class="homelogo ba"> <img src="../assets/img/index/banner.png">
       <span class="toprc">
 
@@ -11,7 +12,7 @@
                     <el-dropdown-item command="b">修改账号</el-dropdown-item>
                     <el-dropdown-item command="a">修改密码</el-dropdown-item>
                     <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
-                    <!-- <el-dropdown-item command="d">权限切换</el-dropdown-item> -->
+                    <el-dropdown-item command="d">权限切换</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown> 
 
@@ -40,7 +41,8 @@
       <NavMenu :navMenus="menuData"></NavMenu>
     </el-menu>
      </div>
-    <div class="homemain ba">
+     </div>
+    <div class="homemain ba" style="margin-top:100px;">
         <!-- <keep-alive>
             <router-view></router-view>
         </keep-alive> -->
@@ -52,6 +54,28 @@
 
     </div>
 </div>
+ <el-dialog title="选择单位" :visible.sync="addDialogVisible"  width="600px">
+       <el-form :model="form">
+
+       <el-row class="ah-40">
+         <el-col :span="24">
+           <span class="yy-input-text trt" >选择单位：</span>
+             <el-select v-model="form.dw"  filterable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                 <el-option
+                  v-for="(item,ind) in xzdw"
+                  :key="ind"
+                  :label="item.orgName"
+                  :value="item.orgId">
+                </el-option>
+              </el-select>
+        </el-col>
+        </el-row>
+      </el-form> 
+       <div slot="footer" class="dialog-footer">
+              <el-button type="primary"  size="small" @click="addsave()">切 换</el-button>
+              <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
+        </div>
+     </el-dialog>
   </div>
 </template>
 
@@ -67,7 +91,10 @@ export default {
       menuData: this.menu.menu,
       name:this.$store.state.uname,
       orgname:this.$store.state.orgname,
-      zwname:this.$store.state.zwname
+      zwname:this.$store.state.zwname,
+      addDialogVisible:false,
+       form:{},
+       xzdw:[],
     };
   },
   mounted(){
@@ -86,9 +113,33 @@ export default {
          }else if(command=='c'){
            this.$router.push({name:'ShortcutMenu'});
          }else if(command=='d'){
-           this.$router.push({name:'AuthoritySwith'});
+           //this.$router.push({name:'AuthoritySwith'});
+
+
+           this.setDw();
+           this.addDialogVisible=true;
          }
       },
+      setDw(){
+            var ff=new FormData();
+            ff.append("userId",this.$store.state.personid);
+            let p=ff;
+             this.$api.post(this.Global.aport4+'/user/getUserOrgs',p,
+            r=>{
+                      if(r.code==1){
+                         this.xzdw=r.data;
+                        //  if(r.data.length>0){
+                        //      var array=r.data;
+                        //      for (let i = 0; i < array.length; i++) {
+                        //          if(array[i].isDefault=='0167000001'){
+                        //              this.radio=array[i].orgId;
+                        //          }
+                                 
+                        //      }
+                        //  }
+                      }
+            });
+        },
     getMenu(){
       this.$api.get(this.Global.aport1+'/menu/getMenu', null,
                 r => {
@@ -109,6 +160,27 @@ export default {
 
                });
     },
+    addsave(){
+         if(this.form.dw=="" || this.form.dw==undefined){
+              this.$message.error("请选择单位！");return;
+          }
+
+        var ff=new FormData();
+          ff.append("userId",this.$store.state.personid);
+          ff.append("orgId",this.form.dw);
+          let p=ff;
+        var url=this.Global.aport4+'/user/setDefaultOrg';
+          this.$api.post(url,p,
+          r=>{
+               if(r.code==1){
+                // this.updateInfo(r.data);
+                   this.$store.commit('getOrgname',r.data.ssdw.mc)
+                   this.$store.commit('getOrgid',r.data.ssdw.dm)
+                   this.$router.push({name: 'Index'});
+               }
+
+          })
+   },
    handleSelect(key, keyPath) {
    
    this.$router.push({
@@ -122,6 +194,14 @@ export default {
 <style scoped>
 .toprc{text-align: right;float:right;margin-right: 20px;color: #000000;padding-top:20px;}
 .homenav ul{height: 50px;box-sizing: border-box}
+
+#nav {
+  position: fixed;
+  width: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1000;
+}
 </style>
 <style>
 /* 水平样式 */

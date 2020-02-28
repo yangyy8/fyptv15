@@ -24,8 +24,28 @@
        
     </div>
 
-    
+     <el-dialog title="选择单位" :visible.sync="addDialogVisible"  width="600px">
+       <el-form :model="form">
 
+       <el-row class="ah-40">
+         <el-col :span="24">
+           <span class="yy-input-text trt" >选择单位：</span>
+             <el-select v-model="form.dw"  filterable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                 <el-option
+                  v-for="(item,ind) in xzdw"
+                  :key="ind"
+                  :label="item.orgName"
+                  :value="item.orgId">
+                </el-option>
+              </el-select>
+        </el-col>
+        </el-row>
+      </el-form> 
+       <div slot="footer" class="dialog-footer">
+              <el-button type="primary"  size="small" @click="addsave()">登 录</el-button>
+              <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
+        </div>
+     </el-dialog>
 </div>
 </template>
 <script>
@@ -34,6 +54,9 @@ export default {
     return {
       user:{},
       jzmm:false,
+      addDialogVisible:false,
+      form:{},
+      xzdw:[],
     }
   },
   mounted(){
@@ -78,39 +101,58 @@ export default {
           this.$api.post(url,p,
              r => {
               if(r.success){
-                    this.$store.commit('getToken',r.data.token)
-                    this.$store.commit('getUname',r.data.mc)
+                   this.updateInfo(r.data);
+                    
+                     this.getJID();
+                     if(r.data.first){
+                        this.$router.push({name: 'EditPwd'});return;
+                     }
+                     console.log('====',r.data.isDefault);
+                     
+                     if(!r.data.isDefault){
+                      //  this.getInfo(r.data.personId);
+                        this.$router.push({name: 'AuthoritySwith'});
+                     }else{
+                     
+                       
+                         this.$router.push({name: 'Index'});
+                     }
                   
-                    if(r.data.ssdw!=null){
-                        this.$store.commit('getOrgname',r.data.ssdw.mc)
-                        this.$store.commit('getOrgid',r.data.ssdw.dm)
+              }else {
+                  this.$message.error(r.message);return;
+              }
+          })
+    },
+    updateInfo(r)
+    {
+      
+                    this.$store.commit('getToken',r.token)
+                    this.$store.commit('getUname',r.mc)
+                 
+                    if(r.ssdw!=null){
+                        this.$store.commit('getOrgname',r.ssdw.mc)
+                        this.$store.commit('getOrgid',r.ssdw.dm)
                     }else{
                        this.$message.error("该用户没有所属单位！不能进行登录！");return;
                     }
-                     if(r.data.ssbm!=null){
-                        this.$store.commit('getBmname',r.data.ssbm.mc)
-                        this.$store.commit('getBmid',r.data.ssbm.dm)
+                     if(r.ssbm!=null){
+                        this.$store.commit('getBmname',r.ssbm.mc)
+                        this.$store.commit('getBmid',r.ssbm.dm)
                       }
-                      if(r.data.zw!=null){
-                        this.$store.commit('getZwname',r.data.zw.mc)
+                      if(r.zw!=null){
+                        this.$store.commit('getZwname',r.zw.mc)
                       }
-                      if(r.data.pbId!=null){
-                            this.$store.commit('getPbid',r.data.pbId)
+                      if(r.pbId!=null){
+                            this.$store.commit('getPbid',r.pbId)
                       }   
-                      if(r.data.personId!=null){
-                            this.$store.commit('getPersonid',r.data.personId)
+                      if(r.personId!=null){
+                            this.$store.commit('getPersonid',r.personId)
                       }
                     
                       this.$store.commit('getPagesize',this.Global.fycount)
                       this.$store.commit('getImgformat',this.Global.imgformat)
                       this.$store.commit('getDocformat',this.Global.docformat);
-                    
-                     this.getJID();
-                    this.$router.push({name: 'Index'});
-              }else {
-                  this.$message.error(r.message);return;
-              }
-          })
+
     },
     getJID(){
    
@@ -141,8 +183,42 @@ export default {
     },
     keyLogin(){
      if(this.user.userName&&this.user.password){
-       this.login();
+        this.login();
      }
+   },
+   getInfo(id){
+         this.addDialogVisible=true;
+         var ff=new FormData();
+          ff.append("userId",id);
+          let p=ff;
+        var url=this.Global.aport4+'/user/getUserOrgs';
+          this.$api.post(url,p,
+          r=>{
+               if(r.code==1){
+                   this.xzdw=r.data;
+               }
+
+          })
+   },
+   addsave(){
+         if(this.form.dw=="" || this.form.dw==undefined){
+              this.$message.error("请选择单位！");return;
+          }
+
+        var ff=new FormData();
+          ff.append("userId",this.$store.state.personid);
+          ff.append("orgId",this.form.dw);
+          let p=ff;
+        var url=this.Global.aport4+'/user/setDefaultOrg';
+          this.$api.post(url,p,
+          r=>{
+               if(r.code==1){
+                 this.updateInfo(r.data);
+                    
+                   this.$router.push({name: 'Index'});
+               }
+
+          })
    },
   },
 }

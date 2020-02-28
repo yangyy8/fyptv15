@@ -2708,9 +2708,10 @@ export default {
         //承办单位
         getcbdw(){// /org/getUndertakeUnit
           let p={
-            "orgId":this.$store.state.orgid
+            "orgid":this.$store.state.orgid
           };
-             this.$api.get(this.Global.aport1+'/org/getUndertakeOrg',p,
+          // /org/getUndertakeOrg  原承办单位接口
+             this.$api.post(this.Global.aport1+'/org/getUndertakeUnits',p,
                 r =>{
                     if(r.code==1){
                         this.cbdw=r.data;

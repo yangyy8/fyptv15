@@ -2,7 +2,7 @@
     <div class="pairadd">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 监控和预警
               <span class="mlr_10">/</span>  <b>快捷菜单设定</b></span> </div>
-         <div class="content">
+         <div class="content" style="height:500px;overflow-y:scroll">
         <el-row>
             <el-col :span="6" style="text-align:right"> 快捷菜单选择：</el-col>
             <el-col :span="10">
@@ -91,7 +91,7 @@ export default {
                 srr.push(ridsb[i].value);
                 
             }
-              console.log(srr,'===');
+              
               let p={
                   'menuList':srr
               }

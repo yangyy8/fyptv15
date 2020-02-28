@@ -30,10 +30,9 @@
                     <el-dropdown-item  command="b">修改账号</el-dropdown-item>
                     <el-dropdown-item command="a">修改密码</el-dropdown-item>
                     <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
-                    <!-- <el-dropdown-item command="d">权限切换</el-dropdown-item> -->
+                    <el-dropdown-item command="d">权限切换</el-dropdown-item>
                   </el-dropdown-menu>
-                </el-dropdown>      
-              
+                </el-dropdown>              
               <span @click="loginout" class="cursor ml-20"><i class="iconfont el-icon-yy-tuichu" ></i> 退出 </span> 
               </span>
             </el-col>
@@ -140,6 +139,28 @@
                 <el-col :span="4"><div  @click="goto('/Home/CaseList')"><img src="../assets/img/index/ic_yajy.png" alt="关注案件"><span>关注案件</span></div></el-col> -->
             </el-row>
         </div>
+        <el-dialog title="选择单位" :visible.sync="addDialogVisible"  width="600px">
+       <el-form :model="form">
+
+       <el-row class="ah-40">
+         <el-col :span="24">
+           <span class="yy-input-text trt" >选择单位：</span>
+             <el-select v-model="form.dw"  filterable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                 <el-option
+                  v-for="(item,ind) in xzdw"
+                  :key="ind"
+                  :label="item.orgName"
+                  :value="item.orgId">
+                </el-option>
+              </el-select>
+        </el-col>
+        </el-row>
+      </el-form> 
+       <div slot="footer" class="dialog-footer">
+              <el-button type="primary"  size="small" @click="addsave()">切 换</el-button>
+              <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
+        </div>
+     </el-dialog>
   </div>
 </template>
 <script>
@@ -149,6 +170,7 @@ export default {
     components: {
     NavMenu: NavMenu
   },
+  inject:['reload'],
     data(){
         return{
            activeIndex:'1',
@@ -169,12 +191,16 @@ export default {
            show3:false,//办理
            show4:false,//联络
            show5:false,//统计
+           addDialogVisible:false,
+           form:{},
+           xzdw:[],
           
         }
     },
     mounted(){
     //   getSearh();
       this.getMenu();
+       this.setDw();
       this.getfooter();
 
     },
@@ -190,9 +216,45 @@ export default {
            this.$router.push({name:'ShortcutMenu'});
          }
          else if(command=='d'){
-           this.$router.push({name:'AuthoritySwith'});
+          // this.$router.push({name:'AuthoritySwith'});
+         
+          this.addDialogVisible=true;
          }
       },
+       setDw(){
+            var ff=new FormData();
+            ff.append("userId",this.$store.state.personid);
+            let p=ff;
+             this.$api.post(this.Global.aport4+'/user/getUserOrgs',p,
+            r=>{
+                      if(r.code==1){
+                         this.xzdw=r.data;
+                      }
+            });
+        },
+         addsave(){
+         if(this.form.dw=="" || this.form.dw==undefined){
+              this.$message.error("请选择单位！");return;
+          }
+
+        var ff=new FormData();
+          ff.append("userId",this.$store.state.personid);
+          ff.append("orgId",this.form.dw);
+          let p=ff;
+        var url=this.Global.aport4+'/user/setDefaultOrg';
+          this.$api.post(url,p,
+          r=>{
+               if(r.code==1){
+                // this.updateInfo(r.data);
+                   this.$store.commit('getOrgname',r.data.ssdw.mc)
+                   this.$store.commit('getOrgid',r.data.ssdw.dm)
+                   this.addDialogVisible=false;
+                   this.reload();
+                  // this.$router.push({name: 'Index'});
+               }
+
+          })
+   },
     getMenu(){
       this.$api.get(this.Global.aport1+'/menu/getMenu', null,
                 r => {

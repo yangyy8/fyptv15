@@ -1593,9 +1593,10 @@ export default {
         //           });
 
          let p={
-                'mc':'',
+                  // 'mc':'',
+                  'orgid':this.$store.state.orgid,
             };
-          this.$api.post(this.Global.aport1+'/org/getOtherOrg',p,
+          this.$api.post(this.Global.aport1+'/org/getUndertakeUnits',p,
                 r =>{
                     if(r.code==1){
                         this.cbdwdata1=r.data;
@@ -1606,9 +1607,10 @@ export default {
          //除了基本信息里的承办单位
          getCBDW(){
           let p={
-             'orgId':this.$store.state.orgid,
+             'orgid':this.$store.state.orgid,
            };
-          this.$api.get(this.Global.aport1+'/org/getUndertakeOrg',p,
+           // /org/getUndertakeOrg  原接口
+          this.$api.post(this.Global.aport1+'/org/getUndertakeUnits',p,
               r =>{
                  if(r.code==1){
                    this.cbdwdata=r.data;

@@ -7,16 +7,16 @@
                    <div class="ptitle mb-20" style="text-align:center">权限切换</div>
                    <div style="width:500px; margin:0 auto;line-height:50px;">
                        <el-row>
-                           <el-col :span="24">
-                              <el-radio v-model="radio" label="1">最高人民法院</el-radio>
-                              <el-radio v-model="radio" label="2">河北高级人民法院</el-radio>
+                           <el-col :span="24" >
+                               <span v-for="(t,ind) in zwdw" :key='ind'>
+                              <el-radio v-model="radio" :label="t.orgId">{{t.orgName}} &nbsp;&nbsp;
+                                  </el-radio></span>
                           </el-col>                          
                        </el-row>
                   <div slot="footer" class="dialog-footer">
                     <el-button type="primary" size="small" @click="save">提 交 </el-button>
-                    <el-button @click="reset" size="small">重 置</el-button>
+                    <!-- <el-button @click="reset" size="small">重 置</el-button> -->
                     </div>
-                   
              </div>
               <div style="font-size:23px;color:red;font-weight:bold;line-height:50px;">{{msg}}</div>
                    </div>
@@ -30,22 +30,51 @@ export default {
             pd:{},
             msg:'',
             radio:'1',
+            zwdw:[],
         }
     },
-    mounted(){},
+    mounted(){
+        this.setDw();
+    },
     methods:{
         save(){
-                  
-                let p = {
-                    'account':this.pd.account
-                };
-            this.$api.post(this.Global.aport1+'/user/changeUser',p,
+            var ff=new FormData();
+            ff.append("userId",this.$store.state.personid);
+            ff.append("orgId",this.radio);
+            let p=ff;
+            this.$api.post(this.Global.aport4+'/user/setDefaultOrg',p,
             r=>{
                       if(r.code==1){
-                         this.msg="修改成功";
-                         this.pd={};
+                        this.$store.commit('getOrgname',r.data.ssdw.mc)
+                        this.$store.commit('getOrgid',r.data.ssdw.dm)
+                        this.$message({
+                                   message: '切换成功！',
+                                   type: 'success'
+                                });
+                        this.$router.push({name:"Index"});
+
                       }else{
                           this.msg=r.message;
+                      }
+            });
+        },
+        setDw(){
+            var ff=new FormData();
+            ff.append("userId",this.$store.state.personid);
+            let p=ff;
+             this.$api.post(this.Global.aport4+'/user/getUserOrgs',p,
+            r=>{
+                      if(r.code==1){
+                         this.zwdw=r.data;
+                         if(r.data.length>0){
+                             var array=r.data;
+                             for (let i = 0; i < array.length; i++) {
+                                 if(array[i].isDefault=='0167000001'){
+                                     this.radio=array[i].orgId;
+                                 }
+                                 
+                             }
+                         }
                       }
             });
         },

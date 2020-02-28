@@ -252,7 +252,7 @@
    <el-row class="ah-40">
        <el-col :span="12">
               <span class="yy-input-text trt">要闻类型：</span>
-              <el-select v-model="form.courtNewsType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+              <el-select v-model="form.courtNewsType" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                   <el-option
                     v-for="(item,ind) in $store.state.fyywlx"
                     :key="ind"
@@ -263,7 +263,7 @@
        </el-col>
           <el-col :span="12">
               <span class="yy-input-text trt">要闻来源：</span>
-              <el-select v-model="form.courtNewsSource" @change="getbd(form.courtNewsSource)" filterable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+              <el-select v-model="form.courtNewsSource" :disabled="ckshow" @change="getbd(form.courtNewsSource)" filterable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                  <el-option
                   v-for="(item,ind) in $store.state.fyywly"
                   :key="ind"
@@ -274,20 +274,20 @@
        </el-col>
         <el-col :sm="24" :md="24" :lg="24" v-if='bd'>
             <span class="yy-input-text trt"  style="width:13.5%!important;">标题：</span>
-             <el-input placeholder="请输入内容" size="small" clearable v-model="form.title"  class="yy-input-input" style="width:80.5%!important;"></el-input>
+             <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form.title"  class="yy-input-input" style="width:80.5%!important;"></el-input>
         </el-col>
           <el-col :sm="24" :md="24" :lg="24" class="mt-5" v-if='bd'>
             <span class="yy-input-text trt topt"  style="width:13.5%!important;">内容：</span>
-             <el-input placeholder="请输入内容" type="textarea" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable v-model="form.contents"  class="yy-input-input" style="width:80.5%!important;"></el-input>
+             <el-input placeholder="请输入内容" :disabled="ckshow" type="textarea" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable v-model="form.contents"  class="yy-input-input" style="width:80.5%!important;"></el-input>
         </el-col>
          <el-col :sm="24" :md="24" :lg="24" v-if='!bd'>
             <span class="yy-input-text trt"  style="width:13.5%!important;">连接：</span>
-             <el-input placeholder="请输入内容" size="small" clearable v-model="form.url"  class="yy-input-input" style="width:80.5%!important;"></el-input>
+             <el-input placeholder="请输入内容" :disabled="ckshow" size="small" clearable v-model="form.url"  class="yy-input-input" style="width:80.5%!important;"></el-input>
         </el-col>
        <el-col :span="24" class="input-item mt-10" v-if='bd'>
            <span class="yy-input-text trt txttop" style="width:13.5%!important;">影像资料：</span>
             <div class="yy-input-input">
-                  <el-button type="primary"  plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="upload(1)">上传影像资料</el-button> 
+                  <el-button type="primary" :disabled="ckshow"  plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="upload(1)">上传影像资料</el-button> 
                </div>
         </el-col>
  <el-col :span="24" v-if="fits && fits.length>0">
@@ -299,9 +299,9 @@
                             <img :src="fit.filepath"  style="max-width:700px; max-height:700px;"/>
                             
                             <img :src="fit.filepath" slot="reference" width="180" height="150">
-                                            
+                                          
                             </el-popover>
-                              <a class="close" @click="delImg(fit.imagedatainfoid)"> <i class="el-icon-close"></i></a>
+                              <a class="close" v-if='!ckshow' @click="delImg(fit.imagedatainfoid)"> <i class="el-icon-close"></i></a>
                             </div>
                               <div class="block" style="float:left;margin-right:20px;margin-top:20px" v-else>
                               <el-popover placement="right" title="" trigger="click">
@@ -318,7 +318,7 @@
                                     您的浏览器不支持视频播放
                              </video>
                              </el-popover>
-                            <a class="close" @click="delImg(fit.imagedatainfoid)" > <i class="el-icon-close"></i></a>
+                            <a class="close" v-if='!ckshow' @click="delImg(fit.imagedatainfoid)" > <i class="el-icon-close"></i></a>
                             </div>
                         </div>
                 </el-col>
@@ -391,6 +391,7 @@ export default {
             opendata:[],//需要传的对象
             txtname:'审核',
             sendtype:'0',//审核
+            ckshow:false,
 
         }
     },
@@ -523,6 +524,7 @@ export default {
                  this.fits=[];
                  this.bd=true;
                  this.tb=0;
+                 this.ckshow=false;
             if(t==0){
                  this.diatxt="法院要闻录入";
                  
@@ -531,6 +533,7 @@ export default {
                  this.diatxt="法院要闻修改";
             }else if(t==9){
                  this.tb=1;
+                 this.ckshow=true;
                  this.diatxt="法院要闻查看";
           }
 

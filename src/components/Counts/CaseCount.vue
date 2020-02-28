@@ -9,9 +9,9 @@
               <el-col :sm="24" :md="24" :lg="12" class="trt">  <el-button type="danger" plain class="countbnt" @click="getOpen(4,'各高院办理全国人大代表关注重点案件情况')" >各高院办理全国人大代表关注重点案件情况</el-button></el-col>
          </el-row>
 
-     <div class="counttj" style="text-align:center;color:red" v-if='type==2 || type==4'>正在建设中...</div>
+     <!-- <div class="counttj" style="text-align:center;color:red" v-if='type==2 || type==4'>正在建设中...</div> -->
 
-     <div class="counttj"  v-if='type==1 || type==3'>
+     <div class="counttj">
      <el-row style="border-bottom:1px solid #cccccc;padding-bottom:20px;">
        <el-col :span="24">
              <div class="title-green">
@@ -148,7 +148,7 @@ export default {
           this.name=name;
           this.type=t;
          
-          this.getList();
+          this.getList(t);
         },
         getList(t){
             if(t==0){
@@ -168,13 +168,19 @@ export default {
              let p={
                   'year':this.pd.year+"",
               };
-              if(this.type==3){
+              if(this.type==3 || this.type==4){
                   p={
-                      'isassign':'',
+                      'isassign':'0212000001',
                       'year':this.pd.year+"",
                   }
               }
-             this.$api.post(this.Global.aport2+'/StatisticsController/queryStatistiscInfo',p,
+
+              var url='/StatisticsController/queryStatistiscInfo';
+              if(this.type==2 || this.type==4){
+                  url='StatisticsController/queryHignStatistiscInfo';
+              }
+
+             this.$api.post(this.Global.aport2+url,p,
                 r =>{
                     if(r.code==1){
                       

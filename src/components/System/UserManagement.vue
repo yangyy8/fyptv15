@@ -33,7 +33,7 @@
                               <el-button type="primary" size="small" :disabled="bnt" @click="add(2)">查看</el-button>
                               <el-button type="primary" size="small" :disabled="bnt" @click="add(1)">修改</el-button>
                               <el-button type="primary" size="small" :disabled="bnt"  @click="delUser">删除</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="setUser(true)">解冻</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="setUser()">解冻</el-button>
                               <el-button type="primary" size="small" :disabled="bnt" @click="setPwd()">重置密码</el-button>
                     </el-row>
                      <el-table
@@ -142,7 +142,17 @@
             </div>
         </el-dialog>
         <el-dialog title="解冻信息" :visible.sync="jdDialogVisible" width="700px">
-           
+             <el-row>
+                  <el-col :span="24">
+                  <div class="yy-input-text trt topt" style="width:15%;"> 
+                    解冻原因：</div>                
+                 <el-input placeholder="请输入内容" type="textarea"  :autosize="{ minRows:4, maxRows: 4}" size="small" clearable v-model="checkContents"  class="yy-input-input" style='width:80%!important' ></el-input>
+             </el-col>
+             </el-row>
+              <div slot="footer" class="dialog-footer">
+              <el-button type="primary"  size="small" @click="setadd()" >保 存</el-button>
+              <el-button @click="jdDialogVisible = false" size="small">取 消</el-button>
+            </div>
         </el-dialog>
     </div>
  </template>
@@ -173,6 +183,7 @@ export default {
             tb:0,
             rolelist:[],//角色列表
             sform:{},
+            checkContents:'',//解冻原因
         }
     },
     mounted(){
@@ -396,26 +407,45 @@ export default {
                 });
             
         },
-        setUser(bb){
+        setUser(){
             if(this.mselect.length>0){
+                this.checkContents="";
+              this.jdDialogVisible=true;
+            }else{
+                  this.$message.error("请选择数据！");
+            }
+             
+        },
+        setadd(){
+            if(this.checkContents==null || this.checkContents=="" || this.checkContents==undefined){
+                this.$message.error("解冻原因不能为空！");return;
+            }
+             if(this.mselect.length>0){
+                var array=this.mselect;
+            
+                for (let i = 0; i < array.length; i++) {
+                
                 var ff=new FormData();
-                ff.append("token",this.$store.state.token);
-                ff.append("use",bb);
-                ff.append("id",this.mselect);
-                let p = ff;
-                  this.$api.post(this.Global.aport4+'/user/unLockUser',p,
+                    ff.append("userId",array[i].pbId);
+                    ff.append("reason",this.checkContents);
+                    let p=ff;
+
+             this.$api.post(this.Global.aport4+'/user/unLockUser',p,
                 r =>{
                       if(r.code==1){
                           this.$message({
                                    message: '操作成功！',
                                    type: 'success'
                                 });
+                           this.jdDialogVisible=false;
                            this.getList(this.CurrentPage, this.pageSize, this.pd);
+                      }else{
+                      this.$message.error(r.message);
                       }
                 });
-            }else{
-                  this.$message.error("请选择数据！");
-            }
+                   
+                }
+             }
         },
         delUser()
         {

@@ -797,9 +797,10 @@ export default {
         },
         getcbdw(){
             let p={
-            "orgId":this.$store.state.orgid
+            "orgid":this.$store.state.orgid
           };
-             this.$api.get(this.Global.aport1+'/org/getUndertakeUnit',p,
+          //  /org/getUndertakeUnit 以前的接口
+             this.$api.post(this.Global.aport1+'/org/getUndertakeUnits',p,
                 r =>{
                     if(r.code==1){
                         this.cbdw=r.data;
