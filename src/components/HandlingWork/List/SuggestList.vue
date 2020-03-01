@@ -398,6 +398,7 @@
                               <el-button type="primary" size="small"  :disabled="pdbnt.bnt6" @click="gotoinfo('fw','复文')">复文</el-button>
                               <el-button type="primary" size="small"  :disabled="pdbnt.bnt7" @click="gotoinfo('cb','催办')">催办</el-button>
                               <el-button type="primary" size="small"  :disabled="pdbnt.bnt8" @click="deltable">删除</el-button>
+                              <el-button type="primary" size="small"   @click="imports">导入</el-button>
                               <el-button type="primary"  size="small"  @click="download(0)">下载全部</el-button>
                               <el-button type="primary"  size="small"  @click="download(1)">下载当页</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(1)">公开</el-button>
@@ -584,6 +585,9 @@
      <RELEASE :url="fburl" :type="0"  :data="opendata" @FBfatherMethod="FBfatherMethod" :random="new Date().getTime()"></RELEASE>
   </el-dialog>
 
+  <el-dialog title="导入文件" :visible.sync="uploadDialogVisible"  width="640px">
+            <UPLOAD :url="uurl" :type="99" :proposalType="drtype" :urlErr="urlErr" @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+   </el-dialog>
     </div>
 </template>
 <script>
@@ -593,8 +597,9 @@ import {ToArray} from '@/assets/js/ToArray.js'
 import OPEN from "../../Common/opencontent"
 import EXAMINE from "../../Common/examinecontent"
 import RELEASE from "../../Common/releasecontent"
+import UPLOAD from "../../Common/upload"
 export default {
-    components:{OPEN,EXAMINE,RELEASE},
+    components:{OPEN,EXAMINE,RELEASE,UPLOAD},
     data(){
         return{
             CurrentPage: 1,
@@ -631,7 +636,7 @@ export default {
             snames:'',
             ywzllist:[],//业务种类
             bnt:true,
-            uurl:'/ActivityInfoController/importActivityInfo',
+            uurl:'/proposalHome/importProposal',
             urlErr:'',
             openurl:'/contentPublic/openContent',
             shurl:'/contentPublic/auditContent',
@@ -642,6 +647,8 @@ export default {
             opendata:[],//需要传的对象
             txtname:'审核',
             sendtype:'0',//审核
+            uploadDialogVisible:false,
+            drtype:'',
 
         }
     },
@@ -1244,6 +1251,14 @@ export default {
         },
         FBfatherMethod(data,t){
                  this.fbDialogVisible=false;
+        },
+      imports(){
+        this.drtype=this.pd.proposalType;
+        this.uploadDialogVisible = true;
+        },
+      drfatherMethod(){
+          this.uploadDialogVisible = false;
+          this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
     },
 }

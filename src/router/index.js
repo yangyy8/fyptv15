@@ -280,6 +280,24 @@ export default new Router({
           component: resolve => require(['@/components/Counts/SuggestCount'], resolve),
         },
         {
+          path: 'SuggestCountNum',
+          name: 'SuggestCountNum',
+          meta:{title:['统计信息','议案信息统计']},
+          component: resolve => require(['@/components/Counts/SuggestCountNum'], resolve),
+        },
+        {
+          path: 'SuggestCountSum',
+          name: 'SuggestCountSum',
+          meta:{title:['统计信息','议案信息统计']},
+          component: resolve => require(['@/components/Counts/SuggestCountSum'], resolve),
+        },
+        {
+          path: 'SuggestCountList',
+          name: 'SuggestCountList',
+          meta:{title:['统计信息','议案信息统计']},
+          component: resolve => require(['@/components/Counts/SuggestCountList'], resolve),
+        },
+        {
           path: 'InstitutionCount',
           name: 'InstitutionCount',
           meta:{title:['统计信息','联络机构信息统计']},

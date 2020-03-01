@@ -13,7 +13,8 @@
             :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <br/>
-            <div style="line-height:40px;font-weight:400;font-size:12px;">文件大小不超过20M，支持{{this.Global.docformat}}。</div>
+            <div v-if='this.proposalType!=null' style="line-height:40px;font-weight:400;font-size:12px;">文件大小不超过200M，支持rar、zip。</div>
+              <div v-else style="line-height:40px;font-weight:400;font-size:12px;">文件大小不超过20M，支持{{this.Global.docformat}}。</div>
           </el-upload>
         </el-col>
       </el-row>
@@ -26,7 +27,7 @@
 
 export default {
     name:'UPLOAD',
-    props:['url','type','urlErr','periodType','random'],
+    props:['url','type','urlErr','periodType','proposalType','random'],
     data(){
         return{
         actions:this.Global.uploads+this.url,
@@ -102,12 +103,25 @@ export default {
                 return
                 }
               }
+              var array=this.$refs.upload.uploadFiles;
+                  
                 
-                var array=this.$refs.upload.uploadFiles;
                   for (let n = 0; n < array.length; n++) {
                       this.result=0;
                       var arr=array[n].name.split('.');
                       var type=arr[arr.length-1].toLowerCase();
+                      var updatetype='';
+                       if(this.proposalType!=null){
+
+                          if(type=='rar'){
+                                this.result=1;
+                            }
+                          else if(type=='zip'){
+                                this.result=1;
+                            }
+                        updatetype="rar、zip";
+                   }else{
+
                       var srr=this.Global.docformat.split(',');
                       for (let i = 0; i < srr.length; i++) {
                         console.log(type,srr[i]);
@@ -115,11 +129,14 @@ export default {
                                this.result=1;
                             }
                        }
+                       updatetype=this.Global.docformat;
+                   }
                     if(this.result==0){
-                        this.$message.error('只能上传'+this.Global.docformat+"格式的文件");return;
+                        this.$message.error('只能上传'+updatetype+"格式的文件");return;
                     }
                     
                   }
+               
               
               this.fileData = new FormData();
               this.$refs.upload.submit();
@@ -130,6 +147,9 @@ export default {
              this.fileData.append("personRelFileType",this.type);
               if(this.periodType!=null){
               this.fileData.append("periodType",this.periodType);
+              }
+              if(this.proposalType!=null){
+                this.fileData.append("proposalType",this.proposalType);
               }
                this.$api.post(this.actions, this.fileData,
                   r => {

@@ -108,7 +108,7 @@
 .tjqtable .el-table thead.is-group th {background: #64A8BD!important;font-size: 14px!important;
   line-height: 30px; color: #333333;font-weight: bold;border: 1px solid #FFFFFF; }
 .tjqtable .el-table thead.is-group tr:first-of-type th:first-of-type {
-  border-bottom: none;
+  border-bottom: none; 
 }
 .tjqtable .el-table thead.is-group tr:last-of-type th:first-of-type {
   border-top: none;
@@ -179,6 +179,7 @@
 .setstit{padding-top: 20px; color: #4B719E; font-weight: bold;}
 .setborder{border-bottom: 1px solid #eeeeee;}
 .countbnt{width: 90%; line-height: 60px;font-size: 20px;margin-top: 10px;}
+.countbnt1{width: 90%; line-height: 40px;font-size: 20px;margin-top: 10px;}
 .counttj{width: 97%;margin-top: 20px; border:1px solid #cccccc; padding: 20px; border-radius: 10px;}
 .title-green{
   color: rgb(75, 195, 160);

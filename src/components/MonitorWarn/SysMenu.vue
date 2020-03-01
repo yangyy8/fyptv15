@@ -1,8 +1,8 @@
 <template>
-    <div class="pairadd">
+    <div class="pairadd ">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 监控和预警
               <span class="mlr_10">/</span>  <b>快捷菜单设定</b></span> </div>
-         <div class="content" style="height:500px;overflow-y:scroll">
+         <div class="content" id='unSchTree' style="height:500px;overflow-y:scroll">
         <el-row>
             <el-col :span="6" style="text-align:right"> 快捷菜单选择：</el-col>
             <el-col :span="10">
@@ -10,6 +10,7 @@
                         <el-tree
                             :data="menudata"
                             show-checkbox
+                            check-strictly
                             node-key="value"
                             :default-checked-keys="defaultChecked"
                             ref="tree"
@@ -91,7 +92,6 @@ export default {
                 srr.push(ridsb[i].value);
                 
             }
-              
               let p={
                   'menuList':srr
               }
@@ -117,4 +117,14 @@ export default {
    .diabnt{
      line-height: 40px;vertical-align: middle
    }
+</style>
+<style>
+/* 父节点隐藏，只留子节点 */
+#unSchTree .el-tree-node .is-leaf + .el-checkbox .el-checkbox__inner{
+   display: inline-block;
+  }
+ #unSchTree .el-tree-node .el-checkbox .el-checkbox__inner{
+  display: none;
+  }
+
 </style>

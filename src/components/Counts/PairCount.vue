@@ -96,7 +96,7 @@
                     <el-button type="primary"  style="width:130px;" @click="getCount">查 询</el-button>
                     <el-button style="width:130px;" @click="reset()">重  置</el-button>
                 </div>
- </div>
+            </div>
          <div style="text-align:center;font-size:25px;line-height:60px;">最高院联络办联络工作统计</div>
           <!-- :span-method="objectSpanMethod" -->
           <el-row class="mt-15" style="text-align: right">
