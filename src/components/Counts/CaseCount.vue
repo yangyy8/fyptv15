@@ -11,7 +11,7 @@
 
      <!-- <div class="counttj" style="text-align:center;color:red" v-if='type==2 || type==4'>正在建设中...</div> -->
 
-     <div class="counttj">
+     <div class="counttj" v-if='ck'>
      <el-row style="border-bottom:1px solid #cccccc;padding-bottom:20px;">
        <el-col :span="24">
              <div class="title-green">
@@ -38,7 +38,7 @@
      </el-row>
      <div id="table-content">
       <div style="text-align:center;font-size:25px;line-height:60px;">{{name}}</div>
-      <div style="text-align:right;font-size:14px;line-height:40px;">截止时间：{{year}}-12-31  
+      <div style="text-align:right;font-size:14px;line-height:40px;">截止时间：{{pd.year}}-12-31  
            <el-button size="mini" style="margin-left:20px;" @click="clickPrinting">打印</el-button>
       </div>
          <el-table 
@@ -113,26 +113,13 @@ import {getYear} from '@/assets/js/date.js'
 export default {
     data(){
         return{
-            tableData:[{
-                "repersentativeSatisfaction": 2,
-                "isreply": 0,
-                "isinTimeCount": 0,
-                "unIsinTime": 0,
-                "suborgName": "立案庭",
-                "completedCount": 0,
-                "isinTimeProbability": 0,
-                "unfinishTimeCount": 0,
-                "iscommunicate": 0,
-                "subOrgId": "FY123456789012345678901234567103",
-                "finishTimeCount": 1,
-                "completedProbability": 0,
-                "unCompletedCount": 10
-            }],
+            tableData:[],
             pd:{},
             yearlist:getYear(),
             year:'',
             name:'',
             type:0,
+            ck:false,
         }
     },
     mounted(){
@@ -147,8 +134,9 @@ export default {
         getOpen(t,name){
           this.name=name;
           this.type=t;
-         
+          this.ck=true;
           this.getList(t);
+         
         },
         getList(t){
             if(t==0){

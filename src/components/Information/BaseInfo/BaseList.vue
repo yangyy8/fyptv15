@@ -172,7 +172,7 @@
                               <el-checkbox v-model="pd.is1">人民法院特约人员</el-checkbox>
                               <el-checkbox v-model="pd.is2">在京代表</el-checkbox>
                               <el-checkbox v-model="pd.is3">人大专门委员会委员</el-checkbox>
-                              <el-checkbox v-model="pd.is4">省部级以上领导</el-checkbox>
+                              <el-checkbox v-model="pd.is4">省部级以上</el-checkbox>
                               <el-checkbox v-model="pd.is5">人大常委会委员</el-checkbox>
                         </el-col>  
                     </el-row>
@@ -193,14 +193,15 @@
 
                 <div class="pborder mt-20">
                         <el-row> 
-                                 <el-col :span="14">
-                              <el-button type="primary" size="small" @click="getCK('0','录入')">录入</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9','查看')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1','修改')">修改</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()">删除</el-button>
-                               <el-button type="primary" size="small" @click="getDR">导入</el-button>
+                             <el-col :span="14">
+                              <el-button type="primary" size="small" @click="getCK('0','录入')" v-if='getAuthShow("0301010005")'>录入</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9','查看')" v-if='getAuthShow("0301010008")'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1','修改')" v-if='getAuthShow("0301010006")'>修改</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()" v-if='getAuthShow("0301010007")'>删除</el-button>
+                              <el-button type="primary" size="small" @click="getDR" v-if='getAuthShow("0301010009")'>导入</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getSH" v-if='getAuthShow("0301010012")'>审核</el-button>
                               <!-- <el-button type="primary"  size="small" @click="download">下载全部</el-button> -->
-                             <!-- <el-button type="primary"  size="small" @click="download">下载当页</el-button> -->
+                              <!-- <el-button type="primary"  size="small" @click="download">下载当页</el-button> -->
                                   </el-col>
                                    <el-col :span="10" class="trt">
                                     <span>  人大代表总数 <b class="sumfont" >{{this.TotalResult}}</b> 人</span>
@@ -270,10 +271,29 @@
     <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
       <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
+    <el-dialog title="审核信息" :visible.sync="shDialogVisible"  width="630px">
+         <el-row class="mb-20">
+             <el-col :span="24" class="input-item">
+               <span class="yy-input-text trt"><font class="red">*</font> 审核结果：</span>
+                <div class="yy-input-input tlt">
+                <el-radio v-model="form.result" label="0179000001">通过</el-radio>
+                <el-radio v-model="form.result" label="0179000002">不通过</el-radio>
+                </div>
+             </el-col>
+             <el-col :span="24">
+               <span class="yy-input-text trt">审核意见：</span>
+                <el-input placeholder="请输入内容" type="textarea"  :autosize="{ minRows:4, maxRows: 4}" size="small" clearable v-model="form.content"  class="yy-input-input" ></el-input>
+             </el-col>
+          </el-row>
+        <div slot="footer" style="text-align:center;border-top:1px solid #cccccc; margin-top:10px; padding-top:10px;">
+              <el-button type="success"  size="small" @click="saveSH">保 存</el-button> 
+              <el-button  size="small"  @click="shDialogVisible=false">取 消</el-button>           
+        </div> 
+   </el-dialog>
     </div>
 </template>
 <script>
-import {format} from '@/assets/js/date.js'
+import {format,getAuthInfo} from '@/assets/js/date.js'
 import {ToArray,sortByKey} from '@/assets/js/ToArray.js'
 import UPLOAD from "../../Common/upload"
 export default {
@@ -305,10 +325,14 @@ export default {
             xhftdata:[],
             activeNum:0,
             inactiveNum:0,
-           wyhlist:[],
-           drDialogVisible:false, 
-           vvurl:'/representative/import',
-           vvurlErr:'',
+            wyhlist:[],
+            drDialogVisible:false, 
+            vvurl:'/representative/import',
+            vvurlErr:'',
+            shDialogVisible:false,
+            form:{},
+            authinfo:this.$store.state.auth,
+         
         }
     },
     watch:{
@@ -328,12 +352,10 @@ export default {
         this.$store.dispatch("getXl");
         this.$store.dispatch("getFydw");
         this.getinit(this.$route);
-        this.getCheckList();
-        this.getList(this.CurrentPage, this.pageSize, this.pd);
+    
     },
     methods:{
       tableRowClassName({row, rowIndex}) {
-  
         if (row.activeFlag != '1') {
           return 'success-row';
         } 
@@ -368,11 +390,25 @@ export default {
                this.xzdata= arr
              }
            },
+        getAuthShow(sign){
+                   if(getAuthInfo(this.authinfo,sign)){
+                       return true;
+                   }else{return false;}
+           },
         getinit(val){
+            
+           //权限start
+           if(this.authinfo.indexOf('0301010004')==-1){
+               this.$router.push({path:'/limitmsg'});
+           }
 
+           //end
+  
            this.viewtype=val.query.type;this.getXHFT();
            this.getBM();
            this.getWYH(this.Global.RD);
+           this.getCheckList();
+           this.getList(this.CurrentPage, this.pageSize, this.pd);
        
         },
           handleSelectionChange(val) {
@@ -500,6 +536,52 @@ export default {
                       }
                 });
         
+        },
+        getSH(){
+          this.form={};
+          if(this.multipleSelection.length>1){
+                this.$message.error("只能选择一条数据!"); return;
+          }else{
+              if(this.multipleSelection[0].checkDistinction=='0261000002'){
+                  this.$message.error("该数据不能审核"); return;
+              }
+          }
+          this.shDialogVisible=true;
+        },
+        saveSH(){
+         
+          if(this.multipleSelection.length==0){
+                   this.$message.error("请选择一条数据!"); return;
+            }else if(this.multipleSelection.length>1){
+                    this.$message.error("只能选择一条数据!"); return;
+            }
+            
+            if(this.form.result==null || this.form.result=="" || this.form.result==undefined){
+                this.$message.error('审核结果不能为空！');return;
+            }else if(this.form.result=='0179000001'){
+                    if(this.form.content==null || this.form.content=="" || this.form.content==undefined){
+                     this.$message.error('审核通过后审批意见不能为空！');return;
+                    }
+            }
+
+               let p={
+               'representativeId':this.multipleSelection[0].representativeId,
+               'content':this.form.content,
+               'result':this.form.result,
+           };
+          this.$api.post(this.Global.aport1+'/representative/check',p,
+                r =>{
+                    if(r.code==1){
+                            this.$message({
+                                type: 'success',
+                                message: '操作成功！'
+                        });
+                        this.shDialogVisible=false;
+                        this.getList(this.CurrentPage, this.pageSize, this.pd);
+                    }else{
+                        this.$message.error(r.message);
+                    }
+                });
         },
           getDR(){
             this.drDialogVisible=true;

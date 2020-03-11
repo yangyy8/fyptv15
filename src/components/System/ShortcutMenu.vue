@@ -91,11 +91,11 @@
                              <el-table-column
                                 label="操作">
                                  <template slot-scope="scope">
-                                    <div>
-                                      <el-button type="text"   class="a-btn"  title="上移"  icon="el-icon-top" @click="getMove(0,scope.row.shortMenuId)"></el-button>
-                                       <el-button type="text"   class="a-btn"  title="下移"  icon="el-icon-bottom" @click="getMove(1,scope.row.shortMenuId)"></el-button>
+                                    <div style="text-align:right;padding-right:15%">
+                                    <el-button type="text"   class="a-btn"  title="上移"  icon="el-icon-top" v-if='scope.row.menuOrder!=1' @click="getMove('up',scope.row.shortMenuId)"></el-button>
+                                    <el-button type="text"   class="a-btn"  title="下移"  icon="el-icon-bottom" v-if='scope.row.menuOrder!=num' @click="getMove('down',scope.row.shortMenuId)"></el-button>
                                     <el-button type="text"   class="a-btn"  title="删除"  icon="el-icon-delete" @click="deletes(scope.row.shortMenuId)"></el-button>
-                                     <el-button  size="mini" @click="getOpen(scope.row.id,scope.row.shortMenuId)">修改菜单名称</el-button>
+                                    <el-button  size="mini" @click="getOpen(scope.row.id,scope.row.shortMenuId)">修改菜单名称</el-button>
                                      </div>
                                   </template>
                             </el-table-column>
@@ -137,9 +137,11 @@ export default {
             mselect:[],
             addDialogVisible:false,
             form:{},
+            num:0,
         }
     },
     mounted(){
+        
         this.getList(this.CurrentPage,this.pageSize);
     },
     methods:{
@@ -153,7 +155,7 @@ export default {
         },
         clickRow(row){
            
-           this.$refs.multipleTable.toggleRowSelection(row)
+            this.$refs.multipleTable.toggleRowSelection(row)
         },
          yhChange(val){
             this.mselect=val;
@@ -170,6 +172,15 @@ export default {
             r=>{
                       if(r.code==1){
                          this.tableData=r.data.menuInfoList;
+                         var array=this.tableData;
+                         for (let index = 0; index < array.length; index++) {
+                             if(array[index].isShortcutMenu=='0262000001'){
+                             
+                                this.$nextTick(()=>{
+                                      this.$refs.multipleTable.toggleRowSelection(array[index],true);
+                             })
+                          }
+                         }
                          this.TotalResult=r.data.pageInfo.total;
                       }else{
                           this.$messgae.error(r.message);
@@ -181,6 +192,7 @@ export default {
             r=>{
                       if(r.code==1){
                          this.tableData1=r.data;
+                         this.num=this.tableData1.length;
                       }else{
                           this.$messgae.error(r.message);
                       }
@@ -211,11 +223,14 @@ export default {
                               "type":"success",
                               "message":r.message
                           });
+ this.getList(this.CurrentPage,this.pageSize);
+
                       }else{
                           this.$message.error(r.message);
                       }
             });
         },
+       
         getOpen(id,mid){
           this.form={};
           this.form.id=id;
@@ -245,7 +260,22 @@ export default {
         },
         getMove(t,d)
         {
-         
+                  let p={
+                          'shortcutMenuId':d,
+                          'orderType':t,
+                        }
+                        this.$api.post(this.Global.aport1+'/menu/changeOrder',p,
+                        r =>{
+                              if(r.code==1){
+                                      this.$message({
+                                            type: 'success',
+                                            message: r.message
+                                    }); 
+                                this.getList(this.CurrentPage,this.pageSize);
+                              }else{
+                                  this.$message.error(r.message);
+                              }
+                        });
         },
         deletes(id){
              this.$confirm('此操作将删除该信息, 是否继续?', '提示', {

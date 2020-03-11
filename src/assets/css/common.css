@@ -153,6 +153,7 @@ textarea{resize: none!important;}
 .t-flex{
   display: flex;
   justify-content: space-between;
+  padding-left: 5px;
 }
 
 /*end*/

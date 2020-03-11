@@ -96,8 +96,8 @@
                       </el-col>
                       <el-col :span="(show4 && show5)?16:(show4?0:24)">
                            <div class="tjxx mr-10" @click="getZX('c752782a1b0f11eaabae00155dbaef87')">
-                           <img src="../assets/img/newindex/img50.png" v-if='show2 || show3' alt="联络工作">
-                            <img src="../assets/img/newindex/img500.png" v-else alt="联络工作">
+                           <img src="../assets/img/newindex/img50.png" v-if='show2 || show3' alt="统计信息">
+                            <img src="../assets/img/newindex/img500.png" v-else alt="统计信息">
                           </div>
                       </el-col>
                     </el-row>
@@ -131,7 +131,7 @@
                   <div @click="getLine(t)"> <i class="el-icon-folder" style="font-size:20px;" v-if="t.icon==null"></i>
                      <i :class="t.icon" style="font-size:22px;" v-else></i>
                       {{t.alias}}</div>
-                    </el-col>
+                    </el-col>getLine
                  <!-- <el-col :span="4"><div  @click="goto('/Home/BaseList')"><img src="../assets/img/index/ic_rddbxx.png" alt="人大代表信息"><span>人大代表信息</span></div></el-col>
                 <el-col :span="4" ><div @click="goto('/Home/zxBaseList')"><img src="../assets/img/index/ic_zxwyxx.png" alt="政协委员信息"><span>政协委员信息</span></div></el-col>
                 <el-col :span="4" ><div @click="goto('/Home/tyBaseList')"><img src="../assets/img/index/ic_tyryxx.png" alt="特约人员信息"><span>特约人员信息</span></div></el-col>
@@ -200,13 +200,13 @@ export default {
     mounted(){
     //   getSearh();
       this.getMenu();
-       this.setDw();
+      
       this.getfooter();
 
     },
     methods:{
         handleCommand(command) {
-         console.log(command);
+         
          
          if(command=='a'){
            this.$router.push({name:'EditPwd'});
@@ -217,7 +217,7 @@ export default {
          }
          else if(command=='d'){
           // this.$router.push({name:'AuthoritySwith'});
-         
+          this.setDw();
           this.addDialogVisible=true;
          }
       },
@@ -259,18 +259,19 @@ export default {
       this.$api.get(this.Global.aport1+'/menu/getMenu', null,
                 r => {
                   this.menuData=r.data;
-                  if(this.menuData.length>1){
+                  if(this.menuData.length>0){
                     this.show1=false;this.show2=false;this.show3=false;this.show4=false;this.show5=false;
                     var array=this.menuData;
+                     
                     for (let i = 0; i < array.length; i++) {
                          var id=array[i].entity.id;
-                          if(id=="c752a6a61b0f11eaabae00155dbaef87"){this.show1=true;}
-                          else if(id=="c7529d831b0f11eaabae00155dbaef87"){this.show2=true;}
+                          if(id=="c752a6a61b0f11eaabae00155dbaef87"){
+                            this.show1=true;}
+                          else if(id=="c7533b751b0f11eaabae00155dbaef87"){this.show2=true;}
                           else if(id=="c751d2ef1b0f11eaabae00155dbaef87"){this.show3=true;}
-                          else if(id=="c7533b751b0f11eaabae00155dbaef87"){this.show4=true;}
+                          else if(id=="c7529d831b0f11eaabae00155dbaef87"){this.show4=true;}
                           else if(id=="c752782a1b0f11eaabae00155dbaef87"){this.show5=true;}
                     }
-
                   }
            });
     },
@@ -343,17 +344,16 @@ export default {
         }
     },
     getLine(t){
-           var name=t.name.split('/');
+      
            
-           this.$router.push({name:name[name.length-1]});
+           this.$router.push({path:t.url});
            
     },
     getfooter(){
         this.$api.get(this.Global.aport1+'/menu/getShortcutMenu', null,
                 r => {
                 if(r.code==1){
-                    console.log(r.data);
-
+                   
                   this.Shortlist=r.data;
                 }
          });

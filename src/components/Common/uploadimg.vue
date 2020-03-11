@@ -99,7 +99,7 @@ export default {
     },
     methods:{
       getinit(val){
-           console.log(this.personId);
+         
            var formdata=new FormData();
            formdata.append("personId",this.personId);
            formdata.append("token",this.$store.state.token);
@@ -112,7 +112,7 @@ export default {
                               this.snum=arr.length;
                                for (let i = 0; i < arr.length; i++) {
                                  if(arr[i].isDefault=='0167000001'){
-                                    console.log(arr[i].isDefault);
+                                    
                                     this.check[i]=true;
                                  }
                                 }
@@ -149,11 +149,10 @@ export default {
         // 通过DOM取文件数据
         this.fil = inputDOM.files;
          
-         console.log('this.fil',this.fil[0].name);
-
+        
              var result=0;
              var array=this.fil[0].name.split('.');
-              console.log(array,'');
+             
              var type=array[array.length-1].toLowerCase();
             
              
@@ -181,7 +180,6 @@ export default {
             return false
           }
           this.imgLen++;
-       
           this.imgs={};
          // this.$set(this.imgs,this.fil[i].name+'?'+new Date().getTime()+i,this.fil[i]);
           this.imgs.name=this.fil[i].name+'?'+new Date().getTime();
@@ -210,26 +208,27 @@ export default {
         this.del(key);
         this.imgLen--;
       },
-       del(n){
-       
+      del(n){
+      
           var arr=[];
           arr.push(n);
            for (let i = 0; i < arr.length; i++) {
             var index = this.images.findIndex(item =>{
               console.log(arr[i].name);
-              
     　　　　　　　if(item.name==arr[i].name && arr[i].name!=undefined){
             　　　return true
             　 　}
-                if(item.name==arr[i].fileName && arr[i].fileName!=undefined){
+                if(item.personIdentityRelFileId==arr[i].personIdentityRelFileId && arr[i].personIdentityRelFileId!=null){
             　　　return true
             　 　}
         　　})
+       
+        
         　 this.images.splice(index,1)
           }
         },
         delImgs(val){
-         
+      
            let p={
              'fileId':val.personIdentityRelFileId
            };
@@ -247,12 +246,13 @@ export default {
             })
         },
       submit(){
-        console.log(this.images,'this.images');
+       
         var array=this.images;
         if(this.selectname=="" && this.snum==array.length){
          for (let i = 0; i < array.length; i++) {
+     
             let isDefault=array[i].isDefault;
-            if(isDefault=="0167000001"){
+            if(isDefault=="0167000001" && this.check[i]){
               this.$emit('fatherMethod','99',this.type); return;
             }
          }
@@ -262,11 +262,10 @@ export default {
         this.formData = new FormData();
         var smecl=0;
         
-        console.log(array.length,'array.length');
         
         for (let i = 0; i < array.length; i++) {
           
-           if(this.selectname=="" && array[i].isDefault=="0167000001"){
+           if(this.selectname=="" && array[i].isDefault=="0167000001" && this.check[i]){
             
              this.selectname=array[i].fileName;
            }
@@ -299,8 +298,7 @@ export default {
                             message: r.message,
                             type: 'success'
                           });
-                          console.log('r.data',r.data);
-                          
+                        
                           this.$emit('fatherMethod',r.data==null?'99':r.data,this.type); 
                         }else{
                           this.$message.error(r.message);

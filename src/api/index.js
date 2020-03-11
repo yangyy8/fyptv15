@@ -8,9 +8,6 @@ import store from '../assets/store';
 
 function apiAxios (method, url, params, success, failure,header,responseType) {
     let loadingInstance1=null;
-  
-   
-    
     if(url!="/menu/getSubMenu"  && url!="/menu/getMenu" && url!="/menu/getShortcutMenu"){
      loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading',text:'正在加载中',background:'rgba(0,0,0,0.6)',customClass:'loadingClass'});
     }
@@ -37,22 +34,19 @@ function apiAxios (method, url, params, success, failure,header,responseType) {
           headers: header || {'X-Requested-With': 'XMLHttpRequest'},
           responseType: responseType||'json',
       })
-                                                                                                                                                 
-      .then(function (res) {  
-                                                                                                                                                                                  
+
+      .then(function (res) {                                                                                                                                                        
         if (res.status === 200) {
             if(loadingInstance1){
               loadingInstance1.close();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+            }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
             if (success) {                                                                                                                                                                                                                                                                                                                                                                      
               success(res.data)
             }
             if(res.data.code=='1000001'){
               window.location.href ="#/";
             }else if(!res.data.success&&res.data.success!=0){
-             
-            //  Message.error(res.data.message);
+              //  Message.error(res.data.message);
             }
   
         }else {

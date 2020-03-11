@@ -7,11 +7,11 @@
                       <el-row class="lh" :gutter="2">
                         <el-col :sm="24" :md="12" :lg="6">
                             <span class="yy-input-text">角色名</span>
-                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.mc"  class="yy-input-input" ></el-input>
+                            <el-input placeholder="请输入内容" size="small"  clearable v-model="pd.roleName"  class="yy-input-input" ></el-input>
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="6">
                             <span class="yy-input-text">所属法院</span>
-                           <el-select v-model="pd.dwdm" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.orgId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fylist"
                                  :key="ind"
@@ -53,9 +53,8 @@
                              
                             <el-table-column
                                 prop="orgName"
-                                label="应用范围">
+                                label="所属法院">
                             </el-table-column>
-                           
                              <el-table-column
                                 prop="createUser"
                                 label="创建人">
@@ -99,11 +98,11 @@
                 <el-row class="ah-40">
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 角色名称：</span>
-                        <el-input placeholder="请输入内容" size="small" clearable v-model="form.roleName"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form.roleName"  class="yy-input-input" ></el-input>
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 所属法院：</span>
-                        <el-select v-model="form.orgId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="form.orgId" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fylist"
                                  :key="ind"
@@ -113,7 +112,7 @@
                         </el-select>
                     </el-col>
                         <el-col :span="24">
-                        <span class="yy-input-text trt"><font class="red">*</font> 画面功能：</span>
+                        <span class="yy-input-text trt"><font class="red">*</font> 菜单功能：</span>
                         
                         <el-tree
                             :data="menudata"
@@ -122,9 +121,26 @@
                             :default-checked-keys="defaultChecked"
                             ref="tree"
                             highlight-current
+                            
                             class="yy-input-input"
                             style="padding-left:30%;"
                             :props="defaultProps">
+                        </el-tree>
+                    </el-col>
+                      <el-col :span="24">
+                        <span class="yy-input-text trt"><font class="red">*</font> 画面功能：</span>
+                        
+                        <el-tree
+                            :data="menudata1"
+                            show-checkbox
+                            node-key="value"
+                            :default-checked-keys="defaultChecked1"
+                            ref="tree1"
+                            highlight-current
+                            
+                            class="yy-input-input"
+                            style="padding-left:30%;"
+                            :props="defaultProps1">
                         </el-tree>
                     </el-col>
                        <el-col :span="24" class="mt-20">
@@ -159,17 +175,27 @@ export default {
             addDialogVisible:false,
             tableData:[],
             menudata:[],
+             menurr:[],
              defaultChecked:[],
             defaultProps: {
                 children: 'children',
                 label: 'label'
             },
             tb:0,
+            menudata1:[],
+            menurr1:[],
+            defaultChecked1:[],
+            defaultProps1: {
+                children: 'children',
+                label: 'label'
+            },
+            ckshow:false,
         }
     },
     mounted(){
            this.getFY();
            this.getMenu();
+           this.getHMGN();
            this.getList(this.CurrentPage, this.pageSize, this.pd);
     },
     methods:{
@@ -183,39 +209,45 @@ export default {
                 if(r.code==1){
                     this.menudata=r.data;
                     // var arr = r.data;
-                    // console.log(arr);
                     // this.menurr = [];
-                    // this.uniteChildSame(arr);
+                    // this.uniteChildSame(arr,0);
                     // this.defaultChecked = this.menurr;
                 }
              });
        },
-        uniteChildSame(arr) {
+        uniteChildSame(arr,t) {
         for (var i = 0; i < arr.length; i++) {
             if (arr[i].check == true || arr[i].children != null) {
-                this.selectChildSame(arr[i].children,arr[i].check,arr[i].value);
+                this.selectChildSame(arr[i].children,arr[i].check,arr[i].value,t);
             }
         }
       },
-      selectChildSame(arr,check,value){
+      selectChildSame(arr,check,value,t){
          if(arr!=null){
                     for (var i = 0; i < arr.length; i++) {
                             if(arr[i].children!=null){
                                 this.selectChildSame(arr[i].children);
                             }else {
                             if(arr[i].check){
-                            
-                            this.menurr.push(arr[i].value);
+                               
+                                if(t==0){
+                                this.menurr.push(arr[i].value);
+                                }else{
+                                 
+                                this.menurr1.push(arr[i].value);
+                                }
                             } 
                          }
                     }
             }else{
                 if(check==true){
-                   
-                       this.menurr.push(value);
+                      if(t==0){
+                         this.menurr.push(value);
+                       }else{
+                         this.menurr1.push(value);
+                       }
                 } 
             }
-       
         },
         yhChange(val){
              this.mselect=val;
@@ -235,6 +267,16 @@ export default {
         },
          reset(){
             this.pd={};
+        },
+         getHMGN(){
+          
+            this.$api.post(this.Global.aport1+'/menu/pageList',null,
+            r=>{
+                      if(r.code==1){
+                         this.menudata1=r.data;
+                      }
+                      
+            });
         },
         getFY(){
               this.$api.get(this.Global.aport1+'/org/getCourtOrg',null,
@@ -267,10 +309,14 @@ export default {
         },
         add(t){
           this.tb=t;
-         
+          this.ckshow=false;
           switch (t) {
               case 0:
                   this.form={};
+                    this.$nextTick(function() {
+                        this.$refs.tree.setCheckedKeys([])
+                        this.$refs.tree1.setCheckedKeys([])
+                    })
                   this.adddia="新增";
                   break;
               case 1:
@@ -278,6 +324,7 @@ export default {
                   break;
               case 2:
                   this.adddia="查看";
+                  this.ckshow=true;
                   break;
               default:
                   break;
@@ -293,15 +340,18 @@ export default {
                    };
                   this.$api.post(this.Global.aport1+'/user/getByRoleId',p,
                   r =>{
-                      if(r.code==1){
-                         this.form=r.data;
-                         this.menudata=r.data.funList;
-                         var arr = r.data.funList;
-                            console.log(arr);
+                    if(r.code==1){
+                            this.form=r.data;
+                            this.menudata=r.data.funList;
+                            var arr = r.data.funList;
                             this.menurr = [];
-                            this.uniteChildSame(arr);
-                           
+                            this.uniteChildSame(arr,0);
                             this.defaultChecked = this.menurr;
+                            this.menudata1=r.data.pageList;
+                            var arr1 = r.data.pageList;
+                            this.menurr1 = [];
+                            this.uniteChildSame(arr1,1);
+                            this.defaultChecked1 = this.menurr1;
                       }
                 });
           }else{
@@ -314,25 +364,35 @@ export default {
 
          var  url="/user/saveRole";
          let checkList=this.$refs.tree.getCheckedNodes();
+        let checkList1=this.$refs.tree1.getCheckedNodes();
         //  console.log(checkList);
          
         //  var array=checkList;
         if(this.form.roleName=='' || this.form.roleName==undefined){
-             this.$message.error('角色不能为空！');return;
+             this.$message.error('角色名称不能为空！');return;
         }
         if(this.form.orgId=='' || this.form.orgId==undefined){
              this.$message.error('所属法院不能为空！');return;
         }
             if (checkList.length == 0) {
+                this.$message.error('菜单功能不能为空！');
+                return;
+             }
+              if (checkList1.length == 0) {
                 this.$message.error('画面功能不能为空！');
                 return;
              }
          var childrenlist=new Array();
-       
+         var childrenlist1=new Array();
               childrenlist = this.$refs.tree.getHalfCheckedKeys().concat(this.$refs.tree.getCheckedKeys());
+              childrenlist1=(this.$refs.tree1.getHalfCheckedKeys().concat(this.$refs.tree1.getCheckedKeys()));
             
+            for (let ii = 0; ii < childrenlist1.length; ii++) {
+                childrenlist.push(childrenlist1[ii]);
                 
-              
+            }
+            console.log(childrenlist);
+            
                 this.form.token=this.$store.state.token;
                 this.form.menuIds=childrenlist;
                 
@@ -383,13 +443,17 @@ export default {
                             for (let i = 0; i < array.length; i++) {
                                 srr.push(array[i].roleId);
                             }
-                            this.$api.post(this.Global.aport4+'/user/deleteUser',srr,
+                            let p={
+                                'roleIds':srr,
+                            };
+                            this.$api.post(this.Global.aport1+'/user/deleteRole',p,
                             r =>{
                                 if(r.code==1){
                                 this.$message({
                                         message: '删除成功！',
                                         type: 'success'
-                                })
+                                });
+                            this.getList(this.CurrentPage, this.pageSize, this.pd); 
                                 }
                             });
                     }).catch(() => {

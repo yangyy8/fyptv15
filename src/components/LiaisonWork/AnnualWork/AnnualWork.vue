@@ -74,7 +74,7 @@
 
             <div class="footer">
             <el-button type="primary"  style="width:130px;" @click="submit" v-if="!ck">保 存</el-button>
-             <el-button style="width:130px;" @click="goto()">查 询</el-button> 
+             <el-button style="width:130px;" @click="goto()">关 闭</el-button> 
             </div>
             <br/>
          </div>

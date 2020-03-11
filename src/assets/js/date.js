@@ -96,3 +96,31 @@ export   function getServerDate(){
       }
    return arr;
  }
+ //大屏时间
+ export function setNowTimes () {
+  let myDate = new Date()
+  // console.log(myDate)
+  let wk = myDate.getDay()
+  let yy = String(myDate.getFullYear())
+  let mm = myDate.getMonth() + 1
+  let dd = String(myDate.getDate() < 10 ? '0' + myDate.getDate() : myDate.getDate())
+  let hou = String(myDate.getHours() < 10 ? '0' + myDate.getHours() : myDate.getHours())
+  let min = String(myDate.getMinutes() < 10 ? '0' + myDate.getMinutes() : myDate.getMinutes())
+  let sec = String(myDate.getSeconds() < 10 ? '0' + myDate.getSeconds() : myDate.getSeconds())
+  let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+  let week = weeks[wk]
+  let nowDate = yy + '年' + mm + '月' + dd+'日'
+  let nowTime = hou + ':' + min + ':' + sec
+  let nowWeek = week
+  return nowDate+'&nbsp;&nbsp;&nbsp;&nbsp;'+nowTime+'&nbsp;&nbsp;&nbsp;&nbsp;'+nowWeek;
+}
+
+export function getAuthInfo(all,sign){
+  if(all.indexOf(sign)!=-1){
+      return true;
+  }
+  else{
+      return false;
+  }
+}
+   

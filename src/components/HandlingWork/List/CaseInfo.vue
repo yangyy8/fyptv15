@@ -2073,7 +2073,6 @@ export default {
                        }
                       if(r.data.focuscaseinfo.session!=null){
                        
-                        
                         this.pd1=r.data.focuscaseinfo;
                    
                        // this.pd0=JSON.parse(JSON.stringify(r.data.caseletterlist[0]));
@@ -2915,6 +2914,8 @@ export default {
         },
         //关注案件在办结界面选择办结时间是自动计算是否期限内办结和超期时间
         getCQSJ(val){
+            this.$set(this.pd6,'isintimecompleted','');
+              this.$set(this.pd6,'outcompletedtime','');
                  let p={
                   'focuscaseid':this.focusCaseId,
                   'completedtime':val,

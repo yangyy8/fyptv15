@@ -107,7 +107,6 @@ export default {
                      if(r.data.first){
                         this.$router.push({name: 'EditPwd'});return;
                      }
-                     console.log('====',r.data.isDefault);
                      
                      if(!r.data.isDefault){
                       //  this.getInfo(r.data.personId);
@@ -147,6 +146,9 @@ export default {
                       }   
                       if(r.personId!=null){
                             this.$store.commit('getPersonid',r.personId)
+                      }
+                       if(r.funids!=null){
+                            this.$store.commit('getAuth',r.funids)
                       }
                     
                       this.$store.commit('getPagesize',this.Global.fycount)

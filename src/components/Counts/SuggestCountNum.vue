@@ -41,13 +41,13 @@
                       <el-col :sm="24" :md="12" :lg="12">
                           <span class="yy-input-text" style="width:18%!important;">
                        议案类型</span>
-                            <el-select v-model="pd.proposalType" @change="getYAName(pd.proposalType)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                         <el-option
-                           v-for="(item,ind) in $store.state.yalx"
-                           :key="ind"
-                           :label="item.mc"
-                           :value="item.dm">
-                           </el-option>
+                            <el-select v-model="pd.proposalType"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-option  label="代表议案" value="0204000001">
+                          </el-option>
+                           <el-option  label="政协提案" value="0204000002">
+                          </el-option>
+                           <el-option  label="建议、批评与意见" value="0204000003">
+                          </el-option>
                         </el-select>
 
                       </el-col>
@@ -144,6 +144,7 @@ export default {
               this.$set(this.pd,'proposalType','');
           },
           getList(){
+           
               if(this.pd.beginTime=='' || this.pd.beginTime==null || this.pd.beginTime==undefined){
                  this.$message.error('开始年份不能为空！');return;
               }
@@ -177,6 +178,7 @@ export default {
       
     },
     getSpanArr(data) {　
+      this.spanArr=[];
           for (var i = 0; i < data.length; i++) {
             
             if (i === 0) {

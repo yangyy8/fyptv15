@@ -73,6 +73,17 @@
                                  </el-option>
                             </el-select>
                         </el-col> -->
+                        <el-col :sm="24" :md="12" :lg="8">
+                            <span class="yy-input-text">是否专门委员会</span>
+                           <el-select v-model="pd.zmwyh"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in $store.state.jgwyh"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                                 </el-option>
+                            </el-select>
+                        </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">编码</span>
                             <el-input placeholder="请输入内容"  size="small" clearable v-model="pd.bm"  class="yy-input-input" ></el-input>
@@ -241,6 +252,7 @@ export default {
        this.$store.dispatch("getXzqh");
        this.$store.dispatch("getFyjb");
        this.$store.dispatch("getSfbm");
+       this.$store.dispatch("getJgwyh");
        this.getinit(this.$route);
            
     },

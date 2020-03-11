@@ -31,7 +31,7 @@
                     <el-row>
                               <el-button type="primary" size="small" :disabled="bnt" @click="add(0)">赋权</el-button>
                               <el-button type="primary" size="small" :disabled="bnt" @click="add(2)">查看</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="add(1)">修改</el-button>
+                              <!-- <el-button type="primary" size="small" :disabled="bnt" @click="add(1)">修改</el-button> -->
                               <el-button type="primary" size="small" :disabled="bnt"  @click="delUser">删除</el-button>
                               <el-button type="primary" size="small" :disabled="bnt" @click="setUser()">解冻</el-button>
                               <el-button type="primary" size="small" :disabled="bnt" @click="setPwd()">重置密码</el-button>
@@ -58,7 +58,15 @@
                                 label="所属法院">
                             </el-table-column>
                              <el-table-column
-                                prop="state"
+                                prop="subOrgName"
+                                label="所属部门">
+                            </el-table-column>
+                             <el-table-column
+                                prop="subOrgPosition"
+                                label="职务">
+                            </el-table-column>
+                             <el-table-column
+                                prop="lockStatus"
                                 label="状态">
                             </el-table-column>
                      </el-table>
@@ -107,7 +115,7 @@
                     </el-col>
                       <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 角色：</span>
-                        <el-select v-model="form.roleIds" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="form.roleIds" :disabled="ck" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in rolelist"
                                  :key="ind"
@@ -117,7 +125,7 @@
                         </el-select>
                     </el-col>
                       <el-col :span="24">
-                        <span class="yy-input-text trt"><font class="red">*</font>  画面功能：</span>
+                        <span class="yy-input-text trt"> 菜单功能：</span>
                         <el-tree
                             :data="menudata"
                             show-checkbox
@@ -128,6 +136,20 @@
                             class="yy-input-input"
                             style="padding-left:30%;"
                             :props="defaultProps">
+                        </el-tree>
+                    </el-col>
+                      <el-col :span="24">
+                        <span class="yy-input-text trt">  画面功能：</span>
+                        <el-tree
+                            :data="menudata1"
+                            show-checkbox
+                            node-key="value"
+                            :default-checked-keys="defaultChecked1"
+                            ref="tree1"
+                            highlight-current
+                            class="yy-input-input"
+                            style="padding-left:30%;"
+                            :props="defaultProps1">
                         </el-tree>
                     </el-col>
                     <el-col :span="24" class="mt-20">
@@ -156,7 +178,7 @@
         </el-dialog>
     </div>
  </template>
-<script>
+ <script>
 export default {
     data(){
         return{
@@ -169,11 +191,18 @@ export default {
             bnt:true,
             mselect:[],
             menudata:[],
+            menudata1:[],
             menurr:[],
+            menurr1:[],
             adddia:'赋权',
             fylist:[],
             defaultChecked:[],
             defaultProps: {
+                children: 'children',
+                label: 'label'
+            },
+            defaultChecked1:[],
+            defaultProps1: {
                 children: 'children',
                 label: 'label'
             },
@@ -184,11 +213,13 @@ export default {
             rolelist:[],//角色列表
             sform:{},
             checkContents:'',//解冻原因
+            ck:false,
         }
     },
     mounted(){
            this.getFY();
            this.getMenu();
+           this.getHMGN();
            this.getList(this.CurrentPage, this.pageSize, this.pd);
     },
     methods:{
@@ -200,34 +231,40 @@ export default {
                     var arr = r.data;
                     console.log(arr);
                     this.menurr = [];
-                    this.uniteChildSame(arr);
+                    this.uniteChildSame(arr,0);
                     this.defaultChecked = this.menurr;
                 }
              });
        },
-        uniteChildSame(arr) {
+        uniteChildSame(arr,t) {
         for (var i = 0; i < arr.length; i++) {
             if (arr[i].check == true || arr[i].children != null) {
-                this.selectChildSame(arr[i].children,arr[i].check,arr[i].value);
+                this.selectChildSame(arr[i].children,arr[i].check,arr[i].value,t);
             }
         }
       },
-      selectChildSame(arr,check,value){
+      selectChildSame(arr,check,value,t){
          if(arr!=null){
                     for (var i = 0; i < arr.length; i++) {
                             if(arr[i].children!=null){
                                 this.selectChildSame(arr[i].children);
                             }else {
                             if(arr[i].check){
-                            
-                            this.menurr.push(arr[i].value);
-                        } 
+                               if(t==0){
+                               this.menurr.push(arr[i].value);
+                               }else{
+                               this.menurr1.push(arr[i].value);
+                               }
+                             } 
                             }
                     }
             }else{
                 if(check==true){
-                   
+                       if(t==0){
                        this.menurr.push(value);
+                       }else{
+                       this.menurr1.push(value);
+                       }
                 } 
             }
        
@@ -269,6 +306,16 @@ export default {
                       }
                 });
         },
+          getHMGN(){
+          
+            this.$api.post(this.Global.aport1+'/menu/pageList',null,
+            r=>{
+                      if(r.code==1){
+                         this.menudata1=r.data;
+                      }
+                      
+            });
+        },
         getList(currentPage, showCount, pd){
           
             this.pd.token=this.$store.state.token;
@@ -309,6 +356,7 @@ export default {
         },
         add(t){
           this.tb=t;
+          this.ck=false;
           switch (t) {
               case 0:
                   this.form={};
@@ -318,6 +366,7 @@ export default {
                   this.adddia="修改";
                   break;
               case 2:
+                  this.ck=true;
                   this.adddia="查看";
                   break;
               default:
@@ -347,8 +396,14 @@ export default {
                             this.menudata=r.data.funList;
                             var arr = r.data.funList;
                             this.menurr = [];
-                            this.uniteChildSame(arr);
+                            this.uniteChildSame(arr,0);
                             this.defaultChecked = this.menurr;
+
+                            this.menudata1=r.data.pageList;
+                            var arr1 = r.data.pageList;
+                            this.menurr1 = [];
+                            this.uniteChildSame(arr1,1);
+                            this.defaultChecked1 = this.menurr1;
                    
                       }
                 });
@@ -376,21 +431,30 @@ export default {
                this.$message.error("角色不能为空！");return;
            }
         //    let checkList=this.$refs.tree.getCheckedNodes();
-        //      if (checkList.length == 0) {
-        //         this.$message.error('画面功能不能为空！');
-        //         return;
-        //      }
+        //    let checkList1=this.$refs.tree1.getCheckedNodes();
+            // if (checkList.length == 0) {
+            //     this.$message.error('菜单功能不能为空！');
+            //     return;
+            //  }
+            //  if (checkList1.length == 0) {
+            //     this.$message.error('画面功能不能为空！');
+            //     return;
+            //  }
            var childrenlist=new Array();
+            var childrenlist1=new Array();
            childrenlist = this.$refs.tree.getHalfCheckedKeys().concat(this.$refs.tree.getCheckedKeys());
-            
-      
+           childrenlist1 = this.$refs.tree1.getHalfCheckedKeys().concat(this.$refs.tree1.getCheckedKeys());
+           
+           for (let ii = 0; ii < childrenlist1.length; ii++) {
+                childrenlist.push(childrenlist1[ii]);
+                
+            }
                 this.sform.token=this.$store.state.token;
                 this.sform.menuIds=childrenlist;
                 this.sform.userId=this.form.userId;
                 this.sform.orgId=this.form.orgId;
                 this.sform.roleIds=this.form.roleIds;
                 
-
                 this.$api.post(this.Global.aport1+url,this.sform,
                  r =>{
                       if(r.code==1){
@@ -417,16 +481,17 @@ export default {
              
         },
         setadd(){
-            if(this.checkContents==null || this.checkContents=="" || this.checkContents==undefined){
-                this.$message.error("解冻原因不能为空！");return;
-            }
+            // if(this.checkContents==null || this.checkContents=="" || this.checkContents==undefined){
+            //     this.$message.error("解冻原因不能为空！");return;
+            // }
+            
              if(this.mselect.length>0){
                 var array=this.mselect;
             
                 for (let i = 0; i < array.length; i++) {
                 
                 var ff=new FormData();
-                    ff.append("userId",array[i].pbId);
+                    ff.append("userId",array[i].courtPersonId);
                     ff.append("reason",this.checkContents);
                     let p=ff;
 
@@ -502,7 +567,10 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                this.$api.post(url, srr,
+                let p={
+                    'userIds':srr,
+                };
+                this.$api.post(url, p,
                 r => {
                     if (r.code==1) {
                     this.$message({
@@ -529,6 +597,3 @@ export default {
     },
 }
 </script>
- <style scoped>
- 
- </style>

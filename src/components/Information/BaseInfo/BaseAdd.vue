@@ -36,7 +36,7 @@
                                         <el-col :span="12" >
                                         <span class="yy-input-text">籍贯</span>
                                         <!-- :filter-method="userFilter" -->
-                                        <el-select v-model="form.birthPlace" :disabled="ckshow" @change="getZNSB()"  @visible-change="getXz()"  filterable clearable  placeholder="请选择"  size="small" class="yy-input-input" >
+                                           <el-select v-model="form.birthPlace" :disabled="ckshow" @change="getZNSB()"  @visible-change="getXz()"  filterable clearable  placeholder="请选择"  size="small" class="yy-input-input" >
                                                 <el-option
                                                     v-for="(item,ind) in xzdata"
                                                     :key="ind"
@@ -142,7 +142,7 @@
                                      </el-col>
                                       <el-col :span="12" v-if="ntype!='4'">
                                         <span class="yy-input-text" :title='label1'>
-                                  <font class="red">*</font> {{label1}}
+                                            <font class="red">*</font> {{label1}}
                                             </span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form1.cardNumber"  class="yy-input-input" ></el-input>
                                      </el-col>
@@ -180,7 +180,7 @@
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='1'">
                                         <span class="yy-input-text"><font class="red">*</font> 选举单位</span>
-                                        <el-select v-model="form1.electUnitsid" :disabled="ckshow" filterable clearable default-first-option placeholder="请先选择所属单位"  size="small" class="yy-input-input" >
+                                        <el-select v-model="form1.electUnitsid" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择所属单位':'无数据'"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in xjdwdata"
                                                 :key="ind"
@@ -334,19 +334,19 @@
                                             <span v-if="ntype=='3'">连任人员</span> -->
                                               </el-checkbox>  
                                           <!-- <span class="lfont ml-20" v-if='pd.is5'>连任</span> -->
-                                          <el-select v-model="form1.wj" :disabled="ckshow" v-if='pd.is5' multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
+                                          <!-- <el-select v-model="form1.wj" :disabled="ckshow" v-if='pd.is5' multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
                                             <el-option label="第十三届" value="第十三届">
                                             </el-option>
                                             <el-option label="第十二届" value="第十二届">
                                             </el-option>
-                                          </el-select>
+                                          </el-select> -->
                                           <el-input-number v-model="form1.reelectionNum" :disabled="ckshow"  v-if='pd.is5' controls-position="right" size="mini"  :min="1" :max="10" style="width:80px"></el-input-number>
                                           <span class="lfont" v-if='pd.is5'>届</span>
                                      </el-col>
                                       <el-col :span="12" v-if="ntype!='3'">
                                           <el-checkbox v-model="pd.is3" :disabled="ckshow">常委会委员</el-checkbox>
                                      </el-col>
-                                     <el-col :span="12">
+                                     <!-- <el-col :span="12">
                                           <el-checkbox v-model="pd.is12" :disabled="ckshow">
                                               曾任
                                               </el-checkbox>  
@@ -358,7 +358,7 @@
                                             </el-option>
                                           </el-select>
                                          
-                                     </el-col>
+                                     </el-col> -->
                                     <el-col :span="12">
                                           <el-checkbox v-model="pd.is4" :disabled="ckshow">
                                             <span v-if="ntype=='1'">在京代表</span>
@@ -366,7 +366,7 @@
                                             <span v-if="ntype=='3'">在京特约人员</span>
                                           </el-checkbox>
                                      </el-col>
-                                      <el-col :span="12" v-if="ntype!='3'" :disabled="ckshow">
+                                      <!-- <el-col :span="12" v-if="ntype!='3'" :disabled="ckshow">
                                           <el-checkbox v-model="pd.is11">补选</el-checkbox>
                                           <span style="font-size:12px;" v-if='pd.is11'>补选时间</span>
                                            <el-date-picker v-if='pd.is11'
@@ -374,11 +374,11 @@
                                             type="date" size="mini" value-format="yyyy-MM-dd"
                                             placeholder="选择日期"  :disabled="ckshow" style="width:50%">
                                         </el-date-picker>
-                                          
-                                     </el-col>
+                                     </el-col> -->
+
                                        <el-col :span="12" v-if="ntype!='3'">
                                           <el-checkbox v-model="pd.is6" :disabled="ckshow">专门委员会委员</el-checkbox>
-                                          <span class="lfont ml-20" v-if='pd.is6'>专门委员会</span>
+                                          <!-- <span class="lfont ml-20" v-if='pd.is6'>专门委员会</span> -->
                                           <el-select v-model="form1.specialCommitteeId" :disabled="ckshow" v-if='pd.is6' filterable clearable default-first-option placeholder="请先选择所属单位" size="mini">
                                             <el-option
                                                 v-for="(item,ind) in wyhdata2"
@@ -419,7 +419,7 @@
                                             </el-option>
                                          </el-select> -->
                                      </el-col>
-                                     <el-col :span="12" class="input-item">
+                                     <!-- <el-col :span="12" class="input-item">
                         <span class="yy-input-text" style="width:18%"><font class="red">*</font> 届次</span>
                         <div  class="yy-input-input">
                         <el-select v-model="form1.session" filterable clearable default-first-option placeholder="请选择届"  size="mini" style="width:49%">
@@ -439,7 +439,7 @@
                            </el-option>
                         </el-select>
                         </div>
-                      </el-col>
+                      </el-col> -->
                                   </el-row>
                              
                            </el-col>
@@ -1168,7 +1168,7 @@ export default {
         this.$store.dispatch('getZmwyh');
         this.$store.dispatch('getBzdr');
         this.$store.dispatch('getJb');
-                this.$store.dispatch('getCb');
+        this.$store.dispatch('getCb');
         this.$store.dispatch('getJjb');
         this.$store.dispatch('getXw');
         this.$store.dispatch('getJg');
@@ -1473,8 +1473,7 @@ export default {
                         if(this.lb!=null)
                         {
                             this.form1.specialType=this.lb;
-                            console.log(this.lb,'=====');
-                            
+                        
                               if(this.lb=='0185000001'){
                                     this.tjshow=true;
                                 }else{
@@ -1484,7 +1483,7 @@ export default {
                         }
                         break;
                     case '4':
-                        this.cname="人员";
+                        this.cname="法院人员";
                         this.ntype='4';
                         this.ptype=this.Global.COURTPERSON;
                         this.zmtype=this.Global.FY;
@@ -2707,6 +2706,7 @@ export default {
 
             },
             goClose(){
+                this.$router.go(-1);return;
                 switch (this.addtype) {
                     case '1':
                         this.$router.push({name:'BaseList'});
@@ -2722,7 +2722,7 @@ export default {
                         break;
                     default:
                           this.$router.push({name:'BaseList'});
-                        break;
+                          break;
                 }
               
             },

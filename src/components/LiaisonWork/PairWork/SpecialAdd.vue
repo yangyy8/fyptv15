@@ -1389,15 +1389,28 @@ export default {
         },
         //法院领导
          getFYName(){
-           let p={
-             'orgId':this.$store.state.orgid,
-             'isLeader':'1'
-           };
-           this.$api.post(this.Global.aport1+'/courtPerson/queryByOrg',p,
-             r =>{
+          //  let p={
+          //    'orgId':this.$store.state.orgid,
+          //    'isLeader':'1'
+          //  };
+          //  this.$api.post(this.Global.aport1+'/courtPerson/queryByOrg',p,
+          //    r =>{
                   
-                   this.fydata=r.data;
-            });
+          //          this.fydata=r.data;
+          //   });
+
+             let p={
+               
+               'personName':'',
+             };
+            this.$api.post(this.Global.aport1+'/courtPerson/getCourtLeader',p,
+                r =>{
+                    if(r.code==1){
+                      
+                          this.fydata=r.data;
+                      
+                    }
+                });
         },
         ChangeFYNameList(val){
              if(this.fyld==undefined || this.fyld==""){

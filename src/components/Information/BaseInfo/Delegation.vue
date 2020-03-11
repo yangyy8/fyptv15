@@ -172,6 +172,7 @@ export default {
           this.uploadDialogVisible=true;
         },
          fatherMethod(data,t){
+                console.log('-----',data,t);
                   
                 this.uploadDialogVisible=false;
             },

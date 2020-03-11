@@ -182,11 +182,12 @@ export default {
           })
    },
    handleSelect(key, keyPath) {
+ //  console.log(key,keyPath);
    
-   this.$router.push({
-        path: key,
-        params: {data: 'query' }
-      })
+  //  this.$router.push({
+  //       path: key,
+  //       params: {data: 'query' }
+  //     })
 }
   }
 }

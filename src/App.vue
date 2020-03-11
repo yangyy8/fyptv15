@@ -32,4 +32,5 @@ export default {
 <style>
 @import "assets/css/common.css";
 @import "assets/css/yangyy.css";
+@import "assets/font/fonts.css";
 </style>

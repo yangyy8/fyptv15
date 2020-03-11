@@ -7,8 +7,8 @@
                 <div class="pborder">
                     <el-row class="lh" :gutter="2">
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                      <span class="yy-input-text" style="width:27.6%!important;">时间</span>
-                      <div class="yy-input-input  t-flex  t-date">
+                      <span class="yy-input-text">时间</span>
+                      <div class="yy-input-input  t-flex">
                         <el-date-picker
                            v-model="pd.startTime" format="yyyy-MM-dd"
                            type="date" size="small" value-format="yyyy-MM-dd"
@@ -68,8 +68,8 @@
                         </el-col>
                         
                         <el-col :sm="24" :md="12" :lg="8">
-                        <span class="yy-input-text"  style="min-width:160px;">代表、委员、特约人员</span>
-                        <el-select v-model="pd.courtOutsiderId"  clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input pairinput">
+                        <span class="yy-input-text"  style="width:37%!important" title='代表、委员、特约人员'>代表、委员、特约人员</span>
+                        <el-select v-model="pd.courtOutsiderId"  clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:50%!important" >
                          <el-option
                           v-for="(item,ind) in xmdata"
                           :key="ind"
@@ -655,11 +655,24 @@ export default {
         },
         //审批领导
          getJBR(){
+            //   let p={
+            //    'orgId':this.$store.state.orgid,
+            //    'subOrgId':'',
+            //  };
+            // this.$api.post(this.Global.aport1+'/courtPerson/queryByOrg',p,
+            //     r =>{
+            //         if(r.code==1){
+                      
+            //               this.fydata=r.data;
+                      
+            //         }
+            //     });
+
               let p={
-               'orgId':this.$store.state.orgid,
-               'subOrgId':'',
+               
+               'personName':'',
              };
-            this.$api.post(this.Global.aport1+'/courtPerson/queryByOrg',p,
+            this.$api.post(this.Global.aport1+'/courtPerson/getCourtLeader',p,
                 r =>{
                     if(r.code==1){
                       

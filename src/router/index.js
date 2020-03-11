@@ -21,6 +21,17 @@ export default new Router({
       name: 'Message',
       component: resolve => require(['@/components/Message'], resolve),
     },
+    
+    {
+      path: '/screen',
+      name: 'screen',
+      component: resolve => require(['@/components/Screen/index'], resolve),
+    },
+    {
+      path: '/contacts',
+      name: 'contacts',
+      component: resolve => require(['@/components/Screen/contacts'], resolve),
+    },
     {
       path: '/IndexO',
       name: 'IndexO',
@@ -37,13 +48,18 @@ export default new Router({
       meta: {logined:true},
       component: resolve => require(['@/components/Home'], resolve),
       children: [
+        {
+          path: '/limitmsg',
+          name: 'limitmsg',
+          component: resolve => require(['@/components/limitmsg'], resolve),
+        },
         // LiaisonWork(联络工作)  PairWork(结对活动)  AnnualWork(年度工作总结)
         {
           path: 'PairAdd',
           name: 'PairAdd',
           meta:{
           title:['联络工作','结对活动录入'], 
-                keepAlive: false // 需要被缓存
+          keepAlive: false // 需要被缓存
           },
           component: resolve => require(['@/components/LiaisonWork/PairWork/PairAdd'], resolve),
         },
@@ -75,7 +91,7 @@ export default new Router({
         {
           path: 'BaseAdd',
           name: 'BaseAdd',
-          meta:{title:['基本信息库','基本信息录入']},
+          meta:{title:['基本信息库','全部基本信息录入']},
           component: resolve => require(['@/components/Information/BaseInfo/BaseAdd'], resolve),
         },
         {

@@ -163,7 +163,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">内部承办单位</span>
-                           <el-select v-model="pd.affiliationUnite" @change="getCBBM(pd.affiliationUnite,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.innerUnderOrg" @change="getCBBM(pd.innerUnderOrg,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in cbdwdata"
                                  :key="ind"
@@ -174,7 +174,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">内部承办部门</span>
-                           <el-select v-model="pd.affiliationUnitw" filterable clearable default-first-option placeholder="请先选择内部承办单位"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.innerUnderSubOrg" filterable clearable default-first-option placeholder="请先选择内部承办单位"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in cbbmdata"
                                  :key="ind"
@@ -183,7 +183,6 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                       
                            </el-row>
                     <el-row class="lh" v-if="open">
                        <el-col :sm="24" :md="12" :lg="8">
@@ -352,21 +351,37 @@
                         </el-col>
                          
                         
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">办结时间</span>
-                           <el-date-picker class="yy-input-input"
-                           v-model="pd.endTime" format="yyyy-MM-dd"
-                           type="date" size="small" value-format="yyyy-MM-dd"
-                           placeholder="选择时间">
-                        </el-date-picker>
+                            <div class="yy-input-input  t-flex  t-date">
+                                <el-date-picker
+                                v-model="pd.completeTimeStart" format="yyyy-MM-dd"
+                                type="date" size="small" value-format="yyyy-MM-dd"
+                                placeholder="开始时间" >
+                                </el-date-picker>
+                                <span class="septum">-</span>
+                                <el-date-picker
+                                    v-model="pd.completeTimeEnd" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="结束时间">
+                                </el-date-picker>
+                            </div>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">应办结时间</span>
-                           <el-date-picker class="yy-input-input"
-                           v-model="pd.assignFinishTime" format="yyyy-MM-dd"
-                           type="date" size="small" value-format="yyyy-MM-dd"
-                           placeholder="选择时间">
-                        </el-date-picker>
+                           <div class="yy-input-input  t-flex  t-date">
+                                <el-date-picker
+                                v-model="pd.assignFinishTimeStart" format="yyyy-MM-dd"
+                                type="date" size="small" value-format="yyyy-MM-dd"
+                                placeholder="开始时间" >
+                                </el-date-picker>
+                                <span class="septum">-</span>
+                                <el-date-picker
+                                    v-model="pd.assignFinishTimeEnd" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="结束时间">
+                                </el-date-picker>
+                            </div>
                         </el-col>
                     </el-row> 
                 </div>

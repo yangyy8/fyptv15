@@ -301,7 +301,7 @@
                             <img :src="fit.filepath" slot="reference" width="180" height="150">
                                           
                             </el-popover>
-                              <a class="close" v-if='!ckshow' @click="delImg(fit.imagedatainfoid)"> <i class="el-icon-close"></i></a>
+                              <a class="close" v-if='!ckshow' @click="delImg(fit.courtnewsimageid)"> <i class="el-icon-close"></i></a>
                             </div>
                               <div class="block" style="float:left;margin-right:20px;margin-top:20px" v-else>
                               <el-popover placement="right" title="" trigger="click">
@@ -318,7 +318,7 @@
                                     您的浏览器不支持视频播放
                              </video>
                              </el-popover>
-                            <a class="close" v-if='!ckshow' @click="delImg(fit.imagedatainfoid)" > <i class="el-icon-close"></i></a>
+                            <a class="close" v-if='!ckshow' @click="delImg(fit.courtnewsimageid)" > <i class="el-icon-close"></i></a>
                             </div>
                         </div>
                 </el-col>
@@ -660,13 +660,24 @@ export default {
           return false;
         },
         delImg(data){
-          
-           var index = this.fits.findIndex(item =>{
-    　　　　　 if(item.imagedatainfoid==data){
-            　　　　return true
-            　　}
-            　})
-             this.fits.splice(index,1)
+            console.log(data,'---');
+            
+          let p={
+              'courtnewsimageid':data,
+          };
+         this.$api.post(this.Global.aport2+'/courtNewsEntry/delImageDataInfo',p,
+                r =>{
+                    if(r.code==1){
+                    var index = this.fits.findIndex(item =>{
+                　　　　　 if(item.courtnewsimageid==data){
+                        　　　　return true
+                        　　}
+                        　})
+                        this.fits.splice(index,1);
+                   }else{
+                       this.$message.error(r.message);
+                   }
+                });
        },
       
       getAll(n){
@@ -718,7 +729,7 @@ export default {
                 contentPublicList.push(obj);
             }
             this.opendata=contentPublicList;
-console.log(this.opendata,'======');
+
 
              if(t==1){
                  this.openDialogVisible=true;
@@ -738,13 +749,15 @@ console.log(this.opendata,'======');
              }
         },
         GKfatherMethod(data,t){
-            
+               this.getList(this.CurrentPage, this.pageSize, this.pd);
                  this.openDialogVisible=false;
         },
         SHfatherMethod(data,t){
+               this.getList(this.CurrentPage, this.pageSize, this.pd);
                  this.shDialogVisible=false;
         },
         FBfatherMethod(data,t){
+               this.getList(this.CurrentPage, this.pageSize, this.pd);
                  this.fbDialogVisible=false;
         },
         DfatherMethod(data,t){
@@ -755,6 +768,7 @@ console.log(this.opendata,'======');
                 }else{
                     this.fits=data;
                 }
+                   this.getList(this.CurrentPage, this.pageSize, this.pd);
             this.uploadDialogVisible=false;
         }
     },

@@ -23,6 +23,7 @@ export default new Vuex.Store({
         docformat:localStorage.getItem('DOCFORMAt') || '',//文件格式
         pbid:localStorage.getItem('PBID') || '',//PBID
         personid:localStorage.getItem('PERSONID') || '',//PERSONID
+        auth:localStorage.getItem('AUTH') || '',//权限组
         gjdq:[],//国家地区
         xb:[],//性别 
         lwqj:[],//来文期间
@@ -168,6 +169,10 @@ export default new Vuex.Store({
         getPersonid(state, data) {
           localStorage.setItem('PERSONID', data)
           state.personid = data;
+        },
+        getAuth(state, data) {
+          localStorage.setItem('AUTH', data)
+          state.auth = data;
         },
         getGjdq(state, data) {
           state.gjdq = data;
