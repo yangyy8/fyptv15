@@ -188,8 +188,10 @@
 
                    <el-checkbox-group v-model="checkedList" @change="changeList()">
                     <el-checkbox v-for="item in checkItem" :label="item.code" :key="item.code" :checked="item.checked" :disabled="item.checked">{{item.label}}</el-checkbox>
-                  </el-checkbox-group>
+                   </el-checkbox-group>
+
                     </div>
+
                 </div>
 
                 <div class="pborder mt-20">
@@ -479,13 +481,15 @@ export default {
                let p={
                   'type':'0246000010',
                   'activityType':this.pd.activityType,
-              };
+               };
               this.$api.post(this.Global.aport2+'/ActivityInfoController/getCaseListInfo',p,
                 r =>{
 
                       if(r.code==1){
                        
                           this.checkItem=r.data;
+                          console.log(this.checkItem);
+                          
                           this.configHeader=[];
                             for(var j=0;j<this.checkItem.length;j++){
                                 if(this.checkItem[j].checked)
@@ -496,6 +500,7 @@ export default {
                             }else{
                                 this.cc=true;
                             }
+                       
                        }
 
 
@@ -521,8 +526,8 @@ export default {
         },
         getList(currentPage, showCount, pd){
         
-          // this.getCheckList();
-          this.changeList();
+          this.getCheckList();
+          //this.changeList();
            this.getJDXXAB();
           let p={
              "pd":this.pd,

@@ -28,7 +28,7 @@
                             :options="jgdata"
                             :show-all-levels="false"
                             :props="{ checkStrictly: true }"
-                            clearable filterable size="small" class="yy-input-input" @visible-change="getLWDW()"></el-cascader>
+                            clearable filterable size="small" class="yy-input-input"></el-cascader>
                             </el-col>
                       </el-row>
                        <el-row class="lh" :gutter="2">
@@ -73,7 +73,7 @@
                                  </el-option>
                             </el-select>
                         </el-col> -->
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" v-if='addtype!="7"'>
                             <span class="yy-input-text">是否专门委员会</span>
                            <el-select v-model="pd.zmwyh"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -307,7 +307,7 @@ export default {
                   default:
                       break;
               }
-          // this.getLWDW();
+          this.getLWDW();
           this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
         yhChange(val){

@@ -44,7 +44,7 @@
                                                     </el-col>
                                              </el-row>
                                          </div>
-                                    <span class="address" @click="goto(2,t.pbId,t.courtPersonId)">{{t.personName}}{{getSN(t.sex,t.nationality)}}</span>
+                                    <span class="address" @click="goto(2,t.pbId,t.courtPersonId,t.orgId)">{{t.personName}}{{getSN(t.sex,t.nationality)}}</span>
                                </el-tooltip>
                            </el-col>
                 </el-row>
@@ -234,7 +234,8 @@ export default {
                         
                    });
         },
-        goto(t,id,dm,mc){
+        goto(t,id,dm,mc,orgid){
+           console.log(orgid,'---');
            
             if(t==1){
                 //this.$router.push({name:'CourtPersonnelList',query:{type:this.addtype,status:'1',jgid:id,sjid:sjid}});
@@ -247,8 +248,7 @@ export default {
             
             }else if(t==2){
                 
-          
-            this.$router.push({name:'BaseAdd',query:{type:'4',status:'1',pbid:id,reid:dm}});
+            this.$router.push({name:'BaseAdd',query:{type:'4',status:'1',pbid:id,reid:dm,orgdm:orgid}});
             }
         },
     },

@@ -145,7 +145,7 @@
                     </el-col>
                        <el-col :span="24" class="mt-20">
                           <span class="yy-input-text trt" style="vertical-align: top;">备注：</span>
-                        <el-input placeholder="请输入内容" type="textarea" :autosize="{ minRows: 2, maxRows: 3}" size="small" clearable v-model="form.remark"  class="yy-input-input"></el-input>
+                        <el-input placeholder="请输入内容" type="textarea" :disabled="ckshow" :autosize="{ minRows: 2, maxRows: 3}" size="small" clearable v-model="form.remark"  class="yy-input-input"></el-input>
                     </el-col>
                      
                 </el-row>
@@ -208,47 +208,81 @@ export default {
                 r => {
                 if(r.code==1){
                     this.menudata=r.data;
-                    // var arr = r.data;
-                    // this.menurr = [];
-                    // this.uniteChildSame(arr,0);
-                    // this.defaultChecked = this.menurr;
+                   
                 }
              });
        },
-        uniteChildSame(arr,t) {
+    
+
+       uniteChildSame(arr,t) {
         for (var i = 0; i < arr.length; i++) {
+            if(t==2){arr[i].disabled = true }
             if (arr[i].check == true || arr[i].children != null) {
                 this.selectChildSame(arr[i].children,arr[i].check,arr[i].value,t);
             }
         }
       },
+      
       selectChildSame(arr,check,value,t){
+         
          if(arr!=null){
                     for (var i = 0; i < arr.length; i++) {
                             if(arr[i].children!=null){
-                                this.selectChildSame(arr[i].children);
-                            }else {
-                            if(arr[i].check){
-                               
-                                if(t==0){
-                                this.menurr.push(arr[i].value);
-                                }else{
-                                 
-                                this.menurr1.push(arr[i].value);
-                                }
-                            } 
-                         }
+                                var srr=arr[i].children;
+                                if(t==2){
+                                    for(var j = 0; j < srr.length; j++){
+                                        srr[j].disabled = true
+                                    }
+                                 }
+                                 this.selectChildSame(srr,'','',t);
+                             }else {
+                               if(arr[i].check){
+                                  this.menurr.push(arr[i].value);
+                                } 
+                             }
+                         if(t==2){arr[i].disabled = true }
                     }
             }else{
                 if(check==true){
-                      if(t==0){
-                         this.menurr.push(value);
-                       }else{
-                         this.menurr1.push(value);
-                       }
+                    this.menurr.push(value);
                 } 
+                
             }
         },
+        uniteChildSame1(arr,t) {
+        for (var i = 0; i < arr.length; i++) {
+            if(t==2){arr[i].disabled = true }
+            if (arr[i].check == true || arr[i].children != null) {
+                this.selectChildSame1(arr[i].children,arr[i].check,arr[i].value,t);
+            }
+        }
+      },
+      selectChildSame1(arr,check,value,t){
+         if(arr!=null){
+                    for (var i = 0; i < arr.length; i++) {
+                            if(arr[i].children!=null){
+                                var srr=arr[i].children;
+                                if(t==2){
+                                    for(var j = 0; j < srr.length; j++){
+                                        srr[j].disabled = true
+                                    }
+                                 }
+                                this.selectChildSame1(srr,'','',t);
+                            }else {
+                                if(arr[i].check){
+                                    this.menurr1.push(arr[i].value);
+                                } 
+                            }
+                          if(t==2){arr[i].disabled = true }
+                    }
+            }else{
+                if(check==true){
+                    this.menurr1.push(value);
+                } 
+            }
+       
+        },
+
         yhChange(val){
              this.mselect=val;
              if(this.mselect.length>0){
@@ -269,7 +303,7 @@ export default {
             this.pd={};
         },
          getHMGN(){
-          
+            this.menudata1=[];
             this.$api.post(this.Global.aport1+'/menu/pageList',null,
             r=>{
                       if(r.code==1){
@@ -345,17 +379,18 @@ export default {
                             this.menudata=r.data.funList;
                             var arr = r.data.funList;
                             this.menurr = [];
-                            this.uniteChildSame(arr,0);
+                            this.uniteChildSame(arr,t);
                             this.defaultChecked = this.menurr;
                             this.menudata1=r.data.pageList;
                             var arr1 = r.data.pageList;
                             this.menurr1 = [];
-                            this.uniteChildSame(arr1,1);
+                            this.uniteChildSame1(arr1,t);
                             this.defaultChecked1 = this.menurr1;
                       }
                 });
           }else{
             this.getMenu();
+            this.getHMGN();
           }
        
           this.addDialogVisible=true;
@@ -470,6 +505,3 @@ export default {
     },
 }
 </script>
- <style scoped>
- 
- </style>

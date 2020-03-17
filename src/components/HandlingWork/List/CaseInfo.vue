@@ -1,14 +1,14 @@
 <template>
-      <div class="pairadd">
+      <div class="pairadd subtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 
            办理工作 <span class="mlr_10">/</span>  <b>{{casename}}{{ctitle}}</b></span> </div>
-         <div class="content subtable">
+         <div class="content ">
                <!-- 来文信息 -->
                 <div class="ptitle mb-20">来文信息</div>
                 <el-row class="ah-40">
                          <el-col :span="10">
                         <span class="yy-input-text" style="width:31%"><font class="red">*</font> 来文人姓名</span>
-                        <el-select v-model="pd1.leaderpbid" :disabled="editshow" @change="ChangeNameList(pd1.leaderpbid,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd1.leaderpbid" :disabled="editshow" @change="ChangeNameListNew(pd1.leaderpbid,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in xmdata"
                            :key="ind"
@@ -1402,7 +1402,8 @@
     </el-dialog>
    <el-dialog title="案件信息" :visible.sync="ayDialogVisible">
                           <el-table
-                              :data="aydata">
+                              :data="aydata"
+                              @row-click="rowclick">
                               <el-table-column
                                   type="index"
                                   label="序号" width="80">
@@ -1749,6 +1750,32 @@ export default {
         getFycs(){
           this.Fynum=1;
         },
+        ChangeNameListNew(val){
+                  var obj = {};
+                      obj = this.xmdata.find(item =>{
+                          return item.personId === val 
+                      });
+              this.pd1.representativeId=obj.representativeId;
+              this.pd1.cppcMemberId=obj.cppcMemberId;
+              this.pd1.specialPersonId=obj.specialPersonId;
+          let p={
+             'personId':val,
+             'personType':obj.identityType
+           };
+            this.$api.post(this.Global.aport1+'/baseinfo/persontags',p,
+             r =>{
+               if(r.code==1)
+               {
+                 if(r.data.length>0){
+                   
+                     this.lpshow=true;
+                     this.labellist=r.data;
+                 }
+                
+               }
+             });
+                
+        },
         ChangeNameList(n,t,val,i){
           if(t==1 && (this.formListN[i].lmdbid=="" || this.formListN[i].lmdbid==undefined)){
              this.$message.error("联名代表、委员、特约人员不能为空!");return;
@@ -1756,6 +1783,7 @@ export default {
           let p={
              'personId':n
            };
+           ///baseinfo/personlist
            this.$api.post(this.Global.aport1+'/baseinfo/personlist',p,
              r =>{
 
@@ -1772,9 +1800,6 @@ export default {
                     }
 
                     this.$set(this.formListN[i],'lmdbid','');
-
-
-
                   }else{
                     this.lpshow=false;
                     this.labellist=r.data[0].tags;
@@ -1898,6 +1923,24 @@ export default {
                         this.aydata=r.data;
                 });
 
+        },
+        rowclick(row){
+
+
+            // this.pd1=row;
+              
+              this.$set(this.pd1,'casenum',row.casenum);//案件编号
+              this.$set(this.pd1,'caseclass',row.caseclass);//案件类型
+              this.$set(this.pd1,'adjudgementphase',row.adjudgementphase);//审理阶段
+              this.$set(this.pd1,'casestatus',row.casestatus);//案件状态
+              this.$set(this.pd1,'interestrelations',row.interestrelations);//利害关系
+              this.$set(this.pd1,'emphasiscase',row.emphasiscase);//是否重点案件
+              this.$set(this.pd1,'repeatcase',row.repeatcase);//是否重复案件
+              this.$set(this.pd1,'focuscourt',row.focuscourt);//问题针对法院
+              this.$set(this.pd1,'focuscourtlevel',row.focuscourtlevel);//涉及法院级别
+              this.$set(this.pd1,'notsatisfied',row.notsatisfied);//不服本院
+
+            this.ayDialogVisible=false;
         },
        fatherMethod(data,t){
       
@@ -2074,7 +2117,13 @@ export default {
                       if(r.data.focuscaseinfo.session!=null){
                        
                         this.pd1=r.data.focuscaseinfo;
-                   
+                       
+                            
+                            //问题针对法院带入承办单位
+                            if(this.pd1.focuscourt!=null && this.pd1.focuscourt!=undefined && this.ctitle=='交办'){
+                                this.$set(this.pd2,'undertakingorgid',this.pd1.focuscourt)
+                                this.getBM(this.pd1.focuscourt,0),this.getFYJB(this.pd1.focuscourt,0)
+                            }
                        // this.pd0=JSON.parse(JSON.stringify(r.data.caseletterlist[0]));
                        
                         // this.pd1.letternumber=letter.letternumber;
@@ -2090,11 +2139,13 @@ export default {
                         }
                         if(this.pd1.leaderpbid!="" && this.pd1.leaderpbid!=null){
                           this.lpshow=true;
-                          this.ChangeNameList(this.pd1.leaderpbid,0);
+                          this.ChangeNameListNew(this.pd1.leaderpbid,0);
                         }
                       }
                        // this.form1data=r.data.caseletterlist;
                         //this.filedata0=r.data.relfilelist;
+
+               
                         
                    }else{
                       this.$message.error(r.message);
@@ -2146,6 +2197,7 @@ export default {
                               if(this.addtype=='2'){ this.zshow2=true;}else{ this.zshow2=false;}
                             
                             }
+                        
                         });
              
                
@@ -2288,6 +2340,8 @@ export default {
             this.zshow1=false;
             this.fkdata=[];
             this.dblbdata=[];
+            this.lableList=[];
+            this.labeladress="";
 
 
         },
@@ -2595,7 +2649,12 @@ export default {
                      arr.push(n);
                     for (let i = 0; i < arr.length; i++) {
                      var index = val.findIndex(item =>{
-　　　　　　　　　  　 if(item.lettertime==arr[i].lettertime && item.lettertimes==arr[i].lettertimes){
+　　　　　　　　　  　 if(item.lettertime==arr[i].lettertime 
+                       && item.lettertimes==arr[i].lettertimes
+                        && item.lettersourcetype==arr[i].lettersourcetype
+                        && item.sourcecourtpersonpbid==arr[i].sourcecourtpersonpbid
+                        && item.lettersourceorgid==arr[i].lettersourceorgid
+                       ){
         　　　　　　　　　　　　return true
         　　　　　　　　　　}
         　　　　　　　　})
@@ -2718,14 +2777,14 @@ export default {
                 });
         },
         getFYJB(val,t){
-          console.log(val);
+          console.log(val,t,this.cbdw);
           
           if(val==''){
 
                     if(t==0){
                         this.$set(this.pd2,"undertakingorglevel","")
                       }else if(t==1){
-                      this.$set(this.pd1,"focuscourtlevel","")
+                        this.$set(this.pd1,"focuscourtlevel","")
                     }
              return;
              }
@@ -2735,7 +2794,7 @@ export default {
                       obj = this.cbdw.find(item =>{
                           return item.orgid === val 
                       });
-                   
+                  
                    this.pd2.undertakingorglevel = obj.lvl
               break;
              case 1:

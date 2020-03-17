@@ -703,6 +703,9 @@ export default {
             var array=this.multipleSelection;
             for (let i = 0; i < array.length; i++) {
             
+                    
+
+
                 var obj={};
                 obj.contentPublicId=array[i].courtNewsId;
                 obj.contentPublicType="0134000003";
@@ -710,16 +713,25 @@ export default {
                 
                 switch (t) {
                     case 1://公开
+                       
                          obj.publicProcessType="0133000001";
                         break;
                     case 2://审核
+                        if(array[i].isCheckId=='0137000002'){
+                            this.$message.error("公开后才能进行审核！");return;
+                        }
                          obj.publicProcessType="0133000002";
                         break;
                     case 3://发布
-                    
+                       if(array[i].isCheckId=='0175000002'){
+                            this.$message.error("审核后才能进行发布！");return;
+                        }
                          obj.publicProcessType="0133000003";
                         break;
                     case 4://回收
+                        if(array[i].isCheckId=='0175000002'){
+                            this.$message.error("审核后才能进行回收！");return;
+                        }
                          obj.publicProcessType="0133000004";
                         break;
                     default:

@@ -175,8 +175,9 @@ export default {
         }
         for (let i=0; i < this.fil.length; i++) {
           let size = Math.floor(this.fil[i].size / 1024);
-          if (size > 20*1024*1024) {
-            alert('请选择20M以内的图片！');
+          if (size > 5*1024*1024) {
+            //alert('请选择5M以内的图片！');
+            this.$message.error('请选择5M以内的图片！');
             return false
           }
           this.imgLen++;

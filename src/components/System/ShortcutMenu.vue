@@ -207,7 +207,6 @@ export default {
             }           
              var srr=[];
              var array=this.mselect;
-             console.log(this.mselect,'----');
              
                for (let i = 0; i < array.length; i++) {
                    srr.push(array[i].id) ;
@@ -223,7 +222,7 @@ export default {
                               "type":"success",
                               "message":r.message
                           });
- this.getList(this.CurrentPage,this.pageSize);
+                this.getList(this.CurrentPage,this.pageSize);
 
                       }else{
                           this.$message.error(r.message);

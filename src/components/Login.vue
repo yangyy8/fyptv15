@@ -61,6 +61,9 @@ export default {
   },
   mounted(){
     this.$store.dispatch("getJb");
+    if(this.$store.state.uid!=null && this.$store.state.uid!='' && this.$store.state.uid!=undefined){
+      this.$set(this.user,'userName',this.$store.state.uid);
+    }
     this.initJzmm();
 
   },
@@ -102,7 +105,7 @@ export default {
              r => {
               if(r.success){
                    this.updateInfo(r.data);
-                    
+                    this.$store.commit('getUid',this.user.userName)
                      this.getJID();
                      if(r.data.first){
                         this.$router.push({name: 'EditPwd'});return;
@@ -113,7 +116,6 @@ export default {
                         this.$router.push({name: 'AuthoritySwith'});
                      }else{
                      
-                       
                          this.$router.push({name: 'Index'});
                      }
                   
@@ -124,7 +126,6 @@ export default {
     },
     updateInfo(r)
     {
-      
                     this.$store.commit('getToken',r.token)
                     this.$store.commit('getUname',r.mc)
                  

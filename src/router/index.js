@@ -101,6 +101,18 @@ export default new Router({
           component: resolve => require(['@/components/Information/BaseInfo/BaseLook'], resolve),
         },
         {
+          path: 'AreaList',
+          name: 'AreaList',
+          meta:{title:['基本信息库','行政区划']},
+          component: resolve => require(['@/components/Information/BaseInfo/AreaList'], resolve),
+        },
+        {
+          path: 'GroupList',
+          name: 'GroupList',
+          meta:{title:['基本信息库','团届别']},
+          component: resolve => require(['@/components/Information/BaseInfo/GroupList'], resolve),
+        },
+        {
           path: 'Personnel',
           name: 'Personnel',
           meta:{title:['基本信息库','人员信息']},
@@ -177,6 +189,12 @@ export default new Router({
           name: 'CourtInfo',
           meta:{title:['基本信息库','法院内部管理',"各级法院代表团"]},
           component: resolve => require(['@/components/Information/BaseInfo/CourtInfo'], resolve),
+        },
+        {
+          path: 'CourtMeber',
+          name: 'CourtMeber',
+          meta:{title:['基本信息库','法院内部管理',"法院人员代表团"]},
+          component: resolve => require(['@/components/Information/BaseInfo/CourtMeber'], resolve),
         },
         {
           path: 'CourtPersonnel',

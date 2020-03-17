@@ -129,7 +129,7 @@
                             </el-select>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">职业</span>
+                            <span class="yy-input-text">单位职务</span>
                            
                               <el-input placeholder="请输入内容" size="small" clearable v-model="pd.job"  class="yy-input-input" ></el-input>
                         </el-col>
@@ -200,8 +200,8 @@
                               <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()" v-if='getAuthShow("0301010007")'>删除</el-button>
                               <el-button type="primary" size="small" @click="getDR" v-if='getAuthShow("0301010009")'>导入</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="getSH" v-if='getAuthShow("0301010012")'>审核</el-button>
-                              <!-- <el-button type="primary"  size="small" @click="download">下载全部</el-button> -->
-                              <!-- <el-button type="primary"  size="small" @click="download">下载当页</el-button> -->
+                              <!-- <el-button type="primary"  size="small" @click="download" v-if='getAuthShow("0301010010")'>下载全部</el-button> -->
+                              <!-- <el-button type="primary"  size="small" @click="download" v-if='getAuthShow("0301010011")'>下载当页</el-button> -->
                                   </el-col>
                                    <el-col :span="10" class="trt">
                                     <span>  人大代表总数 <b class="sumfont" >{{this.TotalResult}}</b> 人</span>
@@ -269,7 +269,7 @@
 <br/>
          </div>
     <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
-      <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+      <UPLOAD :url="vvurl" :type="1000"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     <el-dialog title="审核信息" :visible.sync="shDialogVisible"  width="630px">
          <el-row class="mb-20">
@@ -401,7 +401,6 @@ export default {
            if(this.authinfo.indexOf('0301010004')==-1){
                this.$router.push({path:'/limitmsg'});
            }
-
            //end
   
            this.viewtype=val.query.type;this.getXHFT();
@@ -596,7 +595,7 @@ export default {
             }else{
                 var array=this.multipleSelection;
                    for (let i = 0; i < array.length; i++) {
-                       mselect.push(array[i].pbId);
+                       mselect.push(array[i].personId);
                        
                    }
             }

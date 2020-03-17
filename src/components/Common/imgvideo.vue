@@ -11,6 +11,7 @@
                 :show-file-list="false"
                 :data="{token:this.$store.state.token}"
                 :headers="myHeaders"
+                multiple
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
                 <span class="type_title">图片资料：</span>
@@ -37,6 +38,7 @@
                     :on-progress="uploadVideoProcess"
                     :on-success="handleVideoSuccess"
                     :headers="myHeaders"
+                     multiple
                     :before-upload="beforeUploadVideo"
                     :show-file-list="false">
                     <span class="type_title">视频资料：</span>

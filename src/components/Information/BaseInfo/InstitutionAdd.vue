@@ -77,7 +77,7 @@
                         </el-col>
                           <el-col :sm="24" :md="12" :lg="8"  v-if="addtype=='7'">
                             <span class="yy-input-text"> 巡回法庭</span>
-                           <el-select v-model="pd.xhft" :disabled="ck" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-select v-model="pd.xhft" :disabled="ck || pd.sfbm=='0223000001'" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in  $store.state.sfxhft "
                                  :key="ind"
@@ -570,7 +570,7 @@ export default {
             if(this.form.contactPersonName==undefined || this.form.contactPersonName==""){
                 this.$message.error("姓名不能为空！");return;
             }
-             if(this.form.contactResponsibilityType==undefined || this.form.contactResponsibilityType==""){
+             if(this.form.position==undefined || this.form.position==""){
                 this.$message.error("职务不能为空！");return;
             }
              if(this.form.outsideLine==undefined || this.form.outsideLine==""){
@@ -719,7 +719,7 @@ export default {
              {
                   this.$message({
                     showClose: true,
-                    message: '专线代码不能为空',
+                    message: '固定电话不能为空',
                     type: 'error',
                     offset:'100'
                     });

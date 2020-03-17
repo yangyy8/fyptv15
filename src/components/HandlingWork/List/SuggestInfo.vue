@@ -168,6 +168,10 @@
                         </el-select>
                       </el-col>
 
+                  
+                       
+                    </el-row>
+                    <el-row>
                       <el-col :span="8" v-if='tashow'>
                         <span class="yy-input-text">
                            提案组织
@@ -181,7 +185,7 @@
                            </el-option>
                         </el-select>
                       </el-col>
-                       <el-col :span="8" v-else>
+                      <el-col :span="8" v-else>
                         <span class="yy-input-text"><font class="red">*</font> 
                           <!-- <span v-if='type==2'>提案人</span>
                           <span v-else-if='type==5'>提出人</span>
@@ -1091,6 +1095,8 @@ export default {
     },
     watch:{
        $route:function(val){
+       
+      
         this.getinit(val);
         }
       },
@@ -1248,7 +1254,10 @@ export default {
          this.editshow=false;
          this.yastate=false;
          this.djshow=false;
+         this.tashow=false;
          this.ywzllist=[];
+         this.lableList=[];
+         this.labeladress="";
 
          
       },
@@ -1267,13 +1276,16 @@ export default {
              this.$api.post(this.Global.aport2+'/proposalHome/proposalInfoView',p,
                 r =>{
                       if(r.code==1){
-            
+                          this.leaderInfo=r.data.leaderInfo;
                           this.pd=r.data.basicIinfo;
                           if(this.pd.leaderPersonId!=null){
                          
                           this.$set(this.pr,'leaderPersonId',this.pd.leaderPersonId);
-                           console.log(this.pr.leaderPersonId,'leaderPersonId');
+                           this.$nextTick(() => {
                              this.getName(this.pr.leaderPersonId,8);
+                           });
+                          
+                          
                           }
                           if(this.pd.proposalOrgId!=null){
                           this.pr.proposalOrgId=this.pd.proposalOrgId;
@@ -1403,9 +1415,10 @@ export default {
                          
                            }
                         }
+                         
                      
                       }
-
+                      
                 });
         }
       },
@@ -1906,7 +1919,8 @@ export default {
                  arr.push(n);
                 for (let i = 0; i < arr.length; i++) {
                      var index = this.tableData2.findIndex(item =>{
-　　　　　　　　　  　 if(item.underTakeOrgIdName==arr[i].underTakeOrgIdName){
+　　　　　　　　　  　 if(item.underTakeOrgId==arr[i].underTakeOrgId
+                        && item.underTakeSubOrgId==arr[i].underTakeSubOrgId){
         　　　　　　　　　　　　return true
         　　　　　　　　　　}
         　　　　　　　　})
@@ -2185,29 +2199,39 @@ export default {
                }
               }
              }
+            obj = this.lxdbdata.find(item =>{
+                 return item.personId === val
+                });
+          if(obj==undefined){
+            obj=this.leaderInfo;
+          }else{
+            this.leaderInfo=obj;
+          }
+          
+          console.log(obj,'===');
+           
            let p={
-             'personId':val
+             'personId':val,
+             'personType':obj.identityType
            };
-           this.$api.post(this.Global.aport1+'/baseinfo/personlist',p,
+           this.$api.post(this.Global.aport1+'/baseinfo/persontags',p,
              r =>{
 
                if(r.code==1){
-                 this.leaderInfo=r.data[0];
-                 if(!this.tashow && this.type!=2 && this.type!=5)
-                  {             
-                   
+              
+                 if(!this.tashow  && this.type!=5)
+                  {      
+                    this.lpshow=true;
+                    this.lableList=r.data;
                     
-                    
-                    this.lableList=this.leaderInfo.tags;
-                    
-                    if(this.leaderInfo.address!=null){
+                    if(r.data.address!=null){
                             this.Remark="地址："+this.leaderInfo.address;
                           }else{
                             this.Remark="";
                     }
                   
                     } 
-                    this.lpshow=true;
+                  
                }
              });
 
@@ -2219,7 +2243,6 @@ export default {
       //领衔代表，联系人
       getLmName(){
     
-        
         let p={};var url="/baseinfo/allpersonlist";
         switch (this.type) {
           case '0'://领衔代表（联名代表）
@@ -2254,6 +2277,7 @@ export default {
              r =>{
                    
                    this.lxdbdata=r.data;
+                                        
             });
         },
       goto(){
@@ -2262,7 +2286,7 @@ export default {
         }else{
             if(this.baseid!=null){
                    var arr=this.baseid.split('|');
-                     console.log('arr',arr);
+                   
                      this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3]}});
                 }else{
                     this.$router.push({name:"SuggestList",query:{type:this.type,year:this.year}});

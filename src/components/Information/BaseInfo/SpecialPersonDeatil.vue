@@ -6,10 +6,11 @@
             <span class="mlr_10" >/</span><span ><i class="iflast">特约人员</i></span>
             <span class="mlr_10" v-if="cname1!= ''">/</span><span v-if="cname1!= ''">{{cname1}}</span>
             <span class="mlr_10" v-if="lbmc!= ''">/</span><span v-if="lbmc!= ''">{{lbmc}}</span>
+            <span class="mlr_10" v-if="codemc!= ''">/</span><span v-if="codemc!= ''">{{codemc}}</span>
           </div>
           <div class="content">
         <el-row>
-             <el-col :span="18">
+             <el-col :span="18" style="padding-left:3%">
                <el-row >
                    <el-col :span="14">
                      <div class="title"><span >{{jmc==null?'':jmc}}{{lbmc}}</span>名单</div>
@@ -17,7 +18,7 @@
                    </el-col>
                     <el-col :span="10" style="text-align:right">
                           <el-button type="primary"  @click="goBase()">
-                              <span @click="goBase()">编辑</span>
+                             <span @click="goBase()">编辑</span>
                             </el-button>
                             <el-button  @click="getDR">导入</el-button>
                           <el-button  @click="openfile">相关文件</el-button>
@@ -44,8 +45,8 @@
              </el-col>
              <el-col :span="6" style="padding-left:45px;">
                      <div class="title mb-20">历届名单</div>
-                     <div v-for='(tt,ind) in $store.state.jb' :key="ind" class="ljinfo">
-                         <span @click="gopro(tt.mc,tt.dm)">{{tt.mc}}{{lbmc}}</span>
+                     <div v-for='(tt,ind) in $store.state.jb' :key="ind">
+                         <div  class="ljinfo" @click="gopro(tt.mc,tt.dm)">{{tt.mc}}{{lbmc}}</div>
                      </div>
              </el-col>
         </el-row>
@@ -163,7 +164,7 @@
       <UPLOAD :url="uurl" :type="ptype" :periodType='periodType' :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
  <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
-      <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+      <UPLOAD :url="vvurl" :type="1001"  :urlErr="vvurlErr" :periodType='jkey'  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
 </template>
@@ -323,7 +324,7 @@ export default {
             this.drDialogVisible=true;
         },
           drfatherMethod(data,t){
-this.drDialogVisible=false;
+            this.drDialogVisible=false;
           },
           fatherMethod(data,t){
 
@@ -422,8 +423,8 @@ this.drDialogVisible=false;
           
             this.$router.push({name:'BaseAdd',query:{type:'3',status:'1',pbid:t.pbId,reid:reid}});
         },
-         goBase(){
-              this.$router.push({name:'BaseAdd',query:{type:'3',jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,lb:this.lb}})
+        goBase(){
+              this.$router.push({name:'BaseAdd',query:{type:'3',jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,lb:this.lb,jmc:this.jmc,jkey:this.jkey}})
         },
         goseach(){
          

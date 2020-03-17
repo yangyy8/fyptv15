@@ -169,7 +169,6 @@
                    </el-row>
                    <el-row  class="ah-40" v-if="addtype==2">
                        <el-col :span="24">
- 
                              <el-table
                             ref="multipleTable"
                             :data="ListData1">
@@ -442,7 +441,7 @@
                            </el-table>
                             </el-col>
                             <el-col :span="24" class="mt-20">
-                              代表、委员以及特约人员人数  <span style="font-weight:bold;color:red;margin-left:20px;"> {{count1}} </span> 人
+                              <span class="yy-input-text" style="width:210px;">代表、委员以及特约人员人数</span>  <span style="font-weight:bold;color:red;margin-left:20px;"> {{count1}} </span> 人
                            </el-col>
                     </el-row>
                    <el-row  class="mt-20" >
@@ -1676,7 +1675,7 @@ export default {
                         {  
                             this.pd5.ck8=true;
                         }else{
-                           this.pd5.ck8=true;
+                           this.pd5.ck8=false;
                         }
                             
                          //集中专项视察
@@ -1864,7 +1863,7 @@ export default {
                 arr.push(n);
                 for (let i = 0; i < arr.length; i++) {
                         var index = this.ListData1.findIndex(item =>{
-    　　　　　　　　　  　 if(item.inspectOrg==arr[i].inspectOrg){
+    　　　　　　　　　  　 if(item.inspectOrgId==arr[i].inspectOrgId && item.inspectTypeId==arr[i].inspectTypeId){
             　　　　　　　　　　　　return true
             　　　　　　　　　　}
 
@@ -1876,7 +1875,7 @@ export default {
                 arr.push(n);
                 for (let i = 0; i < arr.length; i++) {
                         var index = this.ListData2.findIndex(item =>{
-    　　　　　　　　　  　 if(item.inspectOrg==arr[i].inspectOrg){
+    　　　　　　　　　  　 if(item.inspectOrgId==arr[i].inspectOrgId && item.inspectTypeId==arr[i].inspectTypeId){
             　　　　　　　　　　　　return true
             　　　　　　　　　　}
             　　　　　　　　})
@@ -2208,7 +2207,7 @@ export default {
                if(this.pd5.ck8){
                  this.form.organizeDiscussionExchange="0260000001";
                }else{
-                 this.form.organizeDiscussionExchange="0260000001";
+                 this.form.organizeDiscussionExchange="0260000002";
                }
                //集中专项视察
                if(this.pd5.ck2){

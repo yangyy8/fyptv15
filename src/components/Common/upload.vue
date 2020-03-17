@@ -1,6 +1,17 @@
 <template lang="html">
 <div>
-     <el-row type="flex" class="mb-6">
+     <el-row class="mb-6">
+     <el-col v-if='type=="1000"' :span="24" class="txtl mb-20">
+       <span>届别：</span>
+           <el-select v-model="periodTypes" filterable clearable default-first-option placeholder="请选择"  size="small" >
+                         <el-option
+                           v-for="(item,ind) in $store.state.jb"
+                           :key="ind"
+                           :label="item.mc"
+                           :value="item.dm">
+                           </el-option>
+         </el-select>
+     </el-col>
      <el-col :span="24" class="txtl">
           <el-upload
             ref="upload"
@@ -10,6 +21,7 @@
             :on-success="upSuccess"
             :before-upload="beforeAvatarUpload"
             :http-request="uploadFile"
+            :before-remove="beforeRemove"
             :auto-upload="false">
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <br/>
@@ -18,6 +30,9 @@
           </el-upload>
         </el-col>
       </el-row>
+         <div style="text-align:left;color:red;line-height:30px;border-top:1px solid #cccccc;margin-top:10px" v-if='msg!=""'>
+            <p v-html="msg"></p>
+         </div>
         <div slot="footer" style="text-align:center;border-top:1px solid #cccccc; padding-top:10px;">
              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传</el-button>
         </div> 
@@ -35,15 +50,19 @@ export default {
         uploadIconData:{token:this.$store.state.token,SBTYPE:this.type},
         fileData:null,
         result:0,
+        periodTypes:'',
+        error:0,
+        msg:'',
         }
     },
 
     mounted(){
-       console.log(this.type,this.actions);
+       this.$store.dispatch("getJb");
     },
     watch:{
       random:function(newVal,oldVal){
         if (this.$refs.upload) {
+            this.msg="";
             this.$refs.upload.clearFiles();
         }
       },
@@ -64,10 +83,11 @@ export default {
             
             },
             uploadFile(file) {
+          
               this.fileData.append('file', file.file);
             },
             downloadM (data,name) {
-              console.log(data);
+             
                 if (!data) {
                     return
                 }
@@ -79,13 +99,36 @@ export default {
                 document.body.appendChild(link)
                 link.click()
            },
+           beforeRemove(file, fileList){
+            this.msg='';
+
+           },
             beforeAvatarUpload(file) {
+                  //这里控制大小 20M
+              
+               console.log('上传文件不能超过20M', file.size,20 * 1024 * 1024);
+               if (file.size  > 20 * 1024 * 1024) {
+                   this.error=1;
+                  // this.$message.error(file.name+" 文件不能超过20M");
+                  this.msg +=file.name+"文件不能超过20M<br/>";
+                   return;  //必须返回false
+                }
                   
-               
             },
            
             submitUpload() {
-           
+             
+             console.log(this.$refs.upload.uploadFiles);
+                 this.msg='';
+               if(this.type=='1000'){
+                 if(this.periodTypes=="" || this.periodTypes==null){
+                   this.$message({
+                    message: '请先选择届别！',
+                    type: 'warning'
+                   });
+                   return
+                 }
+              }
               if (this.$refs.upload.uploadFiles.length == 0) {
                 this.$message({
                   message: '请先选择文件！',
@@ -93,8 +136,9 @@ export default {
                 });
                 return
               }
+             
 
-              if(this.type=='11'){
+              if(this.type=='11' || this.type=='1000' || this.type=='1001'){
                 if (this.$refs.upload.uploadFiles.length != 1){
                 this.$message({
                   message: '此模块只能上传一个文件',
@@ -124,7 +168,7 @@ export default {
 
                       var srr=this.Global.docformat.split(',');
                       for (let i = 0; i < srr.length; i++) {
-                        console.log(type,srr[i]);
+                        // console.log(type,srr[i]);
                             if(type==srr[i]){
                                this.result=1;
                             }
@@ -141,43 +185,57 @@ export default {
               this.fileData = new FormData();
               this.$refs.upload.submit();
               // this.fileData.append('file',this.fileList)
+
              this.fileData.append('token',this.$store.state.token);
              this.fileData.append('filetype',this.type);
-             
              this.fileData.append("personRelFileType",this.type);
+
               if(this.periodType!=null){
-              this.fileData.append("periodType",this.periodType);
+                this.fileData.append("periodType",this.periodType);
+              }else if(this.type=='1000'){
+                this.fileData.append("periodType",this.periodTypes);
               }
               if(this.proposalType!=null){
                 this.fileData.append("proposalType",this.proposalType);
               }
+              if(this.error==1){return;}
+              
+
                this.$api.post(this.actions, this.fileData,
                   r => {
                     if(r.code==1){
-                    if(this.type.length==10){
-                    
-                          if(r.code==1){
-                          this.$message({
-                            message: '上传成功',
-                            type: 'success'
-                          });
-                          
-                          this.$emit('fatherMethod',r.data,this.type); 
+                        if(this.type.length==10 || this.periodType!=null){
+                        
+                              if(r.code==1){
+                              this.$message({
+                                message: r.message,
+                                type: 'success'
+                              });
+                              if(this.type=='1000' || this.type=='1001'){
+                                console.log('+++',this.type);
+                                
+                                this.$emit('drfatherMethod',r.data,this.type); 
+                              }else{
+                                this.$emit('fatherMethod',r.data,this.type); 
+                              }
+                            }else{
+                              this.$message.error(r.message);
+                            }
                         }else{
-                          this.$message.error(r.message);
+                            
+                              if(r.data.success=='success'){
+                              this.$message({
+                                message: '上传成功',
+                                type: 'success'
+                              });
+                              
+                              this.$emit('fatherMethod',r.data.relFileList,this.type); 
+                            }else{
+                              
+                              this.$message.error(r.message);
+                              
+                            }
                         }
-                    }else{
-                          if(r.data.success=='success'){
-                          this.$message({
-                            message: '上传成功',
-                            type: 'success'
-                          });
-                          
-                          this.$emit('fatherMethod',r.data.relFileList,this.type); 
-                        }else{
-                          this.$message.error(r.message);
-                        }
-                    }
                     }else{
                       this.$message.error(r.message);
                     }

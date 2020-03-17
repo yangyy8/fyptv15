@@ -726,7 +726,8 @@ export default {
                                 {offset: 1, color: '#188df0'},
                                 
                             ]
-                        )
+                        ),
+                         barBorderRadius: [30, 30, 30, 30],
                     },
                     emphasis: {
                         itemStyle: {

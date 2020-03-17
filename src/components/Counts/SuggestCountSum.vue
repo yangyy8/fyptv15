@@ -38,7 +38,7 @@
                             </el-select>
                      </div>
                      </el-col>
-                      <el-col :sm="24" :md="12" :lg="12">
+                      <!-- <el-col :sm="24" :md="12" :lg="12">
                           <span class="yy-input-text" style="width:18%!important;">
                        议案类型</span>
                             <el-select v-model="pd.proposalType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -49,8 +49,7 @@
                            <el-option  label="建议、批评与意见" value="0204000003">
                           </el-option>
                         </el-select>
-
-                      </el-col>
+                      </el-col> -->
                         <el-col :sm="24" :md="12" :lg="12">
                           <span class="yy-input-text" style="width:18%!important;">
                        来文期间</span>
@@ -146,7 +145,7 @@
                     label="不公开">
                     </el-table-column>
             </el-table-column>
-             <el-table-column
+             <!-- <el-table-column
                 label="沟通情况">
                 <el-table-column
                     prop="mainInfoMapObject.citycomPhoneSum"
@@ -173,7 +172,7 @@
                     label="未沟通">
                  </el-table-column>
                  
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column
                 label="答复情况">
                 <el-table-column

@@ -1,9 +1,9 @@
 .sreen{
      background: url('../../assets/img/screen/bg.png') no-repeat;
-     background-size: 100% 100%; min-height: 1040px; min-width: 1920px; overflow: hidden;}
+     background-size: 100% 100%; min-height: 1080px; min-width: 1920px; overflow: hidden;}
 .cont{
    background: url('../../assets/img/screen/contbg.png') no-repeat;
-   background-size: 100% 100%; min-height: 1040px; min-width: 1920px; overflow: hidden;}
+   background-size: 100% 100%; min-height: 1080px; min-width: 1920px; overflow: hidden;}
 .sreen .mt-10{margin-top: 10px;}
 .sreen .mt-15{margin-top: 15px;}
 .sreen .mt-20{margin-top: 20px;}

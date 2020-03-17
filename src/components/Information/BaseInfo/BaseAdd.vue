@@ -475,11 +475,11 @@
                                 label="序号">
                             </el-table-column>
                             <el-table-column
-                                prop="theme"
+                                prop="personName"
                                 label="结对人">
                             </el-table-column>
                             <el-table-column
-                                prop="activityType"
+                                prop="pairTime"
                                 label="结对时间">
                             </el-table-column>
                            
@@ -1153,6 +1153,7 @@ export default {
             lbshow:true,
             lb:'',
             tjshow:true,
+            orgdm:'',
         };
     },
     mounted()
@@ -1262,7 +1263,7 @@ export default {
             },
            goya(){
                 this.hdDialogVisible=false;
-                var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
+                 var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
                
                   this.$router.push({name:'SuggestInfo',query:{type:this.yatype,baseid:baseid}});
                
@@ -1388,6 +1389,7 @@ export default {
                 this.xzqh=val.query.xzqh;
                 this.cname2=val.query.codemc;
                 this.lb=val.query.lb;
+                this.orgdm=val.query.orgdm;
                 if(val.name=='BaseAdd'){
                      window.addEventListener('scroll', this.getscroll,true)
                 }
@@ -1702,7 +1704,6 @@ export default {
             //团别
            getTB(code,jb)
            {       
-               console.log('----',code);
                
                if(code==null || code==undefined){
                    code="";
@@ -1727,6 +1728,7 @@ export default {
                     'pbId':this.pbid,
                     'personId':this.reid,
                     'isEdit':this.state,
+                    'orgId':this.orgdm,
                 };
                 
                 this.$api.post(this.Global.aport1+'/baseinfo/detail',p,
@@ -1835,7 +1837,7 @@ export default {
                   this.jdall=1;
                 }
                   let pp={
-                    'courtInsiderId':this.pbid,
+                    'courtInsiderId':this.reid,
                     'pageSize':num,
                     'token':this.$store.state.token,
                 };

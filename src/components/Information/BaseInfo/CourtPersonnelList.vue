@@ -49,7 +49,7 @@
                          </el-select>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">职业</span>
+                            <span class="yy-input-text">职务</span>
                               <el-input placeholder="请输入内容" size="small" clearable v-model="pd.job"  class="yy-input-input" ></el-input>
                         </el-col>
                           <el-col :sm="24" :md="12" :lg="8">
@@ -202,8 +202,8 @@
                 </div>
 <br/>
          </div>
-          <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
-      <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+     <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+      <UPLOAD :url="vvurl" :type="1000"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
 </template>
@@ -397,7 +397,7 @@ export default {
                 {
                   this.$message.error("只能选择一条数据！");return;
                 }
-                this.$router.push({name:'BaseAdd',query:{type:'4',status:t,wtitle:mc,pbid:this.multipleSelection[0].pbId,reid:this.multipleSelection[0].courtPersonId}});
+                this.$router.push({name:'BaseAdd',query:{type:'4',status:t,wtitle:mc,pbid:this.multipleSelection[0].pbId,reid:this.multipleSelection[0].courtPersonId,orgdm:this.multipleSelection[0].orgId}});
             }
         },
          dellist(){
@@ -407,7 +407,10 @@ export default {
             }else{
                 var array=this.multipleSelection;
                    for (let i = 0; i < array.length; i++) {
-                       mselect.push(array[i].pbId);
+                       var obj={};
+                       obj.orgId=array[i].orgId;
+                       obj.courtPersonId=array[i].courtPersonId;
+                       mselect.push(obj);
                     
                    }
             }
@@ -417,7 +420,7 @@ export default {
                 type: 'warning'
                 }).then(() => {
                     let p={
-                        'pbIds':mselect
+                        'list':mselect
                     };
                 this.$api.post(this.Global.aport1+'/courtPerson/delete',p,
                  r =>{

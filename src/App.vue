@@ -5,16 +5,19 @@
 </template>
 
 <script>
+
 export default {
   name: 'App',
    provide () {
     return {
-      reload: this.reload
+      reload: this.reload,
+     
     }
   },
   data(){
     return{
-        isRouterAlive: true
+        isRouterAlive: true,
+        Base64: require('js-base64').Base64,
     }
   },
   methods:{

@@ -113,18 +113,18 @@
                             label="建议编号"
                             width="100">
                         </el-table-column>
-                         <el-table-column
+                         <!-- <el-table-column
                             prop="fileNumber"
                             label="来文文号">
-                        </el-table-column>
+                        </el-table-column> -->
                          <el-table-column
                             prop="groupType"
                             label="代表团">
                         </el-table-column>
-                         <el-table-column
+                         <!-- <el-table-column
                             prop="hostSum"
                             label="主办">
-                        </el-table-column>
+                        </el-table-column> -->
                          <el-table-column
                             prop="leaderName"
                             label="提议代表"
@@ -164,14 +164,14 @@
                             label="要求反馈时间"
                             width="150">
                         </el-table-column>
-                         <el-table-column
+                         <!-- <el-table-column
                             prop="suggestNum"
                             label="建议条数">
-                        </el-table-column>
-                        <el-table-column
+                        </el-table-column> -->
+                        <!-- <el-table-column
                             prop="keyWord"
                             label="关键词">
-                        </el-table-column>
+                        </el-table-column> -->
                         <el-table-column
                             prop="completeTime"
                             label="办结时间">
@@ -184,26 +184,26 @@
                             prop="communicateType"
                             label="沟通方式">
                         </el-table-column>
-                        <el-table-column
+                        <!-- <el-table-column
                             prop="sign"
                             label="标记">
-                        </el-table-column>
-                        <el-table-column
+                        </el-table-column> -->
+                        <!-- <el-table-column
                             prop="wordNumber"
                             label="文号">
-                        </el-table-column>
-                         <el-table-column
+                        </el-table-column> -->
+                         <!-- <el-table-column
                             prop="sendTime"
                             label="寄出时间">
-                        </el-table-column>
-                         <el-table-column
+                        </el-table-column> -->
+                         <!-- <el-table-column
                             prop="promiseThing"
                             label="承诺事项">
-                        </el-table-column>
-                         <el-table-column
+                        </el-table-column> -->
+                         <!-- <el-table-column
                             prop="remark"
                             label="备注">
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
           <br/>
     </div>

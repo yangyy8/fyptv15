@@ -35,15 +35,28 @@ export default {
         save(){
             if(this.pd.account==undefined || this.pd.account==""){
                 this.$message.error("账号不能为空！");return;
-            }           
+            }       
+            this.msg='';    
                 let p = {
                     'account':this.pd.account
                 };
             this.$api.post(this.Global.aport1+'/user/changeUser',p,
             r=>{
                       if(r.code==1){
-                         this.msg="修改成功";
-                         this.pd={};
+                          this.$confirm('账号修改成功，请重新登录!', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                            }).then(() => {
+                                this.$store.commit('getUid',this.pd.account)
+                                this.$router.push({path:'/'});
+                            }).catch(() => {
+                                this.$message({
+                                type: 'info',
+                                message: '已取消删除'
+                                });
+                            });
+
                       }else{
                           this.msg=r.message;
                       }

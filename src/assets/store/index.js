@@ -9,6 +9,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
       state:{
         token: localStorage.getItem('TOKEN') || '',
+        uid:localStorage.getItem('UID') || '',//用户ID
         uname: localStorage.getItem('UName') || '',//用户名
         orgname: localStorage.getItem('SSDW') || '',//所属单位名称
         orgid: localStorage.getItem('ORGID') || '',//所属单位
@@ -24,6 +25,7 @@ export default new Vuex.Store({
         pbid:localStorage.getItem('PBID') || '',//PBID
         personid:localStorage.getItem('PERSONID') || '',//PERSONID
         auth:localStorage.getItem('AUTH') || '',//权限组
+        repeat:localStorage.getItem('REPEAT') || '',//判断菜单是否重复点击
         gjdq:[],//国家地区
         xb:[],//性别 
         lwqj:[],//来文期间
@@ -114,6 +116,10 @@ export default new Vuex.Store({
           localStorage.setItem('TOKEN', data)
           state.token = data;
         },
+        getUid(state, data) {
+          localStorage.setItem('UID', data)
+          state.uid = data;
+        },
         getUname(state, data) {
           localStorage.setItem('UName', data)
           state.uname = data;
@@ -173,6 +179,10 @@ export default new Vuex.Store({
         getAuth(state, data) {
           localStorage.setItem('AUTH', data)
           state.auth = data;
+        },
+        getRepeat(state, data) {
+          localStorage.setItem('REPEAT', data)
+          state.repeat = data;
         },
         getGjdq(state, data) {
           state.gjdq = data;

@@ -71,15 +71,15 @@
              </el-col>
              <el-col :span="6" style="padding-left:45px;">
                      <div class="title mb-20">历届{{mname}}名单</div>
-                     <div v-for='(tt,ind) in $store.state.jb' :key="ind" class="ljinfo">
-                         <span @click="gopro(tt.dm,'jb',tt.mc)">{{tt.mc}}{{cinfo}}</span>
+                     <div v-for='(tt,ind) in $store.state.jb' :key="ind">
+                         <div @click="gopro(tt.dm,'jb',tt.mc)"  class="ljinfo">{{tt.mc}}{{cinfo}}</div>
                      </div>
              </el-col>
         </el-row>
           <br/>
         </div>
   <el-dialog title="导入文件" :visible.sync="uploadDialogVisible"  width="630px">
-      <UPLOAD :url="uurl" :type="11"  :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
+      <UPLOAD :url="uurl" :type="99"  :urlErr="uurlErr" :periodType='jkey'  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
 </template>
@@ -118,6 +118,7 @@ export default {
           uurl:'/representative/import',
           uurlErr:'',
           uploadDialogVisible:false,
+          info:{},
        }
     },
     mounted(){
@@ -133,26 +134,37 @@ export default {
     },
     methods:{
         getinit(val){
+
+           if(val.query.info==undefined || val.query.info==''){
+              this.$router.push({name:'limitmsg'});
+         }else if(val.query.info!=undefined && val.query.info!=''){
+             try{
+              this.info=JSON.parse(Base64.decode(val.query.info));
+           
             this.count=0;
-            this.addtype=val.query.type;
-            this.group=val.query.key;
-            this.type=val.query.vv;
-            this.mc=val.query.mc;
-            this.code=val.query.code;
-            this.codemc=val.query.codemc;
-            this.jb1 = val.query.jb;
-            this.jmc=val.query.jmc;
+            this.addtype=this.info.type;
+            this.group=this.info.key;
+            this.type=this.info.vv;
+            this.mc=this.info.mc;
+            this.code=this.info.code;
+            this.codemc=this.info.codemc;
+            this.jb1 = this.info.jb;
+            this.jmc=this.info.jmc;
             if(this.jmc==null)
               {
                 this.jmc=this.$store.state.jmc;
               }
-            this.jkey=val.query.jkey==null?'':val.query.jkey;
+            this.jkey=this.info.jkey==null?'':this.info.jkey;
             if(this.type=="tbxq"){
                 this.getLevel('3',this.code);
             }else if(this.code!="" && this.code!=undefined && this.type=="tb"){
                this.getTB('3',this.code);
             }
             this.getList(this.addtype,this.type,this.group,this.jb1);
+             }catch(e){
+                this.$router.push({name:'limitmsg',query:{type:1}});
+             }
+         }
         },
         getStyle(){
             if(this.cname3&&!this.cname4){
@@ -172,8 +184,6 @@ export default {
           this.uploadDialogVisible=true;
         },
          fatherMethod(data,t){
-                console.log('-----',data,t);
-                  
                 this.uploadDialogVisible=false;
             },
         getSN(s,n){
@@ -323,9 +333,39 @@ export default {
             //     t="tbxq";
             // }
             if(t=="jb"){
-             this.$router.push({name:'Delegation',query:{type:this.addtype,vv:t,key:this.group,mc:this.mc,code:this.code,jb:this.jb1,codemc:this.codemc,jmc:mc,jkey:d}});
+               let p={
+                      'type':this.addtype,
+                      'vv':t,
+                      'key':this.group,
+                      'mc':this.mc,
+                      'code':this.code,
+                      'codemc':this.codemc,
+                      'jb':this.jb1,
+                      'jmc':mc,
+                      'jkey':d
+                  };
+ 
+                var str=Base64.encode(JSON.stringify(p));
+                this.$router.push({path:'Delegation',query:{info:str}});
+            //  this.$router.push({name:'Delegation',query:{type:this.addtype,vv:t,key:this.group,
+            //  mc:this.mc,code:this.code,jb:this.jb1,codemc:this.codemc,jmc:mc,jkey:d}});
             }else{
-                this.$router.push({name:'Delegation',query:{type:this.addtype,vv:t,key:d,mc:mc,code:this.code,jb:this.jb1,codemc:this.codemc,jmc:this.jmc,jkey:this.jkey}});
+                 let p={
+                      'type':this.addtype,
+                      'vv':t,
+                      'key':d,
+                      'mc':mc,
+                      'code':this.code,
+                      'codemc':this.codemc,
+                      'jb':this.jb1,
+                      'jmc':this.jmc,
+                      'jkey':this.jkey
+                  };
+ 
+                var str=Base64.encode(JSON.stringify(p));
+                this.$router.push({path:'Delegation',query:{info:str}});
+                // this.$router.push({name:'Delegation',query:{type:this.addtype,vv:t,key:d,mc:mc,
+                // code:this.code,jb:this.jb1,codemc:this.codemc,jmc:this.jmc,jkey:this.jkey}});
             }
            
            //this.getList(this.addtype,t,d);

@@ -35,6 +35,21 @@
     .personnel .ptit{padding-left:5%; }
     .personnel .ptitr{padding-right:5%; }
     .pairinput{width:55%!important;}
+    .yy-input-text{
+      display: inline-block;
+      width: 27%;
+      font-size: 16px;
+      text-align: left;
+      line-height: 32px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+    
+    }
+    .yy-input-input{
+      width: 60%!important;
+    }
 }
 
    /* 1440 */
@@ -75,6 +90,21 @@
     .personnel .ptit{padding-left:5px; }
     .personnel .ptitr{padding-right:5px; }
     .pairinput{width:43%!important;}
+    .yy-input-text{
+      display: inline-block;
+      width: 30%;
+      font-size: 14px;
+      text-align: left;
+      line-height: 32px;
+      /* white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle; */
+    
+    }
+    .yy-input-input{
+      width: 60%!important;
+    }
 }
 .el-dropdown{font-size:16px!important;}
 .topba{padding: 0px 80px 0px 80px; }

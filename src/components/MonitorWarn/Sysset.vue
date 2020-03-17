@@ -446,6 +446,15 @@ export default {
                           this.txtableData=r.data.hastenTime;
                           this.ywtableData=r.data.opsInfoList;
                           this.imgtableData=r.data.picFormList==null?[]:r.data.picFormList;
+                           if(r.data.picFormList.length>0){
+                             var sum='';
+                             var array=r.data.picFormList;
+                             for (let i = 0; i < array.length; i++) {
+                               sum+=array[i].picForm+',';
+                             }
+                             this.$store.commit('getImgformat',sum.substr(0,sum.length-1));
+                      }
+                          
                          
                       }else{
                            this.$message.error(r.message);return;

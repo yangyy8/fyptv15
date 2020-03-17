@@ -18,6 +18,7 @@
                             </el-button>
                           <!-- <el-button style="width:80px" >导入</el-button> -->
                           <el-button style="width:80px" @click="goseach()">查询</el-button>
+                          <el-button style="width:80px" v-if='jb!="qg"' @click="$router.go(-1)">返回</el-button>
                     </el-col>
                </el-row>
                <el-row :gutter="2" class="ah-50 pborder mt-20" v-if="addtype=='1'">
@@ -126,7 +127,7 @@ export default {
                         }else if(this.jb=='sj'){
                            this.title="省级行政区划";
                            this.getLevel('1','');
-                          this.cname1="省级人大代表";
+                           this.cname1="省级人大代表";
                         }else if(this.jb=='ds'){
                           this.title="省级行政区划";
                           this.getLevel('1','');

@@ -191,21 +191,7 @@ textarea{resize: none!important;}
   align-items: center;
   justify-content: center;
 }
-.yy-input-text{
-  display: inline-block;
-  width: 27%;
-  font-size: 16px;
-  text-align: left;
-  line-height: 32px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  vertical-align: middle;
 
-}
-.yy-input-input{
-  width: 60%!important;
-}
 .topt{vertical-align: top;}
 .yymain{width: 100%;color: #333333;}
 .yynav{height: 60px;line-height: 60px; text-align: left;}

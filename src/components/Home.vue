@@ -35,7 +35,7 @@
         background-color="#1F426C"
         text-color="#ffffff"
         active-text-color="#ffffff"
-        :default-active="activeIndex"
+        :default-active="$route.path"
         @select="handleSelect"
        >
       <NavMenu :navMenus="menuData"></NavMenu>
@@ -98,14 +98,12 @@ export default {
     };
   },
   mounted(){
-    //console.log(this.$route.path);
+
     this.getMenu();
   },
-
   methods:{
        handleCommand(command) {
-         console.log(command);
-         
+        
          if(command=='a'){
            this.$router.push({name:'EditPwd'});
          }else if(command=='b'){
@@ -143,7 +141,7 @@ export default {
     getMenu(){
       this.$api.get(this.Global.aport1+'/menu/getMenu', null,
                 r => {
-                  console.log(r);
+                  
                   this.menuData=r.data;
                });
     },
@@ -181,13 +179,15 @@ export default {
 
           })
    },
-   handleSelect(key, keyPath) {
- //  console.log(key,keyPath);
-   
-  //  this.$router.push({
-  //       path: key,
-  //       params: {data: 'query' }
-  //     })
+   handleSelect(key, name) {
+     
+      console.log(key, name);
+      if(this.$store.state.repeat==key){
+         this.$router.push({path: this.$route.fullPath,query: { plan: Date.now().toString()}})
+      }else{
+        this.$store.commit('getRepeat',key)
+      }
+      
 }
   }
 }

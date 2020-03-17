@@ -85,7 +85,7 @@
                                  v-for="(item,ind) in wyhlist"
                                  :key="ind"
                                  :label="item.mc"
-                                 :value="item.dm">
+                                 :value="item.orgid">
                                  </el-option>
                             </el-select>
                         </el-col>
@@ -109,7 +109,7 @@
                             </el-select>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="6">
-                            <span class="yy-input-text">职业</span>
+                            <span class="yy-input-text">单位职务</span>
                              <el-input placeholder="请输入内容" size="small" clearable v-model="pd.job"  class="yy-input-input" ></el-input>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="6">
@@ -188,13 +188,13 @@
                 <div class="pborder mt-20">
                     <el-row > 
                         <el-col :span="14">
-                              <el-button type="primary" size="small" @click="getCK('0','录入')">录入</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9','查看')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1','修改')">修改</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()">删除</el-button>
-                               <el-button type="primary" size="small"  @click="getDR">导入</el-button>
-                             <!-- <el-button type="primary"  size="small" @click="download">下载全部</el-button>
-                              <el-button type="primary"  size="small" @click="download">下载当页</el-button> -->
+                              <el-button type="primary" size="small" @click="getCK('0','录入')" v-if='getAuthShow("0301010046")'>录入</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9','查看')" v-if='getAuthShow("0301010049")'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1','修改')" v-if='getAuthShow("0301010047")'>修改</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()" v-if='getAuthShow("0301010048")'>删除</el-button>
+                               <el-button type="primary" size="small"  @click="getDR" v-if='getAuthShow("0301010050")'>导入</el-button>
+                             <!-- <el-button type="primary"  size="small" @click="download" v-if='getAuthShow("0301010051")'>下载全部</el-button>
+                              <el-button type="primary"  size="small" @click="download" v-if='getAuthShow("0301010052")'>下载当页</el-button> -->
                                 </el-col>
                               <el-col :span="10" class="trt">
                                <span> 政协委员总数 <b class="sumfont" >{{this.TotalResult}}</b> 人</span>
@@ -266,12 +266,12 @@
 <br/>
          </div>
           <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
-      <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+      <UPLOAD :url="vvurl" :type="1000"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
 </template>
 <script>
-import {format} from '@/assets/js/date.js'
+import {format,getAuthInfo} from '@/assets/js/date.js'
 import {ToArray,sortByKey} from '@/assets/js/ToArray.js'
 import UPLOAD from "../../Common/upload"
 export default {
@@ -305,6 +305,7 @@ export default {
             drDialogVisible:false, 
            vvurl:'/cppcMember/import',
            vvurlErr:'',
+           authinfo:this.$store.state.auth,
         }
     },
     watch:{
@@ -338,7 +339,18 @@ export default {
         clickRow(row){
            this.$refs.multipleTable.toggleRowSelection(row)
         },
+        //按钮权限 
+         getAuthShow(sign){
+                   if(getAuthInfo(this.authinfo,sign)){
+                       return true;
+                   }else{return false;}
+           },
         getinit(val){
+            //权限start
+            if(this.authinfo.indexOf('0301010045')==-1){
+                this.$router.push({path:'/limitmsg'});
+            }
+            //end
            this.viewtype=val.query.type;this.getFYDW();this.getXHFT();
            this.getWYH(this.Global.ZX);
         },
@@ -402,7 +414,7 @@ export default {
             }else{
                 var array=this.multipleSelection;
                    for (let i = 0; i < array.length; i++) {
-                       mselect.push(array[i].pbId);
+                       mselect.push(array[i].personId);
                        
                    }
             }

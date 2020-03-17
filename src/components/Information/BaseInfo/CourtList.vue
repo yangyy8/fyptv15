@@ -38,7 +38,7 @@
                               <el-button type="danger" size="small" :disabled="bnt"  @click="delUser">删除</el-button>
                          </el-col>
                             <el-col :span="8" class="trt">
-                                  各级法院总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
+                                  各级法院和部门总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
                               </el-col>
                     </el-row>
                      <el-table
