@@ -28,10 +28,10 @@
                 </div>
                 <div class="pborder mt-20">
                     <el-row>
-                              <el-button type="primary" size="small" @click="add(0)">录入</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="add(2)">查看</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="add(1)">修改</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt"  @click="delUser">删除</el-button>
+                              <el-button type="primary" size="small" @click="add(0)" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="add(2)" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="add(1)" v-if='allshow[2]'>修改</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt"  @click="delUser" v-if='allshow[3]'>删除</el-button>
                     </el-row>
                      <el-table
                             ref="multipleTable"
@@ -93,7 +93,7 @@
                 </div>
          </div>
 
-        <el-dialog :title="adddia" :visible.sync="addDialogVisible" width="600px">
+        <el-dialog :title="adddia" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="600px">
             <el-form :model="form" >
                 <el-row class="ah-40">
                     <el-col :span="24">
@@ -112,7 +112,7 @@
                         </el-select>
                     </el-col>
                         <el-col :span="24">
-                        <span class="yy-input-text trt"><font class="red">*</font> 菜单功能：</span>
+                        <span class="yy-input-text trt"><font class="red">*</font> 画面功能：</span>
                         
                         <el-tree
                             :data="menudata"
@@ -127,7 +127,7 @@
                             :props="defaultProps">
                         </el-tree>
                     </el-col>
-                      <el-col :span="24">
+                      <!-- <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 画面功能：</span>
                         
                         <el-tree
@@ -142,7 +142,7 @@
                             style="padding-left:30%;"
                             :props="defaultProps1">
                         </el-tree>
-                    </el-col>
+                    </el-col> -->
                        <el-col :span="24" class="mt-20">
                           <span class="yy-input-text trt" style="vertical-align: top;">备注：</span>
                         <el-input placeholder="请输入内容" type="textarea" :disabled="ckshow" :autosize="{ minRows: 2, maxRows: 3}" size="small" clearable v-model="form.remark"  class="yy-input-input"></el-input>
@@ -190,12 +190,28 @@ export default {
                 label: 'label'
             },
             ckshow:false,
+            alldata:['22063507','22063508','22063509','22063510'],
+            allshow:[],
         }
     },
     mounted(){
+           //权限start
+           this.$api.post(this.Global.menuurl,{'menuId':'11722206'},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
            this.getFY();
-           this.getMenu();
-           this.getHMGN();
+          // this.getMenu();
+           //this.getHMGN();
            this.getList(this.CurrentPage, this.pageSize, this.pd);
     },
     methods:{
@@ -349,7 +365,7 @@ export default {
                   this.form={};
                     this.$nextTick(function() {
                         this.$refs.tree.setCheckedKeys([])
-                        this.$refs.tree1.setCheckedKeys([])
+                        // this.$refs.tree1.setCheckedKeys([])
                     })
                   this.adddia="新增";
                   break;
@@ -390,7 +406,7 @@ export default {
                 });
           }else{
             this.getMenu();
-            this.getHMGN();
+           // this.getHMGN();
           }
        
           this.addDialogVisible=true;
@@ -399,34 +415,35 @@ export default {
 
          var  url="/user/saveRole";
          let checkList=this.$refs.tree.getCheckedNodes();
-        let checkList1=this.$refs.tree1.getCheckedNodes();
+        // let checkList1=this.$refs.tree1.getCheckedNodes();
         //  console.log(checkList);
          
         //  var array=checkList;
         if(this.form.roleName=='' || this.form.roleName==undefined){
-             this.$message.error('角色名称不能为空！');return;
+            this.$message.error('角色名称不能为空！');
+             return;
         }
         if(this.form.orgId=='' || this.form.orgId==undefined){
              this.$message.error('所属法院不能为空！');return;
         }
             if (checkList.length == 0) {
-                this.$message.error('菜单功能不能为空！');
-                return;
-             }
-              if (checkList1.length == 0) {
                 this.$message.error('画面功能不能为空！');
                 return;
              }
+            //   if (checkList1.length == 0) {
+            //     this.$message.error('画面功能不能为空！');
+            //     return;
+            //  }
          var childrenlist=new Array();
-         var childrenlist1=new Array();
+        //  var childrenlist1=new Array();
               childrenlist = this.$refs.tree.getHalfCheckedKeys().concat(this.$refs.tree.getCheckedKeys());
-              childrenlist1=(this.$refs.tree1.getHalfCheckedKeys().concat(this.$refs.tree1.getCheckedKeys()));
+            //   childrenlist1=(this.$refs.tree1.getHalfCheckedKeys().concat(this.$refs.tree1.getCheckedKeys()));
             
-            for (let ii = 0; ii < childrenlist1.length; ii++) {
-                childrenlist.push(childrenlist1[ii]);
+            // for (let ii = 0; ii < childrenlist1.length; ii++) {
+            //     childrenlist.push(childrenlist1[ii]);
                 
-            }
-            console.log(childrenlist);
+            // }
+            // console.log(childrenlist);
             
                 this.form.token=this.$store.state.token;
                 this.form.menuIds=childrenlist;
@@ -434,10 +451,8 @@ export default {
                 this.$api.post(this.Global.aport1+url,this.form,
                  r =>{
                       if(r.code==1){
-                          this.$message({
-                                    message: '保存成功！',
-                                    type: 'success'
-                                });
+                         
+                                this.$message.success("保存成功！");
                                  this.getList(this.CurrentPage, this.pageSize, this.pd); 
                           this.addDialogVisible=false;
                       }else{
@@ -484,18 +499,14 @@ export default {
                             this.$api.post(this.Global.aport1+'/user/deleteRole',p,
                             r =>{
                                 if(r.code==1){
-                                this.$message({
-                                        message: '删除成功！',
-                                        type: 'success'
-                                });
+                                
+                                this.$message.success("删除成功！");
                             this.getList(this.CurrentPage, this.pageSize, this.pd); 
                                 }
                             });
                     }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                        });
+                       
+                        this.$message.info("已取消删除");
                     });
                
             }else{

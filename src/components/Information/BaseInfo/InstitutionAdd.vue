@@ -187,7 +187,7 @@
                         <el-button style="width:130px;" @click="$router.go(-1)">关 闭</el-button>
                     </div>
 
-         <el-dialog :title="lxrdia" :visible.sync="addDialogVisible" width="600px">
+         <el-dialog :title="lxrdia" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="600px">
              <el-form :model="form" >
                 <el-row class="ah-40">
                     <el-col :span="24">
@@ -265,7 +265,7 @@
               <el-button @click="addDialogVisible = false" size="small">关 闭</el-button>
             </div>
        </el-dialog>
- <el-dialog title="智能搜索" :visible.sync="znDialogVisible" >
+ <el-dialog title="智能搜索" :visible.sync="znDialogVisible" :close-on-click-modal='false'>
      <RGZN  :type="1" :data="zndata"  @ZNfatherMethod="ZNfatherMethod" :random="new Date().getTime()"></RGZN>
      <div slot="footer" class="dialog-footer">
               <el-button @click="znDialogVisible = false" size="small">取 消</el-button>
@@ -607,10 +607,9 @@ export default {
                     　　　　　　　　this.tableData.splice(index,1)
                             }
                    }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
+                    
+                    this.$message.info('已取消删除'); 
+                            
                 });
 
             },
@@ -647,92 +646,35 @@ export default {
           submit(){
              if(this.pd.mc=="" || this.pd.mc==undefined)
              {
-                  this.$message({
-                    showClose: true,
-                    message: '机构名称不能为空',
-                    type: 'error',
-                    offset:'100'
-                    });
+                  
+                    this.$message.error('机构名称不能为空'); 
                     return;
              }
-            // if(this.pd.bm=="" || this.pd.bm==undefined)
-            //  {
-            //       this.$message({
-            //         showClose: true,
-            //         message: '编码不能为空',
-            //         type: 'error',
-            //         offset:'100'
-            //         });
-            //         return;
-            //  }
-            // if(this.pd.jc=="" || this.pd.jc==undefined)
-            //  {
-            //       this.$message({
-            //         showClose: true,
-            //         message: '简称不能为空',
-            //         type: 'error',
-            //         offset:'100'
-            //         });
-            //         return;
-            //  }
+           
              if(this.pd.sfbm=="" || this.pd.sfbm==undefined)
              {
-                  this.$message({
-                    showClose: true,
-                    message: '是否部门不能为空',
-                    type: 'error',
-                    offset:'100'
-                    });
+                
+                    this.$message.error('是否部门不能为空'); 
                     return;
              }
-            //   if(this.pd.lvl=="" || this.pd.lvl==undefined)
-            //  {
-            //       this.$message({
-            //         showClose: true,
-            //         message: '请选择级别',
-            //         type: 'error',
-            //         offset:'100'
-            //         });
-            //         return;
-            //  }
+           
               if((this.pd.sj=="" || this.pd.sj==undefined) && this.pd.sfbm=="0223000002")
              {
-                  this.$message({
-                    showClose: true,
-                    message: '机构隶属不能为空',
-                    type: 'error',
-                    offset:'100'
-                    });
+                 
+                    this.$message.error('机构隶属不能为空');
                     return;
              }
-            //    if(this.pd.xzqh=="" || this.pd.xzqh==undefined)
-            //  {
-            //       this.$message({
-            //         showClose: true,
-            //         message: '行政区划不能为空',
-            //         type: 'error',
-            //         offset:'100'
-            //         });
-            //         return;
-            //  }
+           
                if(this.pd.zxdm=="" || this.pd.zxdm==undefined)
              {
-                  this.$message({
-                    showClose: true,
-                    message: '固定电话不能为空',
-                    type: 'error',
-                    offset:'100'
-                    });
+                
+                    this.$message.error('固定电话不能为空');
                     return;
              }
               if(this.pd.dz=="" || this.pd.dz==undefined)
              {
-                  this.$message({
-                    showClose: true,
-                    message: '地址不能为空',
-                    type: 'error',
-                    offset:'100'
-                    });
+                  
+                    this.$message.error('地址不能为空');
                     return;
              }
 
@@ -758,10 +700,9 @@ export default {
                 r =>{
                     
                       if(r.code==1){
-                            this.$message({
-                               "type":"success",
-                               "message":r.message,
-                           });
+                        
+                           
+                           this.$message.success(r.message);
                            this.$router.push({name:'InstitutionList',query:{type:this.addtype}});
                       }else{
                            this.$message.error(r.message);return;

@@ -452,8 +452,8 @@
                 <div class="pborder mt-20">
                             <el-row >
                             <el-col :span="18">
-                              <el-button type="primary" size="small" :disabled="bnt"  @click="getLC(0)">办公流程</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getLC(1)">催办</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt"  @click="getLC(0)" v-if='allshow[0]'>办公流程</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getLC(1)" v-if='allshow[1]'>催办</el-button>
                               </el-col>
                             </el-row>
                           <el-table
@@ -516,7 +516,7 @@
                 </div>
 <br/>
          </div>
-<el-dialog title="催办" :visible.sync="cbDialogVisible" width="600px"> 
+<el-dialog title="催办" :visible.sync="cbDialogVisible" :close-on-click-modal='false' width="600px"> 
      <el-form :model="cbform">
          <el-row class="ah-40">
         <el-col :span="24">
@@ -549,9 +549,10 @@
               <el-button @click="cbDialogVisible = false" size="small">取 消</el-button>
             </div>
 </el-dialog>
-<el-dialog title="办公流程" :visible.sync="addDialogVisible" width="850px"> 
+<el-dialog title="办公流程" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="850px"> 
   <el-form :model="form">
-        <el-collapse v-model="activeNames" @change="handleChange" style="height:600px;overflow-y:auto;" accordion>
+      <div v-if='cklc' style="line-height:40px; text-align:center">暂无办公流程</div>
+        <el-collapse v-model="activeNames" @change="handleChange" style="height:600px;overflow-y:auto;" accordion v-else>
         <div v-for="(item,ind) in bldata" :key="ind">
            <el-collapse-item :title="item.title" :name="item.serialNum">
               <el-row class="ah-40 border" >
@@ -653,6 +654,9 @@ export default {
             bldata:[],//办理流程
             lcdata:[],//办理流程
            sbdata:[],
+           alldata:['27013801','27013802'],
+           allshow:[],
+           cklc:true,
         }
     },
     mounted(){
@@ -694,7 +698,20 @@ export default {
            
         },
         getinit(val){
-             
+                //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'15022701'},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+              //权限end
              this.pd.year=val.query.year;
              this.getCheckList();
              this.getcbdw();
@@ -720,10 +737,14 @@ export default {
                  'type':'2',
                  'billId':this.multipleSelection[0].focuscaseid
              };
-              this.$api.post('http://10.0.30.69:9404/supremeCourtOffice/getOAProcessList',p,
+              this.$api.post(this.Global.aport1+'/oAProcessOffice/getOAProcessList',p,
                 r =>{
                        if(r.code==1){
+
                         this.bldata=r.data;
+                        if(this.bldata.length>0){
+                            this.cklc=false;
+                        }else{this.cklc=true}
                         }
                 });
 
@@ -739,14 +760,12 @@ export default {
               
                  'id':id
              };
-          this.$api.post('http://10.0.30.69:9404/supremeCourtOffice/getOAProcessNodeById',p,
+          this.$api.post(this.Global.aport1+'/oAProcessOffice/getOAProcessNodeById',p,
                 r =>{
                        if(r.code==1){
                            
                            this.$set(obj,'subdata',r.data);
-                      
-                       
-                        }
+                       }
                 });
               
         },
@@ -786,10 +805,8 @@ export default {
                      
                      if(r.code==1){
                          
-                           this.$message({
-                            message: r.message,
-                            type: 'success'
-                            });
+                           
+                             this.$message.success(r.message);
                             this.cbDialogVisible=false;
                           this.getList(this.CurrentPage, this.pageSize, this.pd);
                      }else{

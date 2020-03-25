@@ -112,6 +112,8 @@ export default {
                   // this.$message.error(file.name+" 文件不能超过20M");
                   this.msg +=file.name+"文件不能超过20M<br/>";
                    return;  //必须返回false
+                }else{
+                  this.error=0;
                 }
                   
             },
@@ -122,28 +124,22 @@ export default {
                  this.msg='';
                if(this.type=='1000'){
                  if(this.periodTypes=="" || this.periodTypes==null){
-                   this.$message({
-                    message: '请先选择届别！',
-                    type: 'warning'
-                   });
+                  
+                   this.$message.error('请先选择届别！');
                    return
                  }
               }
               if (this.$refs.upload.uploadFiles.length == 0) {
-                this.$message({
-                  message: '请先选择文件！',
-                  type: 'warning'
-                });
+             
+                this.$message.error('请先选择文件！');
                 return
               }
              
 
               if(this.type=='11' || this.type=='1000' || this.type=='1001'){
                 if (this.$refs.upload.uploadFiles.length != 1){
-                this.$message({
-                  message: '此模块只能上传一个文件',
-                  type: 'warning'
-                });
+                
+                   this.$message.error('此模块只能上传一个文件!');
                 return
                 }
               }
@@ -207,13 +203,10 @@ export default {
                         if(this.type.length==10 || this.periodType!=null){
                         
                               if(r.code==1){
-                              this.$message({
-                                message: r.message,
-                                type: 'success'
-                              });
+                              
+                              this.$message.success(r.message);
                               if(this.type=='1000' || this.type=='1001'){
-                                console.log('+++',this.type);
-                                
+                               
                                 this.$emit('drfatherMethod',r.data,this.type); 
                               }else{
                                 this.$emit('fatherMethod',r.data,this.type); 
@@ -224,10 +217,8 @@ export default {
                         }else{
                             
                               if(r.data.success=='success'){
-                              this.$message({
-                                message: '上传成功',
-                                type: 'success'
-                              });
+                              
+                              this.$message.success('上传成功');
                               
                               this.$emit('fatherMethod',r.data.relFileList,this.type); 
                             }else{

@@ -45,7 +45,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">届别</span>
-                           <el-select v-model="pd.periodType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.periodTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.jb"
                                  :key="ind"
@@ -56,7 +56,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">团别</span>
-                           <el-select v-model="pd.groupType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.groupTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.qtb"
                                  :key="ind"
@@ -81,7 +81,7 @@
                         </el-col> -->
                            <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">党派</span>
-                           <el-select v-model="pd.partisan" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.partisans" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.dp"
                                  :key="ind"
@@ -92,7 +92,7 @@
                         </el-col>
                           <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">民族</span>
-                           <el-select v-model="pd.nationality" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.nationalitys" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.mz"
                                  :key="ind"
@@ -108,7 +108,7 @@
                        
                           <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">专门委员会</span>
-                           <el-select v-model="pd.specialCommitteeId"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.specialCommitteeIds" multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in wyhlist"
                                  :key="ind"
@@ -119,7 +119,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">职业类别</span>
-                           <el-select v-model="pd.jobTypeString" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.jobType" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.zylb"
                                  :key="ind"
@@ -130,13 +130,16 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">单位职务</span>
-                           
                               <el-input placeholder="请输入内容" size="small" clearable v-model="pd.job"  class="yy-input-input" ></el-input>
+                        </el-col>
+                         <el-col :sm="24" :md="12" :lg="8">
+                            <span class="yy-input-text">社会职务</span>
+                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.socialDuty"  class="yy-input-input" ></el-input>
                         </el-col>
                         
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">籍贯</span>
-                           <el-select v-model="pd.birthPlace" :filter-method="userFilter" @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.birthPlaces" multiple :filter-method="userFilter" @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in xzdata"
                                  :key="ind"
@@ -147,7 +150,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">学历</span>
-                           <el-select v-model="pd.education" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.educations" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.xl"
                                  :key="ind"
@@ -158,7 +161,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">所属巡回法庭</span>
-                           <el-select v-model="pd.circuitCourtId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.circuitCourtIds" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in xhftdata"
                                  :key="ind"
@@ -194,15 +197,16 @@
                 <div class="pborder mt-20">
                         <el-row> 
                              <el-col :span="14">
-                              <el-button type="primary" size="small" @click="getCK('0','录入')" v-if='getAuthShow("0301010005")'>录入</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9','查看')" v-if='getAuthShow("0301010008")'>查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1','修改')" v-if='getAuthShow("0301010006")'>修改</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()" v-if='getAuthShow("0301010007")'>删除</el-button>
-                              <el-button type="primary" size="small" @click="getDR" v-if='getAuthShow("0301010009")'>导入</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getSH" v-if='getAuthShow("0301010012")'>审核</el-button>
-                              <!-- <el-button type="primary"  size="small" @click="download" v-if='getAuthShow("0301010010")'>下载全部</el-button> -->
-                              <!-- <el-button type="primary"  size="small" @click="download" v-if='getAuthShow("0301010011")'>下载当页</el-button> -->
-                                  </el-col>
+                              <el-button type="primary" size="small" @click="getCK('0','添加')" v-if='allshow[0]'>添加</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9','查看')" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1','修改')" v-if='allshow[2]'>修改</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()" v-if='allshow[3]'>删除</el-button>
+                              <el-button type="primary" size="small" @click="getDR" v-if='allshow[4]'>导入</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getSH" v-if='allshow[5]'>审核</el-button>
+                              <!-- <el-button type="primary"  size="small" @click="download" v-if='allshow[6]'>下载全部</el-button> -->
+                              <!-- <el-button type="primary"  size="small" @click="download" v-if='allshow[7]'>下载当页</el-button> -->
+                             &nbsp;
+                             </el-col>
                                    <el-col :span="10" class="trt">
                                     <span>  人大代表总数 <b class="sumfont" >{{this.TotalResult}}</b> 人</span>
                                     <span class="ml-20">  已联络 <b class="sumfont" >{{this.activeNum}}</b> 人</span>
@@ -268,10 +272,10 @@
                 </div>
 <br/>
          </div>
-    <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+    <el-dialog title="导入文件" :visible.sync="drDialogVisible"  :close-on-click-modal='false' width="630px">
       <UPLOAD :url="vvurl" :type="1000"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
-    <el-dialog title="审核信息" :visible.sync="shDialogVisible"  width="630px">
+    <el-dialog title="审核信息" :visible.sync="shDialogVisible"  :close-on-click-modal='false' width="630px">
          <el-row class="mb-20">
              <el-col :span="24" class="input-item">
                <span class="yy-input-text trt"><font class="red">*</font> 审核结果：</span>
@@ -293,7 +297,7 @@
     </div>
 </template>
 <script>
-import {format,getAuthInfo} from '@/assets/js/date.js'
+import {format} from '@/assets/js/date.js'
 import {ToArray,sortByKey} from '@/assets/js/ToArray.js'
 import UPLOAD from "../../Common/upload"
 export default {
@@ -332,7 +336,8 @@ export default {
             shDialogVisible:false,
             form:{},
             authinfo:this.$store.state.auth,
-         
+            alldata:['21123127','21123128','21123129','21123130','21123131','21123132','21123133','21123134'],//0录入,1查询,2修改,3删除,4导入,5审核,6下载全部,7下载当页
+            allshow:[],
         }
     },
     watch:{
@@ -369,12 +374,10 @@ export default {
             this.$api.get(this.Global.aport4+this.Global.jg,null,
             r =>{
             
-                
             if(r.success){
-            
                 this.xzList = ToArray(r.data);
                 this.userFilter();
-            }
+               }
             })
         },
     userFilter(query = '') {
@@ -390,21 +393,25 @@ export default {
                this.xzdata= arr
              }
            },
-        getAuthShow(sign){
-                   if(getAuthInfo(this.authinfo,sign)){
-                       return true;
-                   }else{return false;}
-           },
+      
         getinit(val){
-            
-           //权限start
-           if(this.authinfo.indexOf('0301010004')==-1){
-               this.$router.push({path:'/limitmsg'});
-           }
-           //end
-  
+          //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':'11072112'},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
+ 
+ 
            this.viewtype=val.query.type;this.getXHFT();
-           this.getBM();
            this.getWYH(this.Global.RD);
            this.getCheckList();
            this.getList(this.CurrentPage, this.pageSize, this.pd);
@@ -495,6 +502,7 @@ export default {
         },
         getList(currentPage, showCount, pd){
            this.changeList();
+
            //最高人民法院特约人员
            if(this.pd.is1){
                 this.pd.isSpecialPerson="1"
@@ -515,7 +523,7 @@ export default {
            if(this.pd.is5){
                 this.pd.isInStandCommittee="0115000001"
            }
-           
+           this.activeNum=0;this.inactiveNum=0;
            let p={
              "pd":this.pd,
              "pageInfo":{
@@ -571,10 +579,8 @@ export default {
           this.$api.post(this.Global.aport1+'/representative/check',p,
                 r =>{
                     if(r.code==1){
-                            this.$message({
-                                type: 'success',
-                                message: '操作成功！'
-                        });
+                          
+                         this.$message.success(r.message);
                         this.shDialogVisible=false;
                         this.getList(this.CurrentPage, this.pageSize, this.pd);
                     }else{
@@ -611,19 +617,15 @@ export default {
                  r =>{
                   
                       if(r.code==1){
-                         this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                        });
+                        
+                         this.$message.success('删除成功');
                         this.getList(this.CurrentPage, this.pageSize, this.pd);
                       }
                 });
 
                 }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
+                   
+                    this.$message.info('已取消删除');         
                 });
 
         },
@@ -693,10 +695,7 @@ export default {
                        
            },
         
-        getBM()
-           { 
-                       
-           },
+       
       
     },
 }

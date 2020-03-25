@@ -182,14 +182,13 @@ export default {
              this.$api.post(this.Global.aport1+'/org/create',this.pd,
                 r =>{
                       if(r.code==1){
-                           this.$message({
-                               "type":"success",
-                               "message":r.message,
-                           });
+                          
+                          this.$message.success(r.message);   
 
                           this.$router.push({name:'CourtList',query:{}});
                       }else{
-                              this.$message.error(r.message);return;
+                              this.$message.error(r.message);
+                              return;
                       }
                 });
           },

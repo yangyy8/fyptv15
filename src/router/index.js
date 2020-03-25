@@ -155,6 +155,18 @@ export default new Router({
           component: resolve => require(['@/components/Information/BaseInfo/tyBaseList'], resolve),
         },
         {
+          path: 'InstitutionNew',
+          name: 'InstitutionNew',
+          meta:{title:['基本信息库','机构信息']},
+          component: resolve => require(['@/components/Information/BaseInfo/InstitutionNew'], resolve),
+        },
+        {
+          path: 'InstitutionGroup',
+          name: 'InstitutionGroup',
+          meta:{title:['基本信息库','机构信息']},
+          component: resolve => require(['@/components/Information/BaseInfo/InstitutionGroup'], resolve),
+        },
+        {
           path: 'Institution',
           name: 'Institution',
           meta:{title:['基本信息库','机构信息']},
@@ -337,6 +349,7 @@ export default new Router({
           meta:{title:['统计信息','联络机构信息统计']},
           component: resolve => require(['@/components/Counts/InstitutionCount'], resolve),
         },
+        
         {
           path: 'BaseCount',
           name: 'BaseCount',

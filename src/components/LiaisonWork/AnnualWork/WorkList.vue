@@ -20,7 +20,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">工作相关文件类型</span>
-                           <el-select v-model="pd.workRelFileType" @change="getHDName(pd.activityType)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.workRelFileType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.zzxgwjlx"
                                  :key="ind"
@@ -91,10 +91,11 @@
                 <div class="pborder mt-20">
                     <el-row>
                             <el-col :span="16" class="ah-40">
-                              <el-button type="primary" size="small" @click="getCK('0')">录入</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1')">修改</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="delpair">删除</el-button>
+                              <el-button type="primary" size="small" @click="getCK('0')" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9')" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1')" v-if='allshow[2]'>修改</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="delpair" v-if='allshow[3]'>删除</el-button>
+                              &nbsp;
                                 </el-col>
                               <el-col :span="8" class="trt">
                                   {{cinfo}}总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
@@ -202,6 +203,8 @@ export default {
             opendata:[],//需要传的对象
             txtname:'审核',
             sendtype:'0',//审核
+            alldata:['23123601','23123602','23123603','23123604',],//0录入,1查询,2修改,3删除
+            allshow:[],
         }
     },
     mounted(){
@@ -220,6 +223,19 @@ export default {
            this.$refs.multipleTable.toggleRowSelection(row)
         },
         getinit(val){
+           //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':'12232312'},
+                     r =>{
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
           this.tableData=[];
           this.getCheckList();
           this.getFY();
@@ -353,21 +369,16 @@ export default {
                             this.$api.post(this.Global.aport2+'/WorkRelFilesController/delete',p,
                             r =>{
                                 if(r.code==1){
-                                     this.$message({
-                                        message: '删除成功！',
-                                        type: 'success'
-                                  })
-
+                                   
+                                    this.$message.success("删除成功！");
                                   this.getList(this.CurrentPage, this.pageSize, this.pd); 
                                 }
                             });
                          
                          
                     }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                        });
+                      
+                         this.$message.info("已取消删除");
                     });
                
             }else{

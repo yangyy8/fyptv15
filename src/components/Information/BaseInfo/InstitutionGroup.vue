@@ -1,0 +1,405 @@
+<template>
+    <div class="personnel">
+         <div class="homebread">
+          <i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
+          <span> 基本信息库 
+          <span class="mlr_10">/</span><span>{{cname1}}</span>
+          <span class="mlr_10" v-if="cname2 != ''">/</span><span v-if="cname2 != ''"><b>{{cname2}}</b></span>
+          <span class="mlr_10" v-if="cname3 != ''">/</span><span v-if="cname3 != ''"><b>{{cname3}}</b></span>
+          <span class="mlr_10" v-if="cname4 != ''">/</span><span v-if="cname4 != ''"><b>{{cname4}}{{title}}</b></span>
+          </span> 
+    </div>
+     <div class="content">
+           <el-row>
+             <el-col :span='22' class="ptit">
+                <el-row>
+                   <el-col :span='16'>
+                       <div class="title">{{cname4}}{{title}}{{orgmc}}</div>
+                   </el-col>
+                    <el-col :span="8" style="text-align:right">
+                          <el-button type="primary" style="width:80px" @click="goto(0)"  v-if='allshow[0]'><span>添加</span></el-button>
+                          <el-button type="success" @click="goto('1',orgid)" v-if='orgid!=""'>编辑</el-button>
+                          <el-button @click='getDR'  v-if='allshow[1]'>导入</el-button>
+                          <el-button style="width:80px" @click="goseach()"  v-if='allshow[2]'>查询</el-button>
+                          <el-button style="width:80px" @click="goback()" v-if='back'>返回</el-button>
+                    </el-col>
+               </el-row>
+                <el-row :gutter="2" class="ah-50 pborder mt-20 mb-20" v-if='show'>
+                   <el-col :sm="24" :md="12" :lg="8" v-for="(t,ind) in Data" :key="ind">
+                    <span class="address"  @click="getListBM(t.orgid,t.mc)">{{t.mc}}</span>
+                  </el-col>
+                </el-row>
+                <el-row  class="ah-50 pborder mt-20 mb-20 " style="text-align:center" v-else>
+                   <el-col :span="24">
+                    <span>无数据</span>
+                  </el-col>
+                </el-row>
+             </el-col>
+           
+            </el-row>
+     </div>
+      <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false' width="630px">
+      <UPLOAD :url="vvurl" :type="1001"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
+   </el-dialog>
+    </div>
+  
+</template>
+<script>
+import UPLOAD from "../../Common/upload"
+import {getgroupmenu,getgroupdata} from '@/assets/js/aleaorg.js'
+export default {  
+    components:{UPLOAD},
+    data(){
+        return{
+           cname1:'',
+           cname2:'',
+           cname3:'',
+           cname4:'',
+           Data:[],
+           addtype:'',
+           jb:'',
+           code:'',
+           mc:'',
+           title:'',
+           orgid:'',
+           orgmc:'',
+           fydata:[],
+           show:true,
+           back:true,
+           count:0,
+           drDialogVisible:false, 
+           vvurl:'/org/import',
+           vvurlErr:'',
+           alldata:[],
+           allshow:[],
+           lx:'',
+        }
+    },
+    mounted(){
+     
+        this.getinit(this.$route);
+    },
+    watch:{
+        $route:function(val){
+            this.getinit(val);
+        },
+    },
+    methods:{
+        
+        getinit(val){
+            this.reset();
+        if((val.query.type==undefined || val.query.type=='')
+            && (val.query.info==undefined || val.query.info=='')){
+              this.$router.push({name:'limitmsg'});
+         }else if(val.query.info!=undefined && val.query.info!=''){
+             try{
+              this.info=JSON.parse(Base64.decode(val.query.info));
+              
+               this.addtype=this.info.type;
+               this.jb=this.info.jb;
+               this.cname1=this.info.cname1;
+               this.cname2=this.info.cname2;
+               this.cname3=this.info.cname3;
+               this.cname4=this.info.cname4;
+               this.title=this.info.title;
+               this.code=this.info.code;
+               this.lx=this.info.lx; 
+               this.mc=this.info.mc;
+             
+               }catch(e){
+                   this.$router.push({name:'limitmsg',query:{msg:'该地址参数不对！'}});
+               }
+           }else if(val.query.type!=undefined && val.query.type!=''){
+              
+               this.addtype=val.query.type;
+               this.jb=val.query.jb; 
+               this.lx=val.query.lx;      
+               this.back=false;
+               this.getTitle();
+           }
+           //权限start
+           var mid=getgroupmenu(this.addtype,this.jb,this.lx);
+           this.alldata=getgroupdata(this.addtype,this.jb,this.lx);
+            this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                                    console.log(r.data,'===', this.alldata);
+                            }   
+                             this.getLb();
+                             this.getInfo();
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
+          
+        },
+        reset(){
+              this.addtype='';
+               this.jb='';
+               this.cname1='';
+               this.cname2='';
+               this.cname3='';
+               this.cname4='';
+               this.title='';
+               this.code='';
+               this.mc='';this.back=true; this.count=0;
+            this.orgmc="";
+            this.orgid="";this.Data=[];this.fydata=[];
+        },
+        getLb(){
+             switch (this.addtype) {
+              case '1':
+                  this.lb=this.Global.RD;
+                  break;
+              case '2':
+                  this.lb=this.Global.ZX;
+                  break;
+              case '3':
+                  this.lb=this.Global.TZB;
+                  break;
+              case '4':
+                    this.lb=this.Global.MZDP;
+                  break;
+              case '5':
+                   this.lb=this.Global.GSL;
+                  break;
+              case '6':
+                 this.lb=this.Global.TL;
+                  break;
+              case '7':
+                  this.lb=this.Global.FY;
+                  break;
+              default:
+                  break;
+          }
+        },
+         getTitle(){
+           this.cname1="联络机构";
+          switch (this.addtype) {
+              case '1':
+                  this.cname2="人大系统";
+                  this.cname4="全国人民代表大会";
+                  break;
+              case '2':
+                  this.cname2="政协系统";
+                  this.cname4="政协全国委员会";
+                  break;
+              case '3':
+                  this.cname2="统战部系统";
+                  this.cname4="中央统战部";
+                  break;
+              case '4':
+                  this.cname2="民主党派系统";
+                  this.cname4="八大民主党派";
+                  break;
+              case '5':
+                  this.cname2="工商联系统";
+                  this.cname4="全国工商联";
+                  break;
+              case '6':
+                  this.cname2="台联系统";
+                  this.cname4="全国台联";
+                  break;
+              case '7':
+                  this.cname1="法院内部管理";
+                  this.cname2="各级法院";
+                  this.cname4="最高院";
+                  break;
+              default:
+                  break;
+          }
+           switch (this.lx) {
+            case '1':
+                  this.cname2="民主党派系统 / 中国国民党革命委员会";
+                  this.cname4="全国国民党革命委员会";
+              break;
+            case '2':
+                  this.cname2="民主党派系统 / 中国民主同盟";
+                  this.cname4="全国民主同盟";
+              break;
+            case '3':
+                  this.cname2="民主党派系统 / 中国民主建国会";
+                  this.cname4="全国民主建国会";
+              break;
+            case '4':
+                  this.cname2="民主党派系统 / 中国民主促进会";
+                  this.cname4="全国民主促进会";
+              break;
+            case '5':
+                  this.cname2="民主党派系统 / 中国农工民主党";
+                  this.cname4="全国农工民主党";
+              break;
+            case '6':
+                  this.cname2="民主党派系统 / 中国致公党";
+                  this.cname4="全国致公党";
+              break;
+            case '7':
+                  this.cname2="民主党派系统 / 九三学社";
+                  this.cname4="全国九三学社";
+              break;
+            case '8':
+                  this.cname2="民主党派系统 / 台湾民主自治同盟";
+                  this.cname4="全国台湾民主自治同盟";
+              break;
+            default:
+              break;
+          }
+      },
+  
+      getInfo(){
+           if(this.addtype!='7' && this.addtype!='4'){
+                switch (this.jb) {
+                    case 'qg':
+                       this.lvltype='0150000001';
+                        break;
+                    case 'sj':
+                        this.lvltype='0150000002';
+                        break;
+                    case 'ds':
+                        this.lvltype='0150000003';
+                        break;
+                    case 'xq':
+                        this.lvltype='0150000004';
+                        break;
+                    default:
+                        break;
+                }
+              }else if(this.addtype=='7'){
+                switch (this.jb) {
+                     case 'qg':
+                       this.lvltype='0222000001';
+                        break;
+                    case 'sj':
+                        this.lvltype='0222000002';
+                        break;
+                    case 'ds':
+                        this.lvltype='0222000003';
+                        break;
+                    case 'xq':
+                        this.lvltype='0222000004';
+                        break;
+                    default:
+                        break;
+                }
+              }else if(this.addtype=='4'){
+                    // 0227000006 中国国民党革命委员会
+                    // 0227000007 中国民主同盟
+                    // 0227000008 中国民主建国会
+                    // 0227000009 中国民主促进会
+                    // 0227000010 中国农工民主党
+                    // 0227000011 中国致公党
+                    // 0227000012 九三学社
+                    // 0227000013 台湾民主自治同盟
+                  switch (this.lx) {
+                      case '1':
+                          this.lvltype='0227000006';
+                          break;
+                      case '2':
+                          this.lvltype='0227000007';
+                          break;
+                      case '3':
+                          this.lvltype='0227000008';
+                          break;
+                      case '4':
+                          this.lvltype='0227000009';
+                          break;
+                      case '5':
+                          this.lvltype='0227000010';
+                          break;
+                      case '6':
+                          this.lvltype='0227000011';
+                          break;
+                      case '7':
+                          this.lvltype='0227000012';
+                          break;
+                      case '8':
+                          this.lvltype='0227000013';
+                          break;
+                      default:
+                          break;
+                  }
+              }
+          this.getList();
+      },
+   getList(){
+        
+            let p={
+                'lb':this.lb,
+                'xzqh':this.code,
+                'lvl':this.lvltype
+            };
+            this.$api.post(this.Global.aport1+'/org/getOrgByTypeAndArea',p,
+            r=>{
+                if(r.code==1){
+                    this.Data=r.data;
+                    if(r.data.length>0){
+                        this.show=true;
+                    }else{
+                        this.show=false;
+                    }
+                }
+            })
+       },
+    
+   getListBM(id,mc){
+            let p={
+                'orgId':id,
+            };
+            this.$api.get(this.Global.aport1+'/org/getSubDept',p,
+            r=>{
+                if(r.code==1){
+            
+                    if(r.data && r.data.length>0){
+                         this.orgid=id;
+                         this.orgmc=mc;
+                         this.count++;
+                         this.back=true;
+                         this.Data=r.data;
+                    }else{
+                        this.goto(1,id);
+                    }
+                }
+            })
+                         
+        },
+    goback(){
+       
+        if(this.code!=''){
+             this.$router.go(-1);
+        }else{
+        if((this.orgid=='' && this.orgmc=='') || (this.count-1)==0){
+            this.count--;
+            this.orgmc="";
+            this.orgid="";
+            this.getList();
+        }else{
+             this.getListBM(this.orgid,this.orgmc)
+        }
+       }
+    },
+  
+      goto(t,id){
+
+             if(t==1){
+                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'1',jgid:id,title:this.cname4+this.title}});
+            }else if(t==0){
+                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:this.cname4+this.title,jb:this.jb,xzqh:this.code}});
+            }
+        },
+     goseach(){
+          this.$router.push({name:'InstitutionList',query:{type:this.addtype}})
+        },
+    getDR(){
+         
+         this.drDialogVisible=true;
+      },
+      drfatherMethod(data,t){
+         this.drDialogVisible=false;
+      },
+    },
+}
+</script>

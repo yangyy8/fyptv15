@@ -57,7 +57,7 @@
                           <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">结对人</span>
                            
-                        <el-select v-model="pd.courtInsiderId" clearable   filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd.courtInsiderId" clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                           v-for="(item,ind) in cdrdata"
                           :key="ind"
@@ -197,17 +197,18 @@
                 <div class="pborder mt-20">
                     <el-row>
                             <el-col :span="20" class="ah-40">
-                              <el-button type="primary" size="small" @click="add('0')">录入</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1')">修改</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="delpair">删除</el-button>
-                              <el-button type="primary" size="small"   @click="imports">导入</el-button>
-                              <el-button type="primary"  size="small" @click="download(0)">下载全部</el-button>
-                              <el-button type="primary"  size="small" @click="download(1)">下载当页</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(1)">公开</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(2)">审核</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(3)">发布</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(4)">回收</el-button>
+                              <el-button type="primary" size="small" @click="add('0')" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9')" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1')" v-if='allshow[2]'>修改</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="delpair" v-if='allshow[3]'>删除</el-button>
+                              <el-button type="primary" size="small"   @click="imports" v-if='allshow[4]'>导入</el-button>
+                              <el-button type="primary"  size="small" @click="download(0)" v-if='allshow[5]'>下载全部</el-button>
+                              <el-button type="primary"  size="small" @click="download(1)" v-if='allshow[6]'>下载当页</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(1)" v-if='allshow[7]'>公开</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(2)" v-if='allshow[8]'>审核</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(3)" v-if='allshow[9]'>发布</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(4)" v-if='allshow[10]'>回收</el-button>
+                              &nbsp;
                                 </el-col>
                               <el-col :span="4" class="trt">
                                   {{sname}}总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
@@ -270,7 +271,7 @@
                             </div>
 
                 </div>
-         <el-dialog title="选择类型" :visible.sync="addDialogVisible" >
+         <el-dialog title="选择类型" :visible.sync="addDialogVisible" :close-on-click-modal='false'>
              <div style="text-align:center;height:50px;">
                 <el-radio v-model="addtype" label="1" border>结对活动录入</el-radio>
                 <el-radio v-model="addtype" label="2" border>专项视察录入</el-radio>
@@ -291,17 +292,17 @@
             </div>
        </el-dialog>
 
- <el-dialog title="导入文件" :visible.sync="uploadDialogVisible"  width="640px">
+ <el-dialog title="导入文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="640px">
    <UPLOAD :url="uurl" :type="99" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
-  <el-dialog title="公开" :visible.sync="openDialogVisible"  width="660px">
+  <el-dialog title="公开" :visible.sync="openDialogVisible" :close-on-click-modal='false'  width="660px">
    <OPEN :url="openurl" :type="0" :data="opendata" @GKfatherMethod="GKfatherMethod" :random="new Date().getTime()"></OPEN>
   </el-dialog>
-  <el-dialog  :title="txtname" :visible.sync="shDialogVisible"  width="660px">
+  <el-dialog  :title="txtname" :visible.sync="shDialogVisible"  :close-on-click-modal='false' width="660px">
    <EXAMINE :url="shurl" :type="sendtype" :data="opendata" @SHfatherMethod="SHfatherMethod" :random="new Date().getTime()"></EXAMINE>
   </el-dialog>
  
-  <el-dialog title="内容发布" :visible.sync="fbDialogVisible"  width="800px">
+  <el-dialog title="内容发布" :visible.sync="fbDialogVisible" :close-on-click-modal='false'  width="800px">
      <RELEASE :url="fburl" :type="0"  :data="opendata" @FBfatherMethod="FBfatherMethod" :random="new Date().getTime()"></RELEASE>
   </el-dialog>
 <br/>
@@ -359,6 +360,13 @@ export default {
             opendata:[],//需要传的对象
             txtname:'审核',
             sendtype:'0',//审核
+            alldata:['23133605','23133608',
+            '23133606','23133607','23133609',
+            '23133610','23133611','23133612',
+            '23133613','23133614','23133615'],
+            //0录入,1查看,2修改,3删除,4导入,5下载全部,6下载当页,
+            //7公开,8审核,9发布,10回收
+            allshow:[],
         }
     },
     mounted(){
@@ -376,12 +384,29 @@ export default {
         clickRow(row){
            this.$refs.multipleTable.toggleRowSelection(row)
         },
+        getXQ(){
+              //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':'12242313'},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
+        },
         getinit(val){
-          this.tableData=[];
-           this.getCheckList();
-          this.getFY();this.getJBR();
-          this.getName();
-          this.getList(this.CurrentPage, this.pageSize, this.pd);
+                this.tableData=[];
+                this.getXQ();
+                this.getCheckList();
+                this.getFY();this.getJBR();
+                this.getName();
+                this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
         handleSelectionChange(val) {
           this.multipleSelection = val;
@@ -488,8 +513,6 @@ export default {
                       if(r.code==1){
                        
                           this.checkItem=r.data;
-                          console.log(this.checkItem);
-                          
                           this.configHeader=[];
                             for(var j=0;j<this.checkItem.length;j++){
                                 if(this.checkItem[j].checked)
@@ -525,7 +548,7 @@ export default {
         this.configHeader=sortByKey(this.configHeader,'sort');
         },
         getList(currentPage, showCount, pd){
-        
+          this.sname='联络工作'
           this.getCheckList();
           //this.changeList();
            this.getJDXXAB();
@@ -547,7 +570,7 @@ export default {
                           this.TotalResult=0;
                           //this.$message.error(r.message);
                       }
-                        this.sname=this.snames;
+                       // this.sname=this.snames;
                 });
 
         },
@@ -571,10 +594,8 @@ export default {
                             this.$api.post(this.Global.aport2+'/ActivityInfoController/deleteActivityInfo',p,
                             r =>{
                                 if(r.code==1){
-                                     this.$message({
-                                        message: '删除成功！',
-                                        type: 'success'
-                                  })
+                                   
+                                   this.$message.success("删除成功！");
 
                                   this.getList(this.CurrentPage, this.pageSize, this.pd); 
                                 }
@@ -582,10 +603,8 @@ export default {
                          
                          
                     }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                        });
+                      
+                          this.$message.info("已取消删除");
                     });
                
             }else{
@@ -739,6 +758,10 @@ export default {
             
         },
         getHDName(val){
+            if(val=='' || val==null || val==undefined){
+                this.sname='联络工作'
+                return;
+            }
             var obj={};
                 if(val!=null){
                 obj = this.$store.state.hdlx.find(item =>{

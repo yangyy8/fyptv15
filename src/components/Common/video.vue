@@ -200,22 +200,16 @@ export default {
                   r => {
                     if(this.type.length==10){
                          if(r.code==1){
-                          this.$message({
-                            message: '上传成功',
-                            type: 'success'
-                          });
                           
+                          this.$message.success('上传成功');
                           this.$emit('DfatherMethod',r.data.relFileList,this.type); 
                         }else{
                           this.$message.error(r.message);
                         }
                     }else{
                           if(r.data.success=='success'){
-                          this.$message({
-                            message: '上传成功',
-                            type: 'success'
-                          });
                           
+                          this.$message.success('上传成功');
                           this.$emit('fatherMethod',r.data.relFileList,this.type); 
                         }else{
                           this.$message.error(r.message);

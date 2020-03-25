@@ -1,8 +1,21 @@
 <template>
       <div class="pairadd tjtable">
-         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 统计信息 <span class="mlr_10">/</span>  <b>{{cname}}</b></span> </div>
+         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
+         <span> 统计信息 
+           <span class="mlr_10">/</span>  
+            <b>办理工作信息统计</b> 
+            <span class="mlr_10">/</span> 
+             <span class="topbnt" @click="$router.push({path:'SuggestCount'})"><b>建议议案统计</b> </span>
+           <span class="mlr_10">/</span>  <b>{{cname}}</b>
+           </span> </div>
          <div class="content">
-             <div class="ptitle mb-20">{{cname}}</div>
+             <div class="ptitle mb-20">
+               <el-row>
+              <el-col :span="15">{{cname}}
+             </el-col>
+              <el-col :span="9" style="text-align:right"> <el-button size="mini" @click="$router.go(-1)">返 回</el-button></el-col>
+            </el-row>
+             </div>
              <div class="pborder">
                 <el-row class="lh" :gutter="2">
                        <el-col :sm="24" :md="12" :lg="12" class="input-item">
@@ -28,7 +41,7 @@
                             </el-select>
                      </div>
                      </el-col>
-                      <el-col :sm="24" :md="12" :lg="12">
+                      <!-- <el-col :sm="24" :md="12" :lg="12">
                           <span class="yy-input-text" style="width:18%!important;">
                        议案类型</span>
                             <el-select v-model="pd.proposalType"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -39,9 +52,8 @@
                            <el-option  label="建议、批评与意见" value="0204000003">
                           </el-option>
                         </el-select>
-
-                      </el-col>
-                        <el-col :sm="24" :md="12" :lg="12">
+                      </el-col> -->
+                        <el-col :sm="24" :md="12" :lg="12" v-if='type!="04" && type!="05"'>
                           <span class="yy-input-text" style="width:18%!important;">
                        来文期间</span>
                             <el-select v-model="pd.period"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -180,10 +192,10 @@
                             prop="isPublic"
                             label="是否公开">
                         </el-table-column>
-                         <el-table-column
+                         <!-- <el-table-column
                             prop="communicateType"
                             label="沟通方式">
-                        </el-table-column>
+                        </el-table-column> -->
                         <!-- <el-table-column
                             prop="sign"
                             label="标记">
@@ -191,7 +203,7 @@
                         <!-- <el-table-column
                             prop="wordNumber"
                             label="文号">
-                        </el-table-column> -->
+                        </el-table-column> --> 
                          <!-- <el-table-column
                             prop="sendTime"
                             label="寄出时间">
@@ -244,6 +256,10 @@ export default {
             this.cname=val.query.mc;
             
             this.getcbdw();
+            var date=new Date().getFullYear();
+            this.$set(this.pd,'beginTime',date);
+            this.$set(this.pd,'endTime',date);
+            this.getCount();
            
         },
         getcbdw(){

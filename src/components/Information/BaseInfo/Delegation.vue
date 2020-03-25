@@ -27,11 +27,8 @@
                                   </el-col>
                                 </el-row>
                            </el-col>
-
-
-                           
                              <el-col :span="24" v-for="(t,ind) in $store.state.jjb" :key="ind" v-if="addtype=='2'">
-                                    <span class="area" @click="gopro(t.dm,'jjb',t.mc)">{{t.mc}}</span>
+                                <span class="area" @click="gopro(t.dm,'jjb',t.mc)">{{t.mc}}</span>
                            </el-col>
                        </el-row>
 
@@ -44,11 +41,12 @@
                         <div style="margin:20px 20px 0 20px;">共<span style="color:red"> {{count}} </span>名{{mname}}</div>
                    </el-col>
                     <el-col :span="10" style="text-align:right">
-                          <el-button type="primary"  @click="goBase()">
-                              编辑
+                          <el-button type="primary"  @click="goBase()" v-if='allshow[0]'>
+                              添加
                             </el-button>
-                          <el-button @click="getDR()">导入</el-button>
-                          <el-button @click="goseach()">查询</el-button>
+                          <el-button @click="getDR()"  v-if='allshow[1]'>导入</el-button>
+                          <el-button @click="goseach()"  v-if='allshow[2]'>查询</el-button>
+                          <el-button @click="$router.back(-1)">返回</el-button>
                     </el-col>
                </el-row>
                <el-row :gutter="2" class="ah-50 pdz">
@@ -78,7 +76,7 @@
         </el-row>
           <br/>
         </div>
-  <el-dialog title="导入文件" :visible.sync="uploadDialogVisible"  width="630px">
+  <el-dialog title="导入文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="630px">
       <UPLOAD :url="uurl" :type="99"  :urlErr="uurlErr" :periodType='jkey'  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
@@ -88,6 +86,7 @@
 </style>
 <script>
 import UPLOAD from "../../Common/upload"
+import {getlljgdbtmenu,getlljgdbtdata} from '@/assets/js/aleainfo.js'
 export default {
    components:{UPLOAD},
     data(){
@@ -119,6 +118,8 @@ export default {
           uurlErr:'',
           uploadDialogVisible:false,
           info:{},
+          alldata:[],
+          allshow:[],
        }
     },
     mounted(){
@@ -133,13 +134,15 @@ export default {
         },
     },
     methods:{
-        getinit(val){
 
-           if(val.query.info==undefined || val.query.info==''){
+        getinit(val){
+          
+          if(val.query.info==undefined || val.query.info==''){
               this.$router.push({name:'limitmsg'});
          }else if(val.query.info!=undefined && val.query.info!=''){
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
+           console.log(this.info,'==');
            
             this.count=0;
             this.addtype=this.info.type;
@@ -155,16 +158,36 @@ export default {
                 this.jmc=this.$store.state.jmc;
               }
             this.jkey=this.info.jkey==null?'':this.info.jkey;
-            if(this.type=="tbxq"){
-                this.getLevel('3',this.code);
-            }else if(this.code!="" && this.code!=undefined && this.type=="tb"){
-               this.getTB('3',this.code);
-            }
-            this.getList(this.addtype,this.type,this.group,this.jb1);
+            var mid=getlljgdbtmenu(this.addtype,this.jb1);
+            this.alldata=getlljgdbtdata(this.addtype,this.jb1);
+            
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                               this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                               console.log(this.alldata,'--',this.alldata[i],'===',r.data);
+                               
+                            }   
+                            if(this.type=="tbxq"){
+                                this.getLevel('3',this.code);
+                            }else if(this.code!="" && this.code!=undefined && this.type=="tb"){
+                              this.getTB('3',this.code);
+                            }
+                            this.getList(this.addtype,this.type,this.group,this.jb1);
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
+          
              }catch(e){
                 this.$router.push({name:'limitmsg',query:{type:1}});
              }
          }
+          
+          
         },
         getStyle(){
             if(this.cname3&&!this.cname4){
@@ -377,7 +400,11 @@ export default {
             }else if(this.addtype=='2'){
                 reid=t.cppcMemberId;
             }
-            this.$router.push({name:'BaseAdd',query:{type:this.addtype,status:'1',pbid:t.pbId,reid:reid}});
+            var state='9';
+            if(this.allshow[0]==true){
+              state="1";
+            }
+            this.$router.push({name:'BaseAdd',query:{type:this.addtype,status:state,pbid:t.pbId,reid:reid}});
         },
         goBase(){
             this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb1,code:this.group,codemc:this.mc,jmc:this.jmc,jkey:this.jkey,xzqh:this.code,xzqhmc:this.codemc}})

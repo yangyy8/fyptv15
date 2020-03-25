@@ -85,7 +85,7 @@
                             </div>
                 </div>
          </div>
-        <el-dialog :title="adddia" :visible.sync="addDialogVisible" width="700px">
+        <el-dialog :title="adddia" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="700px">
             <el-form :model="form" >
                 <el-row class="ah-40">
                     
@@ -324,10 +324,8 @@ export default {
                 this.$api.post(this.Global.aport1+url,this.sform,
                  r =>{
                       if(r.code==1){
-                          this.$message({
-                                    message: '保存成功！',
-                                    type: 'success'
-                                });
+                         
+                          this.$message.error('保存成功！');
                           this.getList(this.CurrentPage, this.pageSize, this.pd);
                           this.addDialogVisible=false;
                          
@@ -352,18 +350,14 @@ export default {
                             this.$api.post(this.Global.aport1+'/user/deleteUser',p,
                             r =>{
                                 if(r.code==1){
-                                this.$message({
-                                        message: '删除成功！',
-                                        type: 'success'
-                                });
+                               
+                                 this.$message.success("删除成功！");
                                   this.getList(this.CurrentPage, this.pageSize, this.pd);
                                 }
                             });
                     }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                        });
+                       
+                         this.$message.info("已取消删除");
                     });
                
             }else{

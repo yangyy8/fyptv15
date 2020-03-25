@@ -35,5 +35,5 @@ export default {
 	position:fixed;
 	top:0;right:0;bottom:0;left:0;
     margin:auto; border-radius: 10px;}
-.messages .main{margin-top:6%;font-size: 25px; color: red}
+.messages .main{margin-top:10%;font-size: 25px; color: red}
 </style>

@@ -27,10 +27,10 @@
                     <span class="cursor">  <i class="el-icon-user-solid"></i>  {{name}} 
                       (<span style="font-size:12px;"> {{orgname}}<span v-if='zwname!="null"'> ，{{zwname}}</span></span>)</span>
                     <el-dropdown-menu slot="dropdown" style="margin-top:-15px;">
-                    <el-dropdown-item  command="b">修改账号</el-dropdown-item>
-                    <el-dropdown-item command="a">修改密码</el-dropdown-item>
-                    <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
-                    <el-dropdown-item command="d">权限切换</el-dropdown-item>
+                    <el-dropdown-item  command="b" v-if="allshow[0]">修改账号</el-dropdown-item>
+                    <el-dropdown-item command="a" v-if="allshow[1]">修改密码</el-dropdown-item>
+                    <el-dropdown-item command="c" v-if="allshow[2]">快捷菜单</el-dropdown-item>
+                    <el-dropdown-item command="d" v-if="allshow[3]">权限切换</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>              
               <span @click="loginout" class="cursor ml-20"><i class="iconfont el-icon-yy-tuichu" ></i> 退出 </span> 
@@ -68,20 +68,20 @@
            </div> -->
             <el-row class="height" >
               <el-col :span="show1?((this.show2 || this.show3 || this.show4 || this.show5)?12:24):0" v-if="show1">
-                  <div class="baseinfo mr-10" @click="getZX('c752a6a61b0f11eaabae00155dbaef87')">
+                  <div class="baseinfo mr-10" @click="getZX('1100')">
                      <img style="height: 100%" src="../assets/img/newindex/img10.png" alt="基本信息库">
                   </div>
               </el-col>
               <el-col :span="(this.show2 || this.show3 || this.show4 || this.show5)?(show1?12:24):0" v-if="this.show2 || this.show3 || this.show4 || this.show5">
                     <el-row v-if="show2 || show3">
                       <el-col :span="(show2 && show3)?12:(show3?0:24)">
-                          <div class="llgz  mr-10" @click="getZX('c7533b751b0f11eaabae00155dbaef87')"> 
+                          <div class="llgz  mr-10" @click="getZX('1200')"> 
                             <img  src="../assets/img/newindex/img40.png" v-if='show4 || show5' alt="联络工作">
                            <img  src="../assets/img/newindex/img400.png" v-else alt="联络工作">
                           </div>
                       </el-col>
                       <el-col :span="(show2 && show3)?12:(show2?0:24)">
-                           <div class="blgz  mr-10"  @click="getZX('c751d2ef1b0f11eaabae00155dbaef87')">
+                           <div class="blgz  mr-10"  @click="getZX('1300')">
                               <img src="../assets/img/newindex/img30.png" v-if='show4 || show5' alt="办理工作">
                               <img src="../assets/img/newindex/img300.png" v-else alt="办理工作">
                           </div>
@@ -89,13 +89,13 @@
                     </el-row>
                     <el-row :class="(show2 || show3)?'mt-10':''" v-if="show4 || show5">
                       <el-col :span="(show4 && show5)?8:(show5?0:24)">
-                          <div class="jkyj  mr-10" @click="getZX('c7529d831b0f11eaabae00155dbaef87')">
+                          <div class="jkyj  mr-10" @click="getZX('1500')">
                            <img src="../assets/img/newindex/img20.png" v-if='show2 || show3' alt="监控预警">
                           <img src="../assets/img/newindex/img200.png" v-else alt="监控预警">
                           </div>
                       </el-col>
                       <el-col :span="(show4 && show5)?16:(show4?0:24)">
-                           <div class="tjxx mr-10" @click="getZX('c752782a1b0f11eaabae00155dbaef87')">
+                           <div class="tjxx mr-10" @click="getZX('1400')">
                            <img src="../assets/img/newindex/img50.png" v-if='show2 || show3' alt="统计信息">
                             <img src="../assets/img/newindex/img500.png" v-else alt="统计信息">
                           </div>
@@ -139,7 +139,7 @@
                 <el-col :span="4"><div  @click="goto('/Home/CaseList')"><img src="../assets/img/index/ic_yajy.png" alt="关注案件"><span>关注案件</span></div></el-col> -->
             </el-row>
         </div>
-        <el-dialog title="选择单位" :visible.sync="addDialogVisible"  width="600px">
+        <el-dialog title="选择单位" :visible.sync="addDialogVisible" :close-on-click-modal='false'  width="600px">
        <el-form :model="form">
 
        <el-row class="ah-40">
@@ -173,7 +173,7 @@ export default {
   inject:['reload'],
     data(){
         return{
-           activeIndex:'1',
+           activeIndex:'index',
            menuData:this.menu.menu,
            first:true,
            menulist:[],
@@ -194,11 +194,26 @@ export default {
            addDialogVisible:false,
            form:{},
            xzdw:[],
+           alldata:['20003901','20003902','20003903','20003904'],
+           allshow:[],
           
         }
     },
     mounted(){
     //   getSearh();
+     //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':'10002000'},
+                     r =>{
+                           if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+             });
+      //权限end
       this.getMenu();
       
       this.getfooter();
@@ -265,12 +280,12 @@ export default {
                      
                     for (let i = 0; i < array.length; i++) {
                          var id=array[i].entity.id;
-                          if(id=="c752a6a61b0f11eaabae00155dbaef87"){
+                          if(id=="1100"){
                             this.show1=true;}
-                          else if(id=="c7533b751b0f11eaabae00155dbaef87"){this.show2=true;}
-                          else if(id=="c751d2ef1b0f11eaabae00155dbaef87"){this.show3=true;}
-                          else if(id=="c7529d831b0f11eaabae00155dbaef87"){this.show4=true;}
-                          else if(id=="c752782a1b0f11eaabae00155dbaef87"){this.show5=true;}
+                          else if(id=="1200"){this.show2=true;}
+                          else if(id=="1300"){this.show3=true;}
+                          else if(id=="1500"){this.show4=true;}
+                          else if(id=="1400"){this.show5=true;}
                     }
                   }
            });
@@ -298,11 +313,11 @@ export default {
          this.type=t;
          this.url=url;
 
-         if(n=='c752a6a61b0f11eaabae00155dbaef87' || 
-            n=='c7529d831b0f11eaabae00155dbaef87' || 
-            n=='c7533b751b0f11eaabae00155dbaef87' || 
-            n=='c751d2ef1b0f11eaabae00155dbaef87' || 
-            n=='c752782a1b0f11eaabae00155dbaef87'){
+         if(n=='1100' || 
+            n=='1200' || 
+            n=='1300' || 
+            n=='1400' || 
+            n=='1500'){
             this.id=[];
         }
          this.id.push(n);

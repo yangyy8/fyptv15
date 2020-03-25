@@ -16,8 +16,11 @@ import pl from './assets/js/pl.js'
 import VideoPlayer from 'vue-video-player'
 import 'video.js/dist/video-js.css';
 import 'vue-video-player/src/custom-theme.css'
+import DonMessage from '@/./assets/js/message.js'
+import interfaces from '@/./assets/js/interfaces.js'
 Vue.use(VideoPlayer)
-
+Vue.use(interfaces)
+Vue.prototype.$message = DonMessage
 Vue.config.productionTip = false
 Vue.prototype.$api = api;
 Vue.prototype.Global = global_;

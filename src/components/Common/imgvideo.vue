@@ -87,6 +87,7 @@ export default {
             imglist:[],
             list:[],
             result:0,
+            error:0,
             myHeaders:{Authorization: this.$store.state.token},
             imgmat:this.$store.state.imgformat,
         }
@@ -135,7 +136,7 @@ export default {
 
                 //后台上传地址
                 if (res.code == 1) {
-                    console.log(res.data.relFileList[0],'====');
+                   
                    this.videoForm.showVideoPath = res.data.relFileList[0].filepath;
                    this.videolist.push(res.data.relFileList[0]);
                 } else {
@@ -145,7 +146,7 @@ export default {
         
         //图片系列
         beforeAvatarUpload(file){
-          this.result=0;
+            this.result=0;
             var name=file.name.split('.');
             var type=name[name.length-1].toLowerCase();
             var srr=this.imgmat.split(',');
@@ -154,13 +155,18 @@ export default {
                       this.result=1;
                     }
              }
-          
+
            if(this.result==0){
                 this.$message.error('只能上传'+this.imgmat+"格式的文件");return;
            }
+          
         },
         handleAvatarSuccess(res, file){
-          
+         if (file.size > 2 * 1024 * 1024) {
+                   this.error=1;
+                   this.$message.error(file.name+" 不能超过2M");
+                   return;  //必须返回false
+         }
             
         if(this.result!=0){
             this.imglist.push(res.data.relFileList[0]);
@@ -169,6 +175,7 @@ export default {
 
         //保存
         submit(){
+
              this.list = this.imglist.concat(this.videolist);
              if(this.list.length==0){
                  this.$message.error("至少上传一张，若无现场影像，请提供活动方案/活动报告/领导批示的图片。");

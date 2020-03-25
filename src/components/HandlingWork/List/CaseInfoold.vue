@@ -1060,11 +1060,11 @@
          </div>
 
          
-   <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
+   <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px" :close-on-click-modal='false'>
    <UPLOAD :url="uurl" :type="type" :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
 
-    <el-dialog title="来文字号" :visible.sync="lwDialogVisible">
+    <el-dialog title="来文字号" :visible.sync="lwDialogVisible" :close-on-click-modal='false'>
         <el-form :model="form1" >
             <el-row class="ah-40">
               <el-col :span="12">
@@ -1222,7 +1222,7 @@
               <el-button @click="lwDialogVisible = false" size="small">取 消</el-button>
             </div>
     </el-dialog>
-   <el-dialog title="当事人案由信息" :visible.sync="ayDialogVisible">
+   <el-dialog title="当事人案由信息" :visible.sync="ayDialogVisible" :close-on-click-modal='false'>
                           <el-table
                               :data="aydata">
                               <el-table-column
@@ -1272,7 +1272,7 @@
               <el-button @click="ayDialogVisible = false" size="small">取 消</el-button>
             </div>
     </el-dialog>
-         <el-dialog title="选择类型" :visible.sync="addDialogVisible" >
+         <el-dialog title="选择类型" :visible.sync="addDialogVisible" :close-on-click-modal='false'>
              <div style="text-align:center;height:50px;">
                 <el-radio v-model="hdtype" label="1" border>结对活动录入</el-radio>
                 <el-radio v-model="hdtype" label="2" border>专项视察录入</el-radio>
@@ -1927,10 +1927,8 @@ export default {
           this.$api.post(this.Global.aport2+url,p,
                 r =>{
                     if(r.code==1){
-                          this.$message({
-                            message: r.message,
-                            type: 'success'
-                          });
+                          
+                          this.$message.success(r.message); 
                           this.$router.push({name:"CaseList"});
                     }else{
                       this.$message.error(r.message);

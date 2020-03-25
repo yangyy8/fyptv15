@@ -2,7 +2,7 @@
       <div class="pairadd tjtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 统计信息 <span class="mlr_10">/</span>  <b>关注案件统计信息</b></span> </div>
          <div class="content">
-         <el-row>
+         <el-row style="line-height: 75px;">
               <el-col :sm="24" :md="24" :lg="12">  <el-button type="primary" plain class="countbnt" @click="getOpen(1,'我院办理全国人大代表关注案件情况')" >我院办理全国人大代表关注案件情况</el-button></el-col>
               <el-col :sm="24" :md="24" :lg="12" class="trt">  <el-button type="success" plain class="countbnt" @click="getOpen(2,'各高院办理全国人大代表关注案件情况')" >各高院办理全国人大代表关注案件情况</el-button></el-col>
               <el-col :sm="24" :md="24" :lg="12">  <el-button type="warning" plain class="countbnt" @click="getOpen(3,'我院办理全国人大代表关注重点案件情况')" >我院办理全国人大代表关注重点案件情况</el-button></el-col>
@@ -79,7 +79,7 @@
             </el-table-column>
             <el-table-column  label="未到期情况">
                   <el-table-column
-                        prop="isinTimeCount"
+                        prop="unfinishTimeCount"
                         label="交办"
                         width="120">
                     </el-table-column>
@@ -124,7 +124,14 @@ export default {
     },
     mounted(){
         
-       
+        //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'14142611'},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+        //权限end
       
     },
     activated(){

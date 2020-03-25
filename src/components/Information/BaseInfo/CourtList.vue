@@ -214,20 +214,15 @@ export default {
                             });
                          
                          
-                                  this.$message({
-                                        message: '删除成功！',
-                                        type: 'success'
-                                })
+                                 this.$message.success('删除成功！');  
 
                            
                             
                         }
 
                     }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                        });
+                       
+                         this.$message.info('已取消删除');  
                     });
                
             }else{

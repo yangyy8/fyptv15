@@ -17,12 +17,13 @@
                         <div style="margin:20px 20px 0 20px;">共<span style="color:red"> {{count}} </span>名特约人员</div>
                    </el-col>
                     <el-col :span="10" style="text-align:right">
-                          <el-button type="primary"  @click="goBase()">
-                             <span @click="goBase()">编辑</span>
+                          <el-button type="primary"  @click="goBase()" v-if='allshow[0]'>
+                             <span @click="goBase()">添加</span>
                             </el-button>
-                            <el-button  @click="getDR">导入</el-button>
-                          <el-button  @click="openfile">相关文件</el-button>
-                          <el-button @click="goseach()">查询</el-button>
+                            <el-button  @click="getDR"  v-if='allshow[1]'>导入</el-button>
+                          <el-button  @click="openfile"  v-if='allshow[2]'>相关文件</el-button>
+                          <el-button @click="goseach()"  v-if='allshow[3]'>查询</el-button>
+                          <el-button @click="$router.go(-1)">返回</el-button>
                     </el-col>
                </el-row>
                <el-row :gutter="2" class="ah-50 pdz">
@@ -52,7 +53,7 @@
         </el-row>
           <br/>
         </div>
-  <el-dialog title="特约人员相关文件" :visible.sync="fileDialogVisible" width="700px">
+  <el-dialog title="特约人员相关文件" :visible.sync="fileDialogVisible" :close-on-click-modal='false' width="700px">
              <el-row class="ah-50">
                <el-col :span="24">
                   <span class="yy-input-text trt" style="width:200px;">届别：</span>
@@ -160,10 +161,10 @@
                         </el-col>
                 </el-row>
         </el-dialog>
-  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
+  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false' width="630px">
       <UPLOAD :url="uurl" :type="ptype" :periodType='periodType' :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
- <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+ <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false' width="630px">
       <UPLOAD :url="vvurl" :type="1001"  :urlErr="vvurlErr" :periodType='jkey'  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
@@ -173,6 +174,7 @@
 </style>
 <script>
 import UPLOAD from "../../Common/upload"
+import {getlljgdbtmenu,getlljgdbtdata} from '@/assets/js/aleainfo.js'
 export default {
     components:{UPLOAD},
     data(){
@@ -211,6 +213,8 @@ export default {
           vvurl:'/specialPerson/import',
           vvurlErr:'',
           jb:'',
+           alldata:[],
+          allshow:[],
             
        }
     },
@@ -243,7 +247,25 @@ export default {
               {
                 this.jmc=this.$store.state.jmc;
               }
-            this.getList(this.lb,this.code,this.jkey);
+            var mid=getlljgdbtmenu('3',this.jb);
+           this.alldata=getlljgdbtdata('3',this.jb);
+            
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                               this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                               console.log(this.alldata,'--',this.alldata[i],'===',r.data);
+                               
+                            }   
+                              this.getList(this.lb,this.code,this.jkey);
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
+          
         },
         
         getSN(s,n){
@@ -420,17 +442,17 @@ export default {
         },
         goto(t){
             var reid=t.specialPersonId;
-          
-            this.$router.push({name:'BaseAdd',query:{type:'3',status:'1',pbid:t.pbId,reid:reid}});
+          var state="9";
+          if(this.allshow[0]==true){
+            state="1";
+          }
+            this.$router.push({name:'BaseAdd',query:{type:'3',status:state,pbid:t.pbId,reid:reid}});
         },
         goBase(){
               this.$router.push({name:'BaseAdd',query:{type:'3',jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,lb:this.lb,jmc:this.jmc,jkey:this.jkey}})
         },
         goseach(){
-         
               this.$router.push({name:'tyBaseList'});
-           
-        
         },
     },
 }

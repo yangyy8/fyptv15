@@ -39,6 +39,14 @@ export default {
         }
     },
       mounted(){
+           //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'15092708'},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+        //权限end
           this.getMenu();
       },
     methods:{
@@ -98,10 +106,8 @@ export default {
              this.$api.post(this.Global.aport1+'/menu/saveShortcutMenu', p,
                 r => {
                      if(r.code==1){
-                          this.$message({
-                              "type":"success",
-                              "message":r.message
-                          });
+                        
+                          this.$message.success(r.message);
                         this.getMenu();
 
                      }else{

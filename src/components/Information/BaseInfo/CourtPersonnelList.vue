@@ -14,9 +14,10 @@
                       
                         <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">所属法院</span>
-                           <el-select v-model="pd.orgId" @change="getSSBM(pd.orgId)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.orgIds" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in ssfydata"
+                                 
                                  :key="ind"
                                  :label="item.mc"
                                  :value="item.orgid">
@@ -25,7 +26,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">所属部门</span>
-                           <el-select v-model="pd.subOrgId" filterable clearable default-first-option placeholder="请先选择法院"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.subOrgIds" multiple @visible-change="getBM(pd.orgIds)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgIds==''||pd.orgIds==undefined?'请先选择所属法院':'无数据'">
                                <el-option
                                  v-for="(item,ind) in ssbmdata"
                                  :key="ind"
@@ -39,7 +40,7 @@
                          
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">职业类别</span>
-                           <el-select v-model="pd.jobTypeString" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.jobType"  multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.zylb"
                                  :key="ind"
@@ -48,10 +49,17 @@
                                  </el-option>
                          </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">职务</span>
-                              <el-input placeholder="请输入内容" size="small" clearable v-model="pd.job"  class="yy-input-input" ></el-input>
-                        </el-col>
+                        <el-col  :sm="24" :md="12" :lg="8">
+                                        <span class="yy-input-text">职务</span>
+                                         <el-select v-model="pd.subOrgPositions" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                            <el-option
+                                                v-for="(item,ind) in $store.state.zw"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.dm">
+                                            </el-option>
+                                         </el-select>
+                                     </el-col>
                           <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">性别</span>
                            <el-select v-model="pd.sex" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -65,7 +73,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">民族</span>
-                           <el-select v-model="pd.nationality" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.nationalitys" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.mz"
                                  :key="ind"
@@ -76,7 +84,7 @@
                         </el-col>
                        <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">学历</span>
-                           <el-select v-model="pd.education" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.educations" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.xl"
                                  :key="ind"
@@ -87,7 +95,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">籍贯</span>
-                           <el-select v-model="pd.birthPlace" :filter-method="userFilter" @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.birthPlaces" multiple @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in xzdata"
                                  :key="ind"
@@ -132,14 +140,15 @@
                 <div class="pborder mt-20">
                             <el-row>
                               <el-col :span="16">
-                              <el-button type="primary" size="small" @click="add('0','录入')">录入</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="add('9','查看')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="add('1','修改')">修改</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="dellist">删除</el-button>
-                              <el-button type="primary" size="small"  @click="getDR">导入</el-button>
-                              <!-- <el-button type="primary"  size="small"  @click="download">下载全部</el-button>
-                              <el-button type="primary"  size="small"  @click="download">下载当页</el-button> -->
-                                 </el-col>
+                              <el-button type="primary" size="small" @click="add('0','录入')" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="add('9','查看')" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="add('1','修改')" v-if='allshow[2]'>修改</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="dellist" v-if='allshow[3]'>删除</el-button>
+                              <el-button type="primary" size="small"  @click="getDR" v-if='allshow[4]'>导入</el-button>
+                              <!-- <el-button type="primary"  size="small"  v-if='allshow[5]'>下载全部</el-button>
+                              <el-button type="primary"  size="small"  v-if='allshow[6]'>下载当页</el-button> -->
+                             &nbsp;
+                            </el-col>
                               <el-col :span="8" class="trt">
                                 法院内部人员总数 <b class="sumfont" >{{this.TotalResult}}</b> 人
                               </el-col>
@@ -202,7 +211,7 @@
                 </div>
 <br/>
          </div>
-     <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+     <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false'  width="630px">
       <UPLOAD :url="vvurl" :type="1000"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
@@ -212,7 +221,7 @@ import {format} from '@/assets/js/date.js'
 import {ToArray,sortByKey} from '@/assets/js/ToArray.js'
 import UPLOAD from "../../Common/upload"
 export default {
-      components:{UPLOAD},
+    components:{UPLOAD},
     data(){
         return{
             CurrentPage: 1,
@@ -238,15 +247,19 @@ export default {
             xzList:[],
             xzdata:[],
             drDialogVisible:false, 
-           vvurl:'/courtPerson/import',
-           vvurlErr:'',
+            vvurl:'/courtPerson/import',
+            vvurlErr:'',
+             alldata:['22043238','22043239','22043240','22043241','22043242','22043243','22043244'],//0录入,1查询,2修改,3删除,4导入,5下载全部,6下载当页
+             allshow:[],
         }
     },
     mounted(){
             this.$store.dispatch("getXb");
             this.$store.dispatch("getMz");
+            this.$store.dispatch("getZw");
             this.$store.dispatch("getXl");
             this.$store.dispatch("getZylb");
+            
             this.getinit(this.$route);
       
     },
@@ -263,6 +276,23 @@ export default {
            this.$refs.multipleTable.toggleRowSelection(row)
         },
           getinit(val){
+                
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':'11692204'},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+             //权限end
+
+
                 this.addtype=val.query.type;
                 this.getSSFY();
                 this.getCheckList();
@@ -389,6 +419,23 @@ export default {
                       }
                 });
         },
+        //多个法院获取部门
+        getBM(orgid){
+            
+            this.$set(this.pd,"subOrgId","");
+                        this.ssbmdata=[];
+                        if(orgid=='' || orgid==null){return;}
+                        let p={
+                            'orgIds':orgid,
+                        }
+                        this.$api.post(this.Global.aport1+'/org/getSubOrgs',p,
+                            r =>{
+                            
+                                if(r.code==1){
+                                    this.ssbmdata=r.data;
+                                }
+                            });
+        },
         add(t,mc){
             if(t=='0'){
                 this.$router.push({name:'BaseAdd',query:{type:'4',status:t}});
@@ -414,6 +461,7 @@ export default {
                     
                    }
             }
+          
            this.$confirm('此操作将删除该信息, 是否继续?', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
@@ -426,19 +474,16 @@ export default {
                  r =>{
                   
                       if(r.code==1){
-                         this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                        });
+                         
+                          this.$message.success('删除成功！');  
+                        
                         this.getList(this.CurrentPage, this.pageSize, this.pd);
                       }
                 });
 
                 }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
+                   
+                      this.$message.info('已取消删除');          
                 });
 
         },
@@ -460,18 +505,18 @@ export default {
                   return item.mc.includes(query)
                }
              })
-             if (arr.length > 200) {
-               this.xzdata = arr.slice(0, 200)
-             } else {
+            //  if (arr.length > 200) {
+            //    this.xzdata = arr.slice(0, 200)
+            //  } else {
                this.xzdata= arr
-             }
+            //  }
            },
-            getDR(){
+        getDR(){
             this.drDialogVisible=true;
         },
-          drfatherMethod(data,t){
+        drfatherMethod(data,t){
             this.drDialogVisible=false;
-          },
+       },
     },
 }
 </script>

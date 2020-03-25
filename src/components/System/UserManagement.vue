@@ -29,12 +29,12 @@
 
                 <div class="pborder mt-20">
                     <el-row>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="add(0)">赋权</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="add(2)">查看</el-button>
-                              <!-- <el-button type="primary" size="small" :disabled="bnt" @click="add(1)">修改</el-button> -->
-                              <el-button type="primary" size="small" :disabled="bnt"  @click="delUser">删除</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="setUser()">解冻</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="setPwd()">重置密码</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="add(0)" v-if='allshow[0]'>赋权</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="add(2)" v-if='allshow[1]'>查看</el-button>
+                              <!-- <el-button type="primary" size="small" :disabled="bnt" @click="add(1)" v-if='allshow[2]'>修改</el-button> -->
+                              <el-button type="primary" size="small" :disabled="bnt"  @click="delUser" v-if='allshow[3]'>删除</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="setUser()" v-if='allshow[4]'>解冻</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="setPwd()" v-if='allshow[5]'>重置密码</el-button>
                     </el-row>
                      <el-table
                             ref="multipleTable"
@@ -102,7 +102,7 @@
                             </div>
                 </div>
          </div>
-        <el-dialog :title="adddia" :visible.sync="addDialogVisible" width="700px">
+        <el-dialog :title="adddia" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="700px">
             <el-form :model="form" >
                 <el-row class="ah-40">
                      <el-col :span="24">
@@ -125,7 +125,7 @@
                         </el-select>
                     </el-col>
                       <el-col :span="24">
-                        <span class="yy-input-text trt"> 菜单功能：</span>
+                        <span class="yy-input-text trt"> 画面功能：</span>
                         <el-tree
                             :data="menudata"
                             show-checkbox
@@ -138,7 +138,7 @@
                             :props="defaultProps">
                         </el-tree>
                     </el-col>
-                      <el-col :span="24">
+                      <!-- <el-col :span="24">
                         <span class="yy-input-text trt">  画面功能：</span>
                         <el-tree
                             :data="menudata1"
@@ -151,7 +151,7 @@
                             style="padding-left:30%;"
                             :props="defaultProps1">
                         </el-tree>
-                    </el-col>
+                    </el-col> -->
                     <el-col :span="24" class="mt-20">
                           <span class="yy-input-text trt" style="vertical-align: top;">备注：</span>
                         <el-input placeholder="请输入内容"  :disabled="ck"  type="textarea" :autosize="{ minRows: 2, maxRows: 3}" size="small" clearable v-model="form.instructionContents"  class="yy-input-input"></el-input>
@@ -163,7 +163,7 @@
               <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
             </div>
         </el-dialog>
-        <el-dialog title="解冻信息" :visible.sync="jdDialogVisible" width="700px">
+        <el-dialog title="解冻信息" :visible.sync="jdDialogVisible" :close-on-click-modal='false' width="700px">
              <el-row>
                   <el-col :span="24">
                   <div class="yy-input-text trt topt" style="width:15%;"> 
@@ -214,12 +214,30 @@ export default {
             sform:{},
             checkContents:'',//解冻原因
             ck:false,
+            alldata:['22053501','22053502','22053503','22053504','22053505','22053506'],
+            allshow:[],
         }
     },
     mounted(){
+
+              //权限start
+              this.$api.post(this.Global.menuurl,{'menuId':'11712205'},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
+          
            this.getFY();
            this.getMenu();
-           this.getHMGN();
+          // this.getHMGN();
            this.getList(this.CurrentPage, this.pageSize, this.pd);
     },
     methods:{
@@ -477,14 +495,14 @@ export default {
             //     return;
             //  }
            var childrenlist=new Array();
-            var childrenlist1=new Array();
+            // var childrenlist1=new Array();
            childrenlist = this.$refs.tree.getHalfCheckedKeys().concat(this.$refs.tree.getCheckedKeys());
-           childrenlist1 = this.$refs.tree1.getHalfCheckedKeys().concat(this.$refs.tree1.getCheckedKeys());
+        //    childrenlist1 = this.$refs.tree1.getHalfCheckedKeys().concat(this.$refs.tree1.getCheckedKeys());
            
-           for (let ii = 0; ii < childrenlist1.length; ii++) {
-                childrenlist.push(childrenlist1[ii]);
+        //    for (let ii = 0; ii < childrenlist1.length; ii++) {
+        //         childrenlist.push(childrenlist1[ii]);
                 
-            }
+        //     }
                 this.sform.token=this.$store.state.token;
                 this.sform.menuIds=childrenlist;
                 this.sform.userId=this.form.userId;
@@ -494,10 +512,8 @@ export default {
                 this.$api.post(this.Global.aport1+url,this.sform,
                  r =>{
                       if(r.code==1){
-                          this.$message({
-                                    message: '保存成功！',
-                                    type: 'success'
-                                });
+                          
+                            this.$message.success('保存成功！');    
                           this.getList(this.CurrentPage, this.pageSize, this.pd);
                           this.addDialogVisible=false;
                          
@@ -534,10 +550,8 @@ export default {
              this.$api.post(this.Global.aport4+'/user/unLockUser',p,
                 r =>{
                       if(r.code==1){
-                          this.$message({
-                                   message: '操作成功！',
-                                   type: 'success'
-                                });
+                         
+                                this.$message.success('操作成功！'); 
                            this.jdDialogVisible=false;
                            this.getList(this.CurrentPage, this.pageSize, this.pd);
                       }else{
@@ -568,18 +582,14 @@ export default {
                             this.$api.post(this.Global.aport1+'/user/deleteUser',srr,
                             r =>{
                                 if(r.code==1){
-                                this.$message({
-                                        message: '删除成功！',
-                                        type: 'success'
-                                });
+                               
+                                this.$message.success('删除成功！'); 
                                   this.getList(this.CurrentPage, this.pageSize, this.pd);
                                 }
                             });
                     }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                        });
+                        
+                        this.$message.info('已取消删除'); 
                     });
                
             }else{
@@ -605,10 +615,8 @@ export default {
                 this.$api.post(url, srr,
                 r => {
                     if (r.code==1) {
-                    this.$message({
-                        message: '重置密码成功！',
-                        type: 'success'
-                    });
+                   
+                    this.$message.success('重置密码成功！');
                     this.getList(this.CurrentPage, this.pageSize, this.pd);
                     } else {
                        this.$message.error(r.message);
@@ -617,10 +625,8 @@ export default {
                     this.$message.error('失败了');
                 });
             }).catch(() => {
-                this.$message({
-                type: 'info',
-                message: '已取消重置'
-                });
+               
+                this.$message.info('已取消重置');
             });
               }else{
                   this.$message.error("请选择数据！");

@@ -174,7 +174,7 @@
                             :data="ListData1">
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="50">
                             </el-table-column>
                              <el-table-column
                                 prop="inspectOrg"
@@ -237,7 +237,7 @@
                             </el-table-column> -->
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="50">
                             </el-table-column>
                              <el-table-column
                                 prop="inspectOrg"
@@ -294,7 +294,7 @@
                             </el-table-column> -->
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="50">
                             </el-table-column>
                              <el-table-column
                                 prop="newsMediaName"
@@ -346,7 +346,7 @@
                             </el-table-column> -->
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="50">
                             </el-table-column>
                              <el-table-column
                                 prop="personName"
@@ -380,8 +380,8 @@
                   
                    
                   <el-row class="mt-20" >
-                        <el-col :span="12">
-                        <span class="yy-input-text" style="min-width:200px" title="代表、委员以及特约人员">代表、委员以及特约人员 </span>
+                        <el-col :span="15">
+                        <span class="yy-input-text" style="min-width:180px" title="代表、委员以及特约人员">代表、委员以及特约人员 </span>
                         <el-select v-model="lmdbid" v-if="!llbnt"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                           <el-option
                            v-for="(item,ind) in xmdata"
@@ -391,7 +391,7 @@
                            </el-option>
                         </el-select>
                         </el-col>
-                        <el-col :span="12"  v-if="!llbnt">
+                        <el-col :span="9"  v-if="!llbnt">
                             <el-button type="success" size="small" plain @click="ChangeNameList(lmdbid)">加入列表</el-button>
                         </el-col>
                   </el-row><el-row>
@@ -402,7 +402,7 @@
                             :data="ListData4">
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="50">
                             </el-table-column>
                              <el-table-column
                                 prop="personName"
@@ -445,9 +445,9 @@
                            </el-col>
                     </el-row>
                    <el-row  class="mt-20" >
-                        <el-col :span="8">
-                            <span class="yy-input-text textn" >法院领导</span>
-                            <el-select v-model="fyld" v-if="!llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-col :span="12">
+                            <span class="yy-input-text" style="width:100px;">法院领导</span>
+                            <el-select v-model="fyld" v-if="!llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
                                <el-option
                                  v-for="(item,ind) in fydata"
                                  :key="ind"
@@ -470,7 +470,7 @@
                             :data="ListData5">
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="50">
                             </el-table-column>
                              <el-table-column
                                 prop="personName"
@@ -559,7 +559,7 @@
                             :data="ListData9">
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="50">
                             </el-table-column>
                              <el-table-column
                                 prop="number"
@@ -657,7 +657,7 @@
                             :data="ListData8">
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="50">
                             </el-table-column>
                               <el-table-column
                                 prop="casenum"
@@ -742,7 +742,7 @@
                               :data="filedata0">
                               <el-table-column
                                   type="index"
-                                  label="序号" width="80">
+                                  label="序号" width="50">
                               </el-table-column>
                               <el-table-column
                                   prop="filename"
@@ -918,14 +918,14 @@
             </div>
             <br/>
          </div>
-  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
+  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="630px">
    <UPLOAD :url="uurl" :type="0" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
-  <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" width="650px">
+  <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" :close-on-click-modal='false' width="650px">
    <!-- <VIDEO :url="vvurl" :type="2" :urlErr="urlErr" @fatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEO> -->
      <VIDEONEW :url="vvurl" :type="2" :urlErr="urlErr" @DfatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEONEW>
   </el-dialog>
-<el-dialog :title="yatxt" :visible.sync="lwDialogVisible" class="subtable">
+<el-dialog :title="yatxt" :visible.sync="lwDialogVisible" :close-on-click-modal='false' class="subtable">
             <el-row class="ah-40">
              <el-col :span="12">
                 <span class="yy-input-text trt"><font class="red">*</font> 年份：</span>
@@ -996,7 +996,7 @@
                             </el-table-column>
                               <!-- <el-table-column
                                   type="index"
-                                  label="序号" width="80">
+                                  label="序号" width="50">
                               </el-table-column> -->
                               <el-table-column
                                   prop="number"
@@ -1046,7 +1046,7 @@
     </el-dialog>
 
     
-    <el-dialog title="关注案件" :visible.sync="lwDialogVisible2" class="subtable">
+    <el-dialog title="关注案件" :visible.sync="lwDialogVisible2" :close-on-click-modal='false' class="subtable">
         
             <el-row class="ah-40">
               <el-col :span="24">
@@ -1073,7 +1073,7 @@
                             </el-table-column>
                               <el-table-column
                                   type="index"
-                                  label="序号" width="80">
+                                  label="序号" width="50">
                               </el-table-column>
                               <el-table-column
                                   prop="casenum"
@@ -1090,7 +1090,7 @@
             <el-button @click="lwDialogVisible2 = false" size="small">取 消</el-button>
             </div>
     </el-dialog>
-    <el-dialog :title="glname" :visible.sync="dbDialogVisible" class="subtable">
+    <el-dialog :title="glname" :visible.sync="dbDialogVisible" :close-on-click-modal='false' class="subtable">
             <el-row class="ah-40">
               <el-col :span="12">
                 <span class="yy-input-text trt"><font class="red">*</font> 年份：</span>
@@ -1150,7 +1150,7 @@
                             </el-table-column>
                               <el-table-column
                                   type="index"
-                                  label="序号" width="80">
+                                  label="序号" width="50">
                               </el-table-column>
                               <el-table-column
                                   prop="number"
@@ -1372,10 +1372,8 @@ export default {
                   this.ListData4.push(obj);
                   this.count1=this.ListData4.length;
                 }).catch(() => {
-                     this.$message({
-                         type: 'info',
-                         message: '已取消操作'
-                      }); 
+                   
+                      this.$message.info("已取消操作");
 
                  }); 
                }
@@ -1435,10 +1433,8 @@ export default {
                   this.ListData5.push(obj);
                   this.count2=this.ListData5.length;
                 }).catch(() => {
-                     this.$message({
-                         type: 'info',
-                         message: '已取消操作'
-                      }); 
+                    
+                      this.$message.info("已取消操作");
 
                  }); 
                }
@@ -1522,13 +1518,52 @@ export default {
             this.count2=0;
         },
         getinit(val){
-              
+         this.reset();
          this.addtype=val.query.type;
-        
-      
          this.baseid=val.query.baseid;
          this.activityInfoId=val.query.activityInfoId;
-         this.reset();
+         
+          var mid="";
+          switch (this.addtype) {
+            case '2':
+              mid='12032302';
+              break;
+            case '3':
+              mid='12052303';
+              break;
+            case '4':
+              mid='12072304';
+              break;
+            case '5':
+              mid='12092305';
+              break;
+            case '6':
+              mid='12112306';
+              break;
+            case '7':
+              mid='12132307';
+              break;
+            case '8':
+              mid='12152308';
+              break;
+            case '9':
+              mid='12172309';
+              break;
+            case '10':
+              mid='12192310';
+              break;
+            default:
+              break;
+          }
+          //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+          //权限end
+
          this.getName();
          this.getCBDW();
          this.getFYName();
@@ -1795,11 +1830,10 @@ export default {
         },
         goto(){
 
-        
              if(this.baseid!=null){
                     var arr=this.baseid.split('|');
                 
-                      this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3]}});
+                      this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
                    }else{
                       this.$router.push({name:'PairList',query:{type:this.addtype}});
                }
@@ -2259,17 +2293,15 @@ export default {
               this.$api.post(this.Global.aport2+'/ActivityInfoController/saveActivityInfo',this.llgzform,
                 r =>{
                          if(r.code==1){
-                              this.$message({
-                                  "type":"success",
-                                  "message":r.message,
-                              });
+                              
+                              this.$message.success(r.message);
                          
                         
                             if(this.baseid!=null){
                                 var arr=this.baseid.split('|');
                               
                                 
-                                this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3]}});
+                                this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
                               }else{
                                 this.$router.push({name:"PairList"});
                               }

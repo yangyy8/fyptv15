@@ -17,16 +17,23 @@
                        <div class="title">{{jjbmc==null?'':jjbmc}}{{cname4!=''?cname4:cname5}}{{title}}</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
-                          <el-button type="primary" style="width:80px" @click="goBase()"><span>编辑</span></el-button>
-                          <el-button style="width:80px" @click="goseach()">查询</el-button>
+                          <el-button type="primary" style="width:80px" @click="goBase()" v-if='allshow[0]'>
+                              <span>添加</span>
+                              </el-button>
+                          <el-button style="width:80px" @click="goseach()" v-if='allshow[1]'>查询</el-button>
                           <el-button style="width:80px" v-if='lvl!="1"' @click="$router.go(-1)">返回</el-button>
                     </el-col>
                </el-row>
-                <el-row :gutter="2" class="ah-50 pborder mt-20">
+                <el-row :gutter="2" class="ah-50 pborder mt-20" v-if='show'>
                   <el-col :sm="24" :md="12" :lg="4" v-for="(ts,inds) in areadata" :key="inds">
                     <span class="address"  @click="goxj(ts.dm,ts.mc)">{{ts.mc}}</span>
                   </el-col>
                </el-row>
+                <el-row  class="ah-50 pborder mt-20 mb-20 " style="text-align:center" v-else>
+                   <el-col :span="24">
+                    <span>无数据</span>
+                  </el-col>
+                </el-row>
              </el-col>
              <el-col :span="6" style="padding-left:45px;" v-if='addtype=="1" || addtype=="2"'>
                      <div class="title mb-20">历届{{ltitle}}名单</div>
@@ -40,7 +47,7 @@
     </div>
 </template>
 <script>
-
+import {getlljgmenu,getlljgdata} from '@/assets/js/aleainfo.js'
 export default {
      data(){
          return{
@@ -60,8 +67,10 @@ export default {
            jb:'',
            lvl:'1',//级
            code:'',
-           
+           show:true,
            endlvl:1,
+           alldata:[],
+           allshow:[],
          }
      },
      mounted(){
@@ -76,9 +85,9 @@ export default {
         },
     },
      methods:{
+      
         getinit(val){
-           
-       
+          
            this.reset();
             
            if((val.query.type==undefined || val.query.type=='')
@@ -97,7 +106,7 @@ export default {
                this.jjb=this.info.jjb;
                this.jjbmc=this.info.jjbmc;
                }catch(e){
-                   this.$router.push({name:'limitmsg',query:{msg:'该地址参数不对！'}});
+                   this.$router.push({name:'limitmsg',query:{type:1}});
                }
 
                
@@ -108,16 +117,33 @@ export default {
                this.jjbmc=this.$store.state.jmc;
                this.jjb=this.$store.state.jid;
            }
+          var mid=getlljgmenu(this.addtype,parseInt(this.lvl));
+          this.alldata=getlljgdata(this.addtype,parseInt(this.lvl));
           
-           this.getNameList();//得到标题的名称
-           this.getLevel(this.lvl,this.code);
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                               this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                               console.log(i,'==',this.allshow[i],'++++',r.data,'--',this.alldata[i]);
+                            }   
+                           this.getNameList();//得到标题的名称
+                           this.getLevel(this.lvl,this.code);
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
+         
+          
         },
     reset(){
         this.areadata=[];this.info={};
         this.lvl='1';this.code='';this.cinfo='';
         this.cname1='';this.cname2='';this.cname3='';
         this.cname4='';this.addtype='';this.ltitle='';
-        this.title='';this.jb='';this.endlvl=1;
+        this.title='';this.jb='';this.endlvl=1; this.show=true;
     },
     goxj(code,mc){
     if(this.lvl>=this.endlvl){
@@ -183,6 +209,11 @@ export default {
                   r =>{
                           if(r.code==1){
                                 this.areadata=r.data;
+                                if(r.data.length>0){
+                                    this.show=true;
+                                }else{
+                                    this.show=false;
+                                }
                           }
                    });
     },
@@ -249,6 +280,7 @@ export default {
                   break;
           }
           this.title="行政区划";
+          
      },
      goBase(){
             this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,jmc:this.jjbmc,jkey:this.jjb}})

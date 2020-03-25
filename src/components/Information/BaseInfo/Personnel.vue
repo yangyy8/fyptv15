@@ -14,7 +14,7 @@
                    </el-col>
                     <el-col :span="8" style="text-align:right">
                           <el-button type="primary" style="width:80px" @click="goBase()">
-                          <span>编辑</span>
+                          <span>添加</span>
                             </el-button>
                           <!-- <el-button style="width:80px" >导入</el-button> -->
                           <el-button style="width:80px" @click="goseach()">查询</el-button>

@@ -9,10 +9,10 @@
                     <span class="cursor">     <i class="el-icon-user-solid"></i> 
                     {{name}}  (<span style="font-size:12px;"> {{orgname}} <span v-if='zwname!="null"'> ，{{zwname}}</span></span>)</span>
                     <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="b">修改账号</el-dropdown-item>
-                    <el-dropdown-item command="a">修改密码</el-dropdown-item>
-                    <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
-                    <el-dropdown-item command="d">权限切换</el-dropdown-item>
+                    <el-dropdown-item command="b" v-if='allshow[0]'>修改账号</el-dropdown-item>
+                    <el-dropdown-item command="a" v-if='allshow[1]'>修改密码</el-dropdown-item>
+                    <el-dropdown-item command="c" v-if='allshow[2]'>快捷菜单</el-dropdown-item>
+                    <el-dropdown-item command="d" v-if='allshow[3]'>权限切换</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown> 
 
@@ -54,7 +54,7 @@
 
     </div>
 </div>
- <el-dialog title="选择单位" :visible.sync="addDialogVisible"  width="600px">
+ <el-dialog title="选择单位" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="600px">
        <el-form :model="form">
 
        <el-row class="ah-40">
@@ -95,10 +95,25 @@ export default {
       addDialogVisible:false,
        form:{},
        xzdw:[],
+       alldata:['20003901','20003902','20003903','20003904'],
+        allshow:[],
     };
   },
   mounted(){
-
+    //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':'10002000'},
+                     r =>{
+                           if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }
+                          // else if(r.code==0){
+                          //   this.$router.push({path:'/limitmsg'});
+                          // }
+             });
+      //权限end
     this.getMenu();
   },
   methods:{

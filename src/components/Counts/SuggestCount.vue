@@ -2,7 +2,7 @@
     <div class="pairadd">
     <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 统计信息 <span class="mlr_10">/</span>  <b>办理工作信息统计</b> <span class="mlr_10">/</span>  <b>建议议案统计</b></span></div>
       <div class="content">
-          <el-row>
+          <el-row style="line-height:75px;">
             <el-col :span='8'><el-button type="primary" plain class="countbnt1" @click="getOpen('01','历年数字')" >历年数字</el-button></el-col>
             <el-col :span='8'><el-button type="primary" plain class="countbnt1" @click="getOpen('02','建议议案提案统计表')" >建议议案提案统计表</el-button></el-col>
             <el-col :span='8'><el-button type="primary" plain class="countbnt1" @click="getOpen('03','代表议案总表')" >代表议案总表</el-button></el-col>
@@ -27,8 +27,18 @@
 export default {
     data(){
         return{
-           
+        
         }
+    },
+    mounted(){
+          //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'14162612'},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+        //权限end
     },
     methods:{
         getOpen(id,mc){

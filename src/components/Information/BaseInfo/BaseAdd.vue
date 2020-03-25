@@ -57,11 +57,12 @@
                                         <span class="yy-input-text">固定电话</span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" @blur="getZNSB()" clearable v-model="form.fixedPhone" maxlength="15"  class="yy-input-input" ></el-input>
                                      </el-col>
-                                        <el-col :span="12" >
-                                        <span class="yy-input-text"><font class="red" v-if="ntype!='2'">*</font> 手机号码</span>
+                                        <el-col :span="12" :class="(ntype=='1' || ntype=='3')?'mt-10 lh-25':''">
+                                        <span class="yy-input-text"><font class="red" v-if="(ntype=='1' || ntype=='3') &&  !pd.is1">*</font> 手机号码</span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" @blur="getZNSB()" clearable v-model="form.mobilePhone" maxlength="11"  class="yy-input-input" ></el-input>
+                                      <span v-if="ntype=='1' || ntype=='3'" style="padding-left:30%;font-size:12px; color:red;">选择"省部级以上"后，此项不作为必须录入项目</span>
                                      </el-col>
-                                    
+                                
                                       <el-col :span="12">
                                         <span class="yy-input-text"><font class="red">*</font> 
                                         <span v-if="ntype=='1'">所属人大</span>
@@ -201,9 +202,10 @@
                                          </el-select>
                                      </el-col>
                                       
-                                      <el-col :span="12" >
+                                      <el-col :span="12" class="mt-10" style="line-height:25px;">
                                         <span class="yy-input-text"><font class="red">*</font> 党派</span>
-                                        <el-select v-model="form.partisan" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                     
+                                        <el-select v-model="form.partisan" :disabled="ckshow" multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.dp"
                                                 :key="ind"
@@ -211,6 +213,8 @@
                                                 :value="item.dm">
                                             </el-option>
                                          </el-select>
+                                         <span style="padding-left:30%;font-size:12px; color:red;">最多只能选择2个党派</span>
+                                        
                                      </el-col>
                                       <el-col :span="12" >
                                         <span class="yy-input-text">学历</span>
@@ -272,6 +276,10 @@
                                         <span class="yy-input-text" style="width:13.5%!important"><font class="red">*</font> 单位职务</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.job"  class="yy-input-input" style="width:80%!important;"></el-input>
                                      </el-col>
+                                     <el-col :span="24" v-if='addtype!="4"'>
+                                        <span class="yy-input-text" style="width:13.5%!important">社会职务</span>
+                                        <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.socialDuty"  class="yy-input-input" style="width:80%!important;"></el-input>
+                                     </el-col>
                                      <el-col :span="24" v-if="ntype=='3'">
                                         <span class="yy-input-text" style="width:13.5%!important">推荐信息</span>
                                         <el-input placeholder="" size="small" clearable  :disabled="ckshow" v-model="form1.recommendedInformation"  class="yy-input-input" style="width:80%!important;" ></el-input>
@@ -303,7 +311,15 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                                    <el-col :span="12" v-if="ntype!='4'">
+                                     <el-col :span="12" v-if="ntype=='1'">
+                                        <span class="yy-input-text"><font class="red">*</font> 结对时间</span>
+                                        <el-date-picker @change="getZNSB()"
+                                            v-model="form1.pairTime" format="yyyy-MM-dd"
+                                            type="date" size="small" value-format="yyyy-MM-dd"
+                                            placeholder="选择日期" class="yy-input-input" :disabled="ckshow || form1.pairPersonId=='' || form1.pairPersonId==null">
+                                        </el-date-picker>
+                                     </el-col>
+                                    <el-col :span="12" v-if="ntype=='1' || ntype=='3'">
                                         <span class="yy-input-text">所属巡回法庭</span>
                                         <el-select v-model="form1.circuitCourtId" :disabled="ckshow" filterable clearable default-first-option placeholder="请先选择所属单位"  size="small" class="yy-input-input" >
                                             <el-option
@@ -366,15 +382,14 @@
                                             <span v-if="ntype=='3'">在京特约人员</span>
                                           </el-checkbox>
                                      </el-col>
-                                      <!-- <el-col :span="12" v-if="ntype!='3'" :disabled="ckshow">
+                                      <el-col :span="12" v-if="ntype=='1' || ntype=='2'" :disabled="ckshow">
                                           <el-checkbox v-model="pd.is11">补选</el-checkbox>
-                                          <span style="font-size:12px;" v-if='pd.is11'>补选时间</span>
                                            <el-date-picker v-if='pd.is11'
-                                            v-model="form1.birthday2" format="yyyy-MM-dd"
+                                            v-model="form1.repairTime" format="yyyy-MM-dd"
                                             type="date" size="mini" value-format="yyyy-MM-dd"
                                             placeholder="选择日期"  :disabled="ckshow" style="width:50%">
                                         </el-date-picker>
-                                     </el-col> -->
+                                     </el-col>
 
                                        <el-col :span="12" v-if="ntype!='3'">
                                           <el-checkbox v-model="pd.is6" :disabled="ckshow">专门委员会委员</el-checkbox>
@@ -397,7 +412,7 @@
                                    
                                      <el-col :span="12" v-if="ntype!='3'">
                                           <el-checkbox v-model="pd.is7" :disabled="ckshow">不再担任</el-checkbox>
-                                          <span class="lfont ml-20" v-if='pd.is7' >原因</span>
+                                          <!-- <span class="lfont ml-20" v-if='pd.is7' >原因</span> -->
                                            <el-select v-model="form1.isNotHoldReason" :disabled="ckshow"  v-if="pd.is7" filterable clearable default-first-option placeholder="请选择"  size="mini" style="width:31%;">
                                             <el-option
                                                 v-for="(item,ind) in $store.state.bzdr"
@@ -449,13 +464,109 @@
                            </el-col>
                        </el-row>
                      </div>
+                      <!-- 获奖信息 -->
+                     <div class="pairleft" id="box5">
+                       
+                         <div class="hline"></div>
+                         <div class="title">获奖信息</div>
+                         <div class="list">
+                            <el-row class="mt-15" >
+                              <el-button type="primary" size="small" v-if="!ckshow" @click="add(1,0)">添加</el-button>
+                              <el-button type="success" size="small" v-if="!ckshow" plain  :disabled="hjbnt" @click="add(1,1)">修改</el-button>
+                              <el-button type="primary" size="small" plain  :disabled="hjbnt"  @click="add(1,2)">查看</el-button>
+                              <el-button type="danger"  size="small" plain  v-if="!ckshow" :disabled="hjbnt" @click="remove(1)"> 删除</el-button>
+                             
+                            </el-row>
+                          <el-table
+                            ref="hjmultiple"
+                            @row-click="hjclickRow"
+                            :data="hjTableData1"
+                            @selection-change="hjchangeFun">
+                            <el-table-column
+                                type="selection"
+                                width="50">
+                            </el-table-column>
+                            <el-table-column
+                                type="index"
+                                label="序号" width="50">
+                            </el-table-column>
+                             <el-table-column
+                                prop="getTime"
+                                label="获奖时间">
+                            </el-table-column>
+                            <el-table-column
+                                prop="awardName"
+                                label="获奖名称">
+                            </el-table-column>
+                            <el-table-column
+                                prop="awardUnit"
+                                label="颁奖单位">
+                            </el-table-column>
+                           </el-table>
+                          
+                         <div class="loadmore" v-if="hjall==1" @click="getHDZW('',1)">展开更多 <i class="el-icon-arrow-down"></i></div>
+                           <div class="loadmore" v-else-if="hjall==2" @click="getHDZW(hyanum,1)">收起 <i class="el-icon-arrow-up"></i></div>
+                         </div>
+                     </div>
+                    <!-- 职务及变动情况 -->
+                     <div class="pairleft" id="box6">
+                       
+                         <div class="hline"></div>
+                         <div class="title">职务及变动情况</div>
+                         <div class="list">
+                            <el-row class="mt-15" >
+                           
+                              <el-button type="primary" size="small" v-if="!ckshow" @click="add(2,0)">添加</el-button>
+                              <el-button type="success" size="small" v-if="!ckshow" plain  :disabled="bnt" @click="add(2,1)">修改</el-button>
+                              <el-button type="primary" size="small" plain  :disabled="bnt"  @click="add(2,2)">查看</el-button>
+                              <el-button type="danger"  size="small" v-if="!ckshow" plain  :disabled="bnt" @click="remove(2)"> 删除</el-button>
+                            
+                            </el-row>
+                          <el-table
+                            ref="zwmultiple"
+                            :data="zwTableData1"
+                            @row-click="zwclickRow"
+                            @selection-change="changeFun">
+                            <el-table-column
+                                type="selection"
+                                width="50">
+                            </el-table-column>
+                            <el-table-column
+                                type="index"
+                                label="序号" width="50">
+                            </el-table-column>
+                             <el-table-column
+                                prop="beforeOrg"
+                                label="原工作单位">
+                            </el-table-column>
+                            <el-table-column
+                                prop="beforePosition"
+                                label="原任职务">
+                            </el-table-column>
+                            <el-table-column
+                                prop="nowOrg"
+                                label="现工作单位">
+                            </el-table-column>
+                              <el-table-column
+                                prop="nowPosition"
+                                label="现任职务">
+                            </el-table-column>
+                              <el-table-column
+                                prop="changeDate"
+                                label="变动时间">
+                            </el-table-column>
+                           </el-table>
+                          <div class="loadmore" v-if="zwall==1" @click="getHDZW('',2)">展开更多 <i class="el-icon-arrow-down"></i></div>
+                           <div class="loadmore" v-else-if="zwall==2" @click="getHDZW(hyanum,2)">收起 <i class="el-icon-arrow-up"></i></div>
+                         </div>
+                     </div>
                       <!-- 结对信息 -->
                     <div v-if="state=='1' || state=='9'"  style="margin-top:30px;">
                     <div class="pairleft" id="box7" v-if='addtype==4'>
                          <div class="top" ><div class="title">结对信息</div></div>
                          <div class="list">
                             <el-row class="mt-15" >
-                              <el-button type="primary"  size="small" v-if="!ckshow" @click="addJD('0')">录入</el-button>
+                              <el-button type="primary"  size="small" v-if="!ckshow" @click="addJD('0')">添加</el-button>
                               <el-button type="success" size="small" plain v-if="!ckshow"  :disabled="jdbnt" @click="addJD('1')">修改</el-button>
                               <el-button type="primary" size="small" plain  :disabled="jdbnt" @click="addJD('9')">查看</el-button>
                               <!-- <el-button type="danger"  size="small" plain  :disabled="jdbnt" @click="delJD()">删除</el-button> -->
@@ -488,11 +599,12 @@
                            <div class="loadmore" v-else-if="jdall==2" @click="getJDHD(hyanum)">收起 <i class="el-icon-arrow-up"></i></div>
                          </div>
                      </div>
+                     
                      <div class="pairleft" id="box2">
                          <div class="top" ><div class="title">参加活动</div></div>
                          <div class="list">
                             <el-row class="mt-15" >
-                              <el-button type="primary"  size="small" v-if="!ckshow" @click="getLR('0')">录入</el-button>
+                              <el-button type="primary"  size="small" v-if="!ckshow" @click="getLR('0')">添加</el-button>
                               <el-button type="success" size="small" plain v-if="!ckshow"  :disabled="hdbnt" @click="getLR('1')">修改</el-button>
                               <el-button type="primary" size="small" plain  :disabled="hdbnt" @click="getLR('9')">查看</el-button>
                               <!-- <el-button type="danger"  size="small" plain  :disabled="hdbnt">删除</el-button> -->
@@ -560,7 +672,7 @@
                          <div class="list">
                             <el-row class="mt-15" >
                             
-                              <el-button type="primary" size="small" v-if="!ckshow" @click="getLRinfo(1,0)">录入</el-button>
+                              <el-button type="primary" size="small" v-if="!ckshow" @click="getLRinfo(1,0)">添加</el-button>
                               <el-button type="success" size="small" plain v-if="!ckshow"  :disabled="yabnt" @click="getLRinfo(1,1)">修改</el-button>
                               <el-button type="primary" size="small" plain   :disabled="yabnt" @click="getLRinfo(1,9)">查看</el-button>
                               <!-- <el-button type="danger"  size="small" plain  :disabled="yabnt">删除</el-button> -->
@@ -634,7 +746,7 @@
                          <div class="title">关注案件</div>
                          <div class="list">
                             <el-row class="mt-15">
-                              <el-button type="primary" size="small" v-if="!ckshow" @click="getLRinfo(2,99)">录入</el-button>
+                              <el-button type="primary" size="small" v-if="!ckshow" @click="getLRinfo(2,99)">添加</el-button>
                               <el-button type="success" size="small" plain  v-if="!ckshow" :disabled="ajbnt" @click="getLRinfo(2,'0')">修改</el-button>
                               <el-button type="primary" size="small" plain  :disabled="ajbnt" @click="getLRinfo(2,'9')">查看</el-button>
 
@@ -697,98 +809,7 @@
                          </div>
                      </div>
                     </div>
-                    <!-- 获奖信息 -->
-                     <div class="pairleft" id="box5">
-                       
-                         <div class="hline"></div>
-                         <div class="title">获奖信息</div>
-                         <div class="list">
-                            <el-row class="mt-15" >
-                              <el-button type="primary" size="small" v-if="!ckshow" @click="add(1,0)">录入</el-button>
-                              <el-button type="success" size="small" v-if="!ckshow" plain  :disabled="hjbnt" @click="add(1,1)">修改</el-button>
-                              <el-button type="primary" size="small" plain  :disabled="hjbnt"  @click="add(1,2)">查看</el-button>
-                              <el-button type="danger"  size="small" plain  v-if="!ckshow" :disabled="hjbnt" @click="remove(1)"> 删除</el-button>
-                             
-                            </el-row>
-                          <el-table
-                            ref="hjmultiple"
-                            @row-click="hjclickRow"
-                            :data="hjTableData"
-                            @selection-change="hjchangeFun">
-                            <el-table-column
-                                type="selection"
-                                width="50">
-                            </el-table-column>
-                            <el-table-column
-                                type="index"
-                                label="序号" width="50">
-                            </el-table-column>
-                             <el-table-column
-                                prop="getTime"
-                                label="获奖时间">
-                            </el-table-column>
-                            <el-table-column
-                                prop="awardName"
-                                label="获奖名称">
-                            </el-table-column>
-                            <el-table-column
-                                prop="awardUnit"
-                                label="颁奖单位">
-                            </el-table-column>
-                           </el-table>
-                          
-                         </div>
-                     </div>
-                    <!-- 职务及变动情况 -->
-                     <div class="pairleft" id="box6">
-                       
-                         <div class="hline"></div>
-                         <div class="title">职务及变动情况</div>
-                         <div class="list">
-                            <el-row class="mt-15" >
-                           
-                              <el-button type="primary" size="small" v-if="!ckshow" @click="add(2,0)">录入</el-button>
-                              <el-button type="success" size="small" v-if="!ckshow" plain  :disabled="bnt" @click="add(2,1)">修改</el-button>
-                              <el-button type="primary" size="small" plain  :disabled="bnt"  @click="add(2,2)">查看</el-button>
-                              <el-button type="danger"  size="small" v-if="!ckshow" plain  :disabled="bnt" @click="remove(2)"> 删除</el-button>
-                            
-                            </el-row>
-                          <el-table
-                            ref="zwmultiple"
-                            :data="zwTableData"
-                            @row-click="zwclickRow"
-                            @selection-change="changeFun">
-                            <el-table-column
-                                type="selection"
-                                width="50">
-                            </el-table-column>
-                            <el-table-column
-                                type="index"
-                                label="序号" width="50">
-                            </el-table-column>
-                             <el-table-column
-                                prop="beforeOrg"
-                                label="原工作单位">
-                            </el-table-column>
-                            <el-table-column
-                                prop="beforePosition"
-                                label="原任职务">
-                            </el-table-column>
-                            <el-table-column
-                                prop="nowOrg"
-                                label="现工作单位">
-                            </el-table-column>
-                              <el-table-column
-                                prop="nowPosition"
-                                label="现任职务">
-                            </el-table-column>
-                              <el-table-column
-                                prop="changeDate"
-                                label="变动时间">
-                            </el-table-column>
-                           </el-table>
-                         </div>
-                     </div>
+                   
                     <div class="footer">
                         <el-button type="primary"  style="width:130px;" @click="submit" v-if="!ckshow">提  交</el-button>
                         <el-button   style="width:130px;" @click="goClose()">关 闭</el-button>
@@ -799,12 +820,13 @@
                        <div class="listbg">
                            <ul>
                                <li  :class="activeindex==1?'active':''" @click="getBase(1)">基本信息</li>
-                               <li  :class="activeindex==7?'active':''" @click="getBase(2)" v-if="state!='0' && addtype=='4'">结对活动</li>
+                               <li  :class="activeindex==5?'active':''" @click="getBase(5)">获奖信息</li>
+                               <li  :class="activeindex==6?'active':''" @click="getBase(6)">职务及变动情况</li>
+                               <li  :class="activeindex==7?'active':''" @click="getBase(7)" v-if="state!='0' && addtype=='4'">结对活动</li>
                                <li  :class="activeindex==2?'active':''" @click="getBase(2)" v-if="state!='0'">参加活动</li>
                                <li  :class="activeindex==3?'active':''" @click="getBase(3)" v-if="state!='0' && addtype!='4'">议案建议</li>
                                <li  :class="activeindex==4?'active':''" @click="getBase(4)" v-if="state!='0' && addtype!='4'">关注案件</li>
-                               <li  :class="activeindex==5?'active':''" @click="getBase(5)">获奖信息</li>
-                               <li  :class="activeindex==6?'active':''" @click="getBase(6)">职务及变动情况</li>
+
                             </ul>
                        </div>
                     </transition>
@@ -812,7 +834,7 @@
             </el-row>
          </div>
  
- <el-dialog :title="hjdia" :visible.sync="hjDialogVisible" width="600px">
+ <el-dialog :title="hjdia" :visible.sync="hjDialogVisible" :close-on-click-modal='false' width="600px">
             <el-form :model="hjform" >
                 <el-row class="ah-40">
                       <el-col :span="24">
@@ -839,7 +861,7 @@
               <el-button @click="hjDialogVisible = false" size="small">关  闭</el-button>
             </div>
          </el-dialog>
-         <el-dialog :title="zwdia" :visible.sync="zwDialogVisible" width="600px">
+         <el-dialog :title="zwdia" :visible.sync="zwDialogVisible" :close-on-click-modal='false' width="600px">
             <el-form :model="zwform" >
                 <el-row class="ah-40">
                     <el-col :span="24">
@@ -878,18 +900,16 @@
             </div>
          </el-dialog>
 
-   <el-dialog title="上传图片" :visible.sync="uploadDialogVisible"  width="630px">
+   <el-dialog title="上传图片" :visible.sync="uploadDialogVisible" :close-on-click-modal='false' width="630px">
         <UPLOADIMG :url="uurl" :type="ptype" :personId="personId"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOADIMG>
    </el-dialog>
-   <!-- <el-dialog title="上传图片" :visible.sync="uploadDialogVisible"  width="630px">
-        <UPLOADIMG :url="uurl" :type="ptype" :personId="personId"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOADIMG>
-   </el-dialog> -->
-     <el-dialog title="智能搜索" :visible.sync="znDialogVisible" class="subtable">
+  
+     <el-dialog title="智能搜索" :visible.sync="znDialogVisible"  :close-on-click-modal='false' class="subtable">
      <RGZN v-if="znDialogVisible"  :type="ptype" :data="zndata"  @ZNfatherMethod="ZNfatherMethod" :random="new Date().getTime()"></RGZN>
    
    </el-dialog>
 
-    <el-dialog title="选择活动类型" :visible.sync="hdDialogVisible" >
+    <el-dialog title="选择活动类型" :visible.sync="hdDialogVisible" :close-on-click-modal='false'>
              <div style="text-align:center;height:50px;">
                 <el-radio v-model="hdtype" label="1" border>结对活动录入</el-radio>
                 <el-radio v-model="hdtype" label="2" border>专项视察录入</el-radio>
@@ -908,7 +928,7 @@
               <el-button @click="hdDialogVisible = false" size="small">取 消</el-button>
             </div>
        </el-dialog>
-          <el-dialog title="选择议案类型" :visible.sync="yaDialogVisible" width="600px">
+          <el-dialog title="选择议案类型" :visible.sync="yaDialogVisible" :close-on-click-modal='false' width="600px">
              <div style="text-align:center">
                 <el-radio v-model="yatype" label="0" border>建议、批评和意见</el-radio>
                 <el-radio v-model="yatype" label="1" border>代表议案</el-radio>
@@ -921,7 +941,7 @@
               <el-button @click="yaDialogVisible = false" size="small">取 消</el-button>
             </div>
        </el-dialog>
-<el-dialog :title="jdtxt" :visible.sync="jdDialogVisible" class="subtable">
+<el-dialog :title="jdtxt" :visible.sync="jdDialogVisible" :close-on-click-modal='false' class="subtable">
                  <el-form :model="formjd" >
                     <el-row class="ah-40">
                     <el-col :span="12">
@@ -1065,6 +1085,7 @@ export default {
             zwform:{},
             pr:{},
             zwTableData:[],
+            zwTableData1:[],
             hdtableData:[],
             yatableData:[],
             gztableData:[],
@@ -1080,6 +1101,7 @@ export default {
             hjdia:'新增获奖信息', 
             hjform:{},
             hjTableData:[],
+            hjTableData1:[],
             hjtb:0,
             hjck:true,
             hdtype:'1',
@@ -1135,6 +1157,8 @@ export default {
             yaall:0,
             ajall:0,
             jdall:0,
+            hjall:0,
+            zwall:0,
             hyanum:this.$store.state.pagesize,//默认显示3条
             cname1:'',//级名
             cname2:'',//地方名
@@ -1154,6 +1178,7 @@ export default {
             lb:'',
             tjshow:true,
             orgdm:'',
+            listdatatemp:[],
         };
     },
     mounted()
@@ -1179,7 +1204,7 @@ export default {
         this.$store.dispatch('getTylb');
         this.$store.dispatch('getFyjb');
         this.$store.dispatch('getTyzxytjdw');
-         this.$store.dispatch('getTyjdytjdw');
+        this.$store.dispatch('getTyjdytjdw');
         this.getinit(this.$route);
        
     },
@@ -1233,7 +1258,7 @@ export default {
                  default:
                      break;
              }
-                    var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
+                    var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid+"|"+this.wtitle;
             
                     if(types=='1'){
                         this.$router.push({name:'PairAdd',query:{type:types,state:n,activityInfoId:this.hdSelection[0].activityInfoId,baseid:baseid}});
@@ -1254,7 +1279,7 @@ export default {
          },
         goadd(){
                 this.hdDialogVisible=false;
-                 var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
+                 var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid+"|"+this.wtitle;
                 if(this.hdtype==1){
                   this.$router.push({name:'PairAdd',query:{baseid:baseid}});
                 }else{
@@ -1263,14 +1288,14 @@ export default {
             },
            goya(){
                 this.hdDialogVisible=false;
-                 var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
+                 var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid+"|"+this.wtitle;
                
                   this.$router.push({name:'SuggestInfo',query:{type:this.yatype,baseid:baseid}});
                
             },
 
         getLRinfo(n,t){
-              var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid;
+              var baseid=this.addtype+"|"+this.state+"|"+this.pbid+"|"+this.reid+"|"+this.wtitle;
                 if(n==2){
                   if(t==99){
                   this.$router.push({name:'CaseInfo',query:{type:'0',ctitle:"登记",baseid:baseid}});
@@ -1574,7 +1599,7 @@ export default {
                 if(r.success){
                     // this.xzList = ToArray(r.data);
                      this.xzdata = ToArray(r.data);
-                    this.userFilter();
+                     //this.userFilter();
                  }
                 })
             },
@@ -1607,11 +1632,11 @@ export default {
                     if(this.state!="0"  && this.addtype!='4'){
                     let offsetTop1 = document.querySelector('#box1')==null?0:document.querySelector('#box1').offsetTop
                     let offsetTop2 = document.querySelector('#box2')==null?0:document.querySelector('#box2').offsetTop-200
-                    let offsetTop3 = document.querySelector('#box3')==null?0:document.querySelector('#box3').offsetTop
-                    let offsetTop4 = document.querySelector('#box4')==null?0:document.querySelector('#box4').offsetTop-100
+                    let offsetTop3 = document.querySelector('#box3')==null?0:document.querySelector('#box3').offsetTop-200
+                    let offsetTop4 = document.querySelector('#box4')==null?0:document.querySelector('#box4').offsetTop-300
                     let offsetTop5 = document.querySelector('#box5')==null?0:document.querySelector('#box5').offsetTop-200
-                    let offsetTop6 = document.querySelector('#box6')==null?0:document.querySelector('#box6').offsetTop-400
-                    if(top<offsetTop2 && offsetTop2!=0){
+                    let offsetTop6 = document.querySelector('#box6')==null?0:document.querySelector('#box6').offsetTop
+                    if(top<offsetTop5 && offsetTop5!=0){
                        this.activeindex=1;
                     }
                     if(top>=offsetTop2 && top<offsetTop3 && offsetTop2!=0){
@@ -1620,36 +1645,36 @@ export default {
                     if(top>=offsetTop3 && top<offsetTop4 && offsetTop3!=0){
                         this.activeindex=3;
                     }
-                    if(top>=offsetTop4 && top<offsetTop5 && offsetTop4!=0){
+                    if(top>=offsetTop4 && offsetTop4!=0){
                          this.activeindex=4;
                     }
                     if(top>=offsetTop5 && top<offsetTop6 && offsetTop5!=0){
                        this.activeindex=5;
                     }
-                    if(top>=offsetTop6 && offsetTop6!=0) {
+                    if(top>=offsetTop6 && top<offsetTop2 && offsetTop6!=0) {
                        this.activeindex=6;
                     }
                     
                    }else if(this.state!="0" && this.addtype=='4'){
            
                     let offsetTop1 = document.querySelector('#box1')==null?0:document.querySelector('#box1').offsetTop
-                    let offsetTop2 = document.querySelector('#box7')==null?0:document.querySelector('#box7').offsetTop
-                    let offsetTop3 = document.querySelector('#box2')==null?0:document.querySelector('#box2').offsetTop
+                    let offsetTop2 = document.querySelector('#box7')==null?0:document.querySelector('#box7').offsetTop-200
+                    let offsetTop3 = document.querySelector('#box2')==null?0:document.querySelector('#box2').offsetTop-260
                     let offsetTop5 = document.querySelector('#box5')==null?0:document.querySelector('#box5').offsetTop
-                    let offsetTop6 = document.querySelector('#box6')==null?0:document.querySelector('#box6').offsetTop-260
-                    if(top<offsetTop2 && offsetTop2!=0){
+                    let offsetTop6 = document.querySelector('#box6')==null?0:document.querySelector('#box6').offsetTop
+                    if(top<offsetTop5 && offsetTop5!=0){
                        this.activeindex=1;
                     }
                     if(top>=offsetTop2 && top<offsetTop3 && offsetTop2!=0){
                         this.activeindex=7;
                     }
-                     if(top>=offsetTop3 && top<offsetTop5 && offsetTop3!=0){
+                     if(top>=offsetTop3 && offsetTop3!=0){
                         this.activeindex=2;
                     }
                     if(top>=offsetTop5 && top<offsetTop6 && offsetTop5!=0){
                        this.activeindex=5;
                     }
-                    if(top>=offsetTop6 && offsetTop6!=0) {
+                    if(top>=offsetTop6 && top<offsetTop2 &&  offsetTop6!=0) {
                        this.activeindex=6;
                     }
                    }
@@ -1665,6 +1690,7 @@ export default {
                             this.activeindex=5;
                         }
                        if(top>=offsetTop6 && offsetTop6!=0){
+                           
                             this.activeindex=6;
                         }
                    }
@@ -1747,6 +1773,7 @@ export default {
                       }
                       this.zwTableData=r.data.positionList;
                       this.hjTableData=r.data.awardsList;
+                      
 
                       if(this.addtype=='1' || this.addtype=='2'){
                             
@@ -1799,15 +1826,17 @@ export default {
                     }else{
                         this.$message.error(r.message);
                     }
-
+                 
+                this.getHDZW(this.hyanum,1); 
+                this.getHDZW(this.hyanum,2); 
                      //参加活动
                 if(this.state!="0"){
-                
-                  this.getJDHD(this.hyanum);
-                  this.getCJHD(this.hyanum);
-                  this.getYA(this.hyanum);
-                  this.getAJ(this.hyanum);
+                  this.getJDHD('',0);
+                  this.getCJHD('',0);
+                  this.getYA('',0);
+                  this.getAJ('',0);
                  }
+
                 });
 
              }else{
@@ -1830,12 +1859,8 @@ export default {
              }
             },
         
-            getJDHD(num){
-                if(num==""){
-                  this.jdall=2;
-                }else{
-                  this.jdall=1;
-                }
+            getJDHD(num,t){
+               
                   let pp={
                     'courtInsiderId':this.reid,
                     'pageSize':num,
@@ -1844,22 +1869,31 @@ export default {
                  this.$api.post(this.Global.aport2+'/PairInfoController/getPairInfoForCourt',pp,
                    r =>{
                        if(r.code==1){
-                           this.jdtableData=r.data;
-                           if(r.data==null || r.data.length<parseInt(this.hyanum)){
-                               this.jdall=0;
+                        
+                           
+                           if((r.data==null || r.data.length<=parseInt(this.hyanum)) && t==0){
+                               this.jdall=0; this.jdtableData=r.data;
+                           }else if(r.data.length>parseInt(this.hyanum) && t==0){
+                               this.jdall=1;
+                               var array=r.data;
+                               for (let i = 0; i < array.length; i++) {
+                                  this.jdtableData.push(array[i]);
+                               }
+                           }else if(r.data.length==parseInt(num) && t==null){
+                               this.jdall=1;
+                               this.jdtableData=r.data;
+                           }else{
+                                this.jdall=2;
+                                this.jdtableData=r.data;
                            }
                     }else{
                         this.jdall=0;
                     }
                });
             },
-            getCJHD(num){
-                if(num==""){
-                  this.hdall=2;
-                }else{
-                  this.hdall=1;
-                }
-                  let pp={
+            getCJHD(num,t){
+             
+                 let pp={
                     'pbId':this.pbid,
                     'pageSize':num,
                     'token':this.$store.state.token,
@@ -1867,21 +1901,29 @@ export default {
                  this.$api.post(this.Global.aport2+'/ActivityInfoController/getActivityInfoByPbId',pp,
                    r =>{
                        if(r.code==1){
-                           this.hdtableData=r.data;
-                           if(r.data==null || r.data.length<parseInt(this.hyanum)){
-                               this.hdall=0;
+                        
+                           if((r.data==null || r.data.length<=parseInt(this.hyanum)) && t==0){
+                               this.hdall=0; this.hdtableData=r.data;
+                           }else if(r.data.length>parseInt(this.hyanum) && t==0){
+                               this.hdall=1;
+                                var array=r.data;
+                               for (let i = 0; i < parseInt(this.hyanum); i++) {
+                                 this.hdtableData.push(array[i]);
+                               }
+                           }else if(r.data.length==parseInt(num) && t==null){
+                               this.hdall=1; this.hdtableData=r.data;
+                           }else{
+                                 this.hdall=2; this.hdtableData=r.data;
                            }
+                         
+                           
                        }else{
                              this.hdall=0;
                        }
                    });
             },
-           getYA(num){
-                if(num==""){
-                  this.yaall=2;
-                   }else{
-                    this.yaall=1;
-                  }
+           getYA(num,t){
+               
                   let pp={
                     'pbid':this.pbid,
                     'pageSize':num,
@@ -1890,26 +1932,38 @@ export default {
                  this.$api.post(this.Global.aport2+'/proposalHome/selectProposalInfoByPbId',pp,
                    r =>{
                        if(r.code==1){
-                           this.yatableData=r.data;
-                          
-                           
-                            if(r.data==null || r.data.length<parseInt(this.hyanum)){
+                         
+                            if((r.data==null || r.data.length<=parseInt(this.hyanum)) && t==0){
+                               this.yatableData=r.data;
                                this.yaall=0;
+                           }else if(r.data.length>parseInt(this.hyanum) && t==0){
+                                this.yaall=1;
+                                
+                               var array=r.data;
+                               for (let i = 0; i < parseInt(this.hyanum); i++) {
+                                 this.yatableData.push(array[i]);
+                               }
+                           }else if(r.data.length==parseInt(num) && t==null){
+                                  this.yaall=1; this.yatableData=r.data;
+                           }else{
+                               this.yatableData=r.data;this.yaall=2;
                            }
+
+                        
                          
                        }else{
                            this.yaall=0;
                        }
                    });
             },
-            getAJ(num){
+            getAJ(num,t){
               
               if(num==""){
                   this.ajall=2;
               }else{
                   this.ajall=1;
               }
-                  let pp={
+                let pp={
                     'leaderpbid':this.personId,
                     'inum':num,
                     'token':this.$store.state.token,
@@ -1917,16 +1971,59 @@ export default {
                  this.$api.post(this.Global.aport2+'/CaseHomeController/queryFoucscaseInfo',pp,
                    r =>{
                        if(r.code==1){
-                           this.gztableData=r.data;
-                            if(r.data==null ||r.data.length<parseInt(this.hyanum)){
-                               this.ajall=0;
+                          
+                            if((r.data==null || r.data.length<=parseInt(this.hyanum)) && t==0){
+                               this.ajall=0; this.gztableData=r.data;
+                           }else if(r.data.length>parseInt(this.hyanum) && t==0){
+                                this.ajall=1;
+                               var array=r.data;
+                               for (let i = 0; i < parseInt(this.hyanum); i++) {
+                                 this.gztableData.push(array[i]);
+                               }
+                           }else if(r.data.length==parseInt(num) && t==null){
+                               this.ajall=1;  this.gztableData=r.data;
+                           }else{
+                                this.ajall=2; this.gztableData=r.data;
                            }
                        }else{
                           this.ajall=0;
                        }
                    });
             },
-
+            getHDZW(num,t){
+            
+                if(t==1){//获奖
+                   if(num==""){
+                       this.hjTableData1=this.hjTableData;
+                       this.hjall=2;
+                   }else if(parseInt(num)<this.hjTableData.length){
+                        var hjdata=[];
+                            for (let i = 0; i < parseInt(this.hyanum); i++) {
+                                hjdata.push(this.hjTableData[i]);
+                             }
+                        this.hjTableData1=hjdata;
+                        this.hjall=1;
+                   }else{
+                        this.hjTableData1=this.hjTableData;
+                       this.hjall=0;
+                   }
+                }else if(t==2){//职务
+                      if(num==""){
+                       this.zwTableData1=this.zwTableData;
+                       this.zwall=2;
+                   }else if(parseInt(num)<this.zwTableData.length){
+                         var zwdata=[];
+                            for (let i = 0; i < parseInt(this.hyanum); i++) {
+                                zwdata.push(this.zwTableData[i]);
+                             }
+                          this.zwTableData1=zwdata;
+                        this.zwall=1;
+                   }else {
+                       this.zwTableData1=this.zwTableData;
+                       this.zwall=0;
+                   }
+                }
+            },
             changeFun(val) {
                 this.multipleSelection = val;
                 this.bnt=false;
@@ -2119,6 +2216,8 @@ export default {
                      this.zwTableData.push(this.zwform);
                      this.zwTableData=this.unique(this.zwTableData,2);
                      this.zwDialogVisible=false;
+                    
+                      this.getHDZW(this.hyanum,2); 
                      
                 }else if(t==1){
                      if(this.hjform.getTime==undefined || this.hjform.getTime==""){
@@ -2132,7 +2231,12 @@ export default {
                      }
                      this.hjTableData.push(this.hjform);
                      this.hjTableData=this.unique(this.hjTableData,1);
+                     this.getHDZW(this.hyanum,1); 
                      this.hjDialogVisible=false;
+  
+                     
+ 
+                     
                     
                 }
             },
@@ -2167,7 +2271,7 @@ export default {
                 //   {
                 //       this.$message.error("固定电话不能为空!");return;
                 //   }
-                   if((this.form.mobilePhone==undefined || this.form.mobilePhone=="") && this.ntype!='2')
+                   if((this.form.mobilePhone==undefined || this.form.mobilePhone=="") && (this.ntype=='1' || this.ntype=='3'))
                   {
                       this.$message.error("手机号码不能为空!");return;
                   }
@@ -2270,7 +2374,7 @@ export default {
                 var path='';
                 if(this.ntype=='1'){
                     url='/representative/create';
-                    path='BaseList';
+                    // path='BaseList';
                     //省部级以上领导
                     if(this.pd.is1){
                         this.form1.isProvincial="0181000001";
@@ -2309,7 +2413,7 @@ export default {
                         
                 }else if(this.ntype=='2'){
                      url='/cppcMember/create';
-                      path='zxBaseList';
+                    //   path='zxBaseList';
                    //省部级以上领导
                     if(this.pd.is1){
                         this.form1.isProvincial="0181000001";
@@ -2345,7 +2449,7 @@ export default {
                         };
                 }else if(this.ntype=='3'){
                     url='/specialPerson/create';
-                    path='tyBaseList';
+                    // path='tyBaseList';
                     //省部级以上领导
                      if(this.pd.is1){
                         this.form1.isProvincial="0181000001";
@@ -2382,7 +2486,7 @@ export default {
 
                 }else if(this.ntype=='4'){
                     url='/courtPerson/create';
-                    path='CourtPersonnelList';
+                    // path='CourtPersonnelList';
 
                       p={
                         'baseInfo':this.form,
@@ -2402,12 +2506,11 @@ export default {
                 this.$api.post(this.Global.aport1+url,p,
                 r =>{
                     if(r.code==1){
-                        this.$message({
-                            message: r.message,
-                            type: 'success'
-                            });
                         
-                        this.$router.push({name:path,query:{type:1}});
+                             this.$message.success(r.message);
+                        
+                            //  this.$router.push({name:path,query:{type:1}});
+                            this.goClose();
                     }else{
                         this.$message.error(r.message);
                     }
@@ -2597,10 +2700,15 @@ export default {
 
         },
          addlist(val){
+             
              this.listdata2.push(val);
+             this.listdatatemp.push(val);
              const res = new Map();
              var arr=this.listdata2;
              this.listdata2=arr.filter((arr) => !res.has(arr.pbId) && res.set(arr.pbId, 1));
+             const res1 = new Map();
+             var arr1=this.listdatatemp;
+             this.listdatatemp=arr1.filter((arr1) => !res1.has(arr1.pbId) && res1.set(arr1.pbId, 1));
 
         },
           //删除
@@ -2616,22 +2724,61 @@ export default {
             　　　　　　　　　　}
             　　　　　　　　})
             　　　　　 this.listdata2.splice(index,1)
+
+                       var index1 = this.listdatatemp.findIndex(item =>{
+    　　　　　　　　　  　 if(item.pbId==arr[i].pbId){
+            　　　　　　　　　　　　return true
+            　　　　　　　　　　}
+            　　　　　　　　})
+            　　　　　 this.listdatatemp.splice(index1,1)
                  }
             }
         },
         //保存结对信息
-         savelist(){
-             let  p={
+        
+        savelist(){
+         
+            
+            var array=this.listdatatemp;
+            var nname="";
+             for (let i = 0; i < array.length; i++) {
+                 if(array[i].personId!=this.form1.courtInsiderId && array[i].personId!=null && array[i].pairName!='无')
+                 {
+                   nname += array[i].personName+',';
+                 }
+             }
+            
+             
+            nname=nname.substr(0,nname.length-1);
+          
+            if(nname!='')
+            {
+              this.$confirm(nname+"代表的原结对人与目前结对人不一致，请确认是否提交！", '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                       this.getsaveinfo();
+                }).catch(() => {
+                      
+                    this.$message.info('已取消');
+
+                });
+            
+            }else{
+                this.getsaveinfo();
+            }
+        },
+        getsaveinfo(){
+              let  p={
              'courtPersonId':this.formjd.courtInsiderId,
              'courtOutsiderList':this.listdata2,
             };
              this.$api.post(this.Global.aport2+'/PairInfoController/savePairInfo',p,
               r =>{
                      if(r.code==1){
-                            this.$message({
-                                  "type":"success",
-                                  "message":r.message,
-                              });
+                            
+                              this.$message.success(r.message);
                               this.getJDHD(this.hyanum);
                               this.jdDialogVisible=false;
 
@@ -2640,6 +2787,9 @@ export default {
                       }
              });
         },
+
+
+
              //根据机构ID获取部门
              getBM(orgid,t){
               if(this.addtype==3){return;}
@@ -2708,7 +2858,8 @@ export default {
 
             },
             goClose(){
-                this.$router.go(-1);return;
+               
+                if(this.wtitle!=''  && this.wtitle!=null && this.wtitle!=undefined && this.wtitle!='11'){
                 switch (this.addtype) {
                     case '1':
                         this.$router.push({name:'BaseList'});
@@ -2726,6 +2877,15 @@ export default {
                           this.$router.push({name:'BaseList'});
                           break;
                 }
+              }else if(this.wtitle=='11'){
+                  
+                   this.$router.go(-3);
+              }else{
+                   this.$router.back(-1);
+              }
+
+
+
               
             },
         

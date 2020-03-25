@@ -176,14 +176,15 @@
               <div class="pborder mt-20">
                     <el-row>
                             <el-col :span="16">
-                              <el-button type="primary" size="small" @click="getCK('0')">录入</el-button>
-                              <el-button type="primary"  size="small"  :disabled="bnt" @click="getCK('9')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1')">修改</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="delinfo">删除</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(1)">公开</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(2)">审核</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(3)">发布</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(4)">回收</el-button>
+                              <el-button type="primary" size="small" @click="getCK('0')" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary"  size="small"  :disabled="bnt" @click="getCK('9')" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1')" v-if='allshow[2]'>修改</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="delinfo" v-if='allshow[3]'>删除</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(1)" v-if='allshow[4]'>公开</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(2)" v-if='allshow[5]'>审核</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(3)" v-if='allshow[6]'>发布</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(4)" v-if='allshow[7]'>回收</el-button>
+                            &nbsp;
                             </el-col>
                               <el-col :span="8" class="trt">
                                   总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
@@ -247,7 +248,7 @@
 
                 </div>
           </div>
-   <el-dialog :title="diatxt" :visible.sync="addDialogVisible"  width="800px"> 
+   <el-dialog :title="diatxt" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="800px"> 
  <el-form :model="form">
    <el-row class="ah-40">
        <el-col :span="12">
@@ -329,17 +330,17 @@
               <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
             </div>
    </el-dialog>
-   <el-dialog title="影像资料" :visible.sync="uploadDialogVisible"  width="640px">
+   <el-dialog title="影像资料" :visible.sync="uploadDialogVisible" :close-on-click-modal='false' width="640px">
         <VIDEONEW :url="vvurl" :type="2" :urlErr="urlErr" @DfatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEONEW>
   </el-dialog>
-   <el-dialog title="公开" :visible.sync="openDialogVisible"  width="660px">
+   <el-dialog title="公开" :visible.sync="openDialogVisible" :close-on-click-modal='false' width="660px">
    <OPEN :url="openurl" :type="0" :data="opendata" @GKfatherMethod="GKfatherMethod" :random="new Date().getTime()"></OPEN>
   </el-dialog>
-  <el-dialog  :title="txtname" :visible.sync="shDialogVisible"  width="660px">
+  <el-dialog  :title="txtname" :visible.sync="shDialogVisible" :close-on-click-modal='false'  width="660px">
    <EXAMINE :url="shurl" :type="sendtype" :data="opendata" @SHfatherMethod="SHfatherMethod" :random="new Date().getTime()"></EXAMINE>
   </el-dialog>
  
-  <el-dialog title="内容发布" :visible.sync="fbDialogVisible"  width="800px">
+  <el-dialog title="内容发布" :visible.sync="fbDialogVisible" :close-on-click-modal='false' width="800px">
      <RELEASE :url="fburl" :type="0"  :data="opendata" @FBfatherMethod="FBfatherMethod" :random="new Date().getTime()"></RELEASE>
   </el-dialog>
     </div>
@@ -375,10 +376,8 @@ export default {
             fbDialogVisible:false,
             uploadDialogVisible:false,
             addDialogVisible:false,
-            
             vvurl:'/courtNewsEntry/uploadCourtImageData',
             urlErr:'',
-
             diatxt:'法院要闻录入',
             tb:0,
             bd:true,
@@ -392,6 +391,10 @@ export default {
             txtname:'审核',
             sendtype:'0',//审核
             ckshow:false,
+            alldata:['27093813','27093814','27093815',
+            '27093816','27093817','27093818'
+            ,'27093819','27093820'],
+            allshow:[],
 
         }
     },
@@ -429,6 +432,20 @@ export default {
             
         },
         getinit(val){
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':'15102709'},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
                this.getCheckList();
                 this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
@@ -587,18 +604,15 @@ export default {
                         r =>{
                         
                                 if(r.code==1){
-                                    this.$message({
-                                            type: 'success',
-                                            message: '删除成功!'
-                                    });
+                                   
+                                this.$message.success("删除成功");   
+
                                     this.getList(this.CurrentPage, this.pageSize, this.pd);
                                 }
                             });
                        }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
+                    
+                    this.$message.info("已取消删除");   
                 });
             }
 
@@ -630,10 +644,8 @@ export default {
 
                       if(r.data.code==1){
                       
-                           this.$message({
-                            message: r.message,
-                            type: 'success'
-                            });
+                          
+                            this.$message.success(r.message);
                              this.addDialogVisible=false;
                            this.getList(this.CurrentPage, this.pageSize, this.pd);  
                       

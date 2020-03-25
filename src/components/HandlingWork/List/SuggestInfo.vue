@@ -93,7 +93,7 @@
                             </el-table-column> -->
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="80">
                             </el-table-column>
                              <el-table-column
                                 prop="affiliationUnitName"
@@ -239,7 +239,7 @@
 
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="80">
                             </el-table-column>
                             <el-table-column
                                 prop="personName"
@@ -324,7 +324,7 @@
                       </el-col>
                         <el-col :span="8">
                         <span class="yy-input-text">承办司局</span>
-                        <el-select v-model="pdnb.underTakeSubOrgId" @change="getName(pdnb.underTakeSubOrgId,4)"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pdnb.underTakeSubOrgId" @change="getCBR(pdnb.underTakeOrgId,pdnb.underTakeSubOrgId,1),getName(pdnb.underTakeSubOrgId,4)"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in cbsjdata"
                            :key="ind"
@@ -333,6 +333,26 @@
                            </el-option>
                         </el-select>
                       </el-col>
+                         <el-col :span="8">
+                         <span class="yy-input-text">承办人</span>
+                         <el-select v-model="pdnb.underTakeUserId" :disabled="yastate" @change="getName(pdnb.underTakeUserId,9)"   filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                v-for="(item,ind) in cbrdata1"
+                                :key="ind"
+                                :label="item.fullName"
+                                :value="item.pbId">
+                              </el-option>
+                        </el-select>
+
+                       </el-col>
+                         <el-col :span="8">
+                          <span class="yy-input-text">应办结时间</span>
+                                <el-date-picker
+                                    v-model="pdnb.assignFinishTime" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="选择时间" class="yy-input-input">
+                           </el-date-picker>
+                         </el-col>
                       <el-col :span="8">
                         <el-button type="success" plain size="small" @click="addList(2)">加入列表</el-button>
                       </el-col>
@@ -349,7 +369,7 @@
                             </el-table-column> -->
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="80">
                             </el-table-column>
                              <el-table-column
                                 prop="underTakeOrgIdName"
@@ -358,6 +378,14 @@
                             <el-table-column
                                 prop="underTakeSubOrgIdName"
                                 label="内部承办司局">
+                            </el-table-column>
+                            <el-table-column
+                                prop="underTakeUserName"
+                                label="承办人">
+                            </el-table-column>
+                            <el-table-column
+                                prop="assignFinishTime"
+                                label="应办结时间">
                             </el-table-column>
                              <el-table-column
                                 label="操作">
@@ -541,10 +569,9 @@
                             ref="multipleTable"
                             :data="jbtableData"
                             width="100%">
-
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="80">
                             </el-table-column>
                              <el-table-column
                                 prop="assignOrgIdName"
@@ -761,7 +788,7 @@
                             </el-table-column>
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="80">
                             </el-table-column>
                              <el-table-column
                                 prop="assignOrgIdName"
@@ -940,7 +967,7 @@
                             </el-table-column> -->
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="80">
                             </el-table-column>
                              <el-table-column
                                 prop="activityType"
@@ -988,10 +1015,10 @@
             </div>
             <br/>
          </div>
-    <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
+    <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  :close-on-click-modal='false' width="630px">
       <UPLOAD :url="uurl" :type="upt" :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
-   <el-dialog title="选择类型" :visible.sync="addDialogVisible">
+   <el-dialog title="选择类型" :visible.sync="addDialogVisible" :close-on-click-modal='false'>
              <div style="text-align:center;height:50px;">
                 <el-radio v-model="hdtype" label="1" border>结对活动录入</el-radio>
                 <el-radio v-model="hdtype" label="2" border>专项视察录入</el-radio>
@@ -1126,6 +1153,7 @@ export default {
     },
     methods:{
       getinit(val){
+       this.reset();
        this.type=val.query.type;
        this.baseid=val.query.baseid;
        this.ctitle=val.query.ctitle;
@@ -1133,7 +1161,34 @@ export default {
        this.year=val.query.year;
        this.proposalInfoId=val.query.proposalInfoId;
        this.lr=val.query.lr;
-       this.reset();
+      var mid='13162502';
+       switch (this.type) {
+         case '1':
+           mid='13272511';
+           break;
+         case '2':
+           mid='13382520';
+           break;
+          case '3':
+           mid='13492529';
+           break;
+          case '4':
+           mid='13602538';
+           break;
+         default:
+           break;
+       }
+       //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+          //权限end
+      
+
+
        this.getCBDW();
        this.getCBDW1();
        this.getLmName();
@@ -1695,7 +1750,6 @@ export default {
             this.cbrdata=[];
           }else if(t==1){
             this.cbrdata1=[];
-
           }else if(t==2){
             this.cbrdata2=[];
           }
@@ -1838,10 +1892,8 @@ export default {
                   this.tableData1.push(obj);
                   this.pd.jointNumber=this.tableData1.length;
                 }).catch(() => {
-                     this.$message({
-                         type: 'info',
-                         message: '已取消操作'
-                      });          
+                      
+                      this.$message.info('已取消操作');         
                  }); 
                }
              }
@@ -1857,6 +1909,12 @@ export default {
           }
           if(this.pdnb.underTakeSubOrgId=="" || this.pdnb.underTakeSubOrgId==undefined){
             this.$message.error("承办司局不能为空！");return;
+          }
+          if(this.pdnb.underTakeUserId=="" || this.pdnb.underTakeUserId==undefined){
+            this.$message.error("承办人不能为空！");return;
+          }
+          if(this.pdnb.assignFinishTime=="" || this.pdnb.assignFinishTime==undefined){
+            this.$message.error("应办结时间不能为空！");return;
           }
            this.tableData2.push(this.pdnb);
            const res = new Map();
@@ -2124,10 +2182,8 @@ export default {
           this.$api.post(this.Global.aport2+url,p,
                 r =>{
                      if(r.code==1){
-                            this.$message({
-                            message: r.message,
-                            type: 'success'
-                          });
+                        this.$message.success(r.message);
+                          
                           this.goto();
                      }else{
                        this.$message.error(r.message);
@@ -2236,6 +2292,14 @@ export default {
              });
 
             break;
+          case 9:
+              
+             obj = this.cbrdata1.find(item =>{
+                 return item.pbId === val
+                });
+
+              this.pdnb.underTakeUserName = obj.fullName
+            break;
           default:
             break;
         }
@@ -2287,7 +2351,7 @@ export default {
             if(this.baseid!=null){
                    var arr=this.baseid.split('|');
                    
-                     this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3]}});
+                     this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
                 }else{
                     this.$router.push({name:"SuggestList",query:{type:this.type,year:this.year}});
                 }

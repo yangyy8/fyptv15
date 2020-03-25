@@ -95,6 +95,8 @@ const sydw="/org/getAllOrg";//所有单位
 const fydw="/org/getCourtOrg";//法院单位
 const rddw="/org/getCourtOrg";//人大单位
 const zxdw="/org/getCourtOrg";//政协单位
+
+const menuurl="/menu/getButton"//画面和按钮权限
 /**
  * 人大代表
  */
@@ -128,6 +130,6 @@ export default
     mz,xl,zylb,zmwyh,bzdr,hdlx,hdfs,tylb,zzfl,dwlxr,jg,sfbm,taywzl,yalx,cblb,cbxz,taxs,
     dflx,zdywfl,tgxs,gkqf,zdqf,scfl,xwdwfl,xwdwjb,xw,sydw,fydw,rddw,zxdw,tazz,zdaj,imgformat,
     docformat,jgwyh,qtb,zddz,gkzt,zsqf,zszt,shqf,shzt,fbqf,fbzt,fyywlx,fyywly,qxnbj,tyzxytjdw,tyjdytjdw,
-    cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,
+    cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,menuurl,
     REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL
 }

@@ -34,7 +34,7 @@
              </el-col>
         </el-row>
         </div>
-         <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+         <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false' width="630px">
       <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
@@ -60,9 +60,9 @@ export default {
           lvl:'',
           orgmc:'',
           orgid:'',
-           drDialogVisible:false, 
-           vvurl:'/org/import',
-           vvurlErr:'',
+          drDialogVisible:false, 
+          vvurl:'/org/import',
+          vvurlErr:'',
 
         }
     },
@@ -97,7 +97,6 @@ export default {
                   case 'xq':
                        this.lvl="0150000004";
                       break;
-              
                   default:
                       break;
               }
@@ -325,10 +324,10 @@ export default {
         goseach(){
             this.$router.push({name:'InstitutionList',query:{type:this.addtype}})
         },
-         getDR(){
+        getDR(){
             this.drDialogVisible=true;
         },
-          drfatherMethod(data,t){
+        drfatherMethod(data,t){
             this.drDialogVisible=false;
           },
     },

@@ -115,12 +115,4 @@ export   function getServerDate(){
   return nowDate+'&nbsp;&nbsp;&nbsp;&nbsp;'+nowTime+'&nbsp;&nbsp;&nbsp;&nbsp;'+nowWeek;
 }
 
-export function getAuthInfo(all,sign){
-  if(all.indexOf(sign)!=-1){
-      return true;
-  }
-  else{
-      return false;
-  }
-}
-   
+

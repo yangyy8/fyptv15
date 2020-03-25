@@ -107,7 +107,7 @@
               <div style="font-size:23px;color:red;font-weight:bold;line-height:50px;">{{msg}}</div>
               </div>
           </div>
-          <el-dialog title="修改菜单名称" :visible.sync="addDialogVisible"  width="500px">
+          <el-dialog title="修改菜单名称" :visible.sync="addDialogVisible" :close-on-click-modal='false'  width="500px">
               <div>
                <el-row class="mb-20">
                    <el-col>
@@ -218,10 +218,8 @@ export default {
             this.$api.post(this.Global.aport1+'/menu/savePersonMenuList',p,
             r=>{
                       if(r.code==1){
-                           this.$message({
-                              "type":"success",
-                              "message":r.message
-                          });
+                          
+                         this.$message.success(r.message);
                 this.getList(this.CurrentPage,this.pageSize);
 
                       }else{
@@ -245,11 +243,8 @@ export default {
              this.$api.post(this.Global.aport1+'/menu/savePersonMenu',p,
             r=>{
                       if(r.code==1){
-                           this.$message({
-                              "type":"success",
-                              "message":r.message
-                          });
-                       
+                         
+                         this.$message.success(r.message);
                         this.addDialogVisible=false;
                         this.getList(this.CurrentPage,this.pageSize);
                       }else{
@@ -266,13 +261,11 @@ export default {
                         this.$api.post(this.Global.aport1+'/menu/changeOrder',p,
                         r =>{
                               if(r.code==1){
-                                      this.$message({
-                                            type: 'success',
-                                            message: r.message
-                                    }); 
+                                     
+                                this.$message.success(r.message);
                                 this.getList(this.CurrentPage,this.pageSize);
                               }else{
-                                  this.$message.error(r.message);
+                                this.$message.error(r.message);
                               }
                         });
         },
@@ -289,10 +282,8 @@ export default {
                         r =>{
                         
                                 if(r.code==1){
-                                    this.$message({
-                                            type: 'success',
-                                            message: '删除成功!'
-                                    });
+                                   
+                                    this.$message.success('删除成功');
                                     this.getList(this.CurrentPage, this.pageSize);
                                 }else{
                                     this.$message.error(r.message);
@@ -300,10 +291,8 @@ export default {
                                 }
                             });
                        }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
+                          
+                      this.$message.info('已取消删除');
                 });
         },
         reset(){

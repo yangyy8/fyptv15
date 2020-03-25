@@ -73,7 +73,7 @@
            <br/>  <br/>
         </div>
 
-         <el-dialog title="特约人员相关文件" :visible.sync="fileDialogVisible" width="700px">
+         <el-dialog title="特约人员相关文件" :visible.sync="fileDialogVisible" :close-on-click-modal='false' width="700px">
              <el-row class="ah-50">
                <el-col :span="24">
                   <span class="yy-input-text trt" style="width:200px;">届别：</span>
@@ -181,7 +181,7 @@
                         </el-col>
                 </el-row>
         </el-dialog>
-<el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
+<el-dialog title="上传文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false' width="630px">
       <UPLOAD :url="uurl" :type="ptype" :periodType='periodType' :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
 
@@ -358,20 +358,16 @@ export default {
                         this.$api.post(this.Global.aport1+'/specialPerson/delpersonfile',p,
                         r =>{
                                 if(r.code==1){
-                                     this.$message({
-                                      message: r.message,
-                                      type: 'success'
-                                     });
+                                       this.$message.success(r.message);
+                                     
                                      this.getFile(this.periodType);
                                 }else{
                                   this.$message.error(r.message);
                                 }
                         });
                      }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
+                    
+                      this.$message.info('已取消删除');          
                 });
         },
             fatherMethod(data,t){

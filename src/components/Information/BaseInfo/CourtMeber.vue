@@ -16,9 +16,10 @@
                     <div style="margin:20px 20px 0 20px;">共<span style="color:red"> {{count}} </span>名法院人员</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
-                          <el-button type="primary" style="width:80px" @click="goto(0)">录入</el-button>
-                          <el-button style="width:80px" @click="getDR">导入</el-button>
-                          <el-button style="width:80px" @click="$router.push({name:'CourtPersonnelList'})">查询</el-button>
+                          <el-button type="primary" style="width:80px" @click="goto(0)" v-if='allshow[0]'>录入</el-button>
+                          <el-button style="width:80px" @click="getDR" v-if='allshow[1]'>导入</el-button>
+                          <el-button style="width:80px" @click="$router.push({name:'CourtPersonnelList'})" v-if='allshow[2]'>查询</el-button>
+                          <el-button style="width:80px"  @click="$router.go(-1)">返回</el-button>
                     </el-col>
                </el-row>
              <el-row :gutter="2" class="ah-50 pdz">
@@ -44,13 +45,14 @@
         </el-row>
 
         </div>
-      <el-dialog title="导入文件" :visible.sync="drDialogVisible"  width="630px">
+   <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false'  width="630px">
       <UPLOAD :url="vvurl" :type="1000"  :urlErr="vvurlErr"  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
 </template>
 <script>
 import UPLOAD from "../../Common/upload"
+import {getlljgdbtmenu,getlljgdbtdata} from '@/assets/js/aleainfo.js'
 export default {
   components:{UPLOAD},
     data(){
@@ -73,6 +75,8 @@ export default {
           drDialogVisible:false,
           vvurl:'/courtPerson/import',
           vvurlErr:'',
+           alldata:[],
+          allshow:[],
           
         }
     },
@@ -94,6 +98,23 @@ export default {
             this.fname=val.query.fname;
             this.cname=val.query.cname;
             this.getUser(this.orgid);
+            var mid=getlljgdbtmenu('4',this.jb);
+            this.alldata=getlljgdbtdata('4',this.jb);
+            
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                               this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                               console.log(this.alldata,'--',this.alldata[i],'===',r.data);
+                               
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
         },
          
       getSN(s,n){
@@ -150,10 +171,12 @@ export default {
           
            if(t==0){
                 this.$router.push({name:'BaseAdd',query:{type:'4',status:'0',jb:this.jb,xzqh:this.xzqh,xzqhmc:this.xzqhmc}});
-            
             }else if(t==2){
-                
-            this.$router.push({name:'BaseAdd',query:{type:'4',status:'1',pbid:id,reid:dm,orgdm:orgid}});
+                var state='9';
+                if(this.allshow[0]==true){
+                  state="1";
+                }
+            this.$router.push({name:'BaseAdd',query:{type:'4',status:state,pbid:id,reid:dm,orgdm:orgid}});
             }
         },
         getDR(){

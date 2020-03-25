@@ -236,10 +236,8 @@ export default {
            this.$api.post(this.Global.aport1+"/baseinfo/delPhoto",p,
                   r => {
                     if(r.code==1){
-                        this.$message({
-                            message: r.message,
-                            type: 'success'
-                        });
+                        
+                        this.$message.success(r.message);
                         this.del(val);
                       }else{
                         this.$message.error(r.message);
@@ -295,11 +293,8 @@ export default {
                   r => {
                    
                          if(r.code==1){
-                          this.$message({
-                            message: r.message,
-                            type: 'success'
-                          });
-                        
+                         
+                        this.$message.success(r.message);
                           this.$emit('fatherMethod',r.data==null?'99':r.data,this.type); 
                         }else{
                           this.$message.error(r.message);

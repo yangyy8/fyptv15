@@ -8,7 +8,7 @@
                     <el-row class="lh" :gutter="2">
                        <el-col :sm="24" :md="12" :lg="8">
                         <span class="yy-input-text">议案类型</span>
-                        <el-select v-model="pd.proposalType" @change="getYAName(pd.proposalType)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd.proposalType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in $store.state.yalx"
                            :key="ind"
@@ -388,27 +388,11 @@
                 <div class="pborder mt-20">
                     
                             <el-row >
-                            <el-col :span="20" class="ah-40">
-                              <el-button type="primary" size="small" :disabled="pdbnt.bnt1"  @click="gotoinfo('0','录入')">登记</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt2" @click="gotoinfo('9','查看')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt1" @click="gotoinfo('0','补充厅室信息')">补充厅室信息</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt3" @click="gotoinfo('jb','交办')">交办</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt4" @click="gotoinfo('bl','办理')">办理</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt5" @click="gotoinfo('tg','统稿')">统稿</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt6" @click="gotoinfo('fw','复文')">复文</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt7" @click="gotoinfo('cb','催办')">催办</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt8" @click="deltable">删除</el-button>
-                              <el-button type="primary"  size="small"  @click="download(0)">下载全部</el-button>
-                              <el-button type="primary"  size="small"  @click="download(1)">下载当页</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(1)">公开</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(2)">审核</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(3)">发布</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(4)">回收</el-button>
+                             <el-col :span="24" class="ah-40">
+                              <el-button type="primary" size="small" :disabled="bnt"  @click="getLC(0)" v-if='allshow[0]'>办公流程</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getLC(1)" v-if='allshow[1]'>催办</el-button>
                               </el-col>
-                              <el-col :span="4" class="trt">
-                                  <!-- {{title}} -->
-                                  总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
-                              </el-col>
+                            
                             </el-row>
                           <el-table
                             ref="multipleTable"
@@ -470,131 +454,112 @@
                 </div>
 <br/>
          </div>
-    <el-dialog title="批量交办" :visible.sync="jbDialogVisible">
-                <el-row class="ah-40">
-                          <el-col :span="8">
-                         <span class="yy-input-text">承办单位</span>
-                         <el-select v-model="pdjb.assignOrgId" @change="getCBBM(pdjb.assignOrgId);getName(pdjb.assignOrgId,5)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                               <el-option
-                                v-for="(item,ind) in cbdwdata1"
-                                :key="ind"
-                                :label="item.mc"
-                                :value="item.orgid">
-                              </el-option>
-                        </el-select>
-
-                       </el-col>
-                         <el-col :span="8">
-                         <span class="yy-input-text">承办部门</span>
-                         <el-select v-model="pdjb.assignSubOrgId"  @change="getCBR(pdjb.assignOrgId,pdjb.assignSubOrgId),getName(pdjb.assignSubOrgId,6)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                               <el-option
-                                v-for="(item,ind) in cbbmdata"
-                                :key="ind"
-                                :label="item.mc"
-                                :value="item.orgid">
-                              </el-option>
-                        </el-select>
-
-                       </el-col>
-                        <el-col :span="8">
-                         <span class="yy-input-text">承办人</span>
-                         <el-select v-model="pdjb.assignUserId" @change="getName(pdjb.assignUserId,7)"   filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                               <el-option
-                                v-for="(item,ind) in cbrdata"
-                                :key="ind"
-                                :label="item.personName"
-                                :value="item.pbId">
-                              </el-option>
-                        </el-select>
-
-                       </el-col>
-                         <el-col :span="8">
-                          <span class="yy-input-text">应办结时间</span>
-                                <el-date-picker
-                                    v-model="pdjb.assignTime" format="yyyy-MM-dd"
-                                    type="date" size="small" value-format="yyyy-MM-dd"
-                                    placeholder="选择时间" class="yy-input-input">
-                           </el-date-picker>
-                         </el-col>
-                          <el-col :span="8">
-                            <el-button type="success" plain size="small" @click="addList()">加入列表</el-button>
-                          
-                         </el-col>
-                        
-                    </el-row>
-                    <el-row class="ah-50">
-                       
-                        <el-col :span="24">
-                           
-                             <el-table
-                            ref="jbmultipleTable"
-                            :data="jbtableData"
-                            width="100%">
-                            <!-- <el-table-column
-                                type="selection"
-                                width="50">
-                            </el-table-column> -->
-                            <el-table-column
-                                type="index"
-                                label="序号">
-                            </el-table-column>
-                             <el-table-column
-                                prop="assignOrgIdName"
-                                label="承办单位">
-                            </el-table-column>
-                            <el-table-column
-                                prop="assignSubOrgIdName"
-                                label="承办部门">
-                            </el-table-column>
-                            <el-table-column
-                                prop="assignUserIdName"
-                                label="承办人">
-                            </el-table-column>
-                              <el-table-column
-                                prop="assignTime"
-                                label="应办结时间">
-                            </el-table-column>
-                              <el-table-column
-                                label="操作">
-                                 <template slot-scope="scope">
-                                   <div>
-                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="adddel(scope.row)"></el-button>
-                                  </div>
-                                </template>
-                            </el-table-column>
-                           </el-table>
-                          
-                            </el-col>
-                            
-                    </el-row>
-
-            <div slot="footer" class="dialog-footer">
-              <el-button type="primary"  size="small" @click="jbsubmit">提 交</el-button>
-              <el-button @click="jbDialogVisible = false" size="small">取 消</el-button>
+<el-dialog title="催办" :visible.sync="cbDialogVisible" :close-on-click-modal='false' width="600px"> 
+     <el-form :model="cbform">
+         <el-row class="ah-40">
+        <el-col :span="24">
+               <span class="yy-input-text trt">催办时间：</span>
+                <el-date-picker
+                  v-model="cbform.urgenttime" format="yyyy-MM-dd"
+                   type="date" size="small" value-format="yyyy-MM-dd"
+                    placeholder="选择时间" class="yy-input-input" >
+                  </el-date-picker>
+        </el-col>
+          <el-col :span="24">
+             <span class="yy-input-text trt">催办形式：</span>
+                    <el-select v-model="cbform.urgenttype"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                     <el-option
+                       v-for="(item,ind) in $store.state.cbxs"
+                       :key="ind"
+                        :label="item.mc"
+                         :value="item.dm">
+                         </el-option>
+                   </el-select>
+          </el-col>
+         <el-col :span="24">
+                <span class="yy-input-text trt" style="vertical-align: top;" >催办信息：</span>
+                <el-input placeholder="请输入内容" type="textarea" :autosize="{ minRows: 3, maxRows: 4}" size="small" clearable v-model="cbform.urgentcontents"  class="yy-input-input"></el-input>     
+           </el-col>
+         </el-row>
+     </el-form>
+         <div slot="footer" class="dialog-footer">
+              <el-button type="primary"  size="small" @click="addsave()">保 存</el-button>
+              <el-button @click="cbDialogVisible = false" size="small">取 消</el-button>
             </div>
-    </el-dialog>
-      <el-dialog title="公开" :visible.sync="openDialogVisible"  width="660px">
-   <OPEN :url="openurl" :type="0" :data="opendata" @GKfatherMethod="GKfatherMethod" :random="new Date().getTime()"></OPEN>
-  </el-dialog>
-  <el-dialog  :title="txtname" :visible.sync="shDialogVisible"  width="660px">
-   <EXAMINE :url="shurl" :type="sendtype" :data="opendata" @SHfatherMethod="SHfatherMethod" :random="new Date().getTime()"></EXAMINE>
-  </el-dialog>
- 
-  <el-dialog title="内容发布" :visible.sync="fbDialogVisible"  width="800px">
-     <RELEASE :url="fburl" :type="0"  :data="opendata" @FBfatherMethod="FBfatherMethod" :random="new Date().getTime()"></RELEASE>
-  </el-dialog>
+</el-dialog>
+<el-dialog title="办公流程" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="850px"> 
+  <el-form :model="form">
+        <div v-if='cklc' style="line-height:40px; text-align:center">暂无办公流程</div>
+        <el-collapse v-model="activeNames" @change="handleChange" style="height:600px;overflow-y:auto;" accordion v-else>
+         <div v-for="(item,ind) in bldata" :key="ind">
+           <el-collapse-item :title="item.title" :name="item.serialNum">
+              <el-row class="ah-40 border" >
+                   <el-col :span="24" class="borderb">
+                         <span class="yy-input-text borderr" style="width:13%;">标题</span>
+                         <span class="yy-input-input">{{item.title}}</span>
+                   </el-col>
+                      <el-col :span="24" class="borderb">
+                         <span class="yy-input-text">交办意见</span><br>
+                         <span class="padingl"></span>
+                   </el-col>
+                    <el-col :span="12" class="borderb">
+                         <span class="yy-input-text borderr">交办部门</span>
+                         <span class="yy-input-input">{{item.assignedDepartment}}</span>
+                   </el-col>
+                    <el-col :span="12" class="borderb">
+                         <span class="yy-input-text borderr borderl">交办时间</span>
+                         <span class="yy-input-input">{{item.assignedTime}}</span>
+                   </el-col>
+                   <el-col :span="24" class="borderb"  v-for="(t,i) in item.subdata" :key='i'>
+                       <el-row class="borderb backcolor">
+                            <el-col :span="24" class="borderb">
+                         <span class="yy-input-text">领导意见{{i+1}}</span><br>
+                           <span class="padingl">{{t.checkContents}}</span>
+                    </el-col>
+                    <el-col :span="6">
+                         <span class="yy-input-text borderr" style='width:40%'>审批结果</span>
+                         <span class="yy-input-text" style='width:33%!important'>{{t.checkResult}}</span>
+                   </el-col>
+                    <el-col :span="10">
+                         <span class="yy-input-text borderr borderl">审批领导</span>
+                         <span class="yy-input-input">{{t.nodePerson}}</span>
+                   </el-col>
+                    <el-col :span="8">
+                         <span class="yy-input-text borderr borderl">审批时间</span>
+                         <span class="yy-input-input">{{t.nodeTime}}</span>
+                   </el-col>
+                       </el-row>
+                       
 
+                   </el-col>
+                   <el-col :span="8">
+                         <span class="yy-input-text borderr">流程</span>
+                         <span class="yy-input-input">{{item.processType}}</span>
+                   </el-col>
+                    <el-col :span="8">
+                         <span class="yy-input-text borderr borderl">公示</span>
+                         <span class="yy-input-input">{{item.isPublic}}</span>
+                   </el-col>
+                    <el-col :span="8">
+                         <span class="yy-input-text borderr borderl">沟通</span>
+                         <span class="yy-input-input">{{item.isCommunicate}}</span>
+                   </el-col>
+
+              </el-row>
+          </el-collapse-item>
+          </div>
+            
+        </el-collapse>
+
+  </el-form>
+</el-dialog>
     </div>
 </template>
 <script>
 import {format} from '@/assets/js/date.js'
 import {sortByKey} from '@/assets/js/ToArray.js'
 import {ToArray} from '@/assets/js/ToArray.js'
-import OPEN from "../../Common/opencontent"
-import EXAMINE from "../../Common/examinecontent"
-import RELEASE from "../../Common/releasecontent"
 export default {
-    components:{OPEN,EXAMINE,RELEASE},
     data(){
         return{
             CurrentPage: 1,
@@ -602,13 +567,8 @@ export default {
             TotalResult: 0,
             pd:{year:'',assignStatus:'',transactStatus:'',
             completeStatus:'',replyStatus:'',urgentStatus:'',proposalType:''},
-            pdbnt:{bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true},
-            pdjb:{},
-            options:this.pl.ps,
-            open:false,
-            all:true,
             bnt:true,
-            cname:'建议、批评和意见管理',
+            options:this.pl.ps,
             title:'议案建议',
             checkedList:[],
             tableData:[],
@@ -617,7 +577,6 @@ export default {
             checkItemReal:[],
             cc:true,
             multipleSelection:[],
-            jbDialogVisible:false,
             checkItem:[],
             addtype:'1',
             cbdwdata:[],
@@ -626,22 +585,18 @@ export default {
             cbbmdata:[],
             cbrdata:[],
             lxdbdata:[],
-            zt:'',
-            sname:'',
-            snames:'',
             ywzllist:[],//业务种类
-            bnt:true,
-            uurl:'/ActivityInfoController/importActivityInfo',
-            urlErr:'',
-            openurl:'/contentPublic/openContent',
-            shurl:'/contentPublic/auditContent',
-            fburl:'/contentPublic/releaseContent',
-            openDialogVisible:false,
-            shDialogVisible:false,
-            fbDialogVisible:false,
-            opendata:[],//需要传的对象
-            txtname:'审核',
-            sendtype:'0',//审核
+            open:false,
+            all:true,
+            form:{},
+            cbform:{},
+            alldata:[],
+            allshow:[],
+            bldata:[],
+            activeNames:['2'],
+            addDialogVisible:false,
+            cbDialogVisible:false,
+            cklc:true,
 
         }
     },
@@ -664,48 +619,28 @@ export default {
     watch:{
         $route:function(val){
               this.getinit(val);
-        }
+        },
+         bldata:function(newVal,oldVal){
+            
+              for(let i = 0; i < newVal.length; i++) {
+                  var obj=newVal[i];
+                  this.$set(obj,'subdata',[]);
+                  this.getSubInfo(newVal[i].id,obj);
+              }
+          },
     },
     methods:{
        
        clickRow(row){
-
            this.$refs.multipleTable.toggleRowSelection(row);
-             
         },
         handleSelectionChange(val) {
-          this.multipleSelection = val;
-           this.bnt=true;
-           this.pdbnt={bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true};
-           console.log(this.multipleSelection.length,'this.multipleSelection.length');
-           
-           if(this.multipleSelection.length==1){
-              var state=this.multipleSelection[0].handStatusCode;
-              this.pdbnt.bnt1=true;
+           this.multipleSelection = val;
+          if(this.multipleSelection.length>0){
               this.bnt=false;
-              if(state=="0205000001"){//登记
-                  this.pdbnt.bnt1=false;
-                  this.pdbnt.bnt3=false;
-                  this.pdbnt.bnt8=false;
-              }else if(state=="0205000002"){//补充厅室信息
-                    this.pdbnt.bnt1=false;
-              }else if(state=="0205000003"){//交办
-                this.pdbnt.bnt4=false;
-                this.pdbnt.bnt7=false;
-              }else if(state=="0205000004"){//办理
-                this.pdbnt.bnt5=false;
-                this.pdbnt.bnt7=false;
-              }else if(state=="0205000005"){//统稿
-                this.pdbnt.bnt6=false;
-                this.pdbnt.bnt7=false;
-              }
-
-           }else if(this.multipleSelection.length>1){
-             this.pdbnt.bnt3=false;
-             this.pdbnt.bnt8=false;
-             this.pdbnt.bnt1=true;
-             this.bnt=false;
-           }
+          }else{
+             this.bnt=true; 
+          }
         },
           getinit(val){
               this.getyear();
@@ -716,37 +651,48 @@ export default {
               this.zt=val.query.zt;
               this.getCBDW();
               this.getLmName();
-              this.sname=this.cname;
+
+           var mid='';
              switch (this.addtype) {
-                  case '0':
-                        this.cname='建议、批评和意见管理';
-                        this.title='建议、批评和意见';
+                  case '1':
+                         this.cname='建议、批评和意见管理';
+                         this.title='建议、批评和意见';
                          this.pd.proposalType="0204000003";
                          this.getYWZL(this.Global.yajyfl);
+                         mid='15032702';
+                         this.alldata=['27023803','27023804'];
                       break;
-                   case '1':
+                   case '2':
                         this.cname='代表议案管理';
                         this.title='代表议案';
                         this.pd.proposalType="0204000001";
                         this.getYWZL(this.Global.yaywzl);
+                        mid='15042703';
+                         this.alldata=['27033805','27033806'];
                       break;
-                   case '2':
+                   case '3':
                         this.cname='政协提案管理';
                         this.title='政协提案'; 
                         this.pd.proposalType="0204000002";
-                        this.getYWZL(this.Global.taywzl);                       
+                        this.getYWZL(this.Global.taywzl);  
+                         mid='15052704';  
+                         this.alldata=['27043807','27043808'];                   
                       break;
-                   case '3':
+                   case '4':
                         this.cname='审议意见管理';
                         this.title='审议意见';
                         this.pd.proposalType="0204000004";  
-                          this.getYWZL(this.Global.syyjfl);                 
+                        this.getYWZL(this.Global.syyjfl);  
+                        mid='15062705';   
+                         this.alldata=['27053809','27053810'];                   
                       break;
-                   case '4':
+                   case '5':
                         this.cname='日常意见建议管理';
                         this.title='日常意见建议'; 
                         this.pd.proposalType="0204000005"; 
-                        this.getYWZL(this.Global.scjyfl);                      
+                        this.getYWZL(this.Global.scjyfl);  
+                        mid='15072706';
+                        this.alldata=['27063811','27063812'];                       
                       break;
               
                   default:
@@ -772,6 +718,20 @@ export default {
                 default:
                   break;
               }
+          //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+              
 
          //this.changeList();
         this.getCheckList();
@@ -822,18 +782,7 @@ export default {
                       
                 });
         },
-        adddel(n){
-              var arr=[];
-                 arr.push(n);
-                for (let i = 0; i < arr.length; i++) {
-                     var index = this.jbtableData.findIndex(item =>{
-　　　　　　　　　  　 if(item.assignUserId==arr[i].assignUserId && item.assignSubOrgId==arr[i].assignSubOrgId){
-        　　　　　　　　　　　　return true
-        　　　　　　　　　　}
-        　　　　　　　　})
-                   this.jbtableData.splice(index,1)
-                  }
-        },
+       
         changeList(){
           this.configHeader=[];
         
@@ -876,172 +825,8 @@ export default {
                 });
         
         },
-        jbsubmit(){
-          var pinfoid=[];
-          var array=this.multipleSelection;
-          for (let i = 0; i < array.length; i++) {
-            pinfoid.push(array[i].proposalInfoId);
-          }
-           let p={
-             "proposalInfoIds":pinfoid,
-             "assignInfo":this.jbtableData,
-          };
-          this.$api.post(this.Global.aport2+'/proposalAssign/batchAssign',p,
-                r =>{
-                   if(r.code==1){
-                           this.$message({
-                            message: r.message,
-                            type: 'success'
-                          });
-                        this.jbDialogVisible=false;
-                        this.jbtableData=[];
-                        this.getList(this.CurrentPage, this.pageSize, this.pd);
-                      }else{
-                        this.$message.error(r.message);
-                      }
-                });
-        },
-    gotoinfo(t,title){
-        var proposalInfoId="";
-        if(t=='0'){
-          if(this.multipleSelection.length==1){
-             proposalInfoId=this.multipleSelection[0].proposalInfoId;
-          }else if(this.multipleSelection.length>1){
-              this.$message.error("只能选择一条数据！");return;
-          }
-           this.$router.push({name:'SuggestInfo',query:{type:this.addtype,zt:'0',ctitle:title, proposalInfoId:proposalInfoId,year:this.pd.year}});
-        }else{
-            if(this.multipleSelection.length==1){
-              proposalInfoId=this.multipleSelection[0].proposalInfoId;
-              this.$router.push({name:'SuggestInfo',query:{type:this.addtype,zt:t,ctitle:title,proposalInfoId:proposalInfoId,year:this.pd.year}});
-              }else if(this.multipleSelection.length==0){
-                this.$message.error("请选择一条数据！");return;
-              }else{
-              if(t=='jb'){
-                  var array=this.multipleSelection;
-                  for (let ii = 0; ii < array.length; ii++) {
-                    if(array[ii].handStatusCode!="0205000001"){
-                      this.$message.error("除了登记状态的其他数据不能再次交办，请重新选择！");return;
-                    }
-                    
-                  }
-                  this.jbDialogVisible=true;
-              }else{
-                this.$message.error("只能选择一条数据！");return;
-              }
-            }  
-          }
-        },
-        addList(){
-          if(this.pdjb.assignOrgId==undefined || this.pdjb.assignOrgId=="")
-          {
-            this.$message.error("承办单位不能为空!");return;
-          }
-         if(this.pdjb.assignSubOrgId==undefined || this.pdjb.assignSubOrgId=="")
-          {
-            this.$message.error("承办部门不能为空!");return;
-          }
-          if(this.pdjb.assignUserId==undefined || this.pdjb.assignUserId=="")
-          {
-            this.$message.error("承办人不能为空!");return;
-          }
-          if(this.pdjb.assignTime==undefined || this.pdjb.assignTime=="")
-          {
-            this.$message.error("应办结时间不能为空!");return;
-          }
-           this.jbtableData.push(this.pdjb);
-          this.pdjb={};
-        },
-        deltable(){
-          if(this.multipleSelection.length==0){
-                  this.$message.error("请选择一条数据！");return;
-          }
-          var mselect=[];
-          var array=this.multipleSelection;
-          for (let i = 0; i < array.length; i++) {
-           mselect.push(array[i].proposalInfoId);
-          }
-                 this.$confirm('此操作将删除该信息, 是否继续?', '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-                }).then(() => {
-                    let p={
-                          'token':this.$store.state.token,
-                           'deleteInfo':mselect,
-                    };
-                this.$api.post(this.Global.aport2+'/proposalHome/batchDelete',p,
-                 r =>{
-                  
-                      if(r.code==1){
-                         this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                        });
-                        this.getList(this.CurrentPage, this.pageSize, this.pd);
-                      }
-                });
-
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
-                });
-
-        },
-          download(t){
-              let p={};
-             if(t==0){
-              if(this.multipleSelection.length==0){//全部导出
-                    p={
-                        "pd":this.pd,
-                        "showColumns":this.configHeader,
-                    }
-              }
-            }else if(t==1){
-                p={
-                  "pageInfo": {
-                  "pageNumber": this.CurrentPage,
-                  "pageSize": this.pageSize
-                  },
-                "pd":this.pd,
-                "showColumns":this.configHeader,
-               }
-             }
-            this.$api.post(this.Global.aport2+'/proposalHome/exportProposal',p,
-                r =>{
-                      this.downloadM(r);
-                },e=>{},{},'blob')
-          },
-            downloadM (data) {
-            if (!data) {
-                return
-            }       
-            var name=this.title+format(new Date(),'yyyyMMddhhmmss')+'.xls';
-            let url = window.URL.createObjectURL(new Blob([data],{type:"application/xls"}))
-            let link = document.createElement('a')
-            link.style.display = 'none'
-            link.href = url
-            link.setAttribute('download',name)
-            document.body.appendChild(link)
-            link.click()
-        },
-      //     //承办单位  如果没有下级部门，那么该处就是承办部门
-      // getCBDW(){
-      //   let p={
-      //             'orgId':this.$store.state.orgid,
-
-      //           };
-      //             this.$api.get(this.Global.aport1+'/org/getUndertakeOrg',p,
-      //             r =>{
-                  
-      //                if(r.code==1){
-      //                      this.cbdwdata=r.data;
-      //                }
-      //     });
-
-      // },
+      
+   
       //承办部门
       getCBBM(orgid,t){
         if(t==0){
@@ -1121,46 +906,8 @@ export default {
                 }
             this.yeardata=arr;
         },
-      getName(val,t){
-        var obj = {};
-        switch (t) {
-          
-            case 5:
-             obj = this.cbdwdata.find(item =>{
-                 return item.orgid === val 
-                });
-              this.pdjb.assignOrgIdName = obj.mc
-            break;
-             case 6:
-             obj = this.cbbmdata.find(item =>{
-                 return item.orgid === val 
-                });
-              this.pdjb.assignSubOrgIdName = obj.mc
-            break;
-            case 7:
-             obj = this.cbrdata.find(item =>{
-                 return item.pbId === val 
-                });
-              this.pdjb.assignUserIdName = obj.personName
-            break;
-          default:
-            break;
-        }
-      },
-      getYAName(val)
-      {
-       
-        this.$forceUpdate();
-        var obj={};
-        if(val!=null && val!=''){
-         obj = this.$store.state.yalx.find(item =>{
-                 return item.dm === val 
-                });
-          this.snames = obj.mc
-          this.title=obj.mc;
-        }
-      
-       },
+     
+
        //业务种类
         getYWZL(url){
             this.$api.get(this.Global.aport4 + url, null,
@@ -1182,69 +929,90 @@ export default {
            });
 
       },
-      getopen(t){
-            if(this.multipleSelection.length==0){
-                this.$message.error("请选择至少一条数据!");return;
-            }
-            if(this.multipleSelection.length>1 && t==3){
-                this.$message.error("只能选择一条数据!");return;
-            }
-            var contentPublicList=[];
-            var array=this.multipleSelection;
-       
-            
-            for (let i = 0; i < array.length; i++) {
-            
-                var obj={};
-                obj.contentPublicId=array[i].proposalInfoId;
-                obj.contentPublicType="0134000002";
-                switch (t) {
-                    case 1://公开
-                         obj.publicProcessType="0133000001";
-                        break;
-                    case 2://审核
-                         obj.publicProcessType="0133000002";
-                        break;
-                    case 3://发布
-                         obj.publicProcessType="0133000003";
-                        break;
-                    case 4://回收
-                         obj.publicProcessType="0133000004";
-                        break;
-                    default:
-                        break;
-                }
-             
-                contentPublicList.push(obj);
-            }
-            this.opendata=contentPublicList;
+       getLC(t){
+             if(this.multipleSelection.length==0){
+                    this.$message.error("请选择一条数据！");return;
+                 }
+            if(t==0){
+                this.form={};
+                 if(this.multipleSelection.length>1){
+                    this.$message.error("只能选择一条数据！");return;
+                 }
+                 
+             let p={
+                 'type':'1',
+                 'billId':this.multipleSelection[0].focuscaseid
+             };
+              this.$api.post(this.Global.aport1+'/oAProcessOffice/getOAProcessList',p,
+                r =>{
+         
+                       if(r.code==1){
+                        this.bldata=r.data;
+                        if(this.bldata.length>0){this.cklc=false}else{this.cklc=true}
+                        }
+                });
 
-             if(t==1){
-                 this.openDialogVisible=true;
-             }else if(t==2){
-                   this.txtname="审核";
-                   this.shurl="/contentPublic/auditContent";
-                   this.sendtype='0'
-                   this.shDialogVisible=true;
-             }else if(t==3){
-                 this.fbDialogVisible=true;
+
+                this.addDialogVisible=true;
+            }else if(t==1){
+                this.cbform={};
+                this.cbDialogVisible=true;
+            }
+        },
+         getSubInfo(id,obj){
+              let p={
+              
+                 'id':id
+             };
+          this.$api.post(this.Global.aport1+'/oAProcessOffice/getOAProcessNodeById',p,
+                r =>{
+                       if(r.code==1){
+                           
+                           this.$set(obj,'subdata',r.data);
+                       }
+                });
+              
+        },
+          addsave(){
+             if(this.multipleSelection.length==0){
+                 this.$message.error("至少选择一条数据！");return;
              }
-             else if(t==4){
-                 this.txtname="回收";
-                 this.shurl="/contentPublic/recycleContent";
-                 this.sendtype='1'
-                 this.shDialogVisible=true;
-             }
+             //console.log(this.multipleSelection);
+             
+             var array=this.multipleSelection;
+             var frr=[];
+            for (let i = 0; i < array.length; i++) {
+                var obj={};
+                obj.proposalInfoId=array[i].proposalInfoId;
+                frr.push(obj);
+            }
+
+            let p={
+                'focuscaseList':frr,
+                'caseurgent':this.cbform,
+                'token':this.$store.state.token
+            }
+              
+              this.$api.post(this.Global.aport1+'/CaseUrgentController/bathSaveCaseUrgent',p,
+                r =>{
+                     
+                     if(r.code==1){
+                         
+                           
+                          this.$message.success(r.message);
+                          this.cbDialogVisible=false;
+                          this.getList(this.CurrentPage, this.pageSize, this.pd);
+                     }else{
+                       this.$message.error(r.message);
+                     }
+                       
+                });
+
         },
-        GKfatherMethod(data,t){
-                 this.openDialogVisible=false;
+         handleChange(val) {
+           // console.log(val);
         },
-        SHfatherMethod(data,t){
-                 this.shDialogVisible=false;
-        },
-        FBfatherMethod(data,t){
-                 this.fbDialogVisible=false;
-        },
+     
     },
 }
 </script>

@@ -182,6 +182,14 @@ export default {
         this.getyear();
         this.getmonth();
         this.getFY();
+         //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'14122610'},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+        //权限end
         // this.getSpanArr(this.tableData);
     },
     methods:{

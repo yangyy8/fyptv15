@@ -127,11 +127,13 @@
                 <div class="pborder mt-20">
                          <el-row>
                             <el-col :span="16">
-                              <el-button type="primary" size="small" @click="add(0)">录入</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="add(2)">查看</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt" @click="add(1)">修改</el-button>
-                              <el-button type="primary" size="small" :disabled="bnt"  @click="delUser">删除</el-button>
-                                </el-col>
+                              <el-button type="primary" size="small" @click="add(0)" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="add(2)" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt" @click="add(1)" v-if='allshow[2]'>修改</el-button>
+                              <el-button type="primary" size="small" :disabled="bnt"  @click="delUser" v-if='allshow[3]'>删除</el-button>
+                              <!-- <el-button type="primary" size="small"  @click="getDR" v-if='allshow[4]'>导入</el-button> -->
+                               &nbsp;
+                              </el-col>
                               <el-col :span="8" class="trt">
                                {{cname}}总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
                               </el-col>
@@ -221,12 +223,16 @@
                 </div>
          </div>
 
-     
+       <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false'  width="630px">
+          <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
+       </el-dialog>
 
     </div>
  </template>
 <script>
+  import UPLOAD from "../../Common/upload"
 export default {
+  components:{UPLOAD},
     data(){
         return{
             CurrentPage: 1,
@@ -245,6 +251,12 @@ export default {
             show:true,
             cname:'人大系统',
             wyhlist:[],
+            alldata:['','','','',''],//0录入,1查询,2修改,3删除,4导入
+            allshow:[],
+            drDialogVisible:false, 
+            vvurl:'/courtPerson/import',
+            vvurlErr:'',
+
         }
     },
     mounted(){
@@ -265,8 +277,60 @@ export default {
         clickRow(row){
            this.$refs.multipleTable.toggleRowSelection(row)
         },
+        getXQ(type){
+          var menuid='';
+             switch (type) {
+               case '1'://人大
+                 menuid="11262144";
+                 this.alldata=['21443322','21443323','21443324','21443325','21443326'];
+                 break;
+               case '2'://政协
+                 menuid="11322152";
+                 this.alldata=['21523348','21523349','21523350','21523351','21523352'];
+                 break;
+               case '3'://统战部
+                 menuid="11382160";
+                 this.alldata=['21603374','21603375','21603376','21603377','21603378'];
+                 break;
+              case '4':// 民主党派
+                 menuid="11442168";
+                 this.alldata=['21683400','21683401','21683402','21683403','21683404'];
+                 break;
+              case '5':// 工商联
+                 menuid="11502176";
+                 this.alldata=['21763426','21763427','21763428','21763429','21763430'];
+                 break;
+              case '6':// 台联
+                 menuid="11562184";
+                 this.alldata=['21843452','21843453','21843454','21843455','21843456'];
+                 break;
+              case '7':// 各级法院
+                 menuid="11632192";
+                 this.alldata=['21923478','21923479','21923480','21923481','21923482'];
+                 break;
+               default:
+                 break;
+             }
+              //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':menuid},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+              //权限end
+        },
         getinit(val){
+          
+
             this.addtype=val.query.type;
+            this.getXQ(val.query.type);
             this.pd={};
             switch (this.addtype) {
                   case '1':
@@ -429,19 +493,14 @@ export default {
                              });
                          }
                  
-                         this.$message({
-                                message: '删除成功！',
-                                type: 'success'
-                           });
+                       
 
-               
+                this.$message.success('删除成功！');
                      
                         
                     }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                        });
+                      
+                        this.$message.info('已取消删除');
                     });
 
 
@@ -450,6 +509,12 @@ export default {
                   this.$message.error("请选择数据！");
             }
         },
+        getDR(){
+            this.drDialogVisible=true;
+        },
+          fatherMethod(data,t){
+            this.drDialogVisible=false;
+          },
     },
 }
 </script>

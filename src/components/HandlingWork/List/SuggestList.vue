@@ -119,7 +119,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">提案形式</span>
-                           <el-select v-model="pd.proposalForm" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.proposalForm" :disabled='addtype!="2"'  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.taxs"
                                  :key="ind"
@@ -128,9 +128,9 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" >
                             <span class="yy-input-text">提案组织</span>
-                           <el-select v-model="pd.proposalOrgId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.proposalOrgId" :disabled='addtype!="2"'  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.tazz"
                                  :key="ind"
@@ -140,23 +140,23 @@
                             </el-select>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">领衔代表</span>
+                            <span class="yy-input-text">领衔人</span>
                          <el-select v-model="pd.leaderPerson" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in lxdbdata"
                            :key="ind"
-                           :label="item.personName"
+                           :label="item.fullName"
                            :value="item.personId">
                            </el-option>
                         </el-select>
                         </el-col>
                        <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">联名代表</span>
+                            <span class="yy-input-text">联名人</span>
                         <el-select v-model="pd.jointPerson" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in lxdbdata"
                            :key="ind"
-                           :label="item.personName"
+                           :label="item.fullName"
                            :value="item.pbId">
                            </el-option>
                         </el-select>
@@ -174,7 +174,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">内部承办部门</span>
-                           <el-select v-model="pd.innerUnderSubOrg" filterable clearable default-first-option placeholder="请先选择内部承办单位"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.innerUnderSubOrg" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.innerUnderOrg==''||pd.innerUnderOrg==undefined?'请先选择内部承办单位':'无数据'">
                                <el-option
                                  v-for="(item,ind) in cbbmdata"
                                  :key="ind"
@@ -404,22 +404,23 @@
                     
                             <el-row >
                             <el-col :span="20" class="ah-40">
-                              <el-button type="primary" size="small" :disabled="pdbnt.bnt1"  @click="gotoinfo('0','录入')">登记</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt2" @click="gotoinfo('9','查看')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt1" @click="gotoinfo('0','补充厅室信息')">补充厅室信息</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt3" @click="gotoinfo('jb','交办')">交办</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt4" @click="gotoinfo('bl','办理')">办理</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt5" @click="gotoinfo('tg','统稿')">统稿</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt6" @click="gotoinfo('fw','复文')">复文</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt7" @click="gotoinfo('cb','催办')">催办</el-button>
-                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt8" @click="deltable">删除</el-button>
-                              <el-button type="primary" size="small"   @click="imports">导入</el-button>
-                              <el-button type="primary"  size="small"  @click="download(0)">下载全部</el-button>
-                              <el-button type="primary"  size="small"  @click="download(1)">下载当页</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(1)">公开</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(2)">审核</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(3)">发布</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(4)">回收</el-button>
+                              <el-button type="primary" size="small" :disabled="pdbnt.bnt1"  @click="gotoinfo('0','录入')" v-if='allshow[0]'>登记</el-button>
+                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt2" @click="gotoinfo('9','查看')" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt9" @click="gotoinfo('0','补充厅室信息')" v-if='allshow[2]'>补充厅室信息</el-button>
+                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt3" @click="gotoinfo('jb','交办')" v-if='allshow[3]'>交办</el-button>
+                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt4" @click="gotoinfo('bl','办理')" v-if='allshow[4]'>办理</el-button>
+                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt5" @click="gotoinfo('tg','统稿')" v-if='allshow[5]'>统稿</el-button>
+                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt6" @click="gotoinfo('fw','复文')" v-if='allshow[6]'>复文</el-button>
+                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt7" @click="gotoinfo('cb','催办')" v-if='allshow[7]'>催办</el-button>
+                              <el-button type="primary" size="small"  :disabled="pdbnt.bnt8" @click="deltable" v-if='allshow[8]'>删除</el-button>
+                              <el-button type="primary" size="small"   @click="imports" v-if='allshow[9]'>导入</el-button>
+                              <el-button type="primary"  size="small"  @click="download(0)" v-if='allshow[10]'>下载全部</el-button>
+                              <el-button type="primary"  size="small"  @click="download(1)" v-if='allshow[11]'>下载当页</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(1)" v-if='allshow[12]'>公开</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(2)" v-if='allshow[13]'>审核</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(3)" v-if='allshow[14]'>发布</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="getopen(4)" v-if='allshow[15]'>回收</el-button>
+                              &nbsp;
                               </el-col>
                               <el-col :span="4" class="trt">
                                   <!-- {{title}} -->
@@ -486,11 +487,11 @@
                 </div>
 <br/>
          </div>
-    <el-dialog title="批量交办" :visible.sync="jbDialogVisible">
+    <el-dialog title="批量交办" :visible.sync="jbDialogVisible" :close-on-click-modal='false'>
                 <el-row class="ah-40">
                           <el-col :span="8">
                          <span class="yy-input-text">承办单位</span>
-                         <el-select v-model="pdjb.assignOrgId" @change="getCBBM(pdjb.assignOrgId);getName(pdjb.assignOrgId,5)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-select v-model="pdjb.assignOrgId" @change="getCBBM(pdjb.assignOrgId,1);getName(pdjb.assignOrgId,5)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in cbdwdata1"
                                 :key="ind"
@@ -518,7 +519,7 @@
                                <el-option
                                 v-for="(item,ind) in cbrdata"
                                 :key="ind"
-                                :label="item.personName"
+                                :label="item.fullName"
                                 :value="item.pbId">
                               </el-option>
                         </el-select>
@@ -589,18 +590,18 @@
               <el-button @click="jbDialogVisible = false" size="small">取 消</el-button>
             </div>
     </el-dialog>
-      <el-dialog title="公开" :visible.sync="openDialogVisible"  width="660px">
+      <el-dialog title="公开" :visible.sync="openDialogVisible" :close-on-click-modal='false' width="660px">
    <OPEN :url="openurl" :type="0" :data="opendata" @GKfatherMethod="GKfatherMethod" :random="new Date().getTime()"></OPEN>
   </el-dialog>
-  <el-dialog  :title="txtname" :visible.sync="shDialogVisible"  width="660px">
+  <el-dialog  :title="txtname" :visible.sync="shDialogVisible" :close-on-click-modal='false' width="660px">
    <EXAMINE :url="shurl" :type="sendtype" :data="opendata" @SHfatherMethod="SHfatherMethod" :random="new Date().getTime()"></EXAMINE>
   </el-dialog>
  
-  <el-dialog title="内容发布" :visible.sync="fbDialogVisible"  width="800px">
+  <el-dialog title="内容发布" :visible.sync="fbDialogVisible" :close-on-click-modal='false'  width="800px">
      <RELEASE :url="fburl" :type="0"  :data="opendata" @FBfatherMethod="FBfatherMethod" :random="new Date().getTime()"></RELEASE>
   </el-dialog>
 
-  <el-dialog title="导入文件" :visible.sync="uploadDialogVisible"  width="640px">
+  <el-dialog title="导入文件" :visible.sync="uploadDialogVisible"  :close-on-click-modal='false' width="640px">
             <UPLOAD :url="uurl" :type="99" :proposalType="drtype" :urlErr="urlErr" @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
     </div>
@@ -622,7 +623,7 @@ export default {
             TotalResult: 0,
             pd:{year:'',assignStatus:'',transactStatus:'',
             completeStatus:'',replyStatus:'',urgentStatus:'',proposalType:''},
-            pdbnt:{bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true},
+            pdbnt:{bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true,bnt9:false},
             pdjb:{},
             options:this.pl.ps,
             open:false,
@@ -664,6 +665,8 @@ export default {
             sendtype:'0',//审核
             uploadDialogVisible:false,
             drtype:'',
+            alldata:[],
+            allshow:[],
 
         }
     },
@@ -698,7 +701,7 @@ export default {
         handleSelectionChange(val) {
           this.multipleSelection = val;
            this.bnt=true;
-           this.pdbnt={bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true};
+           this.pdbnt={bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true,bnt9:false};
            console.log(this.multipleSelection.length,'this.multipleSelection.length');
            
            if(this.multipleSelection.length==1){
@@ -710,7 +713,7 @@ export default {
                   this.pdbnt.bnt3=false;
                   this.pdbnt.bnt8=false;
               }else if(state=="0205000002"){//补充厅室信息
-                    this.pdbnt.bnt1=false;
+                    this.pdbnt.bnt9=false;
               }else if(state=="0205000003"){//交办
                 this.pdbnt.bnt4=false;
                 this.pdbnt.bnt7=false;
@@ -729,6 +732,7 @@ export default {
              this.bnt=false;
            }
         },
+        
           getinit(val){
               this.getyear();
               this.pd={year:'',assignStatus:'',transactStatus:'',
@@ -736,6 +740,7 @@ export default {
               this.addtype=val.query.type;
               this.pd.year=val.query.year;
               this.zt=val.query.zt;
+              this.getXQ(val.query.type,val.query.zt);
               this.getCBDW();
               this.getLmName();
               this.sname=this.cname;
@@ -911,10 +916,8 @@ export default {
           this.$api.post(this.Global.aport2+'/proposalAssign/batchAssign',p,
                 r =>{
                    if(r.code==1){
-                           this.$message({
-                            message: r.message,
-                            type: 'success'
-                          });
+                         
+                        this.$message.success(r.message);
                         this.jbDialogVisible=false;
                         this.jbtableData=[];
                         this.getList(this.CurrentPage, this.pageSize, this.pd);
@@ -996,19 +999,15 @@ export default {
                  r =>{
                   
                       if(r.code==1){
-                         this.$message({
-                                type: 'success',
-                                message: '删除成功!'
-                        });
+                        
+                        this.$message.success('删除成功');
                         this.getList(this.CurrentPage, this.pageSize, this.pd);
                       }
                 });
 
                 }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                    });          
+                    
+                    this.$message.info('已取消删除');         
                 });
 
         },
@@ -1066,8 +1065,13 @@ export default {
       // },
       //承办部门
       getCBBM(orgid,t){
+        this.cbbmdata=[];
         if(t==0){
-          this.$set(this.pd,'affiliationUnitw',"");
+          this.$set(this.pd,'innerUnderSubOrg',"");
+        }else if(t==1 && (orgid==null || orgid=="")){
+           this.$set(this.pdjb,'assignSubOrgId',"");
+           this.$set(this.pdjb,'assignUserId',"");
+          
         }
         let p={
                   'orgId':orgid,
@@ -1103,9 +1107,9 @@ export default {
       getLmName(){
           let p={};var url="";
         switch (this.addtype) {
-          case '0'://领衔代表（联名代表）
+            case '0'://领衔代表（联名代表）
           case '1':
-          case '4':
+          case '3':
             p={
              'personName':'',
              'personType':this.Global.REPRESENTATIVE,
@@ -1113,14 +1117,19 @@ export default {
             url="/baseinfo/personlistbytype";
             break;
           case '2'://所有人员查询接口
-          case '3':
-            p={
+          p={
              'personName':'',
+             'personType':this.Global.CPPCMEMBER,
+            };
+            url="/baseinfo/personlistbytype";
+            break;
+          case '4':
+            p={
              'leveType':'',
             };
-           url="/baseinfo/allpersonlist";
+           url="/baseinfo/personlist";
             break;
-        
+
           default:
             break;
         }
@@ -1144,6 +1153,7 @@ export default {
             this.yeardata=arr;
         },
       getName(val,t){
+        if(val=="" || val==null || val==undefined){return;}
         var obj = {};
         switch (t) {
           
@@ -1178,9 +1188,33 @@ export default {
          obj = this.$store.state.yalx.find(item =>{
                  return item.dm === val 
                 });
-          this.snames = obj.mc
+       
           this.title=obj.mc;
         }
+        console.log(val);
+        
+      var stype=''
+        switch (val) {
+          case '0204000001'://代表议案
+            stype="1";
+            break;
+          case '0204000002'://政协提案
+            stype="2";
+            break;
+          case '0204000003'://建议、批评
+            stype="0";
+            break;
+          case '0204000004'://审议意见 
+            stype="3";
+            break;
+          case '0204000005'://日常建议
+            stype="4";
+            break;
+          default:
+            break;
+        }
+        this.$router.push({name:'SuggestList',query:{type:stype,year:this.pd.year}});
+        
       
        },
        //业务种类
@@ -1274,6 +1308,142 @@ export default {
       drfatherMethod(){
           this.uploadDialogVisible = false;
           this.getList(this.CurrentPage, this.pageSize, this.pd);
+        },
+     getXQ(type,zt){
+            var mid=''
+            switch (type) {
+                case '0'://建议、批评和意见管理查询
+                    mid='13152501';
+                    if(zt=='jb'){
+                       mid='13172503';
+                    }else if(zt=='bl'){
+                        mid='13182504';
+                    }else if(zt=='fw'){
+                        mid='13192505';
+                    }else if(zt=='tg'){
+                        mid='13202506';
+                    }else if(zt=='cb'){
+                        mid='13212507';
+                    }else if(zt=='dr'){
+                        mid='13222508';
+                    }else if(zt=='xz'){
+                        mid='13232509';
+                    }
+                    this.alldata=['25013711','25013712','25013713',
+                    '25013714','25013715','25013716','25013717',
+                    '25013718','25013719','25013720',
+                    '25013721','25013722','25013723','25013724',
+                    '25013725','25013726']
+                    break;
+                case '1'://代表议案信息
+                    mid='13262510'
+                    if(zt=='jb'){
+                       mid='13282512';
+                    }else if(zt=='bl'){
+                        mid='13292513';
+                    }else if(zt=='fw'){
+                        mid='13302514';
+                    }else if(zt=='tg'){
+                        mid='13312515';
+                    }else if(zt=='cb'){
+                        mid='13322516';
+                    }else if(zt=='dr'){
+                        mid='13332517';
+                    }else if(zt=='xz'){
+                        mid='13342518';
+                    }
+                    this.alldata=['25103727','25103728','25103729', 
+                    '25103730','25103731','25103732','25103733',
+                    '25103734','25103735','25103736',
+                    '25103737','25103738','25103739','25103740',
+                    '25103741','25103742']
+                    break
+                case '2'://政协提案
+                    mid='13372519'
+                     if(zt=='jb'){
+                       mid='13392521';
+                    }else if(zt=='bl'){
+                        mid='13402522';
+                    }else if(zt=='fw'){
+                        mid='13412523';
+                    }else if(zt=='tg'){
+                        mid='13422524';
+                    }else if(zt=='cb'){
+                        mid='13432525';
+                    }else if(zt=='dr'){
+                        mid='13442526';
+                    }else if(zt=='xz'){
+                        mid='13452527';
+                    }
+                    this.alldata=['25193743','25193744','25193745', 
+                    '25193746','25193747','25193748','25193749',
+                    '25193750','25193751','25193752',
+                    '25193753','25193754','25193755','25193756',
+                    '25193757','25193758']
+                    break;
+                 case '3'://审议意见
+                    mid='13482528'
+                     if(zt=='jb'){
+                       mid='13502530';
+                    }else if(zt=='bl'){
+                        mid='13512531';
+                    }else if(zt=='fw'){
+                        mid='13522532';
+                    }else if(zt=='tg'){
+                        mid='13532533';
+                    }else if(zt=='cb'){
+                        mid='13542534';
+                    }else if(zt=='dr'){
+                        mid='13552535';
+                    }else if(zt=='xz'){
+                        mid='13562536';
+                    }
+                    this.alldata=['25283759','25283760','25283761', 
+                    '25283762','25283763','25283764','25283765',
+                    '25283766','25283767','25283768',
+                    '25283769','25283770','25283771','25283772',
+                    '25283773','25283774']
+                    break;
+                case '4'://日常意见建议
+                    mid='13592537'
+                    if(zt=='jb'){
+                       mid='13612539';
+                    }else if(zt=='bl'){
+                        mid='13622540';
+                    }else if(zt=='fw'){
+                        mid='13632541';
+                    }else if(zt=='tg'){
+                        mid='13642542';
+                    }else if(zt=='cb'){
+                        mid='13652543';
+                    }else if(zt=='dr'){
+                        mid='13662544';
+                    }else if(zt=='xz'){
+                        mid='13672545';
+                    }
+                    this.alldata=['25373775','25373776','25373777', 
+                    '25373778','25373779','25373780','25373781',
+                    '25373782','25373783','25373784',
+                    '25373785','25373786','25373787','25373788',
+                    '25373789','25373790']
+                    break;
+                default:
+                    break;
+            }
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+          //权限end
         },
     },
 }

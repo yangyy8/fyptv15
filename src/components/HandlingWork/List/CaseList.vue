@@ -375,7 +375,7 @@
                         <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text">审批人</span>
                             <!-- <el-input placeholder="请输入内容" size="small" clearable v-model="pd.checkuseridname"  class="yy-input-input" ></el-input> -->
-                              <el-select v-model="pd.checkuseridname" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                              <el-select v-model="pd.checkuserid" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in jbrdata"
                                 :key="ind"
@@ -405,17 +405,18 @@
                 <div class="pborder mt-20">
                             <el-row >
                             <el-col :span="18">
-                              <el-button type="primary" size="small" :disabled="pd3.bnt0" @click="gotoinfo('0','录入')">登记</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="gotoinfo('9','查看')">查看</el-button>
-                              <el-button type="primary" size="small"  :disabled="pd3.bnt1"  @click="gotoinfo('1','审批')">审批</el-button>
-                              <el-button type="primary" size="small"  :disabled="pd3.bnt2" @click="gotoinfo('2','交办')">交办</el-button>
-                              <el-button type="primary" size="small"  :disabled="pd3.bnt3"  @click="gotoinfo('3','办理')">办理</el-button>
-                              <el-button type="primary" size="small" :disabled="pd3.bnt5" @click="gotoinfo('6','催办')">催办</el-button>
-                              <el-button type="primary" size="small"  :disabled="pd3.bnt4" @click="gotoinfo('4','办结')">办结</el-button>
+                              <el-button type="primary" size="small" :disabled="pd3.bnt0" @click="gotoinfo('0','录入')" v-if='allshow[0]'>登记</el-button>
+                              <el-button type="primary" size="small"  :disabled="bnt" @click="gotoinfo('9','查看')" v-if='allshow[1]'>查看</el-button>
+                              <el-button type="primary" size="small"  :disabled="pd3.bnt1"  @click="gotoinfo('1','审批')" v-if='allshow[2]'>审批</el-button>
+                              <el-button type="primary" size="small"  :disabled="pd3.bnt2" @click="gotoinfo('2','交办')" v-if='allshow[3]'>交办</el-button>
+                              <el-button type="primary" size="small"  :disabled="pd3.bnt3"  @click="gotoinfo('3','办理')" v-if='allshow[4]'>办理</el-button>
+                              <el-button type="primary" size="small" :disabled="pd3.bnt5" @click="gotoinfo('6','催办')" v-if='allshow[5]'>催办</el-button>
+                              <el-button type="primary" size="small"  :disabled="pd3.bnt4" @click="gotoinfo('4','办结')" v-if='allshow[6]'>办结</el-button>
                               <!-- <el-button type="primary" size="small"  :disabled="pd3.bnt6" @click="gotoinfo('5','复文')">复文</el-button> -->
-                              <el-button type="primary" size="small"   @click="imports">导入</el-button>
-                              <el-button type="primary"  size="small"  @click="download(0)">下载全部</el-button>
-                               <el-button type="primary"  size="small"  @click="download(1)">下载当页</el-button>
+                              <el-button type="primary" size="small"   @click="imports" v-if='allshow[7]'>导入</el-button>
+                              <el-button type="primary"  size="small"  @click="download(0)" v-if='allshow[8]'>下载全部</el-button>
+                              <el-button type="primary"  size="small"  @click="download(1)" v-if='allshow[9]'>下载当页</el-button>
+                              &nbsp;
                               </el-col>
                               <el-col :span="6" class="trt">
                                   关注案件总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
@@ -481,7 +482,7 @@
                 </div>
 <br/>
          </div>
-          <el-dialog title="导入文件" :visible.sync="uploadDialogVisible"  width="640px">
+          <el-dialog title="导入文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="640px">
             <UPLOAD :url="uurl" :type="99" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
             </el-dialog>
     </div>
@@ -521,6 +522,12 @@ export default {
             focusCaseId:'',
             lvdw:[],
             year:'',
+            alldata:['21123127','21123128','21123129',
+            '21123130','21123131','21123132',
+            '21123133','21123134'],
+            //0录入,1查询,2修改,3删除,4导入,
+            //5审核,6下载全部,7下载当页
+            allshow:[],
         }
     },
     mounted(){
@@ -551,7 +558,7 @@ export default {
            this.focusCaseId=row.focuscaseid;
            var num=row.focuscasestatus
            this.bnt=false;
-           console.log('=========',num,row.focuscaseoaprocessid);
+          
              this.pd3={bnt0:false,bnt1:true,bnt2:true,bnt3:true,bnt4:true,bnt5:true,bnt6:true}
             //    高级查询界面按钮控制
             //    登记状态：0  展示按钮(登记、查看、审批)   
@@ -603,8 +610,54 @@ export default {
           // this.$refs.multipleTable.toggleRowSelection(row)
            
         },
+        getXQ(type){
+            var mid='13032401'
+             this.alldata=['24013701','24013702','24013703','24013704','24013705','24013706','24013707','24013708','24013709','24013710']
+            switch (type) {
+                case '1'://报批
+                    mid='13052403'
+                    break;
+                case '2'://交办
+                    mid='13062404'
+                    break;
+                case '3'://办理
+                    mid='13072405'
+                    break;
+                case '4'://办结
+                    mid='13082406'
+                    break;
+                case '5'://催办
+                    mid='13092407'
+                    break;
+                case '6'://复文
+                    mid='13102408'
+                    break;
+                case '7'://导入
+                    mid='13112409'
+                    break;
+                 case '8'://下载
+                    mid='13122410'
+                    break;
+                default:
+                    break;
+            }
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                     
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                         
+                            }   
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+          //权限end
+        },
         getinit(val){
-             
+            
              this.pd.year=val.query.year;
              this.year=val.query.year;
              this.getCheckList();
@@ -615,6 +668,7 @@ export default {
              this.getLrdw();
              this.pd.type=val.query.type==null?'0':val.query.type;
              this.type=val.query.type==null?'0':val.query.type;
+             this.getXQ(val.query.type);
              this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
           handleSelectionChange(val) {

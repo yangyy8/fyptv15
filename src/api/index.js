@@ -35,7 +35,9 @@ function apiAxios (method, url, params, success, failure,header,responseType) {
           responseType: responseType||'json',
       })
 
-      .then(function (res) {                                                                                                                                                        
+      .then(function (res) {    
+        
+                                                                                                                                                            
         if (res.status === 200) {
             if(loadingInstance1){
               loadingInstance1.close();                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
@@ -62,18 +64,21 @@ function apiAxios (method, url, params, success, failure,header,responseType) {
   
       })
       .catch(function (err) {
+      
         if(loadingInstance1){
           loadingInstance1.close();
         }
           let res = err.response
-
+        
+         
           if (err) {
-             if (res && res.status === 901) {//超时
+            if (res && res.status === 901) {//超时
               window.location.href ="#/";
             } else if (res && res.status === 902) { //不能用
               window.location.href ="#/Message";
             }else{
                //console.log('api error, HTTP CODE: ' + res.status);
+               //window.location.href ="#/";
             }
           }
       })

@@ -78,7 +78,7 @@
             </div>
             <br/>
          </div>
-  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="640px">
+  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false' width="640px">
    <UPLOAD :url="uurl" :type="11" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
  
@@ -126,9 +126,17 @@ export default {
         //  this.form.lrbm=this.$store.state.bmname;
         //  this.form.lrr=this.$store.state.uname;
         //  this.form.lrsj=getServerDate();
+         //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'12212311'},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+          //权限end
          this.state=val.query.state;
          this.workRelFilesId=val.query.workRelFilesId;
-         console.log(this.state);
+         
          
          if(this.state=='9'){
              this.ck=true;
@@ -204,10 +212,8 @@ export default {
              this.$api.post(this.Global.aport2+'/WorkRelFilesController/saveWorkRelFiles',this.form,
                 r =>{
                       if(r.code==1){
-                          this.$message({
-                              "type":"success",
-                              "message":r.message
-                          });
+                         
+                           this.$message.success(r.message);    
                          this.$router.push({name:"WorkList"});
                       }else{
                           this.$message.error(r.message);

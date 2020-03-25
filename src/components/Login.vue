@@ -24,7 +24,7 @@
        
     </div>
 
-     <el-dialog title="选择单位" :visible.sync="addDialogVisible"  width="600px">
+     <el-dialog title="选择单位" :visible.sync="addDialogVisible"  width="600px" :close-on-click-modal='false'>
        <el-form :model="form">
 
        <el-row class="ah-40">

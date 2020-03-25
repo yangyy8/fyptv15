@@ -222,10 +222,8 @@ export default {
                  this.$api.post(this.Global.aport2+this.url,p,
                    r =>{
                     if(r.code==1){
-                         this.$message({
-                            message: r.message,
-                            type: 'success'
-                         });
+                        
+                         this.$message.success(r.message);
                         this.$emit('FBfatherMethod','99',this.type); return;
                     }else{
                         this.$message.error(r.message);

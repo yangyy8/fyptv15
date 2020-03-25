@@ -1,8 +1,8 @@
 <template>
-      <div class="pairadd subtable">
+      <div class="pairadd ">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 
            办理工作 <span class="mlr_10">/</span>  <b>{{casename}}{{ctitle}}</b></span> </div>
-         <div class="content ">
+         <div class="content subtable">
                <!-- 来文信息 -->
                 <div class="ptitle mb-20">来文信息</div>
                 <el-row class="ah-40">
@@ -1238,11 +1238,9 @@
          </div>
 
          
-   <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
-   <UPLOAD :url="uurl" :type="type" :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
-   </el-dialog>
+   <div class="subtable">
 
-    <el-dialog title="来文字号" :visible.sync="lwDialogVisible" class="subtable">
+    <el-dialog title="来文字号" :visible.sync="lwDialogVisible" class="subtable" :close-on-click-modal='false'>
         <el-form :model="form1" >
             <el-row class="ah-40">
               <el-col :span="12">
@@ -1400,7 +1398,7 @@
               <el-button @click="lwDialogVisible = false" size="small">取 消</el-button>
             </div>
     </el-dialog>
-   <el-dialog title="案件信息" :visible.sync="ayDialogVisible">
+   <el-dialog title="案件信息" :visible.sync="ayDialogVisible" :close-on-click-modal='false'>
                           <el-table
                               :data="aydata"
                               @row-click="rowclick">
@@ -1445,7 +1443,7 @@
               <el-button @click="ayDialogVisible = false" size="small">取 消</el-button>
             </div>
     </el-dialog>
-         <el-dialog title="选择类型" :visible.sync="addDialogVisible" >
+         <el-dialog title="选择类型" :visible.sync="addDialogVisible" :close-on-click-modal='false'>
              <div style="text-align:center;height:50px;">
                 <el-radio v-model="hdtype" label="1" border>结对活动录入</el-radio>
                 <el-radio v-model="hdtype" label="2" border>专项视察录入</el-radio>
@@ -1465,10 +1463,14 @@
             </div>
        </el-dialog>
        
-
-      <el-dialog title="添加字典项" :visible.sync="dicDialogVisible"  width="630px">
+</div>
+      <el-dialog title="添加字典项" :visible.sync="dicDialogVisible" :close-on-click-modal='false' width="630px">
         <DIC :type="dtype"  @fatherMethod="DfatherMethod" :random="new Date().getTime()"></DIC>
       </el-dialog>
+    <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  :close-on-click-modal='false' width="630px">
+     <UPLOAD :url="uurl" :type="type" :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
+   </el-dialog>
+
      </div>
 </template>
 <script>
@@ -1613,6 +1615,14 @@ export default {
        },
     methods:{
        getinit(val){
+         //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'13042402'},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+          //权限end
          this.reset();
          this.addtype=val.query.type;
          this.focusCaseId=val.query.focusCaseId;
@@ -1848,10 +1858,8 @@ export default {
                       this.dataList[i].jointpersoncount=this.dataList[i].lmdata.length+'';
                     }
                 }).catch(() => {
-                     this.$message({
-                         type: 'info',
-                         message: '已取消操作'
-                      });          
+                      
+                      this.$message.info('已取消操作');       
                  }); 
                }
                 
@@ -2541,10 +2549,8 @@ export default {
           this.$api.post(this.Global.aport2+url,p,
                 r =>{
                     if(r.code==1){
-                          this.$message({
-                            message: r.message,
-                            type: 'success'
-                          });
+                         
+                           this.$message.success(r.message);    
                           this.goto();
 
                     }else{
@@ -2557,7 +2563,7 @@ export default {
              if(this.baseid!=null){
                    var arr=this.baseid.split('|');
                    console.log('arr',arr);
-                   this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3]}});
+                   this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
                 }else{
                     this.$router.push({name:"CaseList",query:{year:this.year}});
               }

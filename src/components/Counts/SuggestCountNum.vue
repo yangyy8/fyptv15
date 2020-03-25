@@ -6,13 +6,20 @@
             <span class="mlr_10">/</span>  
             <b>办理工作信息统计</b> 
             <span class="mlr_10">/</span> 
-             <b>建议议案统计</b>
+             <span class="topbnt" @click="$router.push({path:'SuggestCount'})"><b>建议议案统计</b> </span>
              <span class="mlr_10">/</span> 
              <b>{{cname}}</b>
              </span></div>
 
        <div class="content ">
-          <div class="ptitle mb-20">{{cname}}</div>
+          <div class="ptitle mb-20">
+            <el-row>
+              <el-col :span="15">{{cname}}
+             </el-col>
+              <el-col :span="9" style="text-align:right"> <el-button size="mini" @click="$router.go(-1)">返 回</el-button></el-col>
+            </el-row>
+            
+          </div>
           <div class="pborder">
           <el-row class="lh" :gutter="2">
                       <el-col :sm="24" :md="12" :lg="12" class="input-item">
@@ -55,10 +62,10 @@
                     </el-row>
                     <div class="footer">
                             <el-button type="primary"  style="width:130px;" @click="getList">查 询</el-button>
-                            <el-button style="width:130px;" @click="reset()">重  置</el-button>
-                        </div>
+                            <el-button style="width:130px;"  @click="reset()">重  置</el-button>
+                           
+                    </div>
                 </div>
-                
                 <div style="text-align:center;font-size:25px;line-height:60px;">{{name}}</div>
                 <el-row class="mt-15" style="text-align: right">
                    <el-button size="small" @click="download()">导出</el-button>
@@ -136,7 +143,10 @@ export default {
           getinit(val){
             this.cname=val.query.mc;
             this.type=val.query.type;
-         
+            var date=new Date().getFullYear();
+            this.$set(this.pd,'beginTime',date);
+            this.$set(this.pd,'endTime',date);
+            this.getList();
           },
           reset(){
               this.$set(this.pd,'beginTime','');

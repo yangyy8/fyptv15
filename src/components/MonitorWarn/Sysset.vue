@@ -294,6 +294,14 @@ export default {
         this.$store.dispatch('getJb');
         this.$store.dispatch('getCb');
         this.getyear();
+        //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'15082707'},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+        //权限end
         this.getList();
     },
     methods:{
@@ -424,10 +432,8 @@ export default {
                 r =>{
                   
                       if(r.code==1){
-                           this.$message({
-                               "type":'success',
-                               "message":"设定成功"
-                           });
+                           
+                            this.$message.success("设定成功");
                            this.getList();
                          
                       }else{
@@ -453,6 +459,7 @@ export default {
                                sum+=array[i].picForm+',';
                              }
                              this.$store.commit('getImgformat',sum.substr(0,sum.length-1));
+                             this.$store.commit('getPagesize',r.data.defaultNum)
                       }
                           
                          

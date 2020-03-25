@@ -17,30 +17,31 @@
                        <div class="title">{{jjbmc==null?'':jjbmc}}{{cname4}}{{cname2}}</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
-                          <el-button type="primary" style="width:80px" @click="goBase()"><span>编辑</span></el-button>
-                          <el-button style="width:80px" @click="goseach()">查询</el-button>
-                          <el-button style="width:80px" @click="$router.go(-1)">返回</el-button>
+                          <el-button type="primary" style="width:80px" @click="goBase()" v-if='allshow[0]' key='0'><span>添加</span></el-button>
+                          <el-button style="width:80px" @click="goseach()" v-if='allshow[1]' key='1'>查询</el-button>
+                          <el-button style="width:80px" @click="$router.go(-1)" v-if="back">返回</el-button>
                     </el-col>
                </el-row>
-               <!-- <el-row :gutter="2" class="ah-50 pborder mt-20">
+               <el-row :gutter="2" class="ah-50 pborder mt-20" v-if='!show'>
                    <el-col style="text-align:center">无数据</el-col>
-               </el-row> -->
-                <el-row :gutter="2" class="ah-50 pborder mt-20" v-if='addtype=="1"'>
+               </el-row> 
+               
+                <el-row :gutter="2" class="ah-50 pborder mt-20" v-if='addtype=="1" && show'>
                    <el-col :sm="24" :md="12" :lg="4" v-for="(t,ind) in leveldatatb" :key="ind" >
                     <span class="address"  @click="gopro(t.dm,'tb',t.mc)">{{t.mc}}</span>
                   </el-col>
                 </el-row>
-                 <el-row :gutter="2" class="ah-50 pborder mt-20" v-else-if='addtype=="2"'>
+                 <el-row :gutter="2" class="ah-50 pborder mt-20" v-else-if='addtype=="2" && show'>
                     <el-col :sm="24" :md="12" :lg="6" v-for="(t,ind) in $store.state.jjb" :key="ind">
                       <span class="address"  @click="gopro(t.dm,'jjb',t.mc)">{{t.mc}}</span>
                     </el-col>
                 </el-row>
-                <el-row :gutter="2" class="ah-50 pborder mt-20" v-else-if='addtype=="3"'>
+                <el-row :gutter="2" class="ah-50 pborder mt-20" v-else-if='addtype=="3" && show'>
                     <el-col :sm="24" :md="12" :lg="8" v-for="(te,indm) in $store.state.tylb" :key="indm">
                        <span class="address" style="font-weight:bold;" @click="getline(te.dm,te.mc)"> {{te.mc}}</span>
                     </el-col>
                 </el-row>
-                <el-row :gutter="2" class="ah-50 pborder mt-10 mb-20" v-else-if='addtype=="4"'>
+                <el-row :gutter="2" class="ah-50 pborder mt-10 mb-20" v-else-if='addtype=="4" && show'>
                      <el-col :sm="24" :md="12" :lg="6" v-for="(t,ind) in fydata" :key="ind">
                         <span class="address"  @click="gotoFy(t.orgid,t.sjOrgId,t.mc)">{{t.mc}}</span>
                      </el-col>
@@ -59,6 +60,7 @@
   
 </template>
 <script>
+import {getlljgtbmenu,getlljgtbdata} from '@/assets/js/aleainfo.js'
 export default {
     data(){
         return{
@@ -77,6 +79,10 @@ export default {
            cinfo:'',
            lvltype:'',//用于特约人员
            fydata:[],
+           show:true,
+           back:true,//返回按钮
+           alldata:[],
+           allshow:[],
         }
     },
     mounted(){
@@ -92,14 +98,18 @@ export default {
         },
     },
     methods:{
+       
         getinit(val){
+         
+         this.reset();
+   
         if((val.query.type==undefined || val.query.type=='')
             && (val.query.info==undefined || val.query.info=='')){
               this.$router.push({name:'limitmsg'});
          }else if(val.query.info!=undefined && val.query.info!=''){
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
-              console.log(this.info,'==');
+              
               
                this.addtype=this.info.type;
                this.jb=this.info.jb;
@@ -123,11 +133,45 @@ export default {
                this.jb=val.query.jb;
                this.jjbmc=this.$store.state.jmc;
                this.jjb=this.$store.state.jid;
+               this.back=false;
                this.getTitle();
            }
 
-           this.getInfo();
+          var mid=getlljgtbmenu(this.addtype,this.jb);
+          this.alldata=getlljgtbdata(this.addtype,this.jb);
+            
+            //权限start
+            this.$api.post(this.Global.menuurl,{'menuId':mid},
+                     r =>{
+                          if(r.code==1 && r.data!=null){
+                            for (let i = 0; i < this.alldata.length; i++) {
+                               this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                               console.log(this.alldata,'--',this.alldata[i],'===',r.data);
+                               
+                            }   
+                           this.getInfo();
+                          }else if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+            });
+         //权限end
+          
         },
+      reset(){
+             this.addtype='';
+               this.jb='';
+               this.cname1='';
+               this.cname2='';
+               this.cname3='';
+               this.cname4='';
+               this.code='';
+               this.jjb='';
+               this.jjbmc='';
+               this.mc='';
+               this.ltitle='';
+               this.cinfo='';     
+               this.back=true;this.leveldatatb=[];this.fydata=[];
+      },
       getInfo(){
            if(this.addtype=='1'){
                var level='';
@@ -260,6 +304,11 @@ export default {
                   r =>{
                           if(r.code==1){
                             this.leveldatatb=r.data;
+                            if(r.data.length>0){
+                                this.show=true;
+                            }else{
+                                this.show=false;
+                            }
                           }
                    });
         },
@@ -274,6 +323,11 @@ export default {
             r=>{
                 if(r.code==1){
                     this.fydata=r.data;
+                     if(r.data.length>0){
+                                this.show=true;
+                            }else{
+                                this.show=false;
+                       }
                 }
             })
         },

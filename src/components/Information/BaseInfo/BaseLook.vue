@@ -556,7 +556,7 @@
 
 
          </div>
-            <el-dialog title="选择活动类型" :visible.sync="hdDialogVisible" >
+            <el-dialog title="选择活动类型" :visible.sync="hdDialogVisible" :close-on-click-modal='false'>
              <div style="text-align:center;height:50px;">
                 <el-radio v-model="hdtype" label="1" border>结对活动录入</el-radio>
                 <el-radio v-model="hdtype" label="2" border>专项视察录入</el-radio>

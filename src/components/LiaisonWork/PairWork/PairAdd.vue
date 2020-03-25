@@ -319,16 +319,16 @@
             
         </div>
 
-  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  width="630px">
+  <el-dialog title="上传文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="630px">
    <UPLOAD :url="uurl" :type="2" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
-  <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" width="650px">
+  <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" :close-on-click-modal='false' width="650px">
        <!-- <VIDEO :url="vvurl" :type="2" :urlErr="urlErr" @fatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEO> -->
        <VIDEONEW :url="vvurl" :type="2" :urlErr="urlErr" @DfatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEONEW>
        <img class="img-upload" url="/sfmgapi/upload/add" @success="canSucess">
   </el-dialog>
 
-   <el-dialog :title="txtdia" :visible.sync="pairDialogVisible" class="subtable">
+   <el-dialog :title="txtdia" :visible.sync="pairDialogVisible" :close-on-click-modal='false' class="subtable">
                  <el-form :model="form1" >
                     <el-row class="ah-40">
                     <el-col :span="12">
@@ -504,7 +504,7 @@
                 <el-button @click="pairDialogVisible = false" size="small">取 消</el-button>
                 </div>
     </el-dialog>
-<el-dialog title="代表委员及特约人员评价和意见建议" :visible.sync="dbDialogVisible"  class="subtable">
+<el-dialog title="代表委员及特约人员评价和意见建议" :visible.sync="dbDialogVisible" :close-on-click-modal='false' class="subtable">
         
             <el-row class="ah-40">
                <el-col :span="12">
@@ -795,12 +795,22 @@ export default {
             this.logoUrl = file.url;
         },
         getinit(val){
+          this.reset();
          this.addtype=val.query.type;
          this.baseid=val.query.baseid;
          this.year=val.query.year;
          this.state=val.query.state==null?"0":val.query.state;
          this.activityInfoId=val.query.activityInfoId;
-         this.reset();
+         
+           //权限start
+                 this.$api.post(this.Global.menuurl,{'menuId':'12012301'},
+                     r =>{
+                          if(r.code==0){
+                            this.$router.push({path:'/limitmsg'});
+                          }
+                  });
+          //权限end
+
         //  this.getYA();
          this.yearlist=getYear();
          this.getLmName('');
@@ -1030,7 +1040,7 @@ export default {
               if(this.baseid!=null){
                     var arr=this.baseid.split('|');
                       console.log('arr',arr);
-                      this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3]}});
+                      this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
                    }else{
                       this.$router.push({name:'PairList'});
                }
@@ -1102,17 +1112,15 @@ export default {
                  this.$api.post(this.Global.aport2+'/ActivityInfoController/saveActivityInfo',this.jdform,
                 r =>{
                          if(r.code==1){
-                              this.$message({
-                                  "type":"success",
-                                  "message":r.message,
-                              });
+                             
+                                this.$message.success(r.message);
                               console.log('this.baseid',this.baseid);
                               
                               if(this.baseid!=null){
                                 var arr=this.baseid.split('|');
                                 console.log('arr',arr);
                                 
-                                this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3]}});
+                                this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
                               }else{
                                 this.$router.push({name:"PairList"});
                               }
@@ -1180,6 +1188,13 @@ export default {
             　　　　　　　　　　}
             　　　　　　　　})
             　　　　　 this.listdata2.splice(index,1)
+
+                       var index1 = this.listdatatemp.findIndex(item =>{
+    　　　　　　　　　  　 if(item.pbId==arr[i].pbId){
+            　　　　　　　　　　　　return true
+            　　　　　　　　　　}
+            　　　　　　　　})
+            　　　　　 this.listdatatemp.splice(index1,1)
                  }
             }else if(t==0){
                 var arr=[];
@@ -1196,6 +1211,7 @@ export default {
             }
         },
         addlist(val){
+         
              this.listdata2.push(val);
              this.listdatatemp.push(val);
              const res = new Map();
@@ -1210,12 +1226,15 @@ export default {
             var array=this.listdatatemp;
             var nname="";
              for (let i = 0; i < array.length; i++) {
-                 if(array[i].pairPersonId!=this.form1.courtInsiderId && array[i].pairPersonId!=null)
+                 if(array[i].personId!=this.form1.courtInsiderId && array[i].personId!=null && array[i].pairName!='无')
                  {
                    nname += array[i].personName+',';
                  }
              }
+            
+             
             nname=nname.substr(0,nname.length-1);
+          
             if(nname!='')
             {
               this.$confirm(nname+"代表的原结对人与目前结对人不一致，请确认是否提交！", '提示', {
@@ -1225,16 +1244,14 @@ export default {
                 }).then(() => {
                        this.getsaveinfo();
                 }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: '已取消'
-                    });          
+                      
+                    this.$message.info('已取消');
+
                 });
             
             }else{
                 this.getsaveinfo();
             }
-         
         },
         getsaveinfo(){
              let  p={
@@ -1244,10 +1261,8 @@ export default {
                         this.$api.post(this.Global.aport2+'/PairInfoController/savePairInfo',p,
                         r =>{
                                 if(r.code==1){
-                                        this.$message({
-                                            "type":"success",
-                                            "message":r.message,
-                                        });
+                                       
+                                        this.$message.success(r.message);
                                       
                                 // this.getLmName('');//代表姓名 
                                 // this.getJDXXAB();//结对人
@@ -1438,12 +1453,14 @@ export default {
                
                  var obj = {};
                      obj = this.fyrydata.find(item =>{
+                       console.log(item.courtPersonId === val);
+                       
                         return item.courtPersonId === val
                     });
                     console.log(val,obj);
-
+                     if(obj!=undefined && obj!=null && obj!=''){
                      this.remark="详情："+obj.fullName+" , "+obj.sex+" , "+obj.birthday;
-                 
+                  
                      if(obj.degree!=null){
                          this.remark+=" , "+obj.degree;
                      }
@@ -1453,6 +1470,7 @@ export default {
                       if(obj.address!=null){
                          this.remark+=" , "+obj.address;
                      }
+                    }
                      this.listdata2=[];
 
             let  p={

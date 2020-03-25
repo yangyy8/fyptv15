@@ -69,10 +69,8 @@ export default {
                     }).then(() => {
                         this.$router.push({path:'/'});
                     }).catch(() => {
-                        this.$message({
-                        type: 'info',
-                        message: '已取消删除'
-                        });
+                       
+                        this.$message.info("已取消删除");
                     });
 
                       }else{
