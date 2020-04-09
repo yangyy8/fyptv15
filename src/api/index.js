@@ -8,7 +8,8 @@ import store from '../assets/store';
 
 function apiAxios (method, url, params, success, failure,header,responseType) {
     let loadingInstance1=null;
-    if(url!="/menu/getSubMenu"  && url!="/menu/getMenu" && url!="/menu/getShortcutMenu"){
+    if(url!="/menu/getSubMenu"  && url!="/menu/getMenu" && url!="/menu/getShortcutMenu" 
+    && url!="/PersonIdentifyInfoController/findPerson"){
      loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading',text:'正在加载中',background:'rgba(0,0,0,0.6)',customClass:'loadingClass'});
     }
       if (params) {
@@ -77,7 +78,7 @@ function apiAxios (method, url, params, success, failure,header,responseType) {
             } else if (res && res.status === 902) { //不能用
               window.location.href ="#/Message";
             }else{
-               //console.log('api error, HTTP CODE: ' + res.status);
+               console.log('api error, HTTP CODE: ' +err+'==='+store.state.token);
                //window.location.href ="#/";
             }
           }

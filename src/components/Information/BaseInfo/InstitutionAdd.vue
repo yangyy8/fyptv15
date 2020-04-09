@@ -3,6 +3,7 @@
     <div class="pairadd subtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
          <span> 基本信息库 
+              <span class="mlr_10">/</span> <b>联络机构</b>
         <span class="mlr_10">/</span> <b>{{cname}}</b>
          <span class="mlr_10" v-if='cname1!=null'>/</span><b>{{cname1}}</b></span>
           </div>
@@ -10,9 +11,7 @@
              <div class="pairleft">
                 
                 <div class="top tit">{{cname1==null?cname:cname1}}信息</div>
-               
                     <el-row class="lh con" :gutter="2">
-                    
                         <el-col :sm="24" :md="12" :lg="8">
                             <span class="yy-input-text"><font class="red">*</font> 机构名称</span>
                             <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.mc"  class="yy-input-input" ></el-input>
@@ -21,7 +20,6 @@
                             <span class="yy-input-text"><font class="red">&ensp;</font> 简称</span>
                             <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.jc"  class="yy-input-input" ></el-input>
                         </el-col>
-                         
                         <el-col :sm="24" :md="12" :lg="8" v-if='jb==null'>
                             <span class="yy-input-text"><font class="red">*</font> 是否部门</span>
                            <el-select v-model="pd.sfbm" :disabled="jb=='qg'|| jb=='1' ||status=='1' || ck || xzqh!=null" @change="getLWDW(pd.sfbm,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -87,7 +85,7 @@
                             </el-select>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" v-if="(addtype=='1' || addtype=='2') && jb==null">
-                            <span class="yy-input-text"> 专门委员会</span>
+                            <span class="yy-input-text"> 委员会</span>
                            <el-select v-model="pd.zmwyh" :disabled="ck || pd.sfbm=='0223000001'"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in  $store.state.jgwyh "
@@ -184,7 +182,7 @@
                 </div>
                   <div class="footer">
                         <el-button type="primary"  style="width:130px;" @click="submit" v-if="status!='2'">保 存</el-button>
-                        <el-button style="width:130px;" @click="$router.go(-1)">关 闭</el-button>
+                        <el-button style="width:130px;" @click="gonum">关 闭</el-button>
                     </div>
 
          <el-dialog :title="lxrdia" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="600px">
@@ -310,6 +308,8 @@ export default {
             lvl:'',
             xzqhdata:[],
             cbbm:[],
+            lx:'',
+            num:2,
         }
     },
    
@@ -337,7 +337,8 @@ export default {
             this.jgid=val.query.jgid;
             this.cname1=val.query.title;
             this.jb=val.query.jb;
-
+            this.lx=val.query.lx;
+            this.num=val.query.num;
             if(val.query.xzqh!=null && val.query.xzqh!=undefined){
                 this.xzqh=val.query.xzqh;
                 if(this.pd.sfbm=='0223000001'){
@@ -394,8 +395,43 @@ export default {
                         this.lb=this.Global.TZB;
                       break;
                  case '4':
-                        this.cname="民主党派系统";
-                      this.lb=this.Global.MZDP;
+                      this.cname="民主党派系统";
+                       switch (this.lx) {
+                           case '1':
+                              this.lb=this.Global.MZDP1;
+                              this.cname1="中国国民党革命委员会";
+                               break;
+                           case '2':
+                              this.lb=this.Global.MZDP2;
+                              this.cname1="中国民主同盟";
+                               break;
+                           case '3':
+                              this.lb=this.Global.MZDP3;
+                              this.cname1="中国民主建国会";
+                               break;
+                           case '4':
+                              this.lb=this.Global.MZDP4;
+                              this.cname1="中国民主促进会";
+                               break;
+                           case '5':
+                              this.lb=this.Global.MZDP5;
+                              this.cname1="中国农工民主党";
+                               break;
+                           case '6':
+                              this.lb=this.Global.MZDP6;
+                              this.cname1="中国致公党";
+                               break;
+                           case '7':
+                              this.lb=this.Global.MZDP7;
+                              this.cname1="九三学社";
+                               break;
+                           case '8':
+                              this.lb=this.Global.MZDP8;
+                              this.cname1="台湾民主自治同盟";
+                               break;
+                           default:
+                               break;
+                       }
                       break;
                  case '5':
                         this.cname="工商联系统";
@@ -701,13 +737,20 @@ export default {
                     
                       if(r.code==1){
                         
-                           
                            this.$message.success(r.message);
-                           this.$router.push({name:'InstitutionList',query:{type:this.addtype}});
+                           this.gonum();
+                           //this.$router.push({name:'InstitutionList',query:{type:this.addtype,lx:this.lx}});
                       }else{
                            this.$message.error(r.message);return;
                       }
                 });
+          },
+          gonum(){
+              if(this.num==null || this.num==""){
+                    this.$router.push({name:'InstitutionList',query:{type:this.addtype}});
+              }else{
+                   this.$router.go(-this.num);
+              }
           },
                //隶属机构 
           getLWDW(sfbm,t){

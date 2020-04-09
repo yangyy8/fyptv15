@@ -12,18 +12,18 @@
         <el-row>
              <el-col :span="18" style="padding-left:3%">
                <el-row >
-                   <el-col :span="14">
+                   <el-col :span="10">
                      <div class="title"><span >{{jmc==null?'':jmc}}{{lbmc}}</span>名单</div>
                         <div style="margin:20px 20px 0 20px;">共<span style="color:red"> {{count}} </span>名特约人员</div>
                    </el-col>
-                    <el-col :span="10" style="text-align:right">
+                    <el-col :span="14" style="text-align:right">
                           <el-button type="primary"  @click="goBase()" v-if='allshow[0]'>
                              <span @click="goBase()">添加</span>
                             </el-button>
                             <el-button  @click="getDR"  v-if='allshow[1]'>导入</el-button>
                           <el-button  @click="openfile"  v-if='allshow[2]'>相关文件</el-button>
                           <el-button @click="goseach()"  v-if='allshow[3]'>查询</el-button>
-                          <el-button @click="$router.go(-1)">返回</el-button>
+                          <el-button @click="$router.go(-num)">返回</el-button>
                     </el-col>
                </el-row>
                <el-row :gutter="2" class="ah-50 pdz">
@@ -45,21 +45,21 @@
                 </el-row>
              </el-col>
              <el-col :span="6" style="padding-left:45px;">
-                     <div class="title mb-20">历届名单</div>
-                     <div v-for='(tt,ind) in $store.state.jb' :key="ind">
+                     <div class="title mb-20">历届{{lbmc}}名单</div>
+                     <div v-for='(tt,ind) in jblist' :key="ind">
                          <div  class="ljinfo" @click="gopro(tt.mc,tt.dm)">{{tt.mc}}{{lbmc}}</div>
                      </div>
              </el-col>
         </el-row>
           <br/>
         </div>
-  <el-dialog title="特约人员相关文件" :visible.sync="fileDialogVisible" :close-on-click-modal='false' width="700px">
+  <el-dialog :title="diatxt" :visible.sync="fileDialogVisible" :close-on-click-modal='false' width="700px">
              <el-row class="ah-50">
                <el-col :span="24">
                   <span class="yy-input-text trt" style="width:200px;">届别：</span>
                    <el-select v-model="periodType"  @change="getFile(periodType)" filterable clearable default-first-option placeholder="请选择"  size="small" >
                          <el-option
-                           v-for="(item,ind) in $store.state.jb"
+                           v-for="(item,ind) in jblist"
                            :key="ind"
                            :label="item.mc"
                            :value="item.dm">
@@ -175,6 +175,7 @@
 <script>
 import UPLOAD from "../../Common/upload"
 import {getlljgdbtmenu,getlljgdbtdata} from '@/assets/js/aleainfo.js'
+import {ToArray} from '@/assets/js/ToArray.js'
 export default {
     components:{UPLOAD},
     data(){
@@ -215,6 +216,10 @@ export default {
           jb:'',
            alldata:[],
           allshow:[],
+          num:1,
+          jblist:[],
+          leveltype:'',
+          diatxt:'特约人员相关文件',
             
        }
     },
@@ -241,8 +246,8 @@ export default {
             this.jblv=val.query.jblv;
             this.jb=val.query.jb;
             this.jkey=val.query.jkey==null?'0156000013':val.query.jkey;
-            console.log(this.jkey,'---');
-            
+            this.num=val.query.num==null?1:val.query.num;
+         
             if(this.jmc==null)
               {
                 this.jmc=this.$store.state.jmc;
@@ -270,10 +275,10 @@ export default {
         
         getSN(s,n){
             var sum="";
-          if(s=="女性" && n!="汉族" && n!=null && s!=null){
+          if(s=="女" && n!="汉族" && n!=null && s!=null){
               sum="(女，"+n+")";
           }else{
-              if(s=='女性' && n!=null){
+              if(s=='女' && n!=null){
                  sum="（女）";
                }
               if(n!="汉族" && n!=null){
@@ -294,7 +299,6 @@ export default {
                   r =>{
                           if(r.code==1 ){
                        
-                            
                             if(r.data!=null){
                                this.filedata0.push(r.data);
                             }
@@ -337,6 +341,8 @@ export default {
          openfile()
         {
             this.periodType="";
+
+            this.diatxt=this.lbmc+"相关文件";
             this.filedata0=[];
             this.filedata1=[];
             this.filedata2=[];
@@ -420,7 +426,19 @@ export default {
         },
         getList(dm,code,jb)
         {
+             
+                let pp={
+                        'level':this.jblv,
+                        'administrativeDivision':this.code,
+                        'specialType':this.lb,
+                    };
+                    this.$api.post(this.Global.tyjburl,pp,
+                            r =>{
+                                this.jblist=ToArray(r.data,'1');
+                        });
             
+
+
             var url="/baseinfo/listbytype";
             let p={
                   'periodType':jb,//届别0156000013
@@ -438,7 +456,7 @@ export default {
             });
         },
         gopro(mc,dm){
-           this.$router.push({name:'SpecialPersonDeatil',query:{lb:this.lb,lbmc:this.lbmc,mc:this.cname1,jblv:this.jblv,code:this.code,codemc:this.codemc,jmc:mc,jkey:dm}});
+           this.$router.push({name:'SpecialPersonDeatil',query:{lb:this.lb,lbmc:this.lbmc,mc:this.cname1,jb:this.jb,jblv:this.jblv,code:this.code,codemc:this.codemc,jmc:mc,jkey:dm,num:this.num+1}});
         },
         goto(t){
             var reid=t.specialPersonId;
@@ -446,10 +464,10 @@ export default {
           if(this.allshow[0]==true){
             state="1";
           }
-            this.$router.push({name:'BaseAdd',query:{type:'3',status:state,pbid:t.pbId,reid:reid}});
+            this.$router.push({name:'BaseAdd',query:{type:'3',status:state,pbid:t.pbId,reid:reid,lbmc:this.lbmc}});
         },
         goBase(){
-              this.$router.push({name:'BaseAdd',query:{type:'3',jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,lb:this.lb,jmc:this.jmc,jkey:this.jkey}})
+              this.$router.push({name:'BaseAdd',query:{type:'3',jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,lb:this.lb,jmc:this.jmc,jkey:this.jkey,lbmc:this.lbmc}})
         },
         goseach(){
               this.$router.push({name:'tyBaseList'});

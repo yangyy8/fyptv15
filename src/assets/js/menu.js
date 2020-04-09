@@ -5,7 +5,7 @@ const menu=[
               id: 0,
               jb:0,
               name: "index",
-              icon: "",
+              icon: "el-icon-s-home",
               alias: "首页",
               url:'/Index'
             }
@@ -770,6 +770,7 @@ const menu=[
                   alias: "结对活动",
                   url: "/Home/PairAdd?type=1"
                 },
+                
               },
               {
                 entity: {
@@ -869,6 +870,330 @@ const menu=[
                   alias: "高级查询",
                   url: "/Home/PairList"
                 }
+              },
+              {
+                entity: {
+                  id: 12001,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "40",
+                },
+               
+              },
+              {
+                entity: {
+                  id: 12001,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "39",
+                },
+               
+              },
+              {
+                entity: {
+                  id: 12001,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "38",
+                },
+               
+              },
+              {
+                entity: {
+                  id: 12001,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "37",
+                },
+               
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "36",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "35",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "34",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "33",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "32",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "31",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "30",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "29",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "28",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "27",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "26",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "27",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "24",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "23",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "22",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "21",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "20",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "19",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "18",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "17",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "16",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "15",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "14",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "13",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "12",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "11",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "10",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "9",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "8",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "7",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "6",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "5",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "4",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "3",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "2",
+                },
+              },
+              {
+                entity: {
+                  id: 12002,
+                  name: "PairAddw",
+                  icon: "el-icon-s-custom",
+                  alias: "1",
+                },
               },
             ]
           },

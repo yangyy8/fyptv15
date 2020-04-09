@@ -14,7 +14,7 @@ export default new Router({
     {
       path: '/Index',
       name: 'Index',
-      component: resolve => require(['@/components/Indexnew'], resolve),
+      component: resolve => require(['@/components/Index'], resolve),
     },
     {
       path: '/Message',
@@ -40,7 +40,7 @@ export default new Router({
     {
       path: '/Indexnew',
       name: 'Indexnew',
-      component: resolve => require(['@/components/Index'], resolve),
+      component: resolve => require(['@/components/Indexnew'], resolve),
     },
     {
       path: '/Home',
@@ -53,6 +53,7 @@ export default new Router({
           name: 'limitmsg',
           component: resolve => require(['@/components/limitmsg'], resolve),
         },
+       
         // LiaisonWork(联络工作)  PairWork(结对活动)  AnnualWork(年度工作总结)
         {
           path: 'PairAdd',
@@ -386,6 +387,12 @@ export default new Router({
           name: 'SuggesProcess',
           meta:{title:['监控和预警','办公流程','议案建议']},
           component: resolve => require(['@/components/MonitorWarn/WorkProcess/SuggesProcess'], resolve),
+        },
+        {
+          path: 'SpecialList',
+          name: 'SpecialList',
+          meta:{title:['监控和预警','办公流程','议案建议']},
+          component: resolve => require(['@/components/MonitorWarn/Category/SpecialList'], resolve),
         },
         //系统管理
         {

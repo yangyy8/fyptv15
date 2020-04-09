@@ -2,8 +2,6 @@
     <div class="pairadd">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 联络工作 <span class="mlr_10">/</span>  <b>{{cname}}</b></span> </div>
          <div class="content subtable">
-             
-              <!-- 结对活动 -->
                <div class="ptitle  mb-20">{{cnames}}</div>
                <div class="pborder mb-50">
                    <el-row class="ah-40" >
@@ -55,7 +53,7 @@
                           <span class="yy-input-text textn">
                             <font class="red">*</font>
                                  <span v-if="addtype==9">接待单位</span>
-                                <span v-else>组织单位</span>
+                                <span v-else>开展单位</span>
                               </span>
                             <el-select v-model="form.organizationalUnitId" :disabled="llbnt" @change="getcbbm(form.organizationalUnitId,0);getJDR(form.organizationalUnitId)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -67,9 +65,9 @@
                             </el-select>
                       </el-col>
                        <el-col :span="8"  >
-                            <span class="yy-input-text textn"><font class="red">*</font> 
+                            <span class="yy-input-text textn">
                                 <span v-if="addtype==9">接待部门</span>
-                                <span v-else>组织部门</span>
+                                <span v-else>开展部门</span>
                                 </span>
                             <el-select v-model="form.orgDepartmentId"  @change="getJDR(form.organizationalUnitId,form.orgDepartmentId)" :disabled="llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -82,11 +80,11 @@
                       </el-col>
                        
                    </el-row>
-                   <el-row class="ah-40"  v-if="addtype==4 || addtype==6 || addtype==8">
+                   <el-row class="ah-40"  v-if="addtype==4">
                          <el-col :span="8">
                           <span class="yy-input-text textn">
                               <font class="red">*</font>
-                              <span v-if="addtype!=8">承办单位</span><span v-else>邀请单位</span>
+                             承办单位
                               </span>
                             <el-select v-model="form.undertakeUnitId" :disabled="llbnt"  @change="getcbbm(form.undertakeUnitId,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -100,7 +98,7 @@
                        <el-col :span="8" >
                             <span class="yy-input-text textn">
                                 <font class="red">*</font>
-                                 <span v-if="addtype!=8">承办部门</span><span v-else>邀请部门</span>
+                                承办部门
 
                             </span>
                             <el-select v-model="form.undertakeDepartmentId" :disabled="llbnt"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -113,10 +111,10 @@
                             </el-select>
                       </el-col>
                     </el-row>
-                   <el-row class="ah-40"  v-if="addtype==10 || addtype==6 || addtype==5 || addtype==7">
+                   <el-row class="ah-40"  v-if="addtype==6 || addtype==5 || addtype==7">
                          <el-col :span="8">
                        
-                          <span class="yy-input-text textn"><font class="red">*</font> 开展单位</span>
+                          <span class="yy-input-text textn"><font class="red">*</font> 承办单位</span>
                             <el-select v-model="form.developmentUnitId" :disabled="llbnt" @change="getcbbm(form.developmentUnitId,2)"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
@@ -128,7 +126,7 @@
                       </el-col>
                        <el-col :span="8" >
 
-                            <span class="yy-input-text textn"><font class="red">*</font> 开展部门</span>
+                            <span class="yy-input-text textn">承办部门</span>
                             <el-select v-model="form.devDepartmentId" :disabled="llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fybmdata2"
@@ -262,11 +260,11 @@
 
                     <el-row  class="ah-40"  v-if="addtype==8 && !llbnt">
                         <el-col :span="8">
-                            <span class="yy-input-text" style="width:30%" title="新闻单位名称">新闻单位名称</span>
+                            <span class="yy-input-text" style="width:30%" title="首发新闻单位">首发新闻单位</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd3.newsMediaName"  class="yy-input-input" ></el-input>
                       </el-col>
                        <el-col :span="8">
-                            <span class="yy-input-text textn">新闻单位类别</span>
+                            <span class="yy-input-text textn">宣传报道形式</span>
                             <el-select v-model="pd3.newsMediaTypeId" @change="chChange(pd3.newsMediaTypeId,5)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.xwdwfl"
@@ -275,16 +273,26 @@
                                  :value="item.dm">
                                  </el-option>
                             </el-select>
-
                        </el-col>
-                        <el-col :span="8">
-                            <el-button type="success" size="small" plain @click="getAdd(3,pd3)">加入列表</el-button>
-                        </el-col>
+                       <el-col :span="8">
+                            <span class="yy-input-text textn">转发媒体级别</span>
+                            <el-select v-model="pd3.newsMediaTypesId" @change="chChange(pd3.newsMediaTypesId,5)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in $store.state.zfxwjb"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                                 </el-option>
+                            </el-select>
+                       </el-col>
+                      
                         </el-row>
 
                     <el-row  class="ah-40" v-if="addtype==8">
+                        <el-col :span="24" class="mt-10" style="text-align:right">
+                            <el-button type="success" size="small" plain @click="getAdd(3,pd3)">加入列表</el-button>
+                        </el-col>
                        <el-col :span="24">
-                      
                              <el-table
                             ref="multipleTable"
                             :data="ListData3">
@@ -298,11 +306,15 @@
                             </el-table-column>
                              <el-table-column
                                 prop="newsMediaName"
-                                label="新闻单位名称">
+                                label="首发新闻单位">
+                            </el-table-column>
+                            <el-table-column
+                                prop="newsMediaTypes"
+                                label="宣传报道形式">
                             </el-table-column>
                             <el-table-column
                                 prop="newsMediaType"
-                                label="新闻单位类别">
+                                label="转发媒体级别">
                             </el-table-column>
                             <el-table-column
                                   label="操作">
@@ -317,15 +329,15 @@
                          </el-col>
                     </el-row>
 
-                    <el-row  class="ah-40"  v-if="addtype==9 && !llbnt">
+                    <el-row  class="ah-40"  v-if="addtype==9 ">
                        
                         <el-col :span="8">
-                            <span class="yy-input-text textn">接待人员</span>
-                            <el-select v-model="pd7.receptionistid"  @change="chChange(pd7.receptionistid,6)" filterable clearable default-first-option placeholder="请先选择接待单位接待部门"  size="small" class="yy-input-input" >
+                            <span class="yy-input-text textn">接待人</span>
+                            <el-select v-model="pd7.receptionistid" v-if="!llbnt"  @change="chChange(pd7.receptionistid,6)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form.organizationalUnitId==''||form.organizationalUnitId==undefined?'请先选择接待单位':'无数据'">
                                <el-option
                                  v-for="(item,ind) in jdrdata"
                                  :key="ind"
-                                 :label="item.personName"
+                                 :label="item.fullName"
                                  :value="item.pbId">
                                  </el-option>
                             </el-select>
@@ -340,10 +352,7 @@
                              <el-table
                             ref="multipleTable"
                             :data="ListData7">
-                            <!-- <el-table-column
-                                type="selection"
-                                width="50">
-                            </el-table-column> -->
+                         
                             <el-table-column
                                 type="index"
                                 label="序号" width="50">
@@ -424,6 +433,7 @@
                             </el-table-column>
                               <el-table-column
                                 prop="cardNumber"
+
                                 label="证号">
                             </el-table-column>
                              <el-table-column
@@ -444,7 +454,7 @@
                               <span class="yy-input-text" style="width:210px;">代表、委员以及特约人员人数</span>  <span style="font-weight:bold;color:red;margin-left:20px;"> {{count1}} </span> 人
                            </el-col>
                     </el-row>
-                   <el-row  class="mt-20" >
+                   <el-row  class="mt-20" v-if='addtype!="9" && addtype!="7"'>
                         <el-col :span="12">
                             <span class="yy-input-text" style="width:100px;">法院领导</span>
                             <el-select v-model="fyld" v-if="!llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
@@ -462,9 +472,8 @@
                             
                         </el-col>
                    </el-row>
-                   <el-row class="ah-40">
+                   <el-row class="ah-40" v-if='addtype!="9" && addtype!="7"'>
                         <el-col :span="24" >
-                       
                              <el-table
                             ref="multipleTable"
                             :data="ListData5">
@@ -476,20 +485,7 @@
                                 prop="personName"
                                 label="姓名">
                             </el-table-column>
-                            <!-- <el-table-column
-                                label="团(界)别">
-                             <template slot-scope="scope">
-                                   <div>
-                                      <span v-if="scope.row.groupType!=null && scope.row.periodType!=null">{{scope.row.periodType}}</span>
-                                      <span v-else-if="scope.row.groupType!=null">{{scope.row.groupType}}</span>
-                                      <span v-else-if="scope.row.periodType!=null">{{scope.row.periodType}}</span>
-                                    </div>
-                                </template>
-                            </el-table-column> -->
-                            <!-- <el-table-column
-                                prop="sex"
-                                label="性别">
-                            </el-table-column> -->
+                        
                             <el-table-column
                                 prop="orgName"
                                 label="单位">
@@ -519,40 +515,30 @@
                            <span class="yy-input-text texts"><font class="red">*</font>  {{label4}}</span>
                            <el-input placeholder="请输入内容" type="textarea" :disabled="llbnt" :autosize="{ minRows: 10, maxRows: 10}" size="small" clearable v-model="form.contents"  class="yy-input-input inputw" ></el-input>
                        </el-col>
-                       <el-col :span="24" style="margin-left:10.2%;" v-if="addtype!='9'">
-                             <el-checkbox v-model="pd5.ck1" :disabled="llbnt">人民法院各部门组织开展的特约监督员或特邀咨询员活动</el-checkbox>
+                       <el-col :span="24" style="margin-left:10.2%;">
+                             <el-checkbox v-model="pd5.ck1" :disabled="llbnt">人民法院各部门组织开展的特约人员活动</el-checkbox>
                        </el-col>
                        <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==2">
                              <el-checkbox v-model="pd5.ck2" :disabled="llbnt">集中专项视察</el-checkbox>
                        </el-col>
-                     
-                       <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==2 || addtype==3">
-                             <el-checkbox v-model="pd5.ck3" :disabled="llbnt" @change="getCheck(1)">结合议案建议或政协提案办理</el-checkbox>  
-                               <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck3  && !llbnt" @click="getGL(1)">关联</el-button>
-                       </el-col>
-                        <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==3">
-                             <el-checkbox v-model="pd5.ck4" :disabled="llbnt" @change="getCheck(2)">代表委员意见建议办理</el-checkbox>  
-                               <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck4  && !llbnt" @click="getGL(2)">关联</el-button>
-                       </el-col>
-                       <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==7">
+                          <!-- <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==7">
                              <el-checkbox v-model="pd5.ck5" :disabled="llbnt">院领导参与标识</el-checkbox>
-                       </el-col>
+                       </el-col> -->
                       
-                       <el-col :span="24" style="margin-left:10%;" v-if="addtype==5">
-                             <el-checkbox v-model="pd5.ck6" :disabled="llbnt">是否大要案</el-checkbox>
-                       </el-col>
-                            <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==4">
+                        <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==4 || addtype==5">
                              <el-checkbox v-model="pd5.ck8" :disabled="llbnt">组织座谈交流</el-checkbox>
                        </el-col>
-                   
-                       <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==5 || addtype==4">
-                             <el-checkbox v-model="pd5.ck7" :disabled="llbnt">代表、委员或监督员、咨询员关注案件</el-checkbox>
-                             <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck7 && !llbnt" @click="getGL(3)">关联关注案件</el-button>
+                       <el-col :span="24" style="margin-left:10%;" v-if="addtype==4 || addtype==5">
+                             <el-checkbox v-model="pd5.ck6" :disabled="llbnt">是否大要案</el-checkbox>
                        </el-col>
-                    </el-row>
-                <el-row class="ah-40" v-if="pd5.ck3 && (addtype==3 || addtype==2)">
+                       <el-col :span="24" style="margin-left:10.2%;">
+                             <el-checkbox v-model="pd5.ck3" :disabled="llbnt" @change="getCheck(1)">结合议案建议或政协提案办理</el-checkbox>  
+                               <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck3  && !llbnt" @click="getGLXX(1)">关联</el-button>
+                       </el-col>
+                       <el-col :span="24"  v-if="pd5.ck3" style="margin-left:10.2%;">
+                        <el-row class="ah-40">
                         <el-col :span="24" class="input-item">
-                       <span class="yy-input-text txttop" style="width:10.2%;">结合的议案<br/>建议或提案</span>
+                      
                        <div class="yy-input-input" style="width:89%!important;">
                              <el-table
                             ref="multipleTable"
@@ -589,33 +575,72 @@
                             </div>
                          </el-col>
                    </el-row>
-                    <el-row class="ah-40" v-if="pd5.ck4 && addtype==3">
+                       </el-col>
+                        <!-- <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==3">
+                             <el-checkbox v-model="pd5.ck4" :disabled="llbnt" @change="getCheck(2)">代表委员意见建议办理</el-checkbox>  
+                               <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck4  && !llbnt" @click="getGL(2)">关联</el-button>
+                       </el-col> -->
+                    
+                   
+                       <el-col :span="24" style="margin-left:10.2%;">
+                             <el-checkbox v-model="pd5.ck7" :disabled="llbnt">结合代表、委员及特约人员关注案件</el-checkbox>
+                             <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck7 && !llbnt" @click="getGLXX(2)">关联关注案件</el-button>
+                       </el-col>
+                       <el-col :span="24"   v-if="pd5.ck7" class="input-item" style="margin-left:10.2%;">
+                        
+                       <!-- <span class="yy-input-text txttop" style="width:10.2%;">关注的案件</span> -->
+                       <div class="yy-input-input" style="width:89%!important;">
+                             <el-table
+                            ref="multipleTable"
+                            :data="ListData8">
+                            <el-table-column
+                                type="index"
+                                label="序号" width="50">
+                            </el-table-column>
+                              <el-table-column
+                                prop="casenum"
+                                label="案件号">
+                            </el-table-column>
+                             <el-table-column
+                                prop="partiesandcasereason"
+                                label="当事人及案由">
+                            </el-table-column>
+                             <el-table-column
+                                  prop="leaderpbid"
+                                  label="来文人姓名"
+                                  width="150">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="letternumber"
+                                  label="来文字号">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="lettercontents"
+                                  label="来文要求"
+                                  width="250">
+                              </el-table-column>
+                             <el-table-column
+                                label="操作">
+                                 <template slot-scope="scope">
+                                   <div>
+                                    <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(11,scope.row)"></el-button>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                           </el-table>
+                            </div>
+                         </el-col>
+                  
+                      </el-row>
+               
+                    <!-- <el-row class="ah-40" v-if="pd5.ck4">
                         <el-col :span="24" class="input-item">
                        <span class="yy-input-text" style="width:10.2%;" >代表委员<br/>意见建议</span>
                        <div class="yy-input-input  txttop" style="width:89%!important;">
                              <el-table
                             ref="multipleTable"
                             :data="ListData10">
-                            <!-- <el-table-column
-                                type="index"
-                                label="序号">
-                            </el-table-column>
-                             <el-table-column
-                                prop="number"
-                                label="编号">
-                            </el-table-column>
-                             <el-table-column
-                                prop="proposalType"
-                                label="类型">
-                            </el-table-column>
-                            <el-table-column
-                                prop="title"
-                                label="标题">
-                            </el-table-column>
-                             <el-table-column
-                                prop="leaderPerson"
-                                label="提出人">
-                            </el-table-column> -->
+                           
                              <el-table-column
                                 type="index"
                                 label="序号" width="50">
@@ -647,73 +672,45 @@
                            </el-table>
                             </div>
                          </el-col>
-                   </el-row>
-                    <el-row class="ah-40" v-if="pd5.ck7 && (addtype==5 || addtype==4)">
-                        <el-col :span="24" class="input-item">
-                       <span class="yy-input-text txttop" style="width:10.2%;">关注的案件</span>
-                       <div class="yy-input-input" style="width:89%!important;">
-                             <el-table
-                            ref="multipleTable"
-                            :data="ListData8">
-                            <el-table-column
-                                type="index"
-                                label="序号" width="50">
-                            </el-table-column>
-                              <el-table-column
-                                prop="casenum"
-                                label="案件号">
-                            </el-table-column>
-                             <el-table-column
-                                prop="partiesandcasereason"
-                                label="当事人及案由">
-                            </el-table-column>
-                             <el-table-column
-                                label="操作">
-                                 <template slot-scope="scope">
-                                   <div>
-                                    <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(11,scope.row)"></el-button>
-                                    </div>
-                                </template>
-                            </el-table-column>
-                           </el-table>
-                            </div>
-                         </el-col>
-                   </el-row>
-
+                   </el-row> -->
+                   
 
                    <el-row class="ah-40" >
                         <el-col :span="24" class="input-item">
-                            <span class="yy-input-text textd txttop" title="代表委员及特约人员评价和意见建议">代表委员及特<br>约人员评价和<br>意见建议</span>
+                            <span class="yy-input-text textd txttop" title="代表委员及特约人员意见建议">代表委员及特<br/>约人员意见建议</span>
                             <div class="yy-input-input inputw">
                             <el-row class="mt-10" style="text-align:right;margin-right:10px;"  v-if='!llbnt'>
-                                 <el-button type="success" size="small" @click="gotoya(0)" >关联</el-button>
-                              <!-- <el-button type="primary" size="small" plain >录入</el-button>
-                              <el-button type="success" size="small" plain  :disabled="bnt">修改</el-button>
-                              <el-button type="danger"  size="small" plain  :disabled="bnt">删除</el-button> -->
+                                 <!-- <el-button type="success" size="small" @click="gotoya(0)" >关联</el-button> -->
+                              <el-button type="primary" size="small" plain @click="getyj(0)">添加</el-button>
+                              <el-button type="success" size="small" plain  :disabled="yjbnt" @click="getyj(1)">修改</el-button>
+                              <el-button type="danger"  size="small" plain  :disabled="yjbnt" @click="getyj(2)">查看</el-button>
                             </el-row>
                             <el-table
-                            ref="multipleTable"
+                            ref="multipleTable4"
                             :data="dbtableData"
+                            @row-click="clickRow4"
+                            @selection-change="pdchange4"
                             >
-                            <!-- <el-table-column
+                            <el-table-column
                                 type="selection"
                                 width="50">
-                            </el-table-column> -->
+                            </el-table-column>
                             <el-table-column
                                 type="index"
                                 label="序号" width="50">
                             </el-table-column>
-                             <el-table-column
-                                prop="title"
-                                label="评价和意见建议">
-                            </el-table-column>
+                           
                             <el-table-column
                                 prop="leaderPerson"
                                 label="提出人">
                             </el-table-column>
+                              <el-table-column
+                                prop="title"
+                                label="活动意见建议">
+                            </el-table-column>
                             <el-table-column
                                 prop="isFeedBack"
-                                label="是否反馈">
+                                label="反馈情况">
                             </el-table-column>
                               <el-table-column
                                 prop="feedBackTime"
@@ -732,7 +729,7 @@
                         </el-col>
                         
                         <el-col :span="24" class="input-item mt-20">
-                           <span class="yy-input-text textd txttop" title="工作情况报告"><font class="red">*</font> 工作情况报告</span>
+                           <span class="yy-input-text textd txttop" title="工作情况报告">工作情况报告</span>
                             <div class="yy-input-input inputw" v-if='!llbnt'>
                                   <el-button type="primary" plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="upload(0)">上传文件</el-button> <span class="ts"></span>
                             </div>
@@ -785,8 +782,7 @@
                                             
                             </el-popover>
 
-
-                              <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-close"></i></a>
+                              <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-error"></i></a>
                              
                             <!-- <div style="font-size:11px;text-align:center">{{fit.filename}}.{{fit.filesuffix}}</div>  -->
                             </div>
@@ -806,7 +802,7 @@
                                     您的浏览器不支持视频播放
                              </video>
                              </el-popover>
-                            <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-close"></i></a>
+                            <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-error"></i></a>
                                <!-- <div style="font-size:11px;text-align:center">{{fit.filename}}.{{fit.filesuffix}}</div>  -->
                             </div>
                         </div>
@@ -922,7 +918,6 @@
    <UPLOAD :url="uurl" :type="0" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
   <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" :close-on-click-modal='false' width="650px">
-   <!-- <VIDEO :url="vvurl" :type="2" :urlErr="urlErr" @fatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEO> -->
      <VIDEONEW :url="vvurl" :type="2" :urlErr="urlErr" @DfatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEONEW>
   </el-dialog>
 <el-dialog :title="yatxt" :visible.sync="lwDialogVisible" :close-on-click-modal='false' class="subtable">
@@ -1057,7 +1052,6 @@
                <span class="yy-input-text trt">当事人及案由：</span>
                 <el-input placeholder="请输入内容" size="small" clearable v-model="pd8.partiesandcasereason"  class="yy-input-input" ></el-input>
              </el-col>
-             
                <el-col :span="24" style="text-align:center">
                  <el-button type="success"  size="small" @click="pdsearch(3)"> 查 询</el-button>
                  </el-col>
@@ -1083,7 +1077,7 @@
                                   prop="partiesandcasereason"
                                   label="当事人及案由">
                               </el-table-column>
-                             </el-table>
+                        </el-table>
         
          <div slot="footer" class="dialog-footer">
             <el-button type="primary"  size="small" @click="pdsubmit(2)">关 联</el-button>
@@ -1193,8 +1187,17 @@
               <el-button @click="dbDialogVisible = false" size="small">取 消</el-button>
             </div>
     </el-dialog>
+
   
-  
+   <el-dialog title="活动意见建议" :visible.sync="yjsDialogVisible" :close-on-click-modal='false'>
+     <SUGGEST  :data="yjdata" :type="addtype" @yjsfatherMethod="yjsfatherMethod" :random="new Date().getTime()"></SUGGEST>
+  </el-dialog>
+  <el-dialog title="结合议案建议或政协提案办理" :visible.sync="suggDialogVisible" :close-on-click-modal='false'>
+      <SUGGALL  :data="yjdata" :type="addtype" @suggfatherMethod="suggfatherMethod" :random="new Date().getTime()"></SUGGALL>
+  </el-dialog>
+  <el-dialog title="结合代表、委员及特约人员关注案件" :visible.sync="caseDialogVisible" :close-on-click-modal='false'>
+      <CASE  :data="yjdata" :type="addtype" @casefatherMethod="casefatherMethod" :random="new Date().getTime()"></CASE>
+  </el-dialog>
 
     </div>
 </template>
@@ -1202,9 +1205,12 @@
 import UPLOAD from "../../Common/upload"
 import VIDEO from "../../Common/video"
 import VIDEONEW from "../../Common/imgvideo"
+import SUGGEST from "../../Common/suggest/suggestions"
+import CASE from "../../Common/suggest/caseinfoall"
+import SUGGALL from "../../Common/suggest/suggestall"
 import {getServerDate,formatDate,getYear} from '@/assets/js/date.js'
 export default {
-    components:{UPLOAD,VIDEO,VIDEONEW},
+    components:{UPLOAD,VIDEO,VIDEONEW,SUGGEST,CASE,SUGGALL},
     data(){
         return{
           CurrentPage1: 1,
@@ -1244,17 +1250,23 @@ export default {
           pdmult1:[],
           pdmult2:[],
           pdmult3:[],
+          pdmult4:[],
           dbtableData:[],
           pairDialogVisible:false,
           dbDialogVisible:false,
           bnt:true,
+          yjbnt:true,
           uurl:'/FileUploadController/uploadWorkReport',
           vvurl:'/FileUploadController/uploadImageData',
           urlErr:'',
+          yjdata:'',
           uploadDialogVisible:false,
           YJDialogVisible:false,
           lwDialogVisible:false,
           lwDialogVisible2:false,
+          yjsDialogVisible:false,
+          suggDialogVisible:false,
+          caseDialogVisible:false,
           addtype:'',
           cname:'',
           cnames:'',
@@ -1297,6 +1309,7 @@ export default {
         this.$store.dispatch("getScfl");
         this.$store.dispatch("getXwdwfl");
         this.$store.dispatch("getTazz");
+        this.$store.dispatch("getZfxwjb");
         this.getinit(this.$route);
     
     },
@@ -1304,6 +1317,7 @@ export default {
        
     },
     methods:{
+
         pageSizeChange1(val) {
           this.pageSize1=val;
            this.pdsearch(1,this.CurrentPage1, val, this.pd6);
@@ -1326,6 +1340,9 @@ export default {
         clickRow3(row){
            this.$refs.multipleTable3.toggleRowSelection(row)
         },
+         clickRow4(row){
+           this.$refs.multipleTable4.toggleRowSelection(row)
+        },
         pdchange1(val){
             this.pdmult1=val;
         },
@@ -1334,6 +1351,14 @@ export default {
         },
         pdchange3(val){
             this.pdmult3=val;
+        },
+        pdchange4(val){
+            this.pdmult4=val;
+          if(this.pdmult4.length>0){
+             this.yjbnt=false;
+          }else{
+             this.yjbnt=true;
+          }
         },
         //代表、委员以及特约人员列表
          getName(){
@@ -1564,7 +1589,7 @@ export default {
                   });
           //权限end
 
-         this.getName();
+        
          this.getCBDW();
          this.getFYName();
          this.getFY();
@@ -1599,7 +1624,7 @@ export default {
                   this.form.activityType="0149000006";//座谈
                  break;
             case '7':
-                 this.cname="日常走访活动";
+                 this.cname="走访活动";
                  this.label4="走访情况";
                  this.form.activityType="0149000007";
 
@@ -1611,7 +1636,7 @@ export default {
                  this.form.activityType="0149000009";
                  break;
             case '9':
-                 this.cname="日常接待活动";
+                 this.cname="接待来访活动";
                  this.label4="接待情况";
                  this.form.activityType="0149000008";
                  break;
@@ -1632,7 +1657,9 @@ export default {
         //  this.form.entryDepartment=this.$store.state.bmname;
         //  this.form.entryPerson=this.$store.state.uname;
         //  this.form.entryTime=getServerDate();
-
+        
+        
+         this.getName();
          this.getList();
 
         },
@@ -1862,10 +1889,10 @@ export default {
                 this.pd2={};
              }else if(t==3){
                   if(this.pd3.newsMediaName==undefined || this.pd3.newsMediaName==''){
-                     this.$message.error("新闻单位名称不能为空!");return;
+                     this.$message.error("首发新闻单位不能为空!");return;
                  }
                  if(this.pd3.newsMediaTypeId==undefined || this.pd3.newsMediaTypeId==''){
-                     this.$message.error("新闻单位类别不能为空!");return;
+                     this.$message.error("宣传报道形式不能为空!");return;
                  }
                  this.ListData3.push(val);
                
@@ -2084,22 +2111,10 @@ export default {
         },
         getGLXX(t)
         {
-            if(t==1){ //关注的案件保存
-             this.ListData8=[];
-                if(this.pdmult2.length==0){
-                    this.$message.error("请选择至少一条数据");return;
-                }   
-                var array=this.pdmult2;
-               for (let i = 0; i < array.length; i++) {
-                   var obj={};
-                   obj.caseNumber=array[i].casenum;
-                   obj.causeOfActionAndParties=array[i].partiesandcasereason;
-                   this.ListData8.push(obj);
-                   
-               }
-               
-               this.lwDialogVisible2=false;
-                
+            if(t==1){
+             this.suggDialogVisible=true;
+            }else if(t==2){
+              this.caseDialogVisible=true;
             }
         },
         submit(){
@@ -2132,27 +2147,27 @@ export default {
               }
               if(this.form.organizationalUnitId==undefined || this.form.organizationalUnitId=="")
               {
-                  var jdlabel="组织单位";
+                  var jdlabel="开展单位";
                   if(this.addtype==9){
                       jdlabel="接待单位";
                   }
 
                   this.$message.error(jdlabel+"不能为空！");return;
               }
-               if(this.form.orgDepartmentId==undefined || this.form.orgDepartmentId=="")
-              {
-                  var jdlabel="组织部门";
-                  if(this.addtype==9){
-                      jdlabel="接待部门";
-                  }
+              //  if(this.form.orgDepartmentId==undefined || this.form.orgDepartmentId=="")
+              // {
+              //     var jdlabel="开展部门";
+              //     if(this.addtype==9){
+              //         jdlabel="接待部门";
+              //     }
 
-                  this.$message.error(jdlabel+"不能为空！");return;
-              }
+              //     this.$message.error(jdlabel+"不能为空！");return;
+              // }
               if(this.addtype==4 || this.addtype==6 || this.addtype==8)
               {
                if(this.form.undertakeUnitId==undefined || this.form.undertakeUnitId=="")
               {
-                  var jdlabel="邀请单位";
+              
                   if(this.addtype!=8){
                       jdlabel="承办单位";
                   }
@@ -2161,7 +2176,7 @@ export default {
               }
               if(this.form.undertakeDepartmentId==undefined || this.form.undertakeDepartmentId=="")
               {
-                  var jdlabel="邀请部门";
+                  
                   if(this.addtype!=8){
                       jdlabel="承办部门";
                   }
@@ -2173,12 +2188,12 @@ export default {
               {
                    if(this.form.developmentUnitId==undefined || this.form.developmentUnitId=="")
                     {
-                        this.$message.error("开展单位不能为空！");return;
+                        this.$message.error("承办单位不能为空！");return;
                     }
-                   if(this.form.devDepartmentId==undefined || this.form.devDepartmentId=="")
-                    {
-                        this.$message.error("开展部门不能为空！");return;
-                    }
+                  //  if(this.form.devDepartmentId==undefined || this.form.devDepartmentId=="")
+                  //   {
+                  //       this.$message.error("开展部门不能为空！");return;
+                  //   }
               }
               if(this.ListData4.length==0){
                   
@@ -2189,9 +2204,15 @@ export default {
                this.$message.error(this.label4+"不能为空！");return;
               }
 
-               if(this.filedata0.length==0){
+              //  if(this.filedata0.length==0){
                   
-               this.$message.error("工作情况报告不能为空！");return;
+              //  this.$message.error("工作情况报告不能为空！");return;
+              // }
+
+              if(this.pd5.ck8 && this.addtype=='5'){
+                if(this.dbtableData.length==0){
+                    this.$message.error("代表委员及特约人员意见建议不能为空！");return;
+                }
               }
               if(this.fits.length==0){
                   
@@ -2714,8 +2735,40 @@ export default {
                      }
                   });
         },
-         
-
+        //意见建议添修改查看
+        getyj(t){
+          if(t!=0){
+              if(this.pdmult4.length==0){
+                  this.$message.error('请选择一条数据！');return;
+              }else if(this.pdmult4.length>1){
+                 this.$message.error('只能选择一条数据！');return;
+              }
+          }
+         this.yjsDialogVisible=true;
+        },
+        yjsfatherMethod(type,data){
+          if(type=='99'){
+            this.yjsDialogVisible=false;
+          }
+        },
+        suggfatherMethod(type,data){
+      
+          
+          if(type=='99'){
+            this.suggDialogVisible=false;
+          }else{
+             this.ListData9=data;
+             this.suggDialogVisible=false;
+          }
+        },
+        casefatherMethod(type,data){
+           if(type=='99'){
+            this.caseDialogVisible=false;
+          }else{
+             this.ListData8=data;
+             this.caseDialogVisible=false;
+          }
+        },
       
     }
             
@@ -2733,5 +2786,5 @@ export default {
 .txttop{vertical-align: top;}
 .border{border: 1px solid #E6E6E6; border-radius: 6px;margin-top: 10px;}
 .ts{font-size: 12px;color: red;}
-.block .close{display: block;position: absolute;font-size: 18px; font-weight:bold;color: red;cursor: pointer;z-index: 999;margin-top: -185px;margin-left: 170px;}
+.block .close{display: block;position: absolute;font-size: 25px;font-weight:bold;cursor: pointer;z-index: 999;margin-top: -185px;margin-left: 170px;}
 </style>

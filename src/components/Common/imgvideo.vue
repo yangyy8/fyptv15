@@ -15,10 +15,12 @@
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
                 <span class="type_title">图片资料：</span>
+              
                 <el-button size="small" type="primary" style="width:180px;">选择图片</el-button>
                 </el-upload>
-               <div v-for="(item,ind) in imglist" :key="ind" class="videospan">
-               <img v-if="item.filepath" :src="item.filepath" class="avatar" width="180" height="150">
+               <div v-for="(item,ind) in imglist" :key="ind" class="videospan" style="margin-top: 25px;">
+                  <img v-if="item.filepath" :src="item.filepath" class="avatar" width="180" height="150">
+                  <i class="el-icon-error errcheck" @click="imgdel(item.imagedatainfoid,0)"></i>
               </div>
         </div>
        
@@ -44,17 +46,20 @@
                     <span class="type_title">视频资料：</span>
                     <el-button size="small" type="primary" style="width:180px;">选择视频</el-button>
                  </el-upload>
-                <div class="videospan" v-if="videoForm.showVideoPath !='' && !videoFlag" >
+                <div class="videospan" style="margin-top: 25px;" v-if="videoForm.showVideoPath !='' && !videoFlag" >
                                <el-progress v-if="videoFlag == true"
                                 type="circle"
                                 :percentage="videoUploadPercent"
                                 style="margin-top:7px;"></el-progress>
-                    <video v-for="(item,ind) in videolist" :key="ind"
+                 <div  v-for="(item,ind) in videolist" :key="ind"  class="videospan">
+                    <video
                            :src="item.filepath" width="180" height="150"
                            class="avatar video-avatar" 
                            controls="controls">
                            您的浏览器不支持视频播放
                     </video>
+                      <i class="el-icon-error errcheck" @click="imgdel(item.imagedatainfoid,1)"></i>
+                     </div>
                 </div>
         </div>
     </div>
@@ -138,7 +143,18 @@ export default {
                 if (res.code == 1) {
                    
                    this.videoForm.showVideoPath = res.data.relFileList[0].filepath;
-                   this.videolist.push(res.data.relFileList[0]);
+                   var srr=1;
+                    for (let i = 0; i < this.videolist.length; i++) {
+                    
+                        if(file.name==this.videolist[i].filename+'.'+this.videolist[i].filesuffix){
+                            this.$message.error(this.videolist[i].filename+"已经存在!");
+                            srr=0;
+                        }
+                        
+                    }
+                    if(srr==1){
+                        this.videolist.push(res.data.relFileList[0]);
+                    }
                 } else {
                     this.$message.error(res.message);
                 }
@@ -154,6 +170,8 @@ export default {
                     if(type==srr[i]){
                       this.result=1;
                     }
+             
+                  
              }
 
            if(this.result==0){
@@ -162,6 +180,7 @@ export default {
           
         },
         handleAvatarSuccess(res, file){
+              
          if (file.size > 2 * 1024 * 1024) {
                    this.error=1;
                    this.$message.error(file.name+" 不能超过2M");
@@ -169,8 +188,35 @@ export default {
          }
             
         if(this.result!=0){
-            this.imglist.push(res.data.relFileList[0]);
+            var srr=1;
+            for (let i = 0; i < this.imglist.length; i++) {
+               
+                if(file.name==this.imglist[i].filename+'.'+this.imglist[i].filesuffix){
+                    this.$message.error(this.imglist[i].filename+"已经存在");
+                    srr=0;
+                }
+                
+            }
+            if(srr==1)
+             {this.imglist.push(res.data.relFileList[0]);} 
           }
+        },
+        imgdel(data,t){
+            if(t==0){
+            var index = this.imglist.findIndex(item =>{
+    　　　　　 if(item.imagedatainfoid==data){
+            　　　　return true
+            　　}
+            　})
+             this.imglist.splice(index,1)
+            }else{
+                var index = this.videolist.findIndex(item =>{
+    　　　　　 if(item.imagedatainfoid==data){
+            　　　　return true
+            　　}
+            　})
+             this.videolist.splice(index,1)
+            }
         },
 
         //保存
@@ -180,12 +226,13 @@ export default {
              if(this.list.length==0){
                  this.$message.error("至少上传一张，若无现场影像，请提供活动方案/活动报告/领导批示的图片。");
              }else{
-                  console.log(this.list);
+                   console.log(this.list);
                    this.$emit('DfatherMethod',this.list,this.type); return;
              }
         
              
         },
+       
           
    }
        
@@ -196,7 +243,8 @@ export default {
 .type_title{
     font-size: 20px; font-weight: bold;
 }
-.pic_img{margin-top: 20px;}
-.videospan{margin-top: 10px;float: left;}
+.pic_img{margin-top: 25px;}
+.videospan{float: left;}
 .avatar{margin-right: 15px;}
+.errcheck{font-size: 25px;cursor: pointer;margin-top: -165px;margin-left: 170px; height: 150px;display: block;}
 </style>

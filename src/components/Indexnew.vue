@@ -214,7 +214,7 @@ export default {
                           }
              });
       //权限end
-      this.getMenu();
+    //  this.getMenu();
       
       this.getfooter();
 

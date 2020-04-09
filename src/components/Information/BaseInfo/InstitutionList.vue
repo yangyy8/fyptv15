@@ -5,12 +5,32 @@
              <div class="ptitle mb-20">{{cname}}信息</div>
                 <div class="pborder">
                       <el-row class="lh" :gutter="2">
-                       
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" v-if='addtype=="4"' class="input-item">
+                          <span class="yy-input-text">八大民主党派</span>
+                         <el-select v-model="pd.lbss" multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                             <el-option value="0227000006" label="中国国民党革命委员会">
+                             </el-option>
+                             <el-option value="0227000007" label="中国民主同盟">
+                            </el-option>
+                            <el-option value="0227000008" label="中国民主建国会">
+                            </el-option>
+                            <el-option value="0227000009" label="中国民主促进会">
+                            </el-option>
+                            <el-option value="0227000010" label="中国农工民主党">
+                            </el-option>
+                            <el-option value="0227000011" label="中国致公党">
+                            </el-option>
+                            <el-option value="0227000012" label="九三学社">
+                            </el-option>
+                            <el-option value="0227000013" label="台湾民主自治同盟">
+                            </el-option>
+                          </el-select>
+                      </el-col>
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">机构名称</span>
                             <el-input placeholder="请输入内容"  size="small" clearable v-model="pd.mc"  class="yy-input-input" ></el-input>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">是否部门</span>
                            <el-select v-model="pd.sfbm"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -21,18 +41,18 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">机构隶属</span>
                             <el-cascader  
-                            v-model="pd.sj"
-                            :options="jgdata"
-                            :show-all-levels="false"
-                            :props="{ checkStrictly: true }"
-                            clearable filterable size="small" class="yy-input-input"></el-cascader>
+                              v-model="pd.sj"
+                              :options="jgdata"
+                              :show-all-levels="false"
+                              :props="{ checkStrictly: true }"
+                              clearable filterable size="small" class="yy-input-input">
+                            </el-cascader>
                             </el-col>
-                      </el-row>
-                       <el-row class="lh" :gutter="2">
-                        <el-col :sm="24" :md="12" :lg="8">
+                     
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                           <span class="yy-input-text">级别</span>
                            <el-select v-model="pd.lvl"  v-if='addtype!="7"' filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -51,7 +71,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">行政区划</span>
                            <el-select v-model="pd.xzqh"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -73,8 +93,8 @@
                                  </el-option>
                             </el-select>
                         </el-col> -->
-                        <el-col :sm="24" :md="12" :lg="8" v-if='addtype!="7"'>
-                            <span class="yy-input-text">是否专门委员会</span>
+                        <el-col :sm="24" :md="12" :lg="8" v-if='addtype=="1" || addtype=="2"' class="input-item">
+                            <span class="yy-input-text">委员会</span>
                            <el-select v-model="pd.zmwyh"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.jgwyh"
@@ -84,36 +104,36 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">编码</span>
                             <el-input placeholder="请输入内容"  size="small" clearable v-model="pd.bm"  class="yy-input-input" ></el-input>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">简称</span>
                             <el-input placeholder="请输入内容"  size="small" clearable v-model="pd.jc"  class="yy-input-input" ></el-input>
                         </el-col>
                        
-                            <el-col :sm="24" :md="12" :lg="8">
+                            <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">区号</span>
                             <el-input placeholder="请输入内容"  size="small" clearable v-model="pd.qh"  class="yy-input-input" ></el-input>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">专线代码</span>
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">固定电话</span>
                             <el-input placeholder="请输入内容"  size="small" clearable v-model="pd.zxdm"  class="yy-input-input" ></el-input>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">传真</span>
                             <el-input placeholder="请输入内容"  size="small" clearable v-model="pd.cz"  class="yy-input-input" ></el-input>
                         </el-col>
 
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">邮编</span>
                             <el-input placeholder="请输入内容"  size="small" maxlength="6" clearable v-model="pd.yb"  class="yy-input-input" ></el-input>
                         </el-col>
                     
                     </el-row>
-                     <el-row class="lh con" >
-                          <el-col :sm="24" :md="12" :lg="24">
+                     <el-row class="lh con">
+                          <el-col :sm="24" :md="12" :lg="24" class="input-item">
                             <span class="yy-input-text" style="width:9%;">地址</span>
                              <el-input placeholder="请输入内容"  size="small" clearable v-model="pd.dz"  class="yy-input-input" style="width:53.5%!important;"></el-input>
                         </el-col>
@@ -127,7 +147,7 @@
                 <div class="pborder mt-20">
                          <el-row>
                             <el-col :span="16">
-                              <el-button type="primary" size="small" @click="add(0)" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary" size="small" @click="getadd(0)" v-if='allshow[0]'>添加</el-button>
                               <el-button type="primary" size="small" :disabled="bnt" @click="add(2)" v-if='allshow[1]'>查看</el-button>
                               <el-button type="primary" size="small" :disabled="bnt" @click="add(1)" v-if='allshow[2]'>修改</el-button>
                               <el-button type="primary" size="small" :disabled="bnt"  @click="delUser" v-if='allshow[3]'>删除</el-button>
@@ -227,6 +247,23 @@
           <UPLOAD :url="vvurl" :type="11"  :urlErr="vvurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
        </el-dialog>
 
+       <el-dialog title="选择八大民主党派" :visible.sync="addDialogVisible" :close-on-click-modal='false'>
+        <div style="line-height:50px;">
+           <el-radio v-model="lxtype" label="1">中国国民党革命委员会</el-radio>
+           <el-radio v-model="lxtype" label="2">中国民主同盟</el-radio>
+           <el-radio v-model="lxtype" label="3">中国民主建国会</el-radio>
+           <el-radio v-model="lxtype" label="4">中国民主促进会</el-radio>
+           <el-radio v-model="lxtype" label="5">中国农工民主党</el-radio>
+           <el-radio v-model="lxtype" label="6">中国致公党</el-radio>
+           <el-radio v-model="lxtype" label="7">九三学社</el-radio>
+           <el-radio v-model="lxtype" label="8">台湾民主自治同盟</el-radio>
+        </div>
+
+       <div slot="footer" class="dialog-footer">
+         <el-button type="primary" size="small" @click="add(0)">进行录入</el-button>
+         <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
+       </div>
+      </el-dialog>
     </div>
  </template>
 <script>
@@ -254,8 +291,11 @@ export default {
             alldata:['','','','',''],//0录入,1查询,2修改,3删除,4导入
             allshow:[],
             drDialogVisible:false, 
+            addDialogVisible:false,
             vvurl:'/courtPerson/import',
             vvurlErr:'',
+            lx:'',
+            lxtype:'',
 
         }
     },
@@ -328,8 +368,8 @@ export default {
         },
         getinit(val){
           
-
             this.addtype=val.query.type;
+            this.lx=val.query.lx;
             this.getXQ(val.query.type);
             this.pd={};
             switch (this.addtype) {
@@ -346,11 +386,38 @@ export default {
                    case '3':
                         this.cname="统战部系统";
                         this.pd.lb=this.Global.TZB
-                        
                       break;
                  case '4':
                         this.cname="民主党派系统";
-                        this.pd.lb=this.Global.MZDP
+                         switch (this.lx) {
+                           case '1':
+                              this.lb=this.Global.MZDP1;
+                               break;
+                           case '2':
+                              this.lb=this.Global.MZDP2;
+                               break;
+                           case '3':
+                              this.lb=this.Global.MZDP3;
+                               break;
+                           case '4':
+                              this.lb=this.Global.MZDP4;
+                               break;
+                           case '5':
+                              this.lb=this.Global.MZDP5;
+                               break;
+                           case '6':
+                              this.lb=this.Global.MZDP6;
+                               break;
+                           case '7':
+                              this.lb=this.Global.MZDP7;
+                               break;
+                           case '8':
+                              this.lb=this.Global.MZDP8;
+                               break;
+                           default:
+                               break;
+                       }
+                  break;
                         
                       break;
                  case '5':
@@ -392,8 +459,11 @@ export default {
         },
       
         getList(currentPage, showCount, pd){
-          console.log('---',pd);
-          
+           if((this.pd.lbss=='' || this.pd.lbss==null || this.pd.lbss==undefined) && this.addtype=="4"){
+             this.pd.lbs=[this.Global.MZDP1,this.Global.MZDP2,this.Global.MZDP3,this.Global.MZDP4,this.Global.MZDP5,this.Global.MZDP6,this.Global.MZDP7,this.Global.MZDP8];
+           }else if(this.addtype=="4"){
+             this.pd.lbs=this.pd.lbss;
+           }
            let p={
                'token':this.$store.state.token,
                'pd':this.pd,
@@ -447,10 +517,23 @@ export default {
         reset(){
             this.pd={};
         },
+        getadd(t){
+          if(this.addtype=='4'){
+            this.addDialogVisible=true;
+          }else{
+            this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:t}});
+          }
+        },
         add(t){
         
           if(t==0){
-            this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:t}});
+             
+                if(this.lxtype==''){
+                  this.$message.error("请选择八大民主党派");return;
+                }
+                this.addDialogVisible=false;
+              
+            this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:t,lx:this.lxtype}});
           }else{
               if(this.mselect.length>1){
                   this.$message.error("只能选择一条数据！");return;
@@ -518,6 +601,9 @@ export default {
     },
 }
 </script>
- <style scoped>
- 
+ <style >
+ .el-cascader--small{
+   line-height:40px!important;
+ }
  </style>
+ 

@@ -185,7 +185,7 @@
                            </el-option>
                         </el-select>
                       </el-col>
-                      <el-col :span="8" v-else>
+                      <el-col :span="8" class="mt-10" v-else>
                         <span class="yy-input-text"><font class="red">*</font> 
                           <!-- <span v-if='type==2'>提案人</span>
                           <span v-else-if='type==5'>提出人</span>
@@ -201,7 +201,7 @@
                            </el-option>
                         </el-select>
                       </el-col>
-                      <el-col :span="16" v-if='lpshow'>
+                      <el-col :span="16" class="mt-10" v-if='lpshow'>
                            <el-tag v-for="(value,key) in lableList" :key="key" style="margin-right:10px;">{{value}}</el-tag>
                               <span>{{Remark}}</span>
                       </el-col>
@@ -505,7 +505,7 @@
                       </el-col>
                     </el-row>
                 </div> -->
-
+                
                
                   <!-- 交办信息 -->
                  <div class="ptitle mb-20 mt-20" v-if="zt=='jb' || yastate1">交办信息</div>
@@ -550,7 +550,7 @@
                          <el-col :span="8">
                           <span class="yy-input-text">应办结时间</span>
                                 <el-date-picker
-                                    v-model="pdjb.assignTime" format="yyyy-MM-dd"
+                                    v-model="pdjb.assignFinishTime" format="yyyy-MM-dd"
                                     type="date" size="small" value-format="yyyy-MM-dd"
                                     placeholder="选择时间" class="yy-input-input">
                            </el-date-picker>
@@ -564,8 +564,7 @@
                     <el-row class="ah-50">
 
                         <el-col :span="24">
-                            
-                             <el-table
+                            <el-table
                             ref="multipleTable"
                             :data="jbtableData"
                             width="100%">
@@ -586,7 +585,7 @@
                                 label="承办人">
                             </el-table-column>
                               <el-table-column
-                                prop="assignTime"
+                                prop="assignFinishTime"
                                 label="应办结时间">
                             </el-table-column>
                               <el-table-column
@@ -604,12 +603,80 @@
                     </el-row>
                  </div>
                    <!-- 办理信息 -->
+                <div class="ptitle mb-20 mt-20" v-if="zt=='9'">办理信息</div>
+                 <div class="pborder" v-if="zt=='9'">
+                    <el-row class="ah-50">
+
+                        <el-col :span="24">
+                            <el-table
+                            ref="multipleTable"
+                            :data="blxxtableData"
+                            width="100%">
+                            <el-table-column
+                                type="index"
+                                label="序号" width="80">
+                            </el-table-column>
+                             <el-table-column
+                                prop="underTakeOrgName"
+                                label="承办单位">
+                            </el-table-column>
+                            <el-table-column
+                                prop="underTakeSubOrgName"
+                                label="承办部门">
+                            </el-table-column>
+                            <el-table-column
+                                prop="underTakingUserName"
+                                label="承办人">
+                            </el-table-column>
+                              <el-table-column
+                                prop="underTakingTime"
+                                label="办理时间">
+                            </el-table-column>
+                             <el-table-column
+                                prop="underTakingContent"
+                                label="办理内容">
+                            </el-table-column>
+                            <el-table-column
+                                prop="orgHandStatus"
+                                label="办理情况">
+                            </el-table-column>
+                            <el-table-column
+                                label="文件">
+                                <template slot-scope="scope">
+                                    <div>
+                                      <span v-if='scope.row.proposalRelFile!=null'>
+                                        <el-button type="text"  class="a-btn"  title="下载"  icon="el-icon-download" @click="downData(scope.row.proposalRelFile)"></el-button>
+                                      </span>
+                                      <!-- <span v-else>无</span> -->
+                                    </div>
+                                </template>
+                            </el-table-column>
+                         
+                           </el-table>
+                     
+                            </el-col>
+
+                    </el-row>
+                 </div>
+
+
                  <div class="ptitle mb-20 mt-20" v-if="zt=='bl' || yastate2 ">办理信息</div>
                  <div class="pborder" v-if="zt=='bl' || yastate2">
                     <el-row class="ah-40">
-                          <el-col :span="8">
+                      <el-col :span="8">
+                         <span class="yy-input-text">承办单位</span>
+                         <el-select v-model="pdbl.underTakingOrgId" :disabled="true"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                v-for="(item,ind) in cbdwdata"
+                                :key="ind"
+                                :label="item.mc"
+                                :value="item.orgid">
+                              </el-option>
+                        </el-select>
+                       </el-col>
+                        <el-col :span="8">
                          <span class="yy-input-text">承办部门</span>
-                         <el-select v-model="pdbl.underTakingSubOrgId" :disabled="yastate || yastate2" @change="getCBR($store.state.orgid,pdbl.underTakingSubOrgId,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-select v-model="pdbl.underTakingSubOrgId" :disabled="true" @change="getCBR($store.state.orgid,pdbl.underTakingSubOrgId,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in cbbmdata"
                                 :key="ind"
@@ -620,7 +687,7 @@
                        </el-col>
                          <el-col :span="8">
                          <span class="yy-input-text">承办人</span>
-                         <el-select v-model="pdbl.underTakingUserId" :disabled="yastate || yastate2 " filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-select v-model="pdbl.underTakingUserId" :disabled="true" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in cbrdata"
                                 :key="ind"
@@ -1038,6 +1105,7 @@
               <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
             </div>
        </el-dialog>
+
      </div>
 
 </template>
@@ -1047,6 +1115,7 @@
 <script>
 import UPLOAD from "../../Common/upload"
 import {ToArray} from '@/assets/js/ToArray.js'
+
 export default {
   components:{UPLOAD},
   // name:'SuggestInfo',
@@ -1117,6 +1186,8 @@ export default {
              cbsjdata:[],//承办司局
              Remark:'',
              ctitle:'录入',
+             blxxtableData:[],//办理信息
+        
 
         }
     },
@@ -1219,7 +1290,7 @@ export default {
             this.getZDYW();
             this.getList();
             if(this.zt=='bl'){
-            
+            this.$set(this.pdbl,'underTakingOrgId',this.$store.state.orgid);
             this.$set(this.pdbl,'underTakingSubOrgId',this.$store.state.bmid);
             this.getCBR(this.$store.state.orgid,this.pdbl.underTakingSubOrgId,0,99);
             
@@ -1339,8 +1410,6 @@ export default {
                            this.$nextTick(() => {
                              this.getName(this.pr.leaderPersonId,8);
                            });
-                          
-                          
                           }
                           if(this.pd.proposalOrgId!=null){
                           this.pr.proposalOrgId=this.pd.proposalOrgId;
@@ -1368,20 +1437,32 @@ export default {
                             }
 
                           }
+                     
+                          
+                        if(r.data.processInfo.handVOList!=null){//办理信息
+                             this.blxxtableData=r.data.processInfo.handVOList;
+                         }
+
+
                           if(r.data.processInfo.assignVO!=null){ //交办
                               this.cbtableData=r.data.processInfo.assignVO.assignUnitInfo==null?[]:r.data.processInfo.assignVO.assignUnitInfo;
                               if(this.zt=='9'){
                                 this.yastate1=true;
-                                console.log('交办',this.yastate1);
+                              
                               }
                             }
-                          
-                         if(r.data.processInfo.assignVO.assignUnitInfo!=null){
 
-                          this.jbtableData=r.data.processInfo.assignVO.assignUnitInfo;
+                      
+                         if(r.data.processInfo.assignVO!=null){
+
+                          this.jbtableData=r.data.processInfo.assignVO.assignUnitInfo==null?[]:r.data.processInfo.assignVO.assignUnitInfo;
                        
-                          
+                         }else{
+                           this.jbtableData=r.data.assignCondition==null?[]:r.data.assignCondition;
                          }
+
+
+
                          if(r.data.processInfo.overallVO!=null){//统稿
                            this.pdtg=r.data.processInfo.overallVO;
                            this.filedata2=r.data.processInfo.overallVO.proposalFileInfo==null?[]:r.data.processInfo.overallVO.proposalFileInfo;
@@ -1397,9 +1478,9 @@ export default {
                                 this.getCBR(orgid,this.pdbl.underTakingSubOrgId,0,0);
                              }
                              this.filedata1=r.data.processInfo.handVO.proposalFileInfo==null?[]:r.data.processInfo.handVO.proposalFileInfo;
-                             if(this.zt=='9'){
-                              this.yastate2=true;
-                              }
+                            //  if(this.zt=='9'){
+                            //     this.yastate2=true;
+                            //   }
                            }
 
                           if(r.data.processInfo.replyVO!=null){//复文
@@ -1933,7 +2014,7 @@ export default {
             if(this.pdjb.assignUserId=="" || this.pdjb.assignUserId==undefined){
             this.$message.error("承办人不能为空！");return;
           }
-           if(this.pdjb.assignTime=="" || this.pdjb.assignTime==undefined){
+           if(this.pdjb.assignFinishTime=="" || this.pdjb.assignFinishTime==undefined){
             this.$message.error("应办结时间不能为空！");return;
           }
            this.jbtableData.push(this.pdjb);

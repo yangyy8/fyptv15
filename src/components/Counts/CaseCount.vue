@@ -2,12 +2,32 @@
       <div class="pairadd tjtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 统计信息 <span class="mlr_10">/</span>  <b>关注案件统计信息</b></span> </div>
          <div class="content">
-         <el-row style="line-height: 75px;">
+         <!-- <el-row style="line-height: 75px;">
               <el-col :sm="24" :md="24" :lg="12">  <el-button type="primary" plain class="countbnt" @click="getOpen(1,'我院办理全国人大代表关注案件情况')" >我院办理全国人大代表关注案件情况</el-button></el-col>
               <el-col :sm="24" :md="24" :lg="12" class="trt">  <el-button type="success" plain class="countbnt" @click="getOpen(2,'各高院办理全国人大代表关注案件情况')" >各高院办理全国人大代表关注案件情况</el-button></el-col>
               <el-col :sm="24" :md="24" :lg="12">  <el-button type="warning" plain class="countbnt" @click="getOpen(3,'我院办理全国人大代表关注重点案件情况')" >我院办理全国人大代表关注重点案件情况</el-button></el-col>
               <el-col :sm="24" :md="24" :lg="12" class="trt">  <el-button type="danger" plain class="countbnt" @click="getOpen(4,'各高院办理全国人大代表关注重点案件情况')" >各高院办理全国人大代表关注重点案件情况</el-button></el-col>
-         </el-row>
+         </el-row> -->
+
+       <el-row style="line-height:45px; color:#999999">
+           <el-col :span="12">
+               <div :class="bt==1?'chover':'ccbl'" style=" float: right;" @click="gethover(1)">按我院</div>
+           </el-col>
+            <el-col :span="12">
+               <div :class="bt==2?'chover':'ccbl'" style=" float: left;" @click="gethover(2)">按全国</div>
+           </el-col>
+           
+       </el-row>
+       <el-row class="mt-30">
+           <el-col :span="24" v-if='bt==1' style="text-align:center">
+                <el-button class="ccbnt" @click="getOpen(1,'我院办理全国人大代表关注案件情况')" >我院办理全国人大代表关注案件情况</el-button>
+                 <el-button class="ccbnt" @click="getOpen(2,'各高院办理全国人大代表关注案件情况')" >各高院办理全国人大代表关注案件情况</el-button>
+           </el-col>
+           <el-col :span="24"  v-if='bt==2'  style="text-align:center">
+                <el-button class="ccbnt"  @click="getOpen(3,'我院办理全国人大代表关注重点案件情况')" >我院办理全国人大代表关注重点案件情况</el-button>
+                 <el-button class="ccbnt" @click="getOpen(4,'各高院办理全国人大代表关注重点案件情况')" >各高院办理全国人大代表关注重点案件情况</el-button>
+           </el-col>
+       </el-row>
 
      <!-- <div class="counttj" style="text-align:center;color:red" v-if='type==2 || type==4'>正在建设中...</div> -->
 
@@ -120,6 +140,7 @@ export default {
             name:'',
             type:0,
             ck:false,
+            bt:1,
         }
     },
     mounted(){
@@ -196,6 +217,15 @@ export default {
              window.location.reload(); //  点击取消打印后刷新页面，恢复点击打印按钮之前的原始数据
            
         },
+        gethover(t){
+            this.bt=t;
+        },
+
     },
 }
 </script>
+<style scoped>
+.ccbl{width: 80px;cursor: pointer; text-align: center;}
+.chover{width: 80px;cursor: pointer; text-align: center;border-bottom: 2px solid #004FAB; color: #004FAB;}
+.ccbnt{border-radius: 0px!important;height: 40px!important; background: #0260C0; color: #ffffff;border: none;}
+</style>

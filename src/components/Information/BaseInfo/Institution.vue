@@ -169,7 +169,7 @@ export default {
                         this.cname="民主党派系统";
                         this.lb=this.Global.MZDP;
                           if(this.jb=='qg'){
-                                  this.qgshow=true;  this.getList('');
+                             this.qgshow=true;  this.getList('');
                             this.title="八大民主党派";
                         }else if(this.jb=='sj'){
                              this.qtshow=true;this.getLevel('1','');

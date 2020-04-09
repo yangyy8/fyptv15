@@ -67,7 +67,7 @@
                      <el-row class="ah-40">
                       <el-col :span="8">
                            <span class="yy-input-text " style="width:35%"><font class="red">*</font> 来文字号</span>
-                           <el-input placeholder="请输入内容" :disabled="editshow" size="small" clearable v-model="dataList[i].letternumber"  class="yy-input-input" ></el-input>
+                           <el-input placeholder="请输入内容" :disabled="editshow" size="small" maxlength="10" clearable v-model="dataList[i].letternumber"  class="yy-input-input" ></el-input>
                         <!-- <i class="el-icon-search cursor" @click="getlwzh()"></i> -->
                       </el-col>
                        <el-col :span="8">
@@ -352,7 +352,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <!-- <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i> -->
+                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                       <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 审理阶段</span>
@@ -388,7 +388,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <!-- <i class="el-icon-plus cursor" style="color:red"></i> -->
+                        <i class="el-icon-plus cursor" style="color:red"></i>
                       </el-col>
                         <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 是否重点案件</span>
@@ -664,7 +664,7 @@
                                         </el-option>
                                     </el-select>
                                </el-col>
-                                <el-col :span="24" v-if="ffshow">
+                                <el-col :span="24" v-if="ffshow && pd2.undertakingsuborgid=='c8f88905383211ea9e3700155dbaef87'">
                                         <span class="yy-input-text" style="width:11%!important" title="提请立案流转单">提请立案流转单</span>
                                         <el-button type="primary" :disabled="ckshow" plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="getUpload('6')" >上传文件</el-button> <span class="ts"></span>
                                 </el-col>
@@ -1813,7 +1813,7 @@ export default {
                   }else{
                     this.lpshow=false;
                     this.labellist=r.data[0].tags;
-                    // console.log('==============',this.labellist);
+                    
                     this.pd1.representativeid=r.data[0].representativeId;
                     this.pd1.cppcmemberid=r.data[0].cppcMemberId;
                     this.pd1.specialpersonid=r.data[0].specialPersonId;
@@ -1966,7 +1966,7 @@ export default {
          }
          if(t=='1'){
            if(this.filedata1 && this.filedata1.length>0){
-             console.log(data);
+             
              for (let i = 0; i < data.length; i++) {
                this.filedata1.push(data[i]);
                
@@ -1978,7 +1978,7 @@ export default {
            }
          if(t=='2'){
             if(this.filedata2 && this.filedata2.length>0){
-             console.log(data);
+             
              for (let i = 0; i < data.length; i++) {
                this.filedata2.push(data[i]);
                
@@ -1990,7 +1990,7 @@ export default {
            }
          if(t=='3'){
            if(this.filedata3 && this.filedata3.length>0){
-             console.log(data);
+           
              for (let i = 0; i < data.length; i++) {
                this.filedata3.push(data[i]);
                
@@ -2002,7 +2002,7 @@ export default {
          }
          if(t=='4'){
             if(this.filedata4 && this.filedata4.length>0){
-             console.log(data);
+            
              for (let i = 0; i < data.length; i++) {
                this.filedata4.push(data[i]);
                
@@ -2014,7 +2014,7 @@ export default {
            }
          if(t=='5'){
             if(this.filedata5 && this.filedata5.length>0){
-             console.log(data);
+     
              for (let i = 0; i < data.length; i++) {
                this.filedata5.push(data[i]);
                
@@ -2026,7 +2026,7 @@ export default {
            }
          if(t=='6'){
             if(this.filedata6 && this.filedata6.length>0){
-             console.log(data);
+             
              for (let i = 0; i < data.length; i++) {
                this.filedata6.push(data[i]);
                
@@ -2125,12 +2125,13 @@ export default {
                       if(r.data.focuscaseinfo.session!=null){
                        
                         this.pd1=r.data.focuscaseinfo;
+                        console.log(this.pd1.focuscourt,'pd1.focuscaseid');
                        
                             
                             //问题针对法院带入承办单位
                             if(this.pd1.focuscourt!=null && this.pd1.focuscourt!=undefined && this.ctitle=='交办'){
                                 this.$set(this.pd2,'undertakingorgid',this.pd1.focuscourt)
-                                this.getBM(this.pd1.focuscourt,0),this.getFYJB(this.pd1.focuscourt,0)
+                                this.getBM(this.pd2.undertakingorgid,0),this.getFYJB(this.pd2.undertakingorgid,0)
                             }
                        // this.pd0=JSON.parse(JSON.stringify(r.data.caseletterlist[0]));
                        
@@ -2187,9 +2188,11 @@ export default {
                             if(r.data.filelist.length>0){
                                this.ffshow=false;
                             }
-                            if(this.pd2.undertakingorgid!=null){
-                               this.getBM(this.pd2.undertakingorgid);
-                            }
+                            
+                            // if(this.pd2.undertakingorgid!=null){
+                            //    this.getBM(this.pd2.undertakingorgid,0);
+                            //    this.getFYJB(this.pd2.undertakingorgid,0)
+                            // }
                             
                             if(this.pd2.undertakingsuborgid!=null){
                               this.getCBR('1',this.pd2.undertakingorgid,this.pd2.undertakingsuborgid,0)
@@ -2215,7 +2218,7 @@ export default {
                            if(r.data.showstatus && this.addtype=='9'){
                             this.pd5=r.data;
                             if(this.pd5.undertakingorgid!=null){
-                               this.getBM(this.pd5.undertakingorgid);
+                               this.getBM(this.pd5.undertakingorgid,1);
                             }
                             if(this.pd5.undertakingsuborgid!=null && this.pd5.undertakingsuborgid!=undefined){
                               this.getCBR(2,this.pd5.undertakingorgid,this.pd5.undertakingsuborgid,0);
@@ -2562,7 +2565,7 @@ export default {
          
              if(this.baseid!=null){
                    var arr=this.baseid.split('|');
-                   console.log('arr',arr);
+                  
                    this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
                 }else{
                     this.$router.push({name:"CaseList",query:{year:this.year}});
@@ -2712,7 +2715,7 @@ export default {
                           this.dbh="第 "+r.data+" 号";
                           this.pd2.assignsort=r.data;
                       
-                          console.log(this.pd2.assigntypename,this.pd2.assignyearname);
+                          
                           this.pd2.assignno=this.pd2.assigntypename+"( "+this.pd2.assignyearname+" ) 第"+r.data+"号";;
                           this.pd2.assigninformno=this.pd2.assigntypename.replace("函","")+"( "+this.pd2.assignyearname+" ) 第"+r.data+"号";
                         }
@@ -2783,7 +2786,7 @@ export default {
                 });
         },
         getFYJB(val,t){
-          console.log(val,t,this.cbdw);
+        
           
           if(val==''){
 

@@ -11,10 +11,10 @@
     </div>
     <div class="content">
             <el-row>
-             <el-col :span='(addtype=="1" || addtype=="2")?18:22' class="ptit">
+             <el-col :span='(addtype=="1" || addtype=="2")?22:22' class="ptit">
                 <el-row>
                    <el-col :span='16'>
-                       <div class="title">{{jjbmc==null?'':jjbmc}}{{cname4!=''?cname4:cname5}}{{title}}</div>
+                       <div class="title">{{cname4!=''?cname4:cname5}}{{title}}</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
                           <el-button type="primary" style="width:80px" @click="goBase()" v-if='allshow[0]'>
@@ -35,12 +35,12 @@
                   </el-col>
                 </el-row>
              </el-col>
-             <el-col :span="6" style="padding-left:45px;" v-if='addtype=="1" || addtype=="2"'>
-                     <div class="title mb-20">历届{{ltitle}}名单</div>
-                     <div v-for='(tt,index) in $store.state.jb' :key="index">
+             <!-- <el-col :span="6" style="padding-left:45px;" v-if='addtype=="1" || addtype=="2"'>
+                     <div class="title mb-20">历届{{cname4}}{{cname3}}名单</div>
+                     <div v-for='(tt,index) in jblist' :key="index">
                           <div  class="ljinfo" @click="gojjb(tt.dm,tt.mc)">{{tt.mc}}{{cinfo}}</div>
                      </div>
-             </el-col>
+             </el-col> -->
             </el-row>
     </div>
         
@@ -48,6 +48,7 @@
 </template>
 <script>
 import {getlljgmenu,getlljgdata} from '@/assets/js/aleainfo.js'
+import {ToArray} from '@/assets/js/ToArray.js'
 export default {
      data(){
          return{
@@ -71,6 +72,7 @@ export default {
            endlvl:1,
            alldata:[],
            allshow:[],
+           jblist:[],
          }
      },
      mounted(){
@@ -114,8 +116,8 @@ export default {
               
                this.addtype=val.query.type;
                this.jb=val.query.jb;
-               this.jjbmc=this.$store.state.jmc;
-               this.jjb=this.$store.state.jid;
+            //    this.jjbmc=this.$store.state.jmc;
+            //    this.jjb=this.$store.state.jid;
            }
           var mid=getlljgmenu(this.addtype,parseInt(this.lvl));
           this.alldata=getlljgdata(this.addtype,parseInt(this.lvl));
@@ -126,10 +128,11 @@ export default {
                           if(r.code==1 && r.data!=null){
                             for (let i = 0; i < this.alldata.length; i++) {
                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
-                               console.log(i,'==',this.allshow[i],'++++',r.data,'--',this.alldata[i]);
+                               
                             }   
                            this.getNameList();//得到标题的名称
                            this.getLevel(this.lvl,this.code);
+                          // this.getjbinfo();
                           }else if(r.code==0){
                             this.$router.push({path:'/limitmsg'});
                           }
@@ -137,6 +140,50 @@ export default {
          //权限end
          
           
+        },
+         getjbinfo(){
+             if(this.addtype=='1' || this.addtype=='2')
+           {
+                    var lb="";var leveltype='';
+                    switch (this.addtype) {
+                        case '1':
+                            lb=this.Global.REPRESENTATIVE;
+                          
+                            break;
+                        case '2':
+                            lb=this.Global.CPPCMEMBER;
+                           
+                            break;
+                        default:
+                            break;
+                    }
+                    switch (this.jb) {
+                      case 'qg':
+                        leveltype='0150000001';
+                          break;
+                      case 'sj':
+                          leveltype='0150000002';
+                          break;
+                      case 'ds':
+                          leveltype='0150000003';
+                          break;
+                      case 'xq':
+                          leveltype='0150000004';
+                          break;
+                      default:
+                          break;
+                      }
+                    let p={
+                        'level':leveltype,
+                        'administrativeDivision':this.code,
+                        'identityType':lb,
+                    };
+                    this.$api.post(this.Global.jburl,p,
+                            r =>{
+                                this.jblist=ToArray(r.data,'1');
+                        });
+            }
+
         },
     reset(){
         this.areadata=[];this.info={};

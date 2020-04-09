@@ -1,12 +1,12 @@
 <template>
-    <div class="pairadd subtable">
+    <div class="pairadd ">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
          <span> 办理工作 <span class="mlr_10">/</span>  <b>{{title}}信息</b></span> </div>
-         <div class="content">
+         <div class="content subtable">
                 <div class="ptitle mb-20">{{title}}</div>
                 <div class="pborder">
                     <el-row class="lh" :gutter="2">
-                       <el-col :sm="24" :md="12" :lg="8">
+                       <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                         <span class="yy-input-text">议案类型</span>
                         <el-select v-model="pd.proposalType" @change="getYAName(pd.proposalType)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
@@ -17,7 +17,7 @@
                            </el-option>
                         </el-select>
                       </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">年度</span>
                            <el-select v-model="pd.year" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -28,16 +28,16 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">编号</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.number"  class="yy-input-input" ></el-input>
                         </el-col>
-                        <el-col  :sm="24" :md="12" :lg="16" >
+                        <el-col  :sm="24" :md="12" :lg="16"  class="input-item">
                             <span class="yy-input-text" style="width:13.5%">标题</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.title"  class="yy-input-input" style="width:80%!important;"></el-input>
                         </el-col>
                         
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">业务种类</span>
                            <el-select v-model="pd.businessType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -48,7 +48,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">承办单位</span>
                            <el-select v-model="pd.affiliationUnit" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -59,7 +59,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                           <el-col :sm="24" :md="12" :lg="8">
+                           <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">承办类别</span>
                            <el-select v-model="pd.underTakeType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -70,7 +70,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">承办性质</span>
                            <el-select v-model="pd.underTakeNature" :disabled="pd.underTakeType!='0116000002'" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -81,7 +81,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">来文期间</span>
                            <el-select v-model="pd.period" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -95,7 +95,7 @@
                       
                         
                        
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">届别</span>
                            <el-select v-model="pd.session" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -106,7 +106,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">次别</span>
                            <el-select v-model="pd.times" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -117,7 +117,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">提案形式</span>
                            <el-select v-model="pd.proposalForm" :disabled='addtype!="2"'  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -128,7 +128,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8" >
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item" >
                             <span class="yy-input-text">提案组织</span>
                            <el-select v-model="pd.proposalOrgId" :disabled='addtype!="2"'  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -139,7 +139,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">领衔人</span>
                          <el-select v-model="pd.leaderPerson" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
@@ -150,7 +150,7 @@
                            </el-option>
                         </el-select>
                         </el-col>
-                       <el-col :sm="24" :md="12" :lg="8">
+                       <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">联名人</span>
                         <el-select v-model="pd.jointPerson" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
@@ -161,7 +161,7 @@
                            </el-option>
                         </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">内部承办单位</span>
                            <el-select v-model="pd.innerUnderOrg" @change="getCBBM(pd.innerUnderOrg,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -172,7 +172,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">内部承办部门</span>
                            <el-select v-model="pd.innerUnderSubOrg" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.innerUnderOrg==''||pd.innerUnderOrg==undefined?'请先选择内部承办单位':'无数据'">
                                <el-option
@@ -185,7 +185,7 @@
                         </el-col>
                            </el-row>
                     <el-row class="lh" v-if="open">
-                       <el-col :sm="24" :md="12" :lg="8">
+                       <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">答复类型</span>
                            <el-select v-model="pd.replyType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -196,7 +196,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                      <el-col :sm="24" :md="12" :lg="8">
+                      <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">是否重点办理</span>
                            <el-select v-model="pd.isImportant" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -208,7 +208,7 @@
                             </el-select>
                         </el-col>
                        
-                         <el-col :sm="24" :md="12" :lg="8" v-if="pd.isImportant=='0213000001'">
+                         <el-col :sm="24" :md="12" :lg="8" v-if="pd.isImportant=='0213000001'"  class="input-item">
                             <span class="yy-input-text">重点业务分类</span>
                            <el-select v-model="pd.importantBusinessType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -224,7 +224,7 @@
                             <span class="yy-input-text" style="width:13.5%">备注</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.title"  class="yy-input-input" style="width:80%!important;"></el-input>
                         </el-col> -->
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">交办状态</span>
                            <el-select v-model="pd.assignStatus" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option value="2" label="全部">
@@ -235,7 +235,7 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">办理状态</span>
                            <el-select v-model="pd.transactStatus " filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option value="2" label="全部">
@@ -247,7 +247,7 @@
                                
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">统稿状态</span>
                            <el-select v-model="pd.completeStatus" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                  <el-option value="2" label="全部">
@@ -258,7 +258,7 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">复文状态</span>
                            <el-select v-model="pd.replyStatus" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option value="2" label="全部">
@@ -269,7 +269,7 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">催办状态</span>
                            <el-select v-model="pd.urgentStatus" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option value="2" label="全部">
@@ -318,7 +318,7 @@
                       
                         
                        
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">复文号</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.replyNumber"  class="yy-input-input" ></el-input>
                         </el-col>
@@ -337,7 +337,7 @@
                             </el-select>
                         </el-col> -->
                          
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">是否公开</span>
                            
                             <el-select v-model="pd.isPublic" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -401,7 +401,6 @@
                 </div>
 
                 <div class="pborder mt-20">
-                    
                             <el-row >
                             <el-col :span="20" class="ah-40">
                               <el-button type="primary" size="small" :disabled="pdbnt.bnt1"  @click="gotoinfo('0','录入')" v-if='allshow[0]'>登记</el-button>
@@ -430,7 +429,6 @@
                           <el-table
                             ref="multipleTable"
                             :data="tableData"
-                             
                             @row-click="clickRow"
                             @selection-change="handleSelectionChange">
                             <el-table-column
@@ -487,7 +485,7 @@
                 </div>
 <br/>
          </div>
-    <el-dialog title="批量交办" :visible.sync="jbDialogVisible" :close-on-click-modal='false'>
+    <el-dialog title="批量交办" class="subtable" :visible.sync="jbDialogVisible" :close-on-click-modal='false'>
                 <el-row class="ah-40">
                           <el-col :span="8">
                          <span class="yy-input-text">承办单位</span>
@@ -590,7 +588,7 @@
               <el-button @click="jbDialogVisible = false" size="small">取 消</el-button>
             </div>
     </el-dialog>
-      <el-dialog title="公开" :visible.sync="openDialogVisible" :close-on-click-modal='false' width="660px">
+     <el-dialog title="公开" :visible.sync="openDialogVisible" :close-on-click-modal='false' width="660px">
    <OPEN :url="openurl" :type="0" :data="opendata" @GKfatherMethod="GKfatherMethod" :random="new Date().getTime()"></OPEN>
   </el-dialog>
   <el-dialog  :title="txtname" :visible.sync="shDialogVisible" :close-on-click-modal='false' width="660px">
@@ -623,7 +621,7 @@ export default {
             TotalResult: 0,
             pd:{year:'',assignStatus:'',transactStatus:'',
             completeStatus:'',replyStatus:'',urgentStatus:'',proposalType:''},
-            pdbnt:{bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true,bnt9:false},
+            pdbnt:{bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true,bnt9:true},
             pdjb:{},
             options:this.pl.ps,
             open:false,
@@ -701,7 +699,7 @@ export default {
         handleSelectionChange(val) {
           this.multipleSelection = val;
            this.bnt=true;
-           this.pdbnt={bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true,bnt9:false};
+           this.pdbnt={bnt1:false,bnt2:false,bnt3:true,bnt4:true,bnt5:true,bnt6:true,bnt7:true,bnt8:true,bnt9:true};
            console.log(this.multipleSelection.length,'this.multipleSelection.length');
            
            if(this.multipleSelection.length==1){
@@ -918,7 +916,7 @@ export default {
                    if(r.code==1){
                          
                         this.$message.success(r.message);
-                        this.jbDialogVisible=false;
+                        // this.jbDialogVisible=false;
                         this.jbtableData=[];
                         this.getList(this.CurrentPage, this.pageSize, this.pd);
                       }else{
@@ -927,10 +925,13 @@ export default {
                 });
         },
     gotoinfo(t,title){
+      console.log('------',t,title);
+      
         var proposalInfoId="";
         if(t=='0'){
           if(this.multipleSelection.length==1){
              proposalInfoId=this.multipleSelection[0].proposalInfoId;
+            
           }else if(this.multipleSelection.length>1){
               this.$message.error("只能选择一条数据！");return;
           }
@@ -938,19 +939,44 @@ export default {
         }else{
             if(this.multipleSelection.length==1){
               proposalInfoId=this.multipleSelection[0].proposalInfoId;
-              this.$router.push({name:'SuggestInfo',query:{type:this.addtype,zt:t,ctitle:title,proposalInfoId:proposalInfoId,year:this.pd.year}});
-              }else if(this.multipleSelection.length==0){
+               if(t=='bl'){
+                     let p={
+                      "proposalInfoIds":proposalInfoId,
+                      "token":this.$store.state.token,
+                    };
+                      this.$api.post(this.Global.aport2+'/proposalProcess/checkHandPerson',p,
+                        r =>{
+                              if(r.code==3){
+                                this.$message.error(r.message);return;
+                              } else{
+                                 this.$router.push({name:'SuggestInfo',query:{type:this.addtype,zt:t,ctitle:title,proposalInfoId:proposalInfoId,year:this.pd.year}});
+                              }
+                        });
+                }else{
+                   this.$router.push({name:'SuggestInfo',query:{type:this.addtype,zt:t,ctitle:title,proposalInfoId:proposalInfoId,year:this.pd.year}});
+                 }
+             }else if(this.multipleSelection.length==0){
                 this.$message.error("请选择一条数据！");return;
               }else{
+                           
               if(t=='jb'){
                   var array=this.multipleSelection;
                   for (let ii = 0; ii < array.length; ii++) {
                     if(array[ii].handStatusCode!="0205000001"){
-                      this.$message.error("除了登记状态的其他数据不能再次交办，请重新选择！");return;
+                      this.$message.error("存在缺少厅室信息的数据，请重新选择");return;
                     }
-                    
                   }
-                  this.jbDialogVisible=true;
+
+                     this.$confirm('是否交办?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                      }).then(() => {
+                           this.jbsubmit();
+                      }).catch(() => {
+                        this.$message.info('已取消');      
+                      });
+                //  this.jbDialogVisible=true;
               }else{
                 this.$message.error("只能选择一条数据！");return;
               }
@@ -1314,21 +1340,21 @@ export default {
             switch (type) {
                 case '0'://建议、批评和意见管理查询
                     mid='13152501';
-                    if(zt=='jb'){
-                       mid='13172503';
-                    }else if(zt=='bl'){
-                        mid='13182504';
-                    }else if(zt=='fw'){
-                        mid='13192505';
-                    }else if(zt=='tg'){
-                        mid='13202506';
-                    }else if(zt=='cb'){
-                        mid='13212507';
-                    }else if(zt=='dr'){
-                        mid='13222508';
-                    }else if(zt=='xz'){
-                        mid='13232509';
-                    }
+                    // if(zt=='jb'){
+                    //    mid='13172503';
+                    // }else if(zt=='bl'){
+                    //     mid='13182504';
+                    // }else if(zt=='fw'){
+                    //     mid='13192505';
+                    // }else if(zt=='tg'){
+                    //     mid='13202506';
+                    // }else if(zt=='cb'){
+                    //     mid='13212507';
+                    // }else if(zt=='dr'){
+                    //     mid='13222508';
+                    // }else if(zt=='xz'){
+                    //     mid='13232509';
+                    // }
                     this.alldata=['25013711','25013712','25013713',
                     '25013714','25013715','25013716','25013717',
                     '25013718','25013719','25013720',
@@ -1337,21 +1363,21 @@ export default {
                     break;
                 case '1'://代表议案信息
                     mid='13262510'
-                    if(zt=='jb'){
-                       mid='13282512';
-                    }else if(zt=='bl'){
-                        mid='13292513';
-                    }else if(zt=='fw'){
-                        mid='13302514';
-                    }else if(zt=='tg'){
-                        mid='13312515';
-                    }else if(zt=='cb'){
-                        mid='13322516';
-                    }else if(zt=='dr'){
-                        mid='13332517';
-                    }else if(zt=='xz'){
-                        mid='13342518';
-                    }
+                    // if(zt=='jb'){
+                    //    mid='13282512';
+                    // }else if(zt=='bl'){
+                    //     mid='13292513';
+                    // }else if(zt=='fw'){
+                    //     mid='13302514';
+                    // }else if(zt=='tg'){
+                    //     mid='13312515';
+                    // }else if(zt=='cb'){
+                    //     mid='13322516';
+                    // }else if(zt=='dr'){
+                    //     mid='13332517';
+                    // }else if(zt=='xz'){
+                    //     mid='13342518';
+                    // }
                     this.alldata=['25103727','25103728','25103729', 
                     '25103730','25103731','25103732','25103733',
                     '25103734','25103735','25103736',
@@ -1360,21 +1386,21 @@ export default {
                     break
                 case '2'://政协提案
                     mid='13372519'
-                     if(zt=='jb'){
-                       mid='13392521';
-                    }else if(zt=='bl'){
-                        mid='13402522';
-                    }else if(zt=='fw'){
-                        mid='13412523';
-                    }else if(zt=='tg'){
-                        mid='13422524';
-                    }else if(zt=='cb'){
-                        mid='13432525';
-                    }else if(zt=='dr'){
-                        mid='13442526';
-                    }else if(zt=='xz'){
-                        mid='13452527';
-                    }
+                    //  if(zt=='jb'){
+                    //    mid='13392521';
+                    // }else if(zt=='bl'){
+                    //     mid='13402522';
+                    // }else if(zt=='fw'){
+                    //     mid='13412523';
+                    // }else if(zt=='tg'){
+                    //     mid='13422524';
+                    // }else if(zt=='cb'){
+                    //     mid='13432525';
+                    // }else if(zt=='dr'){
+                    //     mid='13442526';
+                    // }else if(zt=='xz'){
+                    //     mid='13452527';
+                    // }
                     this.alldata=['25193743','25193744','25193745', 
                     '25193746','25193747','25193748','25193749',
                     '25193750','25193751','25193752',
@@ -1383,21 +1409,21 @@ export default {
                     break;
                  case '3'://审议意见
                     mid='13482528'
-                     if(zt=='jb'){
-                       mid='13502530';
-                    }else if(zt=='bl'){
-                        mid='13512531';
-                    }else if(zt=='fw'){
-                        mid='13522532';
-                    }else if(zt=='tg'){
-                        mid='13532533';
-                    }else if(zt=='cb'){
-                        mid='13542534';
-                    }else if(zt=='dr'){
-                        mid='13552535';
-                    }else if(zt=='xz'){
-                        mid='13562536';
-                    }
+                    //  if(zt=='jb'){
+                    //    mid='13502530';
+                    // }else if(zt=='bl'){
+                    //     mid='13512531';
+                    // }else if(zt=='fw'){
+                    //     mid='13522532';
+                    // }else if(zt=='tg'){
+                    //     mid='13532533';
+                    // }else if(zt=='cb'){
+                    //     mid='13542534';
+                    // }else if(zt=='dr'){
+                    //     mid='13552535';
+                    // }else if(zt=='xz'){
+                    //     mid='13562536';
+                    // }
                     this.alldata=['25283759','25283760','25283761', 
                     '25283762','25283763','25283764','25283765',
                     '25283766','25283767','25283768',
@@ -1406,21 +1432,21 @@ export default {
                     break;
                 case '4'://日常意见建议
                     mid='13592537'
-                    if(zt=='jb'){
-                       mid='13612539';
-                    }else if(zt=='bl'){
-                        mid='13622540';
-                    }else if(zt=='fw'){
-                        mid='13632541';
-                    }else if(zt=='tg'){
-                        mid='13642542';
-                    }else if(zt=='cb'){
-                        mid='13652543';
-                    }else if(zt=='dr'){
-                        mid='13662544';
-                    }else if(zt=='xz'){
-                        mid='13672545';
-                    }
+                    // if(zt=='jb'){
+                    //    mid='13612539';
+                    // }else if(zt=='bl'){
+                    //     mid='13622540';
+                    // }else if(zt=='fw'){
+                    //     mid='13632541';
+                    // }else if(zt=='tg'){
+                    //     mid='13642542';
+                    // }else if(zt=='cb'){
+                    //     mid='13652543';
+                    // }else if(zt=='dr'){
+                    //     mid='13662544';
+                    // }else if(zt=='xz'){
+                    //     mid='13672545';
+                    // }
                     this.alldata=['25373775','25373776','25373777', 
                     '25373778','25373779','25373780','25373781',
                     '25373782','25373783','25373784',

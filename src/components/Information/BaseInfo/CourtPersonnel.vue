@@ -139,10 +139,10 @@ export default {
         },
               getSN(s,n){
             var sum="";
-          if(s=="女性" && n!="汉族" && n!=null && s!=null){
+          if(s=="女" && n!="汉族" && n!=null && s!=null){
               sum="(女，"+n+")";
           }else{
-              if(s=='女性' && n!=null){
+              if(s=='女' && n!=null){
                  sum="（女）";
                }
               if(n!="汉族" && n!=null){

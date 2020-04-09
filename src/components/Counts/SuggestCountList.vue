@@ -41,21 +41,21 @@
                             </el-select>
                      </div>
                      </el-col>
-                      <!-- <el-col :sm="24" :md="12" :lg="12">
+                      <el-col :sm="24" :md="12" :lg="12" v-if='type=="09" || type=="10"  || type=="11"  || type=="12"  || type=="13"  || type=="14"  || type=="15"  || type=="16"' >
                           <span class="yy-input-text" style="width:18%!important;">
-                       议案类型</span>
+                           议案类型</span>
                             <el-select v-model="pd.proposalType"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                          <el-option  label="代表议案" value="0204000001">
-                          </el-option>
-                           <el-option  label="政协提案" value="0204000002">
-                          </el-option>
-                           <el-option  label="建议、批评与意见" value="0204000003">
-                          </el-option>
+                           <el-option
+                           v-for="(item,ind) in $store.state.yalx"
+                           :key="ind"
+                           :label="item.mc"
+                           :value="item.dm">
+                           </el-option>
                         </el-select>
-                      </el-col> -->
+                      </el-col>
                         <el-col :sm="24" :md="12" :lg="12" v-if='type!="04" && type!="05"'>
                           <span class="yy-input-text" style="width:18%!important;">
-                       来文期间</span>
+                           来文期间</span>
                             <el-select v-model="pd.period"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in $store.state.lwqj"
@@ -140,6 +140,7 @@
                          <el-table-column
                             prop="leaderName"
                             label="提议代表"
+                            width="200"
                            >
                         </el-table-column>
                          <el-table-column
@@ -148,11 +149,13 @@
                         </el-table-column>
                           <el-table-column
                             prop="title"
-                            label="标题">
+                            label="标题"
+                            width="200">
                         </el-table-column>
                           <el-table-column
                             prop="underOrg"
-                            label="承办单位">
+                            label="承办单位"
+                            width="150">
                         </el-table-column>
                          <el-table-column
                             prop="underType"
@@ -165,9 +168,9 @@
                          <el-table-column
                             prop="innerSubOrg"
                             label="内部承办部门"
-                            width="150">
+                            width="200">
                         </el-table-column>
-                         <el-table-column
+                         <!-- <el-table-column
                             prop="assignPerson"
                             label="承办人">
                         </el-table-column>
@@ -175,7 +178,18 @@
                             prop="assignFinishTime"
                             label="要求反馈时间"
                             width="150">
+                        </el-table-column> -->
+                        <el-table-column v-for="(item, index) in colunmName" :key="index" :label="item" :width="index==0?250:150">
+                                  <template slot-scope="scope">
+                                            
+                                  <div :class="ind==scope.row.underPersonAndFinishTime.length-1?'':'bborder'" v-for='(t,ind) in scope.row.underPersonAndFinishTime' :key='ind'>
+                                      <span v-if='index==0'>  {{t.assignPerson}}</span>
+                                      <span v-if='index==1'>  {{t.assignFinishTime}}</span>
+                                  </div>
+                                  
+                                  </template>
                         </el-table-column>
+
                          <!-- <el-table-column
                             prop="suggestNum"
                             label="建议条数">
@@ -186,7 +200,8 @@
                         </el-table-column> -->
                         <el-table-column
                             prop="completeTime"
-                            label="办结时间">
+                            label="办结时间"
+                            width="100">
                         </el-table-column>
                           <el-table-column
                             prop="isPublic"
@@ -237,6 +252,7 @@ export default {
              cbbmdata:[],
             cname:'建议、批评和意见信息统计',
             type:'',
+             colunmName:['承办人','要求反馈时间'],
         }
     },
     mounted(){
@@ -352,3 +368,6 @@ export default {
     },
 }
 </script>
+<style  scoped>
+.bborder{border-bottom:2px solid #ffffff}
+</style>

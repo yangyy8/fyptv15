@@ -175,8 +175,8 @@ export default {
             addDialogVisible:false,
             tableData:[],
             menudata:[],
-             menurr:[],
-             defaultChecked:[],
+            menurr:[],
+            defaultChecked:[],
             defaultProps: {
                 children: 'children',
                 label: 'label'

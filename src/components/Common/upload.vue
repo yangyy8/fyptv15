@@ -12,6 +12,18 @@
                            </el-option>
          </el-select>
      </el-col>
+      <el-col v-if='this.proposalType!=null' :span="24" class="txtl mb-20">
+       <span>年份：</span>
+           <el-select v-model="year" filterable clearable default-first-option placeholder="请选择"  size="small" >
+                         <el-option
+                           v-for="(item,ind) in yearlist"
+                           :key="ind"
+                           :label="item.mc"
+                           :value="item.dm">
+                           </el-option>
+         </el-select>
+     </el-col>
+
      <el-col :span="24" class="txtl">
           <el-upload
             ref="upload"
@@ -39,7 +51,7 @@
      </div> 
 </template>
 <script>
-
+import {getYear} from '@/assets/js/date.js'
 export default {
     name:'UPLOAD',
     props:['url','type','urlErr','periodType','proposalType','random'],
@@ -53,6 +65,8 @@ export default {
         periodTypes:'',
         error:0,
         msg:'',
+        year:'',
+        yearlist:getYear(),
         }
     },
 
@@ -100,11 +114,14 @@ export default {
                 link.click()
            },
            beforeRemove(file, fileList){
+            
+            this.error=0;
             this.msg='';
 
            },
             beforeAvatarUpload(file) {
                   //这里控制大小 20M
+              
               
                console.log('上传文件不能超过20M', file.size,20 * 1024 * 1024);
                if (file.size  > 20 * 1024 * 1024) {
@@ -120,7 +137,7 @@ export default {
            
             submitUpload() {
              
-             console.log(this.$refs.upload.uploadFiles);
+              if(this.error==1){return;}
                  this.msg='';
                if(this.type=='1000'){
                  if(this.periodTypes=="" || this.periodTypes==null){
@@ -129,14 +146,18 @@ export default {
                    return
                  }
               }
+              if(this.proposalType!=null){
+                if(this.year==null || this.year==undefined || this.year==''){
+                  this.$message.error("请选择年份！");return;
+                }
+              }
               if (this.$refs.upload.uploadFiles.length == 0) {
              
                 this.$message.error('请先选择文件！');
                 return
               }
              
-
-              if(this.type=='11' || this.type=='1000' || this.type=='1001'){
+              if(this.type=='11' || this.type=='1000' || this.type=='1001' || this.type=='0203000002'){
                 if (this.$refs.upload.uploadFiles.length != 1){
                 
                    this.$message.error('此模块只能上传一个文件!');
@@ -192,6 +213,8 @@ export default {
                 this.fileData.append("periodType",this.periodTypes);
               }
               if(this.proposalType!=null){
+               
+                this.fileData.append("year",this.year);
                 this.fileData.append("proposalType",this.proposalType);
               }
               if(this.error==1){return;}
@@ -200,7 +223,7 @@ export default {
                this.$api.post(this.actions, this.fileData,
                   r => {
                     if(r.code==1){
-                        if(this.type.length==10 || this.periodType!=null){
+                        if(this.type.length==10 || this.periodType!=null || this.periodTypes!=""){
                         
                               if(r.code==1){
                               
@@ -227,8 +250,10 @@ export default {
                               
                             }
                         }
+                    }else if(code==3){
+                        window.location.href=r.message;
                     }else{
-                      this.$message.error(r.message);
+                        this.$message.error(r.message);
                     }
                   })
             },

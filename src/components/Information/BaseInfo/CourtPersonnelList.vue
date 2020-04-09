@@ -1,18 +1,22 @@
 <template>
     <div class="pairadd subtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-         <span> 基本信息库<span class="mlr_10">/</span>  <b>{{cname}}</b></span> </div>
+         <span> 基本信息库
+              <span class="mlr_10">/</span>  <b> 法院内部管理</b>
+                 <span class="mlr_10">/</span>  <b>法院人员</b>
+             <span class="mlr_10">/</span>  <b>{{cname}}</b>
+             </span> </div>
          <div class="content">
                 <div class="ptitle mb-20">{{title}}</div>
                 <div class="pborder">
                     <el-row class="lh" :gutter="2">
                         
-                         <el-col  :sm="24" :md="12" :lg="8" >
+                         <el-col  :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">姓名</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.personName"  class="yy-input-input" ></el-input>
                         </el-col>
                       
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属法院</span>
                            <el-select v-model="pd.orgIds" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -24,7 +28,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属部门</span>
                            <el-select v-model="pd.subOrgIds" multiple @visible-change="getBM(pd.orgIds)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgIds==''||pd.orgIds==undefined?'请先选择所属法院':'无数据'">
                                <el-option
@@ -38,7 +42,7 @@
                     </el-row>
                     <el-row class="lh" v-if="open">
                          
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">职业类别</span>
                            <el-select v-model="pd.jobType"  multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -49,7 +53,7 @@
                                  </el-option>
                          </el-select>
                         </el-col>
-                        <el-col  :sm="24" :md="12" :lg="8">
+                        <el-col  :sm="24" :md="12" :lg="8" class="input-item">
                                         <span class="yy-input-text">职务</span>
                                          <el-select v-model="pd.subOrgPositions" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
@@ -60,7 +64,7 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">性别</span>
                            <el-select v-model="pd.sex" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -71,7 +75,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">民族</span>
                            <el-select v-model="pd.nationalitys" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -82,7 +86,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                       <el-col :sm="24" :md="12" :lg="8">
+                       <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">学历</span>
                            <el-select v-model="pd.educations" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -93,7 +97,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">籍贯</span>
                            <el-select v-model="pd.birthPlaces" multiple @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -106,7 +110,7 @@
                         </el-col>
                          
                            <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text" style="width:28%!important;">出生日期</span>
+                            <span class="yy-input-text">出生日期</span>
                             <div class="yy-input-input  t-flex  t-date">
                                 <el-date-picker
                                 v-model="pd.beginBirthday" format="yyyy-MM-dd"
@@ -140,7 +144,7 @@
                 <div class="pborder mt-20">
                             <el-row>
                               <el-col :span="16">
-                              <el-button type="primary" size="small" @click="add('0','录入')" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary" size="small" @click="add('0','录入')" v-if='allshow[0]'>添加</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="add('9','查看')" v-if='allshow[1]'>查看</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="add('1','修改')" v-if='allshow[2]'>修改</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="dellist" v-if='allshow[3]'>删除</el-button>
@@ -232,7 +236,7 @@ export default {
             open:false,
             all:true,
             bnt:true,
-            cname:'法院内部人员查询',
+            cname:'高级查询',
             title:'法院内部人员信息',
             checkedList:[],
             tableData:[],
@@ -462,7 +466,7 @@ export default {
                    }
             }
           
-           this.$confirm('此操作将删除该信息, 是否继续?', '提示', {
+           this.$confirm('此操作将删除所有业务关联该人员的信息!', '提示', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning'

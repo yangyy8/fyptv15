@@ -16,7 +16,7 @@
                     <div style="margin:20px 20px 0 20px;">共<span style="color:red"> {{count}} </span>名法院人员</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
-                          <el-button type="primary" style="width:80px" @click="goto(0)" v-if='allshow[0]'>录入</el-button>
+                          <el-button type="primary" style="width:80px" @click="goto(0)" v-if='allshow[0]'>添加</el-button>
                           <el-button style="width:80px" @click="getDR" v-if='allshow[1]'>导入</el-button>
                           <el-button style="width:80px" @click="$router.push({name:'CourtPersonnelList'})" v-if='allshow[2]'>查询</el-button>
                           <el-button style="width:80px"  @click="$router.go(-1)">返回</el-button>
@@ -77,6 +77,7 @@ export default {
           vvurlErr:'',
            alldata:[],
           allshow:[],
+          depid:'',
           
         }
     },
@@ -95,9 +96,10 @@ export default {
             this.xzqh=val.query.xzqh;
             this.xzqhmc=val.query.xzqhmc;
             this.orgid=val.query.orgid;
+            this.depid=val.query.depid;
             this.fname=val.query.fname;
             this.cname=val.query.cname;
-            this.getUser(this.orgid);
+           
             var mid=getlljgdbtmenu('4',this.jb);
             this.alldata=getlljgdbtdata('4',this.jb);
             
@@ -107,22 +109,22 @@ export default {
                           if(r.code==1 && r.data!=null){
                             for (let i = 0; i < this.alldata.length; i++) {
                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
-                               console.log(this.alldata,'--',this.alldata[i],'===',r.data);
-                               
-                            }   
+                            
+                            }  
+                           this.getUser(this.depid);
                           }else if(r.code==0){
                             this.$router.push({path:'/limitmsg'});
-                          }
+                     }
             });
          //权限end
         },
          
       getSN(s,n){
             var sum="";
-          if(s=="女性" && n!="汉族" && n!=null && s!=null){
+          if(s=="女" && n!="汉族" && n!=null && s!=null){
               sum="(女，"+n+")";
           }else{
-              if(s=='女性' && n!=null){
+              if(s=='女' && n!=null){
                  sum="（女）";
                }
               if(n!="汉族" && n!=null){
@@ -167,11 +169,13 @@ export default {
                         
                    });
         },
-        goto(t,id,dm,mc,orgid){
+        goto(t,id,dm,orgid){
           
            if(t==0){
-                this.$router.push({name:'BaseAdd',query:{type:'4',status:'0',jb:this.jb,xzqh:this.xzqh,xzqhmc:this.xzqhmc}});
+                this.$router.push({name:'BaseAdd',query:{type:'4',status:'0',jb:this.jb,xzqh:this.xzqh,xzqhmc:this.xzqhmc,orgdm:this.orgid,depid:this.depid}});
             }else if(t==2){
+              console.log(orgid,'orgid');
+              
                 var state='9';
                 if(this.allshow[0]==true){
                   state="1";

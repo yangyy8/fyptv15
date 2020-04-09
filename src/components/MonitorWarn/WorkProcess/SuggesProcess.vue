@@ -1,14 +1,17 @@
 <template>
     <div class="pairadd subtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-         <span> 办理工作 <span class="mlr_10">/</span>  <b>{{title}}信息</b></span> </div>
+         <span> 监控和预警 
+           <span class="mlr_10">/</span>  办理流程监控
+           <span class="mlr_10">/</span>  <b>{{title}}信息</b>
+           </span> </div>
          <div class="content">
                 <div class="ptitle mb-20">{{title}}</div>
                 <div class="pborder">
                     <el-row class="lh" :gutter="2">
-                       <el-col :sm="24" :md="12" :lg="8">
+                       <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                         <span class="yy-input-text">议案类型</span>
-                        <el-select v-model="pd.proposalType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd.proposalType" @change="getYAName(pd.proposalType)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in $store.state.yalx"
                            :key="ind"
@@ -17,7 +20,7 @@
                            </el-option>
                         </el-select>
                       </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">年度</span>
                            <el-select v-model="pd.year" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -28,16 +31,16 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">编号</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.number"  class="yy-input-input" ></el-input>
                         </el-col>
-                        <el-col  :sm="24" :md="12" :lg="16" >
+                        <el-col  :sm="24" :md="12" :lg="16"  class="input-item">
                             <span class="yy-input-text" style="width:13.5%">标题</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.title"  class="yy-input-input" style="width:80%!important;"></el-input>
                         </el-col>
                         
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">业务种类</span>
                            <el-select v-model="pd.businessType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -48,7 +51,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">承办单位</span>
                            <el-select v-model="pd.affiliationUnit" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -59,7 +62,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                           <el-col :sm="24" :md="12" :lg="8">
+                           <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">承办类别</span>
                            <el-select v-model="pd.underTakeType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -70,7 +73,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">承办性质</span>
                            <el-select v-model="pd.underTakeNature" :disabled="pd.underTakeType!='0116000002'" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -81,7 +84,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">来文期间</span>
                            <el-select v-model="pd.period" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -95,7 +98,7 @@
                       
                         
                        
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">届别</span>
                            <el-select v-model="pd.session" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -106,7 +109,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">次别</span>
                            <el-select v-model="pd.times" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -117,9 +120,9 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">提案形式</span>
-                           <el-select v-model="pd.proposalForm" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.proposalForm" :disabled='addtype!="2"'  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.taxs"
                                  :key="ind"
@@ -128,9 +131,9 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item" >
                             <span class="yy-input-text">提案组织</span>
-                           <el-select v-model="pd.proposalOrgId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.proposalOrgId" :disabled='addtype!="2"'  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.tazz"
                                  :key="ind"
@@ -139,31 +142,31 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">领衔代表</span>
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
+                            <span class="yy-input-text">领衔人</span>
                          <el-select v-model="pd.leaderPerson" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in lxdbdata"
                            :key="ind"
-                           :label="item.personName"
+                           :label="item.fullName"
                            :value="item.personId">
                            </el-option>
                         </el-select>
                         </el-col>
-                       <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">联名代表</span>
+                       <el-col :sm="24" :md="12" :lg="8"  class="input-item">
+                            <span class="yy-input-text">联名人</span>
                         <el-select v-model="pd.jointPerson" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in lxdbdata"
                            :key="ind"
-                           :label="item.personName"
+                           :label="item.fullName"
                            :value="item.pbId">
                            </el-option>
                         </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">内部承办单位</span>
-                           <el-select v-model="pd.affiliationUnite" @change="getCBBM(pd.affiliationUnite,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.innerUnderOrg" @change="getCBBM(pd.innerUnderOrg,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in cbdwdata"
                                  :key="ind"
@@ -172,9 +175,9 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">内部承办部门</span>
-                           <el-select v-model="pd.affiliationUnitw" filterable clearable default-first-option placeholder="请先选择内部承办单位"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.innerUnderSubOrg" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.innerUnderOrg==''||pd.innerUnderOrg==undefined?'请先选择内部承办单位':'无数据'">
                                <el-option
                                  v-for="(item,ind) in cbbmdata"
                                  :key="ind"
@@ -183,10 +186,9 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                       
                            </el-row>
                     <el-row class="lh" v-if="open">
-                       <el-col :sm="24" :md="12" :lg="8">
+                       <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">答复类型</span>
                            <el-select v-model="pd.replyType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -197,7 +199,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                      <el-col :sm="24" :md="12" :lg="8">
+                      <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">是否重点办理</span>
                            <el-select v-model="pd.isImportant" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -209,7 +211,7 @@
                             </el-select>
                         </el-col>
                        
-                         <el-col :sm="24" :md="12" :lg="8" v-if="pd.isImportant=='0213000001'">
+                         <el-col :sm="24" :md="12" :lg="8" v-if="pd.isImportant=='0213000001'"  class="input-item">
                             <span class="yy-input-text">重点业务分类</span>
                            <el-select v-model="pd.importantBusinessType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -225,7 +227,7 @@
                             <span class="yy-input-text" style="width:13.5%">备注</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.title"  class="yy-input-input" style="width:80%!important;"></el-input>
                         </el-col> -->
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">交办状态</span>
                            <el-select v-model="pd.assignStatus" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option value="2" label="全部">
@@ -236,7 +238,7 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">办理状态</span>
                            <el-select v-model="pd.transactStatus " filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option value="2" label="全部">
@@ -248,7 +250,7 @@
                                
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">统稿状态</span>
                            <el-select v-model="pd.completeStatus" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                  <el-option value="2" label="全部">
@@ -259,7 +261,7 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">复文状态</span>
                            <el-select v-model="pd.replyStatus" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option value="2" label="全部">
@@ -270,7 +272,7 @@
                                 </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">催办状态</span>
                            <el-select v-model="pd.urgentStatus" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option value="2" label="全部">
@@ -319,7 +321,7 @@
                       
                         
                        
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">复文号</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.replyNumber"  class="yy-input-input" ></el-input>
                         </el-col>
@@ -338,7 +340,7 @@
                             </el-select>
                         </el-col> -->
                          
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">是否公开</span>
                            
                             <el-select v-model="pd.isPublic" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -352,21 +354,37 @@
                         </el-col>
                          
                         
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">办结时间</span>
-                           <el-date-picker class="yy-input-input"
-                           v-model="pd.endTime" format="yyyy-MM-dd"
-                           type="date" size="small" value-format="yyyy-MM-dd"
-                           placeholder="选择时间">
-                        </el-date-picker>
+                            <div class="yy-input-input  t-flex  t-date">
+                                <el-date-picker
+                                v-model="pd.completeTimeStart" format="yyyy-MM-dd"
+                                type="date" size="small" value-format="yyyy-MM-dd"
+                                placeholder="开始时间" >
+                                </el-date-picker>
+                                <span class="septum">-</span>
+                                <el-date-picker
+                                    v-model="pd.completeTimeEnd" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="结束时间">
+                                </el-date-picker>
+                            </div>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">应办结时间</span>
-                           <el-date-picker class="yy-input-input"
-                           v-model="pd.assignFinishTime" format="yyyy-MM-dd"
-                           type="date" size="small" value-format="yyyy-MM-dd"
-                           placeholder="选择时间">
-                        </el-date-picker>
+                           <div class="yy-input-input  t-flex  t-date">
+                                <el-date-picker
+                                v-model="pd.assignFinishTimeStart" format="yyyy-MM-dd"
+                                type="date" size="small" value-format="yyyy-MM-dd"
+                                placeholder="开始时间" >
+                                </el-date-picker>
+                                <span class="septum">-</span>
+                                <el-date-picker
+                                    v-model="pd.assignFinishTimeEnd" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="结束时间">
+                                </el-date-picker>
+                            </div>
                         </el-col>
                     </el-row> 
                 </div>
@@ -487,72 +505,70 @@
               <el-button @click="cbDialogVisible = false" size="small">取 消</el-button>
             </div>
 </el-dialog>
-<el-dialog title="办公流程" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="850px"> 
+<el-dialog title="办公流程" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="900px"> 
   <el-form :model="form">
-        <div v-if='cklc' style="line-height:40px; text-align:center">暂无办公流程</div>
+      <div v-if='cklc' style="line-height:40px; text-align:center">暂无办公流程</div>
         <el-collapse v-model="activeNames" @change="handleChange" style="height:600px;overflow-y:auto;" accordion v-else>
-         <div v-for="(item,ind) in bldata" :key="ind">
-           <el-collapse-item :title="item.title" :name="item.serialNum">
-              <el-row class="ah-40 border" >
-                   <el-col :span="24" class="borderb">
-                         <span class="yy-input-text borderr" style="width:13%;">标题</span>
-                         <span class="yy-input-input">{{item.title}}</span>
+        <div v-for="(item,ind) in bldata" :key="ind">
+           <el-collapse-item :title="'交办单：'+item.title" :name="item.serialNum">
+              <el-row class="ah-50 pl-20 pr-20" style="font-size:15px;color:#777777">
+                   <el-col :span="24" class="mt-20 pl-20 borderb" >
+                       <span>标题：</span><b style="font-size:18px;">  {{item.title}}</b>
                    </el-col>
-                      <el-col :span="24" class="borderb">
-                         <span class="yy-input-text">交办意见</span><br>
-                         <span class="padingl"></span>
+                      <el-col :span="24" class="mb-20 pl-20">
+                         <span>交办意见：</span>
+                         <span >同意审批</span>
                    </el-col>
-                    <el-col :span="12" class="borderb">
-                         <span class="yy-input-text borderr">交办部门</span>
-                         <span class="yy-input-input">{{item.assignedDepartment}}</span>
+                    <el-col :span="12" class="backcolor pl-20 borderb">
+                         <span >交办部门：</span>
+                         <span >{{item.assignedDepartment}}</span>
                    </el-col>
-                    <el-col :span="12" class="borderb">
-                         <span class="yy-input-text borderr borderl">交办时间</span>
-                         <span class="yy-input-input">{{item.assignedTime}}</span>
+                    <el-col :span="12" class="backcolor borderb">
+                         <span>交办时间：</span>
+                         <span >{{item.assignedTime}}</span>
                    </el-col>
-                   <el-col :span="24" class="borderb"  v-for="(t,i) in item.subdata" :key='i'>
-                       <el-row class="borderb backcolor">
-                            <el-col :span="24" class="borderb">
-                         <span class="yy-input-text">领导意见{{i+1}}</span><br>
-                           <span class="padingl">{{t.checkContents}}</span>
-                    </el-col>
-                    <el-col :span="6">
-                         <span class="yy-input-text borderr" style='width:40%'>审批结果</span>
-                         <span class="yy-input-text" style='width:33%!important'>{{t.checkResult}}</span>
-                   </el-col>
-                    <el-col :span="10">
-                         <span class="yy-input-text borderr borderl">审批领导</span>
-                         <span class="yy-input-input">{{t.nodePerson}}</span>
-                   </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">审批时间</span>
-                         <span class="yy-input-input">{{t.nodeTime}}</span>
-                   </el-col>
+                   <el-col :span="24"   v-for="(t,i) in item.subdata" :key='i'>
+                       <el-row class="backcolor pl-20 pr-20">
+                        <el-col :span="24" class="borderb">
+                          <span>领导意见{{i+1}}：</span><br>
+                        <span class="padingl">{{t.checkContents}}</span>
+                        </el-col>
+                        <el-col :span="6" class="borderb">
+                                <span>审批结果：</span>
+                                <span class="cblue">{{t.checkResult}}</span>
+                        </el-col>
+                        <el-col :span="10" class="borderb">
+                                <span>审批领导：</span>
+                                <span class="cblue">{{t.nodePerson}}</span>
+                        </el-col>
+                            <el-col :span="8" class="borderb">
+                                <span>审批时间：</span>
+                                <span class="cblue">{{t.nodeTime}}</span>
+                        </el-col>
                        </el-row>
                        
-
                    </el-col>
-                   <el-col :span="8">
-                         <span class="yy-input-text borderr">流程</span>
-                         <span class="yy-input-input">{{item.processType}}</span>
+                   <el-col :span="8" class="backcolor pl-20">
+                         <span>流程：</span>
+                         <span>{{item.processType}}</span>
                    </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">公示</span>
-                         <span class="yy-input-input">{{item.isPublic}}</span>
+                    <el-col :span="8" class="backcolor">
+                         <span>公示：</span>
+                         <span>{{item.isPublic}}</span>
                    </el-col>
-                    <el-col :span="8">
-                         <span class="yy-input-text borderr borderl">沟通</span>
-                         <span class="yy-input-input">{{item.isCommunicate}}</span>
+                    <el-col :span="8" class="backcolor">
+                         <span>沟通：</span>
+                         <span>{{item.isCommunicate}}</span>
                    </el-col>
 
               </el-row>
-          </el-collapse-item>
-          </div>
+         </el-collapse-item>
+</div>
             
-        </el-collapse>
-
+    </el-collapse>
   </el-form>
 </el-dialog>
+
     </div>
 </template>
 <script>

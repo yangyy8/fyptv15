@@ -77,7 +77,8 @@ const zzxgwjlx=zddz+"dic_ioex_workrelfiletype";//工作相关文件类型
 const zw=zddz+"dic_ioex_positiontype";//职务
 const sfxhft=zddz+"dic_ioex_circuitcourtdistinction";//是否巡回法庭
 const gkqf=zddz+"dic_osbu_publicdistinguish";//公开区分
-
+const sflr=zddz+"dic_osbu_reelectiondistinguish";//是否连任
+const jdqf=zddz+"dic_ioex_pairstatus";//结对区分
 const gkzt=zddz+"dic_osbu_publicstatus";//公开状态
 const zsqf=zddz+"dic_ioex_showdistinction";//展示区分
 const zszt=zddz+"dic_ioex_showstatus";//展示状态
@@ -87,7 +88,8 @@ const fbqf=zddz+"dic_osbu_pushdistinguish";//发布区分
 const fbzt=zddz+"dic_osbu_releasestatus";//发布状态
 const fyywlx=zddz+"dic_ioex_courtnewstype";//法院要闻类型
 const fyywly=zddz+"dic_ioex_courtnewssource";//法院要闻来源
-
+const bxqf=zddz+"dic_ioex_supplementdistinction";//补选区分
+const jpyy=zddz+"dic_ioex_dismissalreason";//解聘原因
 const qxnbj=zddz+"dic_osbu_intimecompleteddistinguish";//期限内办结区分
 const tyjdytjdw=zddz+"dic_ioex_supervisorrecommendedunit";//特约监督员推荐单位
 const tyzxytjdw=zddz+"dic_ioex_consultantrecommendedunit";//特邀咨询员推荐单位
@@ -95,6 +97,14 @@ const sydw="/org/getAllOrg";//所有单位
 const fydw="/org/getCourtOrg";//法院单位
 const rddw="/org/getCourtOrg";//人大单位
 const zxdw="/org/getCourtOrg";//政协单位
+const tysf=zddz+"dic_ioex_specialIdentitytype";//身份  人大代表【同时间的身份】、政协委员【同时间的身份】、各界人士
+const zfxwjb=zddz+"dic_ioex_forwardmediaLevel";//转发新闻级别
+
+const jburl="/sessionType"//届别地址
+const tyjburl="/specialSessionType";//特别届别地址
+const tburl="/groupType"//团别地址
+const jjburl="/circleType"//界别地址
+const tylburl='/specialType'//特约类别列表
 
 const menuurl="/menu/getButton"//画面和按钮权限
 /**
@@ -121,6 +131,14 @@ const ZX="0227000002";//政协
 const FY="0227000003";//法院
 const TZB="0227000004";//统战部
 const MZDP="0227000005";//八大民族党派
+const MZDP1="0227000006";//中国国民党革命委员会
+const MZDP2="0227000007";//中国民主同盟
+const MZDP3="0227000008";//中国民主建国会
+const MZDP4="0227000009";//中国民主促进会
+const MZDP5="0227000010";//中国农工民主党
+const MZDP6="0227000011";//中国致公党
+const MZDP7="0227000012";//九三学社
+const MZDP8="0227000013";//台湾民主自治同盟
 const GSL="0227000014";//工商联
 const TL="0227000015";//台联
 export default
@@ -131,5 +149,6 @@ export default
     dflx,zdywfl,tgxs,gkqf,zdqf,scfl,xwdwfl,xwdwjb,xw,sydw,fydw,rddw,zxdw,tazz,zdaj,imgformat,
     docformat,jgwyh,qtb,zddz,gkzt,zsqf,zszt,shqf,shzt,fbqf,fbzt,fyywlx,fyywly,qxnbj,tyzxytjdw,tyjdytjdw,
     cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,menuurl,
-    REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL
+    REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL,jpyy,tysf,tyjburl,
+    MZDP1,MZDP2,MZDP3,MZDP4,MZDP5,MZDP6,MZDP7,MZDP8,sflr,jdqf,jburl,tburl,jjburl,tylburl,bxqf,zfxwjb
 }

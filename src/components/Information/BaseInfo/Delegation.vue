@@ -13,21 +13,22 @@
                <div  class="left">
                     <el-row class="ah-40" style="text-align: center;" >
                            <el-col :span="24"  v-if="addtype=='1'">
-                                 <el-row  v-if="code!=''">
+                                 <!-- <el-row  v-if="code!='' && code!=undefined">
                                     <el-col :sm="24" :md="24" :lg="24"  v-for="(t,ind) in leveldata" :key="ind">
                                          <span class="area" @click="gopro(t.dm,'tb',t.mc)">{{t.mc}}</span>
                                     </el-col>
                                 </el-row>
-                                <el-row  v-else>
-                                    <el-col :sm="24" :md="24" :lg="12"  v-for="(t,ind) in $store.state.tb" :key="ind">
+                                <el-row  v-else> -->
+                                  <el-row>
+                                    <el-col :sm="24" :md="24" :lg="12"  v-for="(t,ind) in leveldata" :key="ind">
                                          <span class="area" @click="gopro(t.dm,'tb',t.mc)" v-if="t.dm!='0190900000'">{{t.mc}}</span>
                                     </el-col>
-                                  <el-col :sm="24" :md="24" :lg="24">
-                                         <span class="area" @click="gopro('0190900000','tb','解放军和武警部队')">解放军和武警部队</span>
+                                  <el-col :sm="24" :md="24" :lg="24"  v-for="(ts,inde) in leveldata">
+                                         <span class="area" v-if="ts.dm=='0190900000'"  @click="gopro('0190900000','tb','解放军和武警部队')">解放军和武警部队</span>
                                   </el-col>
                                 </el-row>
                            </el-col>
-                             <el-col :span="24" v-for="(t,ind) in $store.state.jjb" :key="ind" v-if="addtype=='2'">
+                             <el-col :span="24" v-for="(t,ind) in jjblist" :key="ind" v-if="addtype=='2'">
                                 <span class="area" @click="gopro(t.dm,'jjb',t.mc)">{{t.mc}}</span>
                            </el-col>
                        </el-row>
@@ -46,7 +47,7 @@
                             </el-button>
                           <el-button @click="getDR()"  v-if='allshow[1]'>导入</el-button>
                           <el-button @click="goseach()"  v-if='allshow[2]'>查询</el-button>
-                          <el-button @click="$router.back(-1)">返回</el-button>
+                          <el-button @click="$router.go(-num)">返回</el-button>
                     </el-col>
                </el-row>
                <el-row :gutter="2" class="ah-50 pdz">
@@ -68,8 +69,8 @@
                 </el-row>
              </el-col>
              <el-col :span="6" style="padding-left:45px;">
-                     <div class="title mb-20">历届{{mname}}名单</div>
-                     <div v-for='(tt,ind) in $store.state.jb' :key="ind">
+                     <div class="title mb-20">历届{{cname4==""?cname3:cname4}}名单</div>
+                     <div v-for='(tt,ind) in jblist' :key="ind">
                          <div @click="gopro(tt.dm,'jb',tt.mc)"  class="ljinfo">{{tt.mc}}{{cinfo}}</div>
                      </div>
              </el-col>
@@ -87,6 +88,8 @@
 <script>
 import UPLOAD from "../../Common/upload"
 import {getlljgdbtmenu,getlljgdbtdata} from '@/assets/js/aleainfo.js'
+import {ToArray} from '@/assets/js/ToArray.js'
+
 export default {
    components:{UPLOAD},
     data(){
@@ -107,6 +110,8 @@ export default {
           mc:'',
           addtype:'',
           leveldata:[],
+          jjblist:[],
+          jblist:[],
           code:'',
           codemc:'',
           jb1:'',
@@ -120,6 +125,8 @@ export default {
           info:{},
           alldata:[],
           allshow:[],
+          num:1,
+          leveltype:'',
        }
     },
     mounted(){
@@ -142,7 +149,8 @@ export default {
          }else if(val.query.info!=undefined && val.query.info!=''){
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
-           console.log(this.info,'==');
+             console.log(this.info,'===');
+             
            
             this.count=0;
             this.addtype=this.info.type;
@@ -153,6 +161,7 @@ export default {
             this.codemc=this.info.codemc;
             this.jb1 = this.info.jb;
             this.jmc=this.info.jmc;
+            this.num=this.info.num==null?1:this.info.num;
             if(this.jmc==null)
               {
                 this.jmc=this.$store.state.jmc;
@@ -167,14 +176,34 @@ export default {
                           if(r.code==1 && r.data!=null){
                             for (let i = 0; i < this.alldata.length; i++) {
                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
-                               console.log(this.alldata,'--',this.alldata[i],'===',r.data);
+                              //  console.log(this.alldata,'--',this.alldata[i],'===',r.data);
                                
                             }   
+                             switch (this.jb1) {
+                                case 'qg':
+                                    this.leveltype='0150000001';
+                                    break;
+                                case 'sj':
+                                    this.leveltype='0150000002';
+                                    break;
+                                case 'ds':
+                                    this.leveltype='0150000003';
+                                    break;
+                                case 'xq':
+                                    this.leveltype='0150000004';
+                                    break;
+                                default:
+                                    break;
+                            }
                             if(this.type=="tbxq"){
                                 this.getLevel('3',this.code);
-                            }else if(this.code!="" && this.code!=undefined && this.type=="tb"){
-                              this.getTB('3',this.code);
+                            }else if(this.type=="tb"){
+                             
+                              this.getTB(this.leveltype,this.code);
+                            }else if(this.type=='jjb'){
+                              this.getJJB();
                             }
+                            this.getJB();
                             this.getList(this.addtype,this.type,this.group,this.jb1);
                           }else if(r.code==0){
                             this.$router.push({path:'/limitmsg'});
@@ -211,10 +240,10 @@ export default {
             },
         getSN(s,n){
             var sum="";
-          if(s=="女性" && n!="汉族" && n!=null && s!=null){
+          if(s=="女" && n!="汉族" && n!=null && s!=null){
               sum="(女，"+n+")";
           }else{
-              if(s=='女性' && n!=null){
+              if(s=='女' && n!=null){
                  sum="（女）";
                }
               if(n!="汉族" && n!=null){
@@ -224,17 +253,51 @@ export default {
            return sum;
         },
          getTB(l,v){
-            let p={
-                    'code':v,
-                    'level':l
-               };
-             this.$api.get(this.Global.aport4+'/service/getGroupType',p,
-              r =>{
-                   if(r.code==1){
-                     this.leveldata=r.data;
+              let p={
+                    'level':l,
+                    'administrativeDivision':v
+                  };
+                  this.$api.post(this.Global.aport1+this.Global.tburl,p,
+                  r =>{
+                          if(r.code==1){
+                            this.leveldata=ToArray(r.data);
+                          }
+                   });
 
+             
+        },
+        getJJB(){
+           let p={
+                    'level':this.leveltype,
+                    'administrativeDivision':this.code,
+                    'sessionType':this.jkey
+                    };
+                 this.$api.post(this.Global.jjburl,p,
+                        r =>{
+                          this.jjblist=ToArray(r.data);
+               });
+        },
+        getJB(){
+          var lb="";
+                    switch (this.addtype) {
+                        case '1':
+                            lb=this.Global.REPRESENTATIVE;
+                            break;
+                        case '2':
+                            lb=this.Global.CPPCMEMBER;
+                            break;
+                        default:
+                            break;
                     }
-            });
+                    let p={
+                        'level':this.leveltype,
+                        'administrativeDivision':this.code,
+                        'identityType':lb,
+                    };
+                    this.$api.post(this.Global.jburl,p,
+                            r =>{
+                                this.jblist=ToArray(r.data,'1');
+                      });
         },
         getLevel(l,v){
                let p={
@@ -244,7 +307,7 @@ export default {
                   this.$api.get(this.Global.aport4+'/service/getxzqh',p,
                   r =>{
                           if(r.code==1){
-                                this.num++;
+                                
                                 this.leveldata=r.data;
                           }
                    });
@@ -309,7 +372,7 @@ export default {
                     if(jb1=='qg'){
                      
                       this.cname3 = '全国政协委员';
-                      this.cname4 = this.codemc+'政协委员';
+                      this.cname4 = '';
                     }else if(jb1=='sj'){
                       
                       this.cname3 = '省级政协委员';
@@ -365,7 +428,8 @@ export default {
                       'codemc':this.codemc,
                       'jb':this.jb1,
                       'jmc':mc,
-                      'jkey':d
+                      'jkey':d,
+                      'num':this.num+1
                   };
  
                 var str=Base64.encode(JSON.stringify(p));
@@ -382,9 +446,11 @@ export default {
                       'codemc':this.codemc,
                       'jb':this.jb1,
                       'jmc':this.jmc,
-                      'jkey':this.jkey
+                      'jkey':this.jkey,
+                      'num':this.num+1
                   };
- 
+               
+                
                 var str=Base64.encode(JSON.stringify(p));
                 this.$router.push({path:'Delegation',query:{info:str}});
                 // this.$router.push({name:'Delegation',query:{type:this.addtype,vv:t,key:d,mc:mc,

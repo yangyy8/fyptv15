@@ -5,7 +5,7 @@
          <div class="logtop"><img src="../assets/img/dtop.png"></div>
          <div class="logintitle"></div>
          <div class="login-item">
-        <el-input  placeholder="输入手机号或用户名" v-model="user.userName" @keyup.enter.native="keyLogin">
+        <el-input  placeholder="输入用户名" v-model="user.userName" @keyup.enter.native="keyLogin">
           <i slot="prefix" class="el-input__icon"><img src="../assets/img/logo01.png"></i>
         </el-input>
         </div>

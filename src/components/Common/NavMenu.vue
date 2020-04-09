@@ -6,15 +6,17 @@
       <el-menu-item v-if="!navMenu.childs&&navMenu.entity"
                     :key="navMenu.entity.id" :data="navMenu" :index="navMenu.entity.name"  :route="navMenu.entity.url"
                    >
+                   
         <i :class="navMenu.entity.icon"></i>
-        <span slot="title">{{navMenu.entity.alias}}</span>
+        <span class="homef" v-if="navMenu.entity.icon=='el-icon-s-home'">{{navMenu.entity.alias}}</span>
+         <span  v-else>{{navMenu.entity.alias}}</span>
       </el-menu-item>
       <!-- 此菜单下还有子菜单 -->
       <el-submenu v-if="navMenu.childs&&navMenu.entity"
                   :key="navMenu.entity.id" :data="navMenu" :index="navMenu.entity.name" :route="navMenu.entity.url">
         <template slot="title">
           <i :class="navMenu.entity.icon"></i>
-          <span style="font-size:18px;" v-if="navMenu.entity.jb==0">{{navMenu.entity.alias}}</span>
+          <span class="homef" v-if="navMenu.entity.jb==0">{{navMenu.entity.alias}}</span>
           <span style="margin-right:50px;" v-else>{{navMenu.entity.alias}}</span>
           
         </template>

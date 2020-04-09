@@ -115,4 +115,63 @@ export   function getServerDate(){
   return nowDate+'&nbsp;&nbsp;&nbsp;&nbsp;'+nowTime+'&nbsp;&nbsp;&nbsp;&nbsp;'+nowWeek;
 }
 
+//100年
+export function birthdayYear(){
+  let myDate = new Date()
+  let year=myDate.getFullYear()+1;
+  let years=[];
+  for (let index = (year-100); index < year; index++) {
+     
+    years.push(index);
+  }
+  return years;
+}
+//12个月
 
+export function birthdayMonth(){
+  let months=[];
+  for (let i = 1; i < 13; i++) {
+    months.push(i);
+    
+  }
+  return months;
+}
+
+//日
+export function birthdayDay(y,m){
+  switch (m) {
+    case 1:
+    case 3:
+    case 5:
+    case 7:
+    case 8:
+    case 10:
+    case 12:
+           return 31;
+           
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+           return 30;
+        
+    case 2:
+          return isRuinian(y);
+  }
+}
+
+/**
+ * 判断某年是否闰年
+ */
+function isRuinian(year){
+  console.log('year/4',year%4,'year%100',year%100,'year/400',year%400,'year',year);
+  
+  if(year%4 == 0 && year%100 != 0){
+          return 29;
+  } else if (year%400 == 0){
+          return 29;
+  } else{
+          return 28;
+  }
+
+}

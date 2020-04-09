@@ -22,9 +22,9 @@
                         </el-date-picker>
                      </div>
                      </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">活动方式</span>
-                           <el-select v-model="pd.activityMode" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.activityModeArr" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.hdfs"
                                  :key="ind"
@@ -33,9 +33,9 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">活动类型</span>
-                           <el-select v-model="pd.activityType" @change="getHDName(pd.activityType)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.activityTypeArr" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.hdlx"
                                  :key="ind"
@@ -44,20 +44,20 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="24" :lg="24">
+                        <el-col :sm="24" :md="24" :lg="24" class="input-item">
                             <span class="yy-input-text" style="width:9%!important;">主题</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.theme"  class="yy-input-input"  style="width:86.8%!important;"></el-input>
                         </el-col>
-                           <el-col :sm="24" :md="24" :lg="24">
+                           <el-col :sm="24" :md="24" :lg="24" class="input-item">
                             <span class="yy-input-text"  style="width:9%!important;">地点</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.location"  class="yy-input-input" style="width:86.8%!important;"></el-input>
                         </el-col>
                     </el-row>
                     <el-row class="lh" v-if="open">
-                          <el-col :sm="24" :md="12" :lg="8">
+                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">结对人</span>
                            
-                        <el-select v-model="pd.courtInsiderId" clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd.courtInsiderIdArr" multiple clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                           v-for="(item,ind) in cdrdata"
                           :key="ind"
@@ -67,9 +67,9 @@
                         </el-select>
                         </el-col>
                         
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                         <span class="yy-input-text"  style="width:37%!important" title='代表、委员、特约人员'>代表、委员、特约人员</span>
-                        <el-select v-model="pd.courtOutsiderId"  clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:50%!important" >
+                        <el-select v-model="pd.courtOutsiderIdArr" multiple clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:50%!important" >
                          <el-option
                           v-for="(item,ind) in xmdata"
                           :key="ind"
@@ -78,9 +78,9 @@
                          </el-option>
                         </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">法院领导</span>
-                         <el-select v-model="pd.courtPersonId" clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input">
+                         <el-select v-model="pd.courtPersonIdArr" multiple clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input">
                          <el-option
                           v-for="(item,ind) in fydata"
                           :key="ind"
@@ -89,7 +89,7 @@
                          </el-option>
                         </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">组织单位</span>
                            <el-select v-model="pd.orgUnitId" @change="getcbbm(pd.orgUnitId,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -100,7 +100,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">组织部门</span>
                            <el-select v-model="pd.orgDepartmentId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -111,12 +111,12 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                             <el-col :sm="24" :md="12" :lg="8">
+                             <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">批示领导</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="pd.instructorName"  class="yy-input-input" ></el-input>
                         </el-col>
 
-                         <el-col :sm="24" :md="12" :lg="8">
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">批示单位</span>
                              <el-input placeholder="请输入内容" size="small" clearable v-model="pd.instructionUnit"  class="yy-input-input" ></el-input>
                         </el-col>
@@ -136,7 +136,7 @@
                         </el-date-picker>
                      </div>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">录入单位</span>
                            <el-select v-model="pd.entryUnitId" @change="getcbbm(pd.entryUnitId,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -147,7 +147,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">录入部门</span>
                            <el-select v-model="pd.entryDepartmentId"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -323,7 +323,7 @@ export default {
             CurrentPage: 1,
             pageSize: 10,
             TotalResult: 0,
-            pd:{orgDepartmentId:'',entryDepartmentId:''},
+            pd:{},
             options:this.pl.ps,
             open:false,
             all:true,
@@ -384,6 +384,7 @@ export default {
         clickRow(row){
            this.$refs.multipleTable.toggleRowSelection(row)
         },
+       
         getXQ(){
               //权限start
             this.$api.post(this.Global.menuurl,{'menuId':'12242313'},
@@ -549,7 +550,7 @@ export default {
         },
         getList(currentPage, showCount, pd){
           this.sname='联络工作'
-          this.getCheckList();
+          //this.getCheckList();
           //this.changeList();
            this.getJDXXAB();
           let p={

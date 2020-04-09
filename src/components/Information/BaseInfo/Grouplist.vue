@@ -17,7 +17,7 @@
                        <div class="title">{{jjbmc==null?'':jjbmc}}{{cname4}}{{cname2}}</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
-                          <el-button type="primary" style="width:80px" @click="goBase()" v-if='allshow[0]' key='0'><span>添加</span></el-button>
+                          <el-button type="primary" style="width:80px" @click="goBase()" v-if='allshow[0] && addtype!="3"' key='0'><span>添加</span></el-button>
                           <el-button style="width:80px" @click="goseach()" v-if='allshow[1]' key='1'>查询</el-button>
                           <el-button style="width:80px" @click="$router.go(-1)" v-if="back">返回</el-button>
                     </el-col>
@@ -32,13 +32,13 @@
                   </el-col>
                 </el-row>
                  <el-row :gutter="2" class="ah-50 pborder mt-20" v-else-if='addtype=="2" && show'>
-                    <el-col :sm="24" :md="12" :lg="6" v-for="(t,ind) in $store.state.jjb" :key="ind">
+                    <el-col :sm="24" :md="12" :lg="6" v-for="(t,ind) in jjblist" :key="ind">
                       <span class="address"  @click="gopro(t.dm,'jjb',t.mc)">{{t.mc}}</span>
                     </el-col>
                 </el-row>
                 <el-row :gutter="2" class="ah-50 pborder mt-20" v-else-if='addtype=="3" && show'>
-                    <el-col :sm="24" :md="12" :lg="8" v-for="(te,indm) in $store.state.tylb" :key="indm">
-                       <span class="address" style="font-weight:bold;" @click="getline(te.dm,te.mc)"> {{te.mc}}</span>
+                    <el-col :sm="24" :md="12" :lg="8" v-for="(te,indm) in tylblist" :key="indm">
+                       <span class="address" style="font-weight:bold;" @click="getlb(te.dm,te.mc)"> {{te.mc}}</span>
                     </el-col>
                 </el-row>
                 <el-row :gutter="2" class="ah-50 pborder mt-10 mb-20" v-else-if='addtype=="4" && show'>
@@ -48,19 +48,37 @@
                 </el-row>
              </el-col>
              <el-col :span="6" style="padding-left:45px;" v-if='addtype=="1" || addtype=="2"'>
-                     <div class="title mb-20">历届{{ltitle}}名单</div>
-                     <div v-for='(tt,index) in $store.state.jb' class="ljinfo" :key="index">
+                     <div class="title mb-20">历届{{cname4}}{{cname3}}名单</div>
+                     <div v-for='(tt,index) in jblist' class="ljinfo" :key="index">
                         <span @click="gojjb(tt.dm,tt.mc)">{{tt.mc}}{{cinfo}}</span>
                      </div>
              </el-col>
             </el-row>
      </div>
-     
+     <el-dialog title="选择届别" :visible.sync="jbDialogVisible" :close-on-click-modal='false' width="500px">
+         <div>
+             <span class="yy-input-text">届别</span>
+                           <el-select v-model="lbpd.tyjb" @change="getJbmc(lbpd.tyjb)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in tyjblist"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                        </el-option>
+             </el-select>
+         </div>
+           <div slot="footer" class="dialog-footer">
+                <el-button type="primary" size="small" @click="savelist">确 定</el-button>
+                <el-button @click="jbDialogVisible = false" size="small">取 消</el-button>
+                </div>
+     </el-dialog>
+
     </div>
   
 </template>
 <script>
 import {getlljgtbmenu,getlljgtbdata} from '@/assets/js/aleainfo.js'
+import {ToArray} from '@/assets/js/ToArray.js'
 export default {
     data(){
         return{
@@ -68,7 +86,9 @@ export default {
            cname2:'',
            cname3:'',
            cname4:'',
+           tyjb:'',
            leveldatatb:[],
+           jbDialogVisible:false,
            addtype:'',
            jb:'',
            jjb:'',
@@ -78,18 +98,24 @@ export default {
            ltitle:'',
            cinfo:'',
            lvltype:'',//用于特约人员
+           leveltype:'',//用于代表和政协
            fydata:[],
            show:true,
            back:true,//返回按钮
            alldata:[],
            allshow:[],
+           jblist:[],//届别列表
+           tylblist:[],
+           jjblist:[],
+           tyjblist:[],
+           lbpd:{},
         }
     },
     mounted(){
-        this.$store.dispatch("getJb");
-        this.$store.dispatch("getTb");
-        this.$store.dispatch("getJjb");
-        this.$store.dispatch("getTylb");
+        // this.$store.dispatch("getJb");
+        // this.$store.dispatch("getTb");
+        // this.$store.dispatch("getJjb");
+        // this.$store.dispatch("getTylb");
         this.getinit(this.$route);
     },
     watch:{
@@ -131,8 +157,8 @@ export default {
               
                this.addtype=val.query.type;
                this.jb=val.query.jb;
-               this.jjbmc=this.$store.state.jmc;
-               this.jjb=this.$store.state.jid;
+            //    this.jjbmc=this.$store.state.jmc;
+            //    this.jjb=this.$store.state.jid;
                this.back=false;
                this.getTitle();
            }
@@ -157,8 +183,99 @@ export default {
          //权限end
           
         },
+        getjbinfo(){
+
+            if(this.addtype=='1' || this.addtype=='2')
+           {
+                    var lb="";
+                    switch (this.addtype) {
+                        case '1':
+                            lb=this.Global.REPRESENTATIVE;
+                            break;
+                        case '2':
+                            lb=this.Global.CPPCMEMBER;
+                            break;
+                        case '3':
+                            lb=this.Global.SPECIALPERSON;
+                            break;
+                        default:
+                            break;
+                    }
+                    let p={
+                        'level':this.leveltype,
+                        'administrativeDivision':this.code,
+                        'identityType':lb,
+                    };
+                    this.$api.post(this.Global.jburl,p,
+                            r =>{
+                                this.jblist=ToArray(r.data,'1');
+                                if(this.jjbmc==null || this.jjbmc==""){
+                                    this.jjbmc=this.jblist[0].mc;
+                                }
+                                 if(this.jjb==null || this.jjb==""){
+                                    this.jjb=this.jblist[0].dm;
+                                }
+
+                                 if(this.addtype=='2'){
+                
+                                        let p={
+                                                'level':this.leveltype,
+                                                'administrativeDivision':this.code,
+                                                'sessionType':this.jjb
+                                            };
+                                            this.$api.post(this.Global.jjburl,p,
+                                                    r =>{
+                                                        this.jjblist=ToArray(r.data);
+                                                        
+                                            });
+                                    }
+                      });
+            }else if(this.addtype=='3'){
+                   let p={
+                        'level':this.lvltype,
+                        'administrativeDivision':this.code,
+                        
+                    };
+                    this.$api.post(this.Global.tylburl,p,
+                            r =>{
+                                this.tylblist=ToArray(r.data);
+                              
+                    });
+            }
+
+           
+        },
+        getlb(dm,mc){
+            this.lbpd={};
+           this.lbpd.dm=dm,
+           this.lbpd.mc=mc;
+            let pp={
+                        'level':this.lvltype,
+                        'administrativeDivision':this.code,
+                        'specialType':dm,
+                    };
+                    this.$api.post(this.Global.tyjburl,pp,
+                            r =>{
+                           this.tyjblist=ToArray(r.data,'1');
+                });
+            this.jbDialogVisible=true;
+        },
+        savelist(){
+            if(this.lbpd.tyjb=="" || this.lbpd.tyjb==null || this.lbpd.tyjb==undefined){
+                this.$message.error("请选择届别");return;
+            }else{
+                 this.getline();
+            }
+        },
+        getJbmc(val){
+             var obj = {};
+                     obj = this.tyjblist.find(item =>{
+                        return item.dm === val
+               });
+               this.lbpd.tyjbmc=obj.mc;
+        },
       reset(){
-             this.addtype='';
+               this.addtype='';
                this.jb='';
                this.cname1='';
                this.cname2='';
@@ -173,30 +290,30 @@ export default {
                this.back=true;this.leveldatatb=[];this.fydata=[];
       },
       getInfo(){
-           if(this.addtype=='1'){
-               var level='';
+           if(this.addtype=='1' || this.addtype=='2'){
+               
                 switch (this.jb) {
                     case 'qg':
-                       level='0150000001';
+                        this.leveltype='0150000001';
                         break;
                     case 'sj':
-                        level='0150000002';
+                        this.leveltype='0150000002';
                         break;
                     case 'ds':
-                        level='0150000003';
+                        this.leveltype='0150000003';
                         break;
                     case 'xq':
-                        level='0150000004';
+                        this.leveltype='0150000004';
                         break;
                     default:
                         break;
                 }
-                 this.getTB(level,this.code);
+                 this.getTB(this.leveltype,this.code);
               }else   if(this.addtype=='3' || this.addtype=='4'){
                
                 switch (this.jb) {
                      case 'qg':
-                       this.lvltype='0222000001';
+                        this.lvltype='0222000001';
                         break;
                     case 'sj':
                         this.lvltype='0222000002';
@@ -216,6 +333,7 @@ export default {
                 }
               
               }
+              this.getjbinfo();
       },
       getTitle(){
           switch (this.addtype) {
@@ -285,26 +403,27 @@ export default {
     this.$router.push({path:'Delegation',query:{info:str}});
     },
     //特约人员
-      getline(dm,mc){
-             
-           this.$router.push({name:'SpecialPersonDeatil',query:{lb:dm,lbmc:mc,mc:this.cname3,jb:this.jb,jblv:this.lvltype,code:this.code,codemc:this.mc}});
+      getline(){
+          console.log(this.lbpd,'this.lbpd');
+          
+           this.$router.push({name:'SpecialPersonDeatil',query:{lb:this.lbpd.dm,lbmc:this.lbpd.mc,mc:this.cname3,jb:this.jb,jblv:this.lvltype,code:this.code,codemc:this.mc,jkey:this.lbpd.tyjb,jmc:this.lbpd.tyjbmc}});
        },
       gotoFy(orgid,sjOrgId,mc){
-           this.$router.push({name:'CourtMeber',query:{orgid:orgid,jb:this.jb,type:this.addtype,xzqh:this.code,xzqhmc:this.mc,cname:this.cname3,fname:mc}});
+           this.$router.push({name:'CourtMeber',query:{orgid:sjOrgId,depid:orgid,jb:this.jb,type:this.addtype,xzqh:this.code,xzqhmc:this.mc,cname:this.cname3,fname:mc}});
        },
         //团别
       getTB(l,v){
-            console.log(l,v);
-            
+          
                let p={
                     'level':l,
-                    'code':v
+                    'administrativeDivision':v
                   };
-                  this.$api.get(this.Global.aport4+'/service/getGroupType',p,
+                  this.$api.post(this.Global.aport1+this.Global.tburl,p,
                   r =>{
                           if(r.code==1){
-                            this.leveldatatb=r.data;
-                            if(r.data.length>0){
+                            this.leveldatatb=ToArray(r.data);
+                                                        
+                            if(this.leveldatatb.length>0){
                                 this.show=true;
                             }else{
                                 this.show=false;

@@ -7,19 +7,8 @@
          <div class="content subtable">
               <div class="ptitle mb-20">结对信息</div>
               <div class="pborder mb-50">
-                  <el-row>
-                      <el-col :span="7">
-                         <span class="yy-input-text" style="width:37%;"><font class="red">*</font> 代表姓名</span>
-                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                            <el-option
-                            v-for="(item,ind) in lxdbdata"
-                            :key="ind"
-                            :label="item.fullName"
-                            :value="item.personId">
-                            </el-option>
-                         </el-select>
-                      </el-col>
-                      <el-col :span="7">
+                  <el-row class="ah-40">
+                      <el-col :span="9">
                         <span class="yy-input-text"><font class="red">*</font> 结对人</span>
                          <el-select v-model="pd.courtOutUserId" :disabled="llbnt"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2)"  filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
@@ -30,26 +19,82 @@
                          </el-option>
                         </el-select>
                       </el-col>
-                      <el-col :span="5">
+                      <!-- <el-col :span="5">
                           <span class="yy-input-text">结对时间</span>
                             {{pd.beginBJSJ}}
-                      </el-col>
+                      </el-col> -->
                       <el-col :span="4" v-if='!llbnt'>
-                        <el-button type="info" plain size="small" @click="jdreset">重置</el-button>
+                        <!-- <el-button type="info" plain size="small" @click="jdreset">重置</el-button> -->
                         <el-button type="primary" plain size="small"  @click="getPair()" v-if='pd.courtOutsiderId!="" || pd.courtOutUserId!=""'>
                           {{hdlabel}}
                          </el-button>
                             
                       </el-col>
+
                   </el-row>
+                  <el-row class="ah-40">
+                     <el-col :span="9">
+                         <span class="yy-input-text"><font class="red">*</font> 代表</span>
+                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-option
+                            v-for="(item,ind) in lxdbdata"
+                            :key="ind"
+                            :label="item.fullName"
+                            :value="item.personId">
+                            </el-option>
+                         </el-select>
+                      </el-col>
+                      <el-col :span="4">
+                         <el-button type="success" size="small" plain @click="getJdlist">加入列表</el-button>
+                      </el-col>
+                      <el-col :span="24">
+                          <el-table
+                            ref="multipleTable"
+                            :data="ListDataJd">
+                            <el-table-column
+                                type="index"
+                                label="序号" width="50">
+                            </el-table-column>
+                             <el-table-column
+                                prop="fullName"
+                                label="姓名">
+                            </el-table-column>
+                            <el-table-column
+                                prop="identity"
+                                label="代表(委员)">
+                            </el-table-column>
+                            <el-table-column
+                                prop="groupType"
+                                label="团（界）别">
+                            </el-table-column>
+                              <el-table-column
+                                prop="instructionTime"
+                                label="特约人员">
+                            </el-table-column>
+                             <el-table-column
+                                prop="pairTime"
+                                label="结对时间">
+                            </el-table-column>
+                             <el-table-column
+                                label="操作">
+                                 <template slot-scope="scope">
+                                   <div>
+                                    <el-button type="text"  :disabled="llbnt" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(2,scope.row)"></el-button>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                           </el-table>
+                      </el-col>
+                  </el-row>
+
+
               </div>
               <!-- 结对活动 -->
                <div class="ptitle  mb-20">结对活动</div>
                <div class="pborder mb-50">
-
                    <el-row class="context" >
                      <el-col :span="12" class="input-item">
-                      <span class="yy-input-text" style="width:23%;"><font class="red">*</font> 时间</span>
+                      <span class="yy-input-text" style="width:22%"><font class="red">*</font> 时间</span>
                       <div class="yy-input-input  t-flex  t-date" style="width:80%!important;">
                         <el-date-picker :disabled="llbnt"
                            v-model="form.startTime" format="yyyy-MM-dd"
@@ -64,12 +109,12 @@
                         </el-date-picker>
                      </div>
                      </el-col>
-                     <el-col :span="24">
+                     <el-col :span="24" class="input-item">
                            <span class="yy-input-text" style="width:10.8%;"><font class="red">*</font> 地点</span>
                            <el-input placeholder="请输入内容" size="small" :disabled="llbnt" clearable v-model="form.location"  class="yy-input-input" style="width:88%!important;"></el-input>
                      </el-col>
                     
-                       <el-col :span="8">
+                       <el-col :span="8" class="input-item">
                             <span class="yy-input-text" style="width:32.5%;"><font class="red">*</font> 活动方式</span>
                             <el-select v-model="form.activityMode" :disabled="llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -81,18 +126,113 @@
                             </el-select>
                       </el-col>
                       
-                        <el-col :span="24" class="mt-10">
+                        <el-col :span="24" class="input-item mt-10">
                            <span class="yy-input-text txttop" style="width:10.8%;"><font class="red">*</font> 联络内容</span>
                            <el-input placeholder="请输入内容" type="textarea" :disabled="llbnt" :autosize="{ minRows: 3, maxRows: 4}" size="small" clearable v-model="form.contents"  class="yy-input-input" style="width:88%!important;"></el-input>
                        </el-col>
+                   </el-row>
+
+                    <el-row class="ah-40 mt-20">
+                       <el-col :span="24" style="margin-left:11%;">
+                             <el-checkbox v-model="pd5.ck3" :disabled="llbnt">结合议案建议或政协提案办理</el-checkbox>  
+                               <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck3  && !llbnt" @click="getGL(1)">关联</el-button>
+                       </el-col>
+                        <el-col :span="24" class="input-item"  v-if="pd5.ck3" style="margin-left:11%;">
+                            <div class="yy-input-input" style="width:89%!important;">
+                             <el-table
+                            ref="multipleTable"
+                            :data="suggList1">
+                            <el-table-column
+                                type="index"
+                                label="序号" width="50">
+                            </el-table-column>
+                             <el-table-column
+                                prop="number"
+                                label="编号">
+                            </el-table-column>
+                            <el-table-column
+                                prop="proposalType"
+                                label="类型">
+                            </el-table-column>
+                            <el-table-column
+                                prop="title"
+                                label="标题">
+                            </el-table-column>
+                             <el-table-column
+                                prop="leaderPerson"
+                                label="提出人">
+                            </el-table-column>
+                             <el-table-column
+                                label="操作">
+                                 <template slot-scope="scope">
+                                   <div>
+                                    <el-button type="text" :disabled="llbnt" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delsuggAdd(1,scope.row)"></el-button>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                           </el-table>
+
+                            </div>
+                       </el-col>
+                        <el-col :span="24" style="margin-left:11%;">
+                             <el-checkbox v-model="pd5.ck7" :disabled="llbnt">结合代表、委员及特约人员关注案件</el-checkbox>
+                             <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck7 && !llbnt" @click="getGL(2)">关联关注案件</el-button>
+                       </el-col>
+                       <el-col :span="24"   v-if="pd5.ck7" class="input-item" style="margin-left:11%;">
+                        
+                       <!-- <span class="yy-input-text txttop" style="width:10.2%;">关注的案件</span> -->
+                       <div class="yy-input-input" style="width:89%!important;">
+                             <el-table
+                            ref="multipleTable"
+                            :data="suggList2">
+                            <el-table-column
+                                type="index"
+                                label="序号" width="50">
+                            </el-table-column>
+                              <el-table-column
+                                prop="casenum"
+                                label="案件号">
+                            </el-table-column>
+                             <el-table-column
+                                prop="partiesandcasereason"
+                                label="当事人及案由">
+                            </el-table-column>
+                             <el-table-column
+                                  prop="leaderpbid"
+                                  label="来文人姓名"
+                                  width="150">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="letternumber"
+                                  label="来文字号">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="lettercontents"
+                                  label="来文要求"
+                                  width="250">
+                              </el-table-column>
+                             <el-table-column
+                                label="操作">
+                                 <template slot-scope="scope">
+                                   <div>
+                                    <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delsuggAdd(2,scope.row)"></el-button>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                           </el-table>
+                            </div>
+                         </el-col>
+                    </el-row>
+
+                      <el-row class="ah-40 mt-20">
                         <el-col :span="24" class="input-item mt-10">
-                            <span class="yy-input-text  txttop" style="width:11%;" title="代表委员及特约人员评价和意见建议">代表委员及特<br>约人员评价和<br>意见建议</span>
+                            <span class="yy-input-text  txttop" style="width:11%;" title="代表委员及特约人员意见建议">代表委员及特<br/>约人员意见建议</span>
                             <div class="yy-input-input" style="width:88%!important;">
                             <el-row class="mt-10" style="text-align:right;margin-right:10px;" v-if='!llbnt'>
-                                 <el-button type="success" size="small" @click="gotoya(0)">关联</el-button>
-                              <!-- <el-button type="primary" size="small" plain @click="gotoya(0)">录入</el-button>
-                              <el-button type="success" size="small" plain  :disabled="bnt">修改</el-button>
-                              <el-button type="danger"  size="small" plain  :disabled="bnt">删除</el-button> -->
+                                 <!-- <el-button type="success" size="small" @click="gotoya(0)">关联</el-button> -->
+                             <el-button type="primary" size="small" plain @click="getyj(0)">添加</el-button>
+                              <el-button type="success" size="small" plain  :disabled="yjbnt" @click="getyj(1)">修改</el-button>
+                              <el-button type="danger"  size="small" plain  :disabled="yjbnt" @click="getyj(2)">查看</el-button>
                             </el-row>
                             <el-table
                             ref="multipleTable"
@@ -134,8 +274,10 @@
                             
                             </div>
                         </el-col>
-                        <el-col :span="24" class="input-item">
-                           <span class="yy-input-text" style="width:11%;" title="工作情况报告"><font class="red">*</font> 工作情况报告</span>
+
+
+                        <el-col :span="24" class="input-item mt-10">
+                           <span class="yy-input-text" style="width:11%;" title="工作情况报告"> 工作情况报告</span>
                             <div class="yy-input-input" v-if='!llbnt'>
                                   <el-button type="primary" plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="upload(0)">上传文件</el-button> <span class="ts"></span>
                             </div>
@@ -166,7 +308,7 @@
                               </el-table-column>
                              </el-table>
                              </el-col>
-                        <el-col :span="24" class="input-item">
+                        <el-col :span="24" class="input-item mt-10">
                            <span class="yy-input-text  txttop" style="width:11%;"><font class="red">*</font> 影像资料</span>
                             <div class="yy-input-input" v-if='!llbnt'>
                                 <el-button type="primary" plain   style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="upload(1)">上传影像资料</el-button> <span class="ts"></span>
@@ -178,18 +320,14 @@
                             <div class="block" style="float:left;margin-right:20px;margin-top:20px" v-if='getImgV(fit.filesuffix)'>
                                 
                             <el-popover placement="right" title="" trigger="click">
-                                                            <!-- <el-image
-                                                            style="width: 180px; height: 150px"
-                                                            :src="fit.filepath"
-                                                            fit="fit"></el-image> -->
+                                                           
                               <img :src="fit.filepath"  style="max-width:700px; max-height:700px;"/>
                               <img :src="fit.filepath" slot="reference" width="180" height="150">
                                                         
                             </el-popover>
 
-                              <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-close"></i></a>
+                              <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-error"></i></a>
                              
-                            <!-- <div style="font-size:11px;text-align:center">{{fit.filename}}.{{fit.filesuffix}}</div>  -->
                             </div>
                               <div class="block" style="float:left;margin-right:20px;margin-top:20px" v-else>
 
@@ -209,8 +347,7 @@
                                     您的浏览器不支持视频播放
                                </video>
                               </el-popover>
-                            <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-close"></i></a>
-                               <!-- <div style="font-size:11px;text-align:center">{{fit.filename}}.{{fit.filesuffix}}</div>  -->
+                            <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-error"></i></a>
                             </div>
                         </div>
                         </el-col>
@@ -323,7 +460,6 @@
    <UPLOAD :url="uurl" :type="2" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
   <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" :close-on-click-modal='false' width="650px">
-       <!-- <VIDEO :url="vvurl" :type="2" :urlErr="urlErr" @fatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEO> -->
        <VIDEONEW :url="vvurl" :type="2" :urlErr="urlErr" @DfatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEONEW>
        <img class="img-upload" url="/sfmgapi/upload/add" @success="canSucess">
   </el-dialog>
@@ -372,30 +508,7 @@
                                   prop="personName"
                                   label="姓名">
                               </el-table-column>
-                               <!-- <el-table-column
-                                  prop="job"
-                                  label="职业">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="orgName"
-                                  label="单位">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="partisan"
-                                  label="党派">
-                              </el-table-column>
-                               <el-table-column
-                                  prop="nationality"
-                                  label="民族">
-                              </el-table-column>
-                                 <el-table-column
-                                  prop="birthPlace"
-                                  label="籍贯">
-                              </el-table-column>
-                                  <el-table-column
-                                  prop="birthday"
-                                  label="出生日期">
-                              </el-table-column> -->
+                              
                              <el-table-column
                                 prop="groupType"
                                 label="团别">
@@ -446,26 +559,6 @@
                                   label="姓名">
                               </el-table-column>
 
-                               <!-- <el-table-column
-                                  prop="job"
-                                  label="职业">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="orgName"
-                                  label="单位">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="partisan"
-                                  label="党派">
-                              </el-table-column>
-                               <el-table-column
-                                  prop="nationality"
-                                  label="民族">
-                              </el-table-column>
-                                 <el-table-column
-                                  prop="birthPlace"
-                                  label="籍贯">
-                              </el-table-column> -->
                               <el-table-column
                                 prop="groupType"
                                 label="团别">
@@ -592,14 +685,7 @@
                                   prop="feedBackTime"
                                   label="反馈时间">
                               </el-table-column>
-                               <!-- <el-table-column
-                                  label="操作">
-                                  <template slot-scope="scope">
-                                    <div>
-                                      <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="pddel(1,scope.row)"></el-button>
-                                     </div>
-                                  </template>
-                              </el-table-column> -->
+                              
                              </el-table>
                              <div class="middle-foot">
                              <div class="page-msg"></div>
@@ -621,8 +707,19 @@
             </div>
     </el-dialog>
 
-     
-     
+   <el-dialog title="活动意见建议" :visible.sync="yjsDialogVisible" :close-on-click-modal='false'>
+     <SUGGEST  :data="yjdata" :type="addtype" @yjsfatherMethod="yjsfatherMethod" :random="new Date().getTime()"></SUGGEST>
+  </el-dialog>
+  <el-dialog title="结合议案建议或政协提案办理" :visible.sync="suggDialogVisible" :close-on-click-modal='false'>
+      <SUGGALL  :data="yjdata" :type="addtype" @suggfatherMethod="suggfatherMethod" :random="new Date().getTime()"></SUGGALL>
+  </el-dialog>
+  <el-dialog title="结合代表、委员及特约人员关注案件" :visible.sync="caseDialogVisible" :close-on-click-modal='false'>
+      <CASE  :data="yjdata" :type="addtype" @casefatherMethod="casefatherMethod" :random="new Date().getTime()"></CASE>
+  </el-dialog>
+  <el-dialog title="修改定向结对"  :visible.sync="pairsDialogVisible" :close-on-click-modal='false'>
+      <PAIR  :data="pairdata" :type="addtype" @pairfatherMethod="pairfatherMethod" :random="new Date().getTime()"></PAIR>
+  </el-dialog>
+ 
     </div>
 </template>
 <script scoped>
@@ -631,8 +728,12 @@ import VIDEO from "../../Common/video"
 import VIDEONEW from "../../Common/imgvideo"
 import {getServerDate,getYear} from '@/assets/js/date.js'
 import SuggestInfo from "../../HandlingWork/List/SuggestInfo"
+import SUGGEST from "../../Common/suggest/suggestions"
+import CASE from "../../Common/suggest/caseinfoall"
+import SUGGALL from "../../Common/suggest/suggestall"
+import PAIR from "../../Common/suggest/pairinfo"
 export default {
-    components:{UPLOAD,VIDEO,SuggestInfo,VIDEONEW},
+    components:{UPLOAD,VIDEO,SuggestInfo,VIDEONEW,SUGGEST,CASE,SUGGALL,PAIR},
     data(){
         return{
           CurrentPage1: 1,
@@ -648,6 +749,7 @@ export default {
           tableData2:[],
           yjtableData:[],//代表意见 
           ListData1:[],
+          ListDataJd:[],//结对
           multipleTable:[],
           form1data:[],
           filedata0:[],
@@ -656,6 +758,10 @@ export default {
           txtdia:'修改定向结对',
           pairDialogVisible:false,
           dbDialogVisible:false,
+          yjsDialogVisible:false,
+          suggDialogVisible:false,
+          caseDialogVisible:false,
+          pairsDialogVisible:false,
           bnt:true,
           uurl:'/FileUploadController/uploadWorkReport',
           vvurl:'/FileUploadController/uploadImageData',
@@ -683,10 +789,18 @@ export default {
           year:'',
           jdstate:0,
           pdmult1:[],
+          pdmult:[],
           listdatatemp:[],
           lrdata:[],//录入法院
           pairId:'',//结对信息id  
           oldcourtid:'',//原来的代表姓名 
+          pd5:{},
+          yjdata:[],
+          suggList1:[],
+          suggList2:[],
+          yjbnt:true,
+          pairdata:{},
+    
           
         };
     },
@@ -754,6 +868,7 @@ export default {
             }
         },
          delAdd(t,n){
+           
             if(t==1){ //批示人
                 var arr=[];
                 arr.push(n);
@@ -764,6 +879,18 @@ export default {
             　　　　　　　　　　}
             　　　　　　　　})
             　　　　　 this.ListData1.splice(index,1)
+                 }
+              }else if(t==2){
+                
+                var arr=[];
+                arr.push(n);
+                for (let i = 0; i < arr.length; i++) {
+                        var index = this.ListDataJd.findIndex(item =>{
+    　　　　　　　　　  　 if(item.fullName==arr[i].fullName){
+            　　　　　　　　　　　　return true
+            　　　　　　　　　　}
+            　　　　　　　　})
+            　　　　　 this.ListDataJd.splice(index,1)
                  }
               }
          },
@@ -883,8 +1010,6 @@ export default {
                     }
 
                 });
-            
-             
         },
         downData(n){
           // window.location.href=n.filepath;
@@ -1008,25 +1133,41 @@ export default {
           this.formmult=val;
         },
         getPair(){
-            this.form1={};
-            this.listdata2=[];
-            this.listdata0=[];
-            this.listdatatemp=[];
-            this.remark="";
-            this.oldcourtid="";
-            this.getLmName(this.pd.courtOutsiderIdName);
+            // this.form1={};
+            // this.listdata2=[];
+            // this.listdata0=[];
+            // this.listdatatemp=[];
+            // this.remark="";
+            // this.oldcourtid="";
+            // this.getLmName(this.pd.courtOutsiderIdName);
             
             
-            if(this.pd.courtOutUserId!=null && this.pd.courtOutUserId!=undefined){
-               this.$set(this.form1,'courtInsiderId',this.pd.courtOutUserId);
+            // if(this.pd.courtOutUserId!=null && this.pd.courtOutUserId!=undefined){
+            //    this.$set(this.form1,'courtInsiderId',this.pd.courtOutUserId);
                
-               this.getYjdxx(this.pd.courtOutUserId);
-            }
-            if(this.pd.courtOutsiderId!=null && this.pd.courtOutsiderId!=undefined){
-             this.$set(this.form1,'jointperson',this.pd.courtOutsiderIdName);
-            }
+            //    this.getYjdxx(this.pd.courtOutUserId);
+            // }
+            // if(this.pd.courtOutsiderId!=null && this.pd.courtOutsiderId!=undefined){
+            //  this.$set(this.form1,'jointperson',this.pd.courtOutsiderIdName);
+            // }
            
-            this.pairDialogVisible=true;
+            // this.pairDialogVisible=true;
+          var obj={}
+        
+          obj.courtOutsiderId=this.pd.courtOutUserId;
+          obj.courtOutsiderIdName=this.pd.courtOutsiderIdName;
+          this.pairdata=obj;
+          this.pairsDialogVisible=true;
+
+        },
+        pairfatherMethod(type,data){
+              
+              if(type=='99'){
+              this.pairsDialogVisible=false;
+              }else{
+                  this.getsaveinfo(data);
+              }
+              
         },
 
         upload(t){
@@ -1078,9 +1219,9 @@ export default {
                 if(this.form.contents==undefined || this.form.contents==""){
                     this.$message.error("联络内容不能为空！");return;
                 }
-                 if(this.filedata0.length==0){
-                    this.$message.error("工作情况报告不能为空！");return;
-                }
+                //  if(this.filedata0.length==0){
+                //     this.$message.error("工作情况报告不能为空！");return;
+                // }
                   if(this.fits.length==0){
                     this.$message.error("影像资料不能为空！");return;
                 }
@@ -1210,8 +1351,8 @@ export default {
                  }
             }
         },
+       
         addlist(val){
-         
              this.listdata2.push(val);
              this.listdatatemp.push(val);
              const res = new Map();
@@ -1253,10 +1394,15 @@ export default {
                 this.getsaveinfo();
             }
         },
-        getsaveinfo(){
+        getsaveinfo(data){
+
+          console.log(data,'=====data');
+          
              let  p={
-                        'courtPersonId':this.form1.courtInsiderId,
-                        'courtOutsiderList':this.listdata2,
+                        // 'courtPersonId':this.form1.courtInsiderId,
+                        // 'courtOutsiderList':this.listdata2,
+                        'courtPersonId':data.courtPersonId,
+                        'courtOutsiderList':data.courtOutsiderList,
                         };
                         this.$api.post(this.Global.aport2+'/PairInfoController/savePairInfo',p,
                         r =>{
@@ -1267,13 +1413,13 @@ export default {
                                 // this.getLmName('');//代表姓名 
                                 // this.getJDXXAB();//结对人
                                  this.oldcourtid=this.pd.courtOutsiderId;
-                                if(this.pd.courtOutsiderId!=null && this.pd.courtOutsiderId!='' && this.pd.courtOutUserId!=this.form1.courtInsiderId){
+                                if(this.pd.courtOutsiderId!=null && this.pd.courtOutsiderId!='' && this.pd.courtOutUserId!=data.courtPersonId){
                                   
                                    this.getJDXX(this.pd.courtOutsiderId,0);
 
                                 }else if(this.pd.courtOutUserId!=null && this.pd.courtOutUserId!='')
                                 { this.getJDXX(this.pd.courtOutUserId,1);}
-                                this.pairDialogVisible=false;
+                                   this.pairsDialogVisible=false;
                                 }else{
                                 this.$message.error(r.message);
                                 }
@@ -1449,7 +1595,7 @@ export default {
         getYjdxx(val,t){
             this.remark='';
            if(val!=''){
-               console.log(this.fyrydata,val,'-----');
+            
                
                  var obj = {};
                      obj = this.fyrydata.find(item =>{
@@ -1527,8 +1673,95 @@ export default {
                        break;
                }
                }
-        }
+        },
+        //意见建议添修改查看
+        getyj(t){
+          if(t!=0){
+              if(this.pdmult.length==0){
+                  this.$message.error('请选择一条数据！');return;
+              }else if(this.pdmult.length>1){
+                 this.$message.error('只能选择一条数据！');return;
+              }
+          }
+         this.yjsDialogVisible=true;
+        },
+        getGL(t){
+           if(t==1){
+             this.suggDialogVisible=true;
+           }else if(t==2){
+             this.caseDialogVisible=true;
+           }
+        },
+        yjsfatherMethod(type,data){
+          if(type=='99'){
+            this.yjsDialogVisible=false;
+          }
+        },
+        suggfatherMethod(type,data){
+      
+          
+          if(type=='99'){
+            this.suggDialogVisible=false;
+          }else{
+             this.suggList1=data;
+             this.suggDialogVisible=false;
+          }
+        },
+        casefatherMethod(type,data){
+           if(type=='99'){
+            this.caseDialogVisible=false;
+          }else{
+             this.suggList2=data;
+             this.caseDialogVisible=false;
+          }
+        },
+        delsuggAdd(t,n){
+             if(t==1){
+                  var arr=[];
+                  arr.push(n);
+                for (let i = 0; i < arr.length; i++) {
+                        var index = this.suggList1.findIndex(item =>{
+    　　　　　　　　　  　 if(item.number==arr[i].number){
+            　　　　　　　　　　　　return true
+            　　　　　　　　　　}
+            　　　　　　　　})
+            　　　　　 this.suggList1.splice(index,1);
+                
+                 }
+             }else if(t==2){
+                  var arr=[];
+                  arr.push(n);
+                for (let i = 0; i < arr.length; i++) {
+                        var index = this.suggList2.findIndex(item =>{
+    　　　　　　　　　  　 if(item.caseNumber==arr[i].caseNumber){
+            　　　　　　　　　　　　return true
+            　　　　　　　　　　}
+            　　　　　　　　})
+            　　　　　 this.suggList2.splice(index,1);
+                
+                 }
+             }
+           },
+          getJdlist(){
+             if(this.pd.courtOutUserId=='' || this.pd.courtOutUserId==null || this.pd.courtOutUserId==undefined){
+                this.$message.error("结对人不能为空!");return;
+              }
+              if(this.pd.courtOutsiderId=='' || this.pd.courtOutsiderId==null || this.pd.courtOutsiderId==undefined){
+                this.$message.error("代表不能为空!");return;
+              }
+             
+                  var obj = {};
+                    obj = this.lxdbdata.find(item =>{
+                        return item.personId === this.pd.courtOutsiderId
+                    });
+                console.log(obj);
 
+
+                this.ListDataJd.push(obj);
+                 const res = new Map();
+                 var arr=this.ListDataJd;
+                 this.ListDataJd=arr.filter((arr) => !res.has(arr.personId) && res.set(arr.personId, 1));
+          },
 
 
     }
@@ -1540,5 +1773,5 @@ export default {
 .txttop{vertical-align: top}
 .border{border: 1px solid #E6E6E6; border-radius: 6px;margin-top: 10px;}
 .ts{font-size: 12px;color: red;}
-.block .close{display: block;position: absolute;font-size: 18px; font-weight:bold;color: red;cursor: pointer;z-index: 999;margin-top: -185px;margin-left: 170px;}
+.block .close{display: block;position: absolute;font-size: 25px;font-weight:bold;cursor: pointer;z-index: 999;margin-top: -185px;margin-left: 170px;}
 </style>

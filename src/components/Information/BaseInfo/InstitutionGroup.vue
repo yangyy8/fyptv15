@@ -5,6 +5,7 @@
           <span> 基本信息库 
           <span class="mlr_10">/</span><span>{{cname1}}</span>
           <span class="mlr_10" v-if="cname2 != ''">/</span><span v-if="cname2 != ''"><b>{{cname2}}</b></span>
+          <span class="mlr_10" v-if="mzname != ''">/</span><span v-if="mzname != ''"><b>{{mzname}}</b></span>
           <span class="mlr_10" v-if="cname3 != ''">/</span><span v-if="cname3 != ''"><b>{{cname3}}</b></span>
           <span class="mlr_10" v-if="cname4 != ''">/</span><span v-if="cname4 != ''"><b>{{cname4}}{{title}}</b></span>
           </span> 
@@ -14,7 +15,10 @@
              <el-col :span='22' class="ptit">
                 <el-row>
                    <el-col :span='16'>
-                       <div class="title">{{cname4}}{{title}}{{orgmc}}</div>
+                       <div class="title">
+                           <span v-if='orgmc!=null && orgmc!=""'>{{orgmc}}</span>
+                          <span v-else> {{cname4}}{{title}}</span>
+                           </div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
                           <el-button type="primary" style="width:80px" @click="goto(0)"  v-if='allshow[0]'><span>添加</span></el-button>
@@ -26,7 +30,7 @@
                </el-row>
                 <el-row :gutter="2" class="ah-50 pborder mt-20 mb-20" v-if='show'>
                    <el-col :sm="24" :md="12" :lg="8" v-for="(t,ind) in Data" :key="ind">
-                    <span class="address"  @click="getListBM(t.orgid,t.mc)">{{t.mc}}</span>
+                    <span class="address"  @click="getlistto(t.orgid,t.mc)">{{t.mc}}</span>
                   </el-col>
                 </el-row>
                 <el-row  class="ah-50 pborder mt-20 mb-20 " style="text-align:center" v-else>
@@ -55,6 +59,7 @@ export default {
            cname2:'',
            cname3:'',
            cname4:'',
+           mzname:'',
            Data:[],
            addtype:'',
            jb:'',
@@ -67,6 +72,7 @@ export default {
            show:true,
            back:true,
            count:0,
+           num:1,
            drDialogVisible:false, 
            vvurl:'/org/import',
            vvurlErr:'',
@@ -94,6 +100,7 @@ export default {
          }else if(val.query.info!=undefined && val.query.info!=''){
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
+              console.log(this.info,'this.info');
               
                this.addtype=this.info.type;
                this.jb=this.info.jb;
@@ -105,6 +112,9 @@ export default {
                this.code=this.info.code;
                this.lx=this.info.lx; 
                this.mc=this.info.mc;
+               this.orgid=this.info.orgid;
+               this.orgmc=this.info.orgmc;
+               this.num=this.info.num;
              
                }catch(e){
                    this.$router.push({name:'limitmsg',query:{msg:'该地址参数不对！'}});
@@ -126,7 +136,7 @@ export default {
                           if(r.code==1 && r.data!=null){
                             for (let i = 0; i < this.alldata.length; i++) {
                                 this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
-                                    console.log(r.data,'===', this.alldata);
+                            
                             }   
                              this.getLb();
                              this.getInfo();
@@ -162,7 +172,34 @@ export default {
                   this.lb=this.Global.TZB;
                   break;
               case '4':
-                    this.lb=this.Global.MZDP;
+                    switch (this.lx) {
+                           case '1':
+                              this.lb=this.Global.MZDP1;
+                               break;
+                           case '2':
+                              this.lb=this.Global.MZDP2;
+                               break;
+                           case '3':
+                              this.lb=this.Global.MZDP3;
+                               break;
+                           case '4':
+                              this.lb=this.Global.MZDP4;
+                               break;
+                           case '5':
+                              this.lb=this.Global.MZDP5;
+                               break;
+                           case '6':
+                              this.lb=this.Global.MZDP6;
+                               break;
+                           case '7':
+                              this.lb=this.Global.MZDP7;
+                               break;
+                           case '8':
+                              this.lb=this.Global.MZDP8;
+                               break;
+                           default:
+                               break;
+                       }
                   break;
               case '5':
                    this.lb=this.Global.GSL;
@@ -214,36 +251,36 @@ export default {
           }
            switch (this.lx) {
             case '1':
-                  this.cname2="民主党派系统 / 中国国民党革命委员会";
-                  this.cname4="全国国民党革命委员会";
+                  this.mzname="中国国民党革命委员会";
+                  this.cname4="国民党中央革命委员会";
               break;
             case '2':
-                  this.cname2="民主党派系统 / 中国民主同盟";
-                  this.cname4="全国民主同盟";
+                  this.mzname="中国民主同盟";
+                  this.cname4="民主同盟中央";
               break;
             case '3':
-                  this.cname2="民主党派系统 / 中国民主建国会";
-                  this.cname4="全国民主建国会";
+                  this.mzname="中国民主建国会";
+                  this.cname4="民主建国会中央";
               break;
             case '4':
-                  this.cname2="民主党派系统 / 中国民主促进会";
-                  this.cname4="全国民主促进会";
+                  this.mzname="中国民主促进会";
+                  this.cname4="民主促进会中央";
               break;
             case '5':
-                  this.cname2="民主党派系统 / 中国农工民主党";
-                  this.cname4="全国农工民主党";
+                  this.mzname="中国农工民主党";
+                  this.cname4="农工民主党中央";
               break;
             case '6':
-                  this.cname2="民主党派系统 / 中国致公党";
-                  this.cname4="全国致公党";
+                  this.mzname="中国致公党";
+                  this.cname4="致公党中央";
               break;
             case '7':
-                  this.cname2="民主党派系统 / 九三学社";
-                  this.cname4="全国九三学社";
+                  this.mzname="九三学社";
+                  this.cname4="九三学社中央";
               break;
             case '8':
-                  this.cname2="民主党派系统 / 台湾民主自治同盟";
-                  this.cname4="全国台湾民主自治同盟";
+                  this.mzname="台湾民主自治同盟";
+                  this.cname4="台湾民主自治同盟中央";
               break;
             default:
               break;
@@ -323,10 +360,17 @@ export default {
                           break;
                   }
               }
+            
+              
           this.getList();
       },
    getList(){
-        
+
+        if(this.orgid!='' && this.orgmc!=''){
+          
+            
+           this.getListBM(this.orgid,this.orgmc);
+        }else{
             let p={
                 'lb':this.lb,
                 'xzqh':this.code,
@@ -343,9 +387,32 @@ export default {
                     }
                 }
             })
+        }
        },
-    
+  getlistto(id,mc){
+      
+       let p={
+          'cname1':this.cname1,
+          'cname2':this.cname2,
+          'cname3':this.cname3,
+          'cname4':this.cname4,
+          'mzname':this.mzname,
+          'title':this.title,
+          'type':this.addtype,
+          'code':this.code,
+          'mc':this.mc,
+          'jb':this.jb,
+          'lx':this.lx,
+          'orgid':id,
+          'orgmc':mc,
+          'num':this.num+1,
+        
+      }
+    var str=Base64.encode(JSON.stringify(p));
+    this.$router.push({path:'InstitutionGroup',query:{info:str}});
+  },
    getListBM(id,mc){
+      
             let p={
                 'orgId':id,
             };
@@ -354,9 +421,10 @@ export default {
                 if(r.code==1){
             
                     if(r.data && r.data.length>0){
-                         this.orgid=id;
-                         this.orgmc=mc;
-                         this.count++;
+                        //  this.orgid=id;
+                        //  this.orgmc=mc;
+                        //  this.count++;
+                        //  this.num++;
                          this.back=true;
                          this.Data=r.data;
                     }else{
@@ -364,34 +432,43 @@ export default {
                     }
                 }
             })
-                         
         },
     goback(){
-       
-        if(this.code!=''){
-             this.$router.go(-1);
-        }else{
-        if((this.orgid=='' && this.orgmc=='') || (this.count-1)==0){
-            this.count--;
-            this.orgmc="";
-            this.orgid="";
-            this.getList();
-        }else{
-             this.getListBM(this.orgid,this.orgmc)
-        }
-       }
+        this.$router.go(-1);
+    //     if(this.code!=''){
+           
+    //          this.$router.go(-1);
+             
+    //     }else{
+    //     if((this.orgid=='' && this.orgmc=='') || (this.count-1)==0){
+           
+    //         this.count--;
+        
+    //         this.orgmc="";
+    //         this.orgid="";
+    //         //this.$router.go(-1);
+    //         this.back=false;
+    //         this.getList();
+    //     }else{
+    //         console.log('-=-=-=',this.orgid,this.orgmc,this.count);
+    //         this.getListBM(this.orgid,this.orgmc)
+    //     }
+    //    }
     },
   
       goto(t,id){
-
+ var tt="";
+ if(this.title==""){
+     tt=this.cname4;
+ }
              if(t==1){
-                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'1',jgid:id,title:this.cname4+this.title}});
+                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'1',jgid:id,title:tt,lx:this.lx,num:this.num}});
             }else if(t==0){
-                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:this.cname4+this.title,jb:this.jb,xzqh:this.code}});
+                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:tt,jb:this.jb,xzqh:this.code,lx:this.lx,num:this.num}});
             }
         },
      goseach(){
-          this.$router.push({name:'InstitutionList',query:{type:this.addtype}})
+          this.$router.push({name:'InstitutionList',query:{type:this.addtype,lx:this.lx}})
         },
     getDR(){
          

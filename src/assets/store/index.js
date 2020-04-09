@@ -109,6 +109,12 @@ export default new Vuex.Store({
         qxnbj:[],//期限内办结
         tyzxytjdw:[],//特约监督员推荐单位
         tyjdytjdw:[],//特邀咨询员推荐单位
+        sflr:[],//是否连任
+        jdqf:[],//结对区分
+        bxqf:[],//补选区分
+        jpyy:[],//解聘原因
+        tysf:[],//特约身份
+        zfxwjb:[],//转发新闻级别
       },
       mutations: {
         //state代表了最开始存放的区域，即驱动应用的数据源
@@ -434,6 +440,24 @@ export default new Vuex.Store({
         },
         getTyjdytjdw(state,data){
           state.tyjdytjdw = data;
+        },
+        getSflr(state,data){
+          state.sflr = data;
+        },
+        getJdqf(state,data){
+          state.jdqf = data;
+        },
+        getBxqf(state,data){
+          state.bxqf = data;
+        },
+        getJpyy(state,data){
+          state.jpyy = data;
+        },
+        getTysf(state,data){
+          state.tysf = data;
+        },
+        getZfxwjb(state,data){
+          state.zfxwjb = data;
         },
       },
       actions: {
@@ -944,6 +968,42 @@ export default new Vuex.Store({
           api.get(global_.aport4 + global_.tyjdytjdw, null,
             r => {
               context.commit('getTyjdytjdw', ToArray(r.data))
+          })
+        },
+        getSflr(context) {
+          api.get(global_.aport4 + global_.sflr, null,
+            r => {
+              context.commit('getSflr', ToArray(r.data))
+          })
+        },
+        getJdqf(context) {
+          api.get(global_.aport4 + global_.jdqf, null,
+            r => {
+              context.commit('getJdqf', ToArray(r.data))
+          })
+        },
+        getBxqf(context) {
+          api.get(global_.aport4 + global_.bxqf, null,
+            r => {
+              context.commit('getBxqf', ToArray(r.data))
+          })
+        },
+        getJpyy(context) {
+          api.get(global_.aport4 + global_.jpyy, null,
+            r => {
+              context.commit('getJpyy', ToArray(r.data))
+          })
+        },
+        getTysf(context) {
+          api.get(global_.aport4 + global_.tysf, null,
+            r => {
+              context.commit('getTysf', ToArray(r.data))
+          })
+        },
+        getZfxwjb(context) {
+          api.get(global_.aport4 + global_.zfxwjb, null,
+            r => {
+              context.commit('getZfxwjb', ToArray(r.data))
           })
         },
       }

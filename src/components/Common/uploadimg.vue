@@ -10,7 +10,7 @@
             
               <img :src="getObjectURL(item.file)" slot="reference" width="120" height="120" :alt="getObjectURL(item.file)">
               </el-popover>
-              <a class="close" @click="delImg(item)"> <i class="el-icon-close"></i></a>
+              <a class="close" @click="delImg(item)"> <i class="el-icon-error"></i></a>
               <el-checkbox class="check" v-model="check[ind]" @change="getC(check[ind],item.name,ind)"></el-checkbox>
             </p>
               <p class="img" v-else>
@@ -19,7 +19,7 @@
             
                <img :src="item.serverPath" slot="reference" width="120" height="120">
               </el-popover>
-              <a class="close" @click="delImgs(item)"> <i class="el-icon-close"></i></a>
+              <a class="close" @click="delImgs(item)"> <i class="el-icon-error"></i></a>
               <el-checkbox class="check" v-model="check[ind]" @change="getC(check[ind],item.fileName,ind)"></el-checkbox>
               </p>
             <!-- <el-button size="mini" @click="upTr(ind)" >上移</el-button>

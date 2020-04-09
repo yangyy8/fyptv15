@@ -5,6 +5,7 @@
           <span> 基本信息库 
           <span class="mlr_10">/</span><span>{{cname1}}</span>
           <span class="mlr_10" v-if="cname2 != ''">/</span><span v-if="cname2 != ''"><b>{{cname2}}</b></span>
+          <span class="mlr_10" v-if="mzname != ''">/</span><span v-if="mzname != ''"><b>{{mzname}}</b></span>
           <span class="mlr_10" v-if="cname3 != '' || title!=''">/</span><span v-if="cname3 != ''|| title!=''"><b>{{cname3}}{{title}}</b></span>
           <span class="mlr_10" v-if="cname4 != ''">/</span><span v-if="cname4 != ''"><b>{{cname4}}</b></span>
           </span> 
@@ -53,6 +54,7 @@ export default {
            cname2:'',
            cname3:'',
            cname4:'',
+           mzname:'',
            areadata:'',
            addtype:'',
            info:{},//信息对象
@@ -167,6 +169,7 @@ export default {
           'cname2':this.cname2,
           'cname3':this.cname3,
           'cname4':this.cname4+mc,
+          'mzname':this.mzname,
           'title':this.title,
           'type':this.addtype,
           'code':xzqh,
@@ -216,41 +219,41 @@ export default {
                   this.title="统战部";
                   break;
               case '4':
-                  // this.cname2="民主党派系统";
+                  this.cname2="民主党派系统";
                   // this.title="民主党派";
-                     console.log(this.lx,'===');
+                
                      
                   switch (this.lx) {
                       case '1':
-                            this.cname2="民主党派系统 / 中国国民党革命委员会";
+                            this.mzname="中国国民党革命委员会";
                             this.title="国民党革命委员会";
                         break;
                       case '2':
-                            this.cname2="民主党派系统 / 中国民主同盟";
+                            this.mzname="中国民主同盟";
                             this.title="民主同盟";
                         break;
                       case '3':
-                            this.cname2="民主党派系统 / 中国民主建国会";
+                            this.mzname="中国民主建国会";
                             this.title="民主建国会";
                         break;
                       case '4':
-                            this.cname2="民主党派系统 / 中国民主促进会";
+                            this.mzname="中国民主促进会";
                             this.title="民主促进会";
                         break;
                       case '5':
-                            this.cname2="民主党派系统 / 中国农工民主党";
+                            this.mzname="中国农工民主党";
                             this.title="农工民主党";
                         break;
                       case '6':
-                            this.cname2="民主党派系统 / 中国致公党";
+                            this.mzname="中国致公党";
                             this.title="致公党";
                         break;
                       case '7':
-                            this.cname2="民主党派系统 / 九三学社";
+                            this.mzname="九三学社";
                             this.title="九三学社";
                         break;
                       case '8':
-                            this.cname2="民主党派系统 / 台湾民主自治同盟";
+                            this.mzname="台湾民主自治同盟";
                             this.title="台湾民主自治同盟";
                         break;
                       default:
@@ -309,10 +312,10 @@ export default {
          
      },
       goBase(){  
-       this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:this.title,jb:this.jb,xzqh:this.code}});
+       this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:this.title,jb:this.jb,xzqh:this.code,lx:this.lx}});
       },
       goseach(){
-          this.$router.push({name:'InstitutionList',query:{type:this.addtype}})
+          this.$router.push({name:'InstitutionList',query:{type:this.addtype,lx:this.lx}})
       },
       getDR(){
          this.drDialogVisible=true;
