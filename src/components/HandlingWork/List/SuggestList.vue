@@ -941,7 +941,7 @@ export default {
               proposalInfoId=this.multipleSelection[0].proposalInfoId;
                if(t=='bl'){
                      let p={
-                      "proposalInfoIds":proposalInfoId,
+                      "proposalInfoId":proposalInfoId,
                       "token":this.$store.state.token,
                     };
                       this.$api.post(this.Global.aport2+'/proposalProcess/checkHandPerson',p,

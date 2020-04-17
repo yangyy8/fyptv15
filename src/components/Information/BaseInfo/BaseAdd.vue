@@ -85,8 +85,8 @@
                                         <div  class="yy-input-inputleft">
                                             <div v-for="(tt,ind) in rows" :key='ind'>
                                             <el-input placeholder="请输入内容" size="small" :disabled="ckshow" @blur="getZNSB(tt.mobilePhone)" v-model="tt.mobilePhone" clearable  maxlength="11" class="rwidth"></el-input>
-                                            <i class="el-icon-plus cursor" size="mini" @click="addrow"></i>
-                                            <i class="el-icon-minus cursor" style="color:red" size="mini" v-if='ind!=0' @click="deleterow(ind)"></i>
+                                            <i class="el-icon-plus cursor" size="mini" v-if='!ckshow' @click="addrow"></i>
+                                            <i class="el-icon-minus cursor" style="color:red" size="mini" v-if='ind!=0 && !ckshow' @click="deleterow(ind)"></i>
                                             </div>
                                             <div v-if="ntype=='1' || ntype=='3'" style="font-size:12px; color:red;line-height:20px;">选择"省部级以上"后，此项不作为必须录入项目</div>
                                         </div>
@@ -101,7 +101,7 @@
                                         <span class="yy-input-text"><font class="red">*</font> 
                                         {{labelorg}}
                                         </span>
-                                        <el-select v-model="form1.orgId" :disabled="ckshow || (jb!=null  && xzqh!=null && xzqh!='') "  @change="getBM(form1.orgId,0);getJB(form1.orgId);getXJDW(form1.orgId,0);getXHFT(form1.orgId,0);getZMWFY(form1.orgId,0);getWorkList(form1.orgId,0);getJDXX(form1.orgId,0);"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                        <el-select v-model="form1.orgId" :disabled="ckshow || (jb!=null  && xzqh!=null && xzqh!='') "  @change="getJB(form1.orgId);getBM(form1.orgId,0);getXJDW(form1.orgId,0);getXHFT(form1.orgId,0);getZMWFY(form1.orgId,0);getWorkList(form1.orgId,0);getJDXX(form1.orgId,0);getJJB();getTYLBList()"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in ssdwdata"
                                                 :key="ind"
@@ -121,9 +121,9 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                                       <el-col :span="12" v-if="(ntype=='1' || ntype=='2' ) || ( (jkey==null && ntype=='3') && (state!='1' && ntype=='3'))" class="input-item">
+                                       <el-col :span="12" v-if="(ntype=='1' || ntype=='2' ) || ( (jkey==null && ntype=='3') && (state=='1' && ntype=='3' && lbmc!=null))" class="input-item">
                                         <span class="yy-input-text"><font class="red">*</font> 层级</span>
-                                        <el-select v-model="form1.levelType" v-if='addtype=="1" || addtype=="2"' @change="getNJB()"  :disabled="ckshow || (jb!=null && form1.levelType!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                        <el-select v-model="form1.levelType" v-if='addtype=="1" || addtype=="2"' @change="getNJB();getJJB();getTYLBList()"  :disabled="ckshow || (jb!=null && form1.levelType!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.jbb"
                                                 :key="ind"
@@ -142,9 +142,9 @@
                                      </el-col>
                                        <el-col :span="12" v-if="ntype=='3' && lbshow" class="input-item">
                                         <span class="yy-input-text"><font class="red">*</font>  特约职务</span>
-                                          <el-select v-model="form1.specialType" @change="getTJ(form1.specialType);getTYJB()" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                          <el-select v-model="form1.specialType" @change="getTJ(form1.specialType);getTYJB();" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
                                             <el-option
-                                                v-for="(item,ind) in $store.state.tylb"
+                                                v-for="(item,ind) in tylblist"
                                                 :key="ind"
                                                 :label="item.mc"
                                                 :value="item.dm">
@@ -153,7 +153,7 @@
                                      </el-col>
                                        <el-col :span="12" v-if="ntype!='4'" class="input-item">
                                         <span class="yy-input-text"> <font class="red">*</font> 届别</span>
-                                        <el-select v-model="form1.periodType" :disabled="ckshow || (jb!=null && form1.periodType!=null && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择层级和特约职务':'请先选择层级'):'无数据'">
+                                        <el-select v-model="form1.periodType" @change="getjblist(1,form1.periodType);getJJB()" :disabled="ckshow || (jb!=null && form1.periodType!=null && form1.periodType!='' && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择层级和特约职务':'请先选择'+labelorg+'和层级'):'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in jblist"
                                                 :key="ind"
@@ -164,7 +164,7 @@
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='1'" class="input-item">
                                         <span class="yy-input-text"><font class="red">*</font> 团别</span>
-                                        <el-select v-model="form1.groupType" :disabled="ckshow || (jb!=null && form1.groupType!=null && code!=null)" @change="getJDXX(form1.orgId,0,form1.groupType)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                        <el-select v-model="form1.groupType" :disabled="ckshow || (jb!=null && form1.groupType!=null && code!=null)" @change="getJDXX(form1.orgId,0,form1.groupType);getBJDTB(form1.groupType);getXHFT(form1.orgId,0);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in tbdata"
                                                 :key="ind"
@@ -175,9 +175,9 @@
                                      </el-col>
                                          <el-col :span="12" v-if="ntype=='2'" class="input-item">
                                         <span class="yy-input-text"><font class="red">*</font> 界别</span>
-                                        <el-select v-model="form1.circlesType" :disabled="ckshow || (jb!=null && form1.circlesType!=null && code!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                        <el-select v-model="form1.circlesType" :disabled="ckshow || (jb!=null && form1.circlesType!=null && form1.circlesType!='' && code!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg+'和届别':'无数据'">
                                             <el-option
-                                                v-for="(item,ind) in $store.state.jjb"
+                                                v-for="(item,ind) in jjblist"
                                                 :key="ind"
                                                 :label="item.mc"
                                                 :value="item.dm">
@@ -323,7 +323,7 @@
                                      </el-col> -->
                                       <el-col :span="12" v-if="ntype=='4'" class="input-item">
                                         <span class="yy-input-text"><font class="red">*</font> 职务</span>
-                                         <el-select v-model="form1.subOrgPosition" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                         <el-select v-model="form1.subOrgPosition" @change="getJDZWLB(form1.subOrgPosition)" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.zw"
                                                 :key="ind"
@@ -379,7 +379,7 @@
                                         <span class="yy-input-text" style="width:13.5%!important">关注领域</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.focusareas"  class="yy-input-input" style="width:80%!important;" ></el-input>
                                      </el-col>
-                                 <el-col :span="12" v-if="ntype=='1'" class="input-item">
+                                 <el-col :span="12" v-if="ntype=='1' && jdshow" class="input-item">
                                         <span class="yy-input-text">结对信息</span>
                                       <el-select v-model="form1.pairPersonId" @change="getClear" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
                                             <el-option
@@ -390,7 +390,7 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                                     <el-col :span="12" v-if="ntype=='1'" class="input-item">
+                                     <el-col :span="12" v-if="ntype=='1' && jdshow" class="input-item">
                                         <span class="yy-input-text"><font class="red">*</font> 结对时间</span>
                                         <el-date-picker 
                                             v-model="form1.pairTime" format="yyyy-MM-dd"
@@ -483,7 +483,7 @@
                                                         连任 &nbsp;
                                                         </el-checkbox>  
                                                     <!-- <span class="lfont ml-20" v-if='pd.is5'>连任</span> -->
-                                                    <el-select v-model="form1.reelections" @change="getLRData(form1.reelections)" :disabled="ckshow" v-if='pd.is5' multiple  filterable clearable default-first-option placeholder="请选择" size="mini" style="width:30%">
+                                                    <el-select v-model="form1.reelections" @change="getLRData(form1.reelections)" :disabled="ckshow" v-if='pd.is5' multiple  filterable clearable default-first-option placeholder="请选择" size="mini" style="width:30%" >
                                                         <el-option
                                                             v-for="(item,ind) in jblistlr"
                                                             :key="ind"
@@ -501,7 +501,7 @@
                                                         曾任代表  &nbsp;
                                                         </el-checkbox>  
                                                     
-                                                    <el-select v-model="form1.formerRepresentatives" :disabled="ckshow" v-if='pd.is14' multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
+                                                    <el-select v-model="form1.formerRepresentatives" :disabled="ckshow" v-if='pd.is14' multiple  filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
                                                         <el-option
                                                             v-for="(item,ind) in jblistdb"
                                                             :key="ind"
@@ -515,7 +515,7 @@
                                                     <el-checkbox v-model="pd.is15" :disabled="ckshow">
                                                         曾任委员  &nbsp;
                                                         </el-checkbox> 
-                                                    <el-select v-model="form1.formerMembers" :disabled="ckshow" v-if='pd.is15' multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
+                                                    <el-select v-model="form1.formerMembers" :disabled="ckshow" v-if='pd.is15' multiple  filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
                                                         <el-option
                                                             v-for="(item,ind) in jblistwy"
                                                             :key="ind"
@@ -526,7 +526,7 @@
                                                     
                                                 </el-col>
                                                 <el-col :span="24" v-if="ntype!='4'" :disabled="ckshow" class="input-item">
-                                                    <el-checkbox v-model="pd.is11">
+                                                    <el-checkbox v-model="pd.is11" :disabled="ckshow">
                                                         <span v-if='ntype=="3"'>增补</span> 
                                                         <span v-else>补选</span>  &nbsp;
                                                         </el-checkbox>
@@ -667,8 +667,8 @@
                          </div>
                      </div>
                       <!-- 结对信息 -->
-                    <div v-if="state=='1' || state=='9'"  style="margin-top:30px;">
-                    <div class="pairleft" id="box7" v-if='addtype==4'>
+                    <div v-if="(state=='1' || state=='9') && kjdshow"  style="margin-top:30px;">
+                    <div class="pairleft" id="box7" v-if='addtype==4 && kjdshow'>
                          <div class="top" ><div class="title">结对信息</div></div>
                          <div class="list">
                             <el-row class="mt-15" >
@@ -1189,7 +1189,7 @@ export default {
     data(){
         return{
             form:{},
-            form1:{reelectionNum:'1',levelType:''},
+            form1:{reelectionNum:'0',levelType:''},
             pd:{is2:false,is1:false,is3:false,
             is4:false,is6:false,is7:false,is8:false,
             is9:false,is10:false,is11:false,
@@ -1313,13 +1313,18 @@ export default {
             jblistdb:[],
             jblistwy:[],
             depid:'',
+            lvl:'',
+            jjblist:[],
+            tylblist:[],
+            kjdshow:true,
+            jdshow:true,
         };
     },
     mounted()
     {
         this.$store.dispatch('getXb');
-        this.$store.dispatch('getJb');
-        this.$store.dispatch('getTb');
+        // this.$store.dispatch('getJb');
+        // this.$store.dispatch('getTb');
         this.$store.dispatch('getDp');
         this.$store.dispatch('getJbb');
         this.$store.dispatch('getMz');
@@ -1329,13 +1334,13 @@ export default {
         this.$store.dispatch('getBzdr');
         this.$store.dispatch('getJb');
         this.$store.dispatch('getCb');
-        this.$store.dispatch('getJjb');
+        // this.$store.dispatch('getJjb');
         this.$store.dispatch('getXw');
         this.$store.dispatch('getJg');
-        this.$store.dispatch('getTylb');
+        // this.$store.dispatch('getTylb');
         this.$store.dispatch('getSydw');
         this.$store.dispatch('getZw');
-        this.$store.dispatch('getTylb');
+        // this.$store.dispatch('getTylb');
         this.$store.dispatch('getFyjb');
         this.$store.dispatch('getTyzxytjdw');
         this.$store.dispatch('getTyjdytjdw');
@@ -1575,23 +1580,23 @@ export default {
                        
                         if(this.jb=='qg'){
                             this.cname1="全国";
-                            this.form1.levelType="0150000001";
+                            this.lvl="0150000001";
                                                       
                         }else if(this.jb=='sj'){
                             this.cname1="省级";
-                            this.form1.levelType="0150000002";
+                            this.lvl="0150000002";
                         }
                         else if(this.jb=='ds'){
                             this.cname1="市级";
-                            this.form1.levelType="0150000003";
+                            this.lvl="0150000003";
                         }
                         else if(this.jb=='xq'){
                             this.cname1="区县";
-                            this.form1.levelType="0150000004";
+                            this.lvl="0150000004";
                         }
-                       
-                        this.getTB(this.xzqh,this.form1.levelType);
-                        this.getNJB();
+                       this.$set(this.form1,'levelType',this.lvl);
+                        this.getTB(this.xzqh,this.lvl);
+                        
                         break;
                     case '2':
                         this.cname="政协委员";
@@ -1601,25 +1606,27 @@ export default {
                         this.labelya="政协提案";
                         this.ptype=this.Global.CPPCMEMBER;
                         this.zmtype=this.Global.ZX;
-                        if(this.code!=null || this.code!=""){
-                            this.$set(this.form1,"circlesType",this.code);
-                        }
+                       
                         if(this.jb=='qg'){
                             this.cname1="全国";
-                            this.form1.levelType="0150000001";
+                            this.lvl="0150000001";
                         }else if(this.jb=='sj'){
                             this.cname1="省级";
-                            this.form1.levelType="0150000002";
+                           this.lvl="0150000002";
                         }
                         else if(this.jb=='ds'){
                             this.cname1="市级";
-                            this.form1.levelType="0150000003";
+                            this.lvl="0150000003";
                         }
                         else if(this.jb=='xq'){
                             this.cname1="区县";
-                            this.form1.levelType="0150000004";
+                            this.lvl="0150000004";
                         }
-                        this.getNJB();
+                        this.$set(this.form1,'levelType',this.lvl);
+                        this.getJJB('2');
+                         if(this.code!=null || this.code!=""){
+                            this.$set(this.form1,"circlesType",this.code);
+                        }
                         break;
                        
                     case '3':
@@ -1636,18 +1643,18 @@ export default {
                         this.zmtype=this.Global.FY;
                         if(this.jb=='qg'){
                             this.cname1="最高法";
-                            this.form1.levelType="0222000001";
+                            this.lvl="0222000001";
                         }else if(this.jb=='sj'){
                             this.cname1="高级";
-                            this.form1.levelType="0222000002";
+                            this.lvl="0222000002";
                         }
                         else if(this.jb=='ds'){
                             this.cname1="中级";
-                            this.form1.levelType="0222000003";
+                            this.lvl="0222000003";
                         }
                         else if(this.jb=='xq'){
                             this.cname1="基层";
-                            this.form1.levelType="0222000004";
+                            this.lvl="0222000004";
                         }
 
                         if(this.lb!=null)
@@ -1663,7 +1670,13 @@ export default {
                         }else if(this.lbmc!=''){
                               this.lbshow=false;
                         }
+                        this.$set(this.form1,'levelType',this.lvl);
                         this.getTYJB();
+                        if(this.xzqh!=undefined && this.form1.levelType!=null)
+                        {
+                            this.getTYLBList(this.xzqh);
+                        }
+                       
                         break;
                      
                     case '4':
@@ -1672,22 +1685,23 @@ export default {
                         this.ntype='4';
                         this.ptype=this.Global.COURTPERSON;
                         this.zmtype=this.Global.FY;
-                         if(this.jb=='1'){
+                         if(this.jb=='qg'){
                             this.cname1="最高院";
-                            this.form1.levelType="0222000001";
-                        }else if(this.jb=='2'){
+                            this.lvl="0222000001";
+                        }else if(this.jb=='sj'){
                             this.cname1="各省高院";
-                            this.form1.levelType="0222000002";
+                            this.lvl="0222000002";
                         }
-                        else if(this.jb=='3'){
+                        else if(this.jb=='ds'){
                             this.cname1="各市中院";
-                            this.form1.levelType="0222000003";
+                            this.lvl="0222000003";
                         }
-                        else if(this.jb=='4'){
+                        else if(this.jb=='xq'){
                             this.cname1="区县基层法院";
-                            this.form1.levelType="0222000004";
+                            this.lvl="0222000004";
                        
                         }
+                        this.$set(this.form1,'levelType',this.lvl);
                         this.getJDXX();
                         break;
                     default:
@@ -1695,7 +1709,7 @@ export default {
                 }
             
 
-
+            
             this.getList();
           },
           getUUID(){
@@ -1707,21 +1721,35 @@ export default {
           },
          
           getZNSB(phone){
-  
               if(this.state!="0"){
                   return;
               }
               this.type=this.ptype;
               this.zndata={};
               this.zndata.personType=this.ptype;
-              var birthday=this.form.year+this.form.month+this.form.day;
+              var birthday=this.form.year+''+this.form.month+''+this.form.day;
              if(this.form.personName!=undefined && this.form.personName!=''){
                 this.zndata.personName=this.form.personName;
                 this.zndata.sex=this.form.sex;
                 this.zndata.birthPlace=this.form.birthPlace;
-                this.zndata.birthday=birthday;
+                // this.zndata.birthday=birthday;
+                this.zndata.year=this.form.year;
+                this.zndata.month=this.form.month;
+                this.zndata.day=this.form.day;
                 this.zndata.fixedPhone=this.form.fixedPhone;
-                this.zndata.mobilePhone=phone==undefined?'':phone; 
+                var sjh='';
+                if(this.rows.length>0){
+                 for (let i = 0; i < this.rows.length; i++) {
+                       if(this.rows[i].mobilePhone!=''){
+                            sjh=this.rows[i].mobilePhone;
+                       }
+                 }
+                }
+                if(phone==undefined){
+                    phone=sjh;
+                }
+                
+                this.zndata.mobilePhone=phone; 
               }
               if((this.form.personName!=undefined && this.form.personName!='')  &&
                   (this.form.sex!=undefined && this.form.sex!='') &&
@@ -1875,7 +1903,8 @@ export default {
                     'mc':'',
                     'sj':orgid,
                     'lvl':this.form1.levelType,
-                    'xzqh':xzqh
+                    'xzqh':xzqh,
+                    'groupType':this.addtype=='3'?this.form.area:this.form1.groupType,
                     
                 };
                 this.$api.post(this.Global.aport1+'/org/getCircuitCourt',p,
@@ -1938,9 +1967,7 @@ export default {
                       this.form1=r.data;
                       this.personId=r.data.personId;
                       this.getSSDW(this.form1.orgId,1);//所属单位
-                     
                       
-                   
                       if(this.form.mobilePhones && this.form.mobilePhones.length>0){
                            var mrr=this.form.mobilePhones;this.rows=[];
                           for (let i = 0; i < mrr.length; i++) {
@@ -1949,7 +1976,7 @@ export default {
                               oobj.mobilePhone=mrr[i];
                               this.rows.push(oobj);
                           }
-                         console.log(this.rows,'this.rows');
+                      
                          
                       }
                      if(this.form.year!=null && this.form.year!='' && this.form.year!=undefined){
@@ -1981,12 +2008,22 @@ export default {
                               if(r.data.isNotHold=='0112000001'){
                                  this.pd.is7=true;
                              }
+                             if(r.data.repair=='0272000001'){
+                                 this.pd.is11=true;
+                             }
+                              if(r.data.formerRepresentative=='0284000001'){
+                                 this.pd.is14=true;
+                             }
+                              if(r.data.formerMember=='0285000001'){
+                                 this.pd.is15=true;
+                             }
                               if(r.data.workCommitteesDistinction=='0273000001'){
                                  this.pd.is13=true;
                              }
                         this.getTB(this.xzqh,this.form1.levelType);
-                        this.getNJB();
-                      
+                       // this.getNJB();
+                        this.getJJB('1');
+                       
 
                       }else if(this.addtype=='3'){
 
@@ -2008,14 +2045,26 @@ export default {
 
                                 //  this.getBM(this.form.orgId);
                              }
+                           
                              if(r.data.isRepresentative=='1'){
                                   this.pd.is9=true;
+                             }
+                             if(r.data.repair=='0272000001'){
+                                  this.pd.is11=true;
                              }
                              if(r.data.fire=='0292000001'){
                                   this.pd.is12=true;
                              }
-                        
+                               if(r.data.formerRepresentative=='0284000001'){
+                                 this.pd.is14=true;
+                             }
+                              if(r.data.formerMember=='0285000001'){
+                                 this.pd.is15=true;
+                             }
+                             
                        this.getTYJB();
+                       this.getTYLBList();
+                 
                       }else if(this.addtype=="4"){
                            this.getBM(this.form1.orgId);
                       }         
@@ -2041,17 +2090,8 @@ export default {
                    this.getSSDW();//所属单位
                   
                    
-                   if(this.jkey!=null || this.jkey!=undefined){
                    
-                        this.$set(this.form1,"periodType",this.jkey);
-                    }
-                    // else{
-                    //     if(this.$store.state.jid!=null){
-                    //     this.$set(this.form1,"periodType",this.$store.state.jid);
-                    //     }
-                    // }
-
-
+                   
                     if(this.code!=null || this.code!='' ){
                              if(this.jb!='xq'){
                                 this.$set(this.form1,"groupType",this.code);
@@ -2061,14 +2101,38 @@ export default {
              }
                
             },
-            getNJB(){
-              console.log('this.form1.levelType',this.form1.levelType);
-              
-              if(this.form1.levelType==null || this.form1.levelType==""){
-                   return;
-                }
+              getJJB(t){
+               
+                if(this.addtype=='2'){
+
+                     var lel=this.lvl;
+                    if(this.lvl==''){
+                        lel=this.form1.levelType;
+                    }
+                        let p={
+                            'level':lel,
+                            'administrativeDivision':this.xzqh==undefined?"":this.xzqh,
+                            'sessionType':this.form1.periodType==undefined?this.jkey:this.form1.periodType
+                             };
+                         this.$api.post(this.Global.jjburl,p,
+                              r =>{
+                               this.jjblist=ToArray(r.data);
+                                                        
+                               });
+                 }
+            },
+            getNJB(t){
+          
+                //this.$set(this.form1,"periodType",'');
+             
+
+               var lel=this.lvl;
+                    if(this.lvl==''){
+                        lel=this.form1.levelType;
+                    }
 
                 var lb="";
+                
                  switch (this.addtype) {
                     case '1':
                        lb=this.Global.REPRESENTATIVE;
@@ -2076,11 +2140,15 @@ export default {
                     case '2':
                        lb=this.Global.CPPCMEMBER;
                        break;
+                    case '3':
+                       lb=this.Global.SPECIALPERSON;
+                       break;
                     default:
                        break;
                     }
+                
                 let p={
-                    'level':this.form1.levelType,
+                    'level':lel,
                     'administrativeDivision':this.xzqh==undefined?"":this.xzqh,
                     'identityType':lb,
                     };
@@ -2088,17 +2156,25 @@ export default {
                     
                    this.$api.post(this.Global.jburl,p,
                        r =>{
+                          
+                           if(t!=null){
+                             this.jblistdb=ToArray(r.data,'1');
+                             this.jblistwy=ToArray(r.data,'1');
+                           }else{
+                               
                             this.jblist=ToArray(r.data,'1');
                             this.getjblist(0,this.jblist)
+                           }
                    });
             },
             getTYJB(){
-                
+                // this.$set(this.form1,"periodType",'');
                 if((this.form1.levelType==null || this.form1.levelType=="")
                  || (this.form1.specialType==null || this.form1.specialType=="")
                  ){
                    return;
                 }
+
                 let pp={
                         'level':this.form1.levelType,
                         'administrativeDivision':this.xzqh==undefined?"":this.xzqh,
@@ -2112,33 +2188,88 @@ export default {
             },
 
             getjblist(t,data){
-             
+          
                  if(t==0){
                      this.jblistlr=data;
-                     this.jblistdb=data;
-                     this.jblistwy=data;
                      if(this.jkey!="" && this.jkey!=null){
                          var arr=[];
                          arr.push(this.jkey);
-                        this.$set(this.form1,'reelections',arr); 
+                         this.$set(this.form1,'reelections',arr); 
                      }
+                    
+                    this.getcrdb(data);
+                    this.getcrwy(data);
+                 }else if(t==1){
+                         var arr=[];
+                         arr.push(data);
+                         this.$set(this.form1,'reelections',arr);
+                         this.getcrdb(this.jblist);
+                         this.getcrwy(this.jblist);
                  }
                 
             },
+            getcrdb(data){
+                 if(this.addtype=='1'){
+                     var arr=this.form1.reelections;
+                     for (let i = 0; i < arr.length; i++) {
+                         data = data.filter(t => t.dm != arr[i])
+                     }
+                     if(arr && arr.length>0){
+                         var val="0"+(parseInt(arr[0])-1);
+                         data = data.filter(t => t.dm != val)
+                     }
+                     this.jblistdb=data;
+                 }else if(this.addtype=="3"){
+                     this.getNJB(0);
+                 }else{
+               
+                     this.jblistdb=data;
+                 }
+               
+                   
+            },
+            getcrwy(data){
+                 if(this.addtype=='2'){
+                    //  console.log('22----',this.form1.reelections,this.form1.periodType);
+                     var arr=this.form1.reelections;
+                     for (let i = 0; i < arr.length; i++) {
+                         data = data.filter(t => t.dm != arr[i])
+                     }
+                     if(arr && arr.length>0){
+                         var val="0"+(parseInt(arr[0])-1);
+                         data = data.filter(t => t.dm != val)
+                     }
+                     this.jblistwy=data;
+                 }else if(this.addtype=="3"){
+                     this.getNJB(0);
+                 }else{
+                       this.jblistwy=data;
+                 }
+               
+
+            },
             getLRData(val){
-            if(this.pd.is5){
-                for (let i = 0; i < val.length; i++) {
-                    console.log(parseInt(val[i+1]),parseInt(val[i]),'---');
-                    // if(parseInt(val[i+1])!=NaN){
-                    //     if(parseInt(val[i+1])-parseInt(val[i])!=1 && parseInt(val[i+1])-parseInt(val[i])!=-1){
-                    //         this.$message.error("请选择连续届别");return;
-                    //     }
-                    // }
-                    
-                }
+                if(this.pd.is5){
+                    var array=val;
+                    val=val.sort(function(a,b){return a-b});
+                 
+                    if(val.length>1){
+                        for (let i = 0; i < val.length-1; i++) {
+                       
+                         if(parseInt(val[i+1])-parseInt(val[i])!=1){
+                                this.$message.error("请选择连续届别!");
+                                val = val.filter(t => t != array[i]);
+                                 console.log(val,'val');
+                                return;
+                            }
+                        }
+                        
+                    }
 
                     this.$set(this.form1,'reelectionNum',val.length);
-            } 
+                    this.getcrdb(this.jblistlr);
+                    this.getcrdb(this.jblistlr);
+                } 
             },
             getJDHD(num,t){
                
@@ -2244,8 +2375,9 @@ export default {
               }else{
                   this.ajall=1;
               }
+            
                 let pp={
-                    'leaderpbid':this.pbId,
+                    'leaderpbid':this.pbid,
                     'leaderpersonid':this.personId,
                     'inum':num,
                     'token':this.$store.state.token,
@@ -2709,6 +2841,23 @@ export default {
                     }else{
                         this.form1.repair="0272000002";
                     }
+                    // 0284000001 有曾任代表记录
+                    // 0284000002 无曾任代表记录
+                    // 0285000001 有曾任委员记录
+                    // 0285000002 无曾任委员记录
+                    //曾任代表
+                     if(this.pd.is14){
+                        this.form1.formerRepresentative="0284000001";
+                    }else{
+                        this.form1.formerRepresentative="0284000002";
+                    }
+                    //曾任委员
+                     if(this.pd.is15){
+                        this.form1.formerMember="0285000001";
+                    }else{
+                        this.form1.formerMember="0285000002";
+                    }
+
                       //工作委员会委员区分
                      if(this.pd.is13){
                         this.form1.workCommitteesDistinction="0273000001";
@@ -2760,6 +2909,18 @@ export default {
                     }else{
                         this.form1.repair="0272000002";
                     }
+                    //曾任代表
+                     if(this.pd.is14){
+                        this.form1.formerRepresentative="0284000001";
+                    }else{
+                        this.form1.formerRepresentative="0284000002";
+                    }
+                    //曾任委员
+                     if(this.pd.is15){
+                        this.form1.formerMember="0285000001";
+                    }else{
+                        this.form1.formerMember="0285000002";
+                    }
                       p={
                         'baseInfo':this.form,
                         'cppcMember':this.form1,
@@ -2809,6 +2970,18 @@ export default {
                     }else{
                         this.form1.fire="0292000002";
                     }
+                    //曾任代表
+                    if(this.pd.is14){
+                        this.form1.formerRepresentative="0284000001";
+                    }else{
+                        this.form1.formerRepresentative="0284000002";
+                    }
+                    //曾任委员
+                     if(this.pd.is15){
+                        this.form1.formerMember="0285000001";
+                    }else{
+                        this.form1.formerMember="0285000002";
+                    }
 
                       p={
                         'baseInfo':this.form,
@@ -2853,28 +3026,39 @@ export default {
                 });
             },
             getSSDW(s,m){
-               
+                    var lel=this.lvl;
+                    if(this.lvl==''){
+                        lel=this.form1.levelType;
+                    }
                  let p={
                     'lb':this.zmtype,
-                    'lvl':this.form1.levelType,
+                    'lvl':lel,
                     'xzqh':this.xzqh,
                 };
                  this.$api.post(this.Global.aport1+'/org/getOrgByType',p,
                    r =>{
                        if(r.code==1){
                            this.ssdwdata=r.data;
+                           
                            if(this.ssdwdata.length==1 || m==1){
                                  if(s!="" && s!=null){
                                    this.$set(this.form1,"orgId",s);
                                  }else{
+                                   
                                    this.$set(this.form1,"orgId",this.ssdwdata[0].orgid);
                                  }
                                  if(this.addtype!='4'){
                                    this.getXHFT(this.form1.orgId,this.state);//巡回法庭
                                  }
                                  else if(this.addtype=='4'){
-                                    
-                                      this.getBM(this.form1.orgId);//部门
+                                       var obj={};
+                                        obj = this.ssdwdata.find(item =>{
+                                            return item.orgid === this.form1.orgId
+                                            });
+                                        this.lvl = obj.lvl
+                                       
+                                       this.getBM(this.form1.orgId);//部门
+                                       this.getJDZWLB(this.form1.subOrgPosition);
                                     
                                  }
  
@@ -2884,15 +3068,22 @@ export default {
                                    this.getZMWFY(this.form1.orgId);//专门委员会
                                    this.getWorkList(this.form1.orgId);//专门委员会
                                    this.getXJDW(this.form1.orgId);//选举单位
+                                   this.getNJB();
+                                   if(this.jkey!=null || this.jkey!=undefined){
+                        
+                                            this.$set(this.form1,"periodType",this.jkey);
+                                    }
+                                   
                                  }
                                  if(this.addtype=='1'){
                                    this.getJDXX(this.form1.orgId);//结对信息
                                  }
+                                // this.getJB(this.form1.orgId);
+                                 
                            }else{
                                if(this.addtype=='4'){
-                                   
                                      if(this.orgdm!="" && this.orgdm!=null){
-                                         this.$set(this.form1,"orgId",this.orgdm);
+                                        this.$set(this.form1,"orgId",this.orgdm);
                                         this.getBM(this.form1.orgId);//部门
                                      }
 
@@ -2904,8 +3095,7 @@ export default {
             //选举单位
             getXJDW(orgid,t){
               //  if(this.addtype==3){return;}
-              console.log(orgid,'====');
-              
+            
                 if(orgid=='' || orgid==null){
                      this.$set(this.form1,'electUnitsid','')
                      this.xjdwdata=[];
@@ -2940,18 +3130,18 @@ export default {
                    });
             },
 
-            getFYDW(){
-                let p={
-                    'mc':'',
+            // getFYDW(){
+            //     let p={
+            //         'mc':'',
 
-                };
-                 this.$api.post(this.Global.aport1+'/org/getCircuitCourt',p,
-                   r =>{
-                       if(r.code==1){
-                           this.fydwdata=r.data;
-                       }
-                   });
-            },
+            //     };
+            //      this.$api.post(this.Global.aport1+'/org/getCircuitCourt',p,
+            //        r =>{
+            //            if(r.code==1){
+            //                this.fydwdata=r.data;
+            //            }
+            //        });
+            // },
             //结对信息 所有的法院人员
              getJDXX(orgid,m,tb){ 
                
@@ -3199,7 +3389,7 @@ export default {
                            this.wyhdata1=r.data;
                           
                            this.wyhdata3=r.data;
-                           if(this.addtype=='4'){
+                           if(this.addtype=='4' && this.state=='0'){
                                this.$set(this.form1,'subOrgId',this.depid)
                            }
                        }
@@ -3234,8 +3424,13 @@ export default {
              this.$set(this.form1,'levelType','');
             if(this.addtype==1){
                 this.$set(this.form1,'groupType','');
+             }else if(this.addtype==2){
+                   this.$set(this.form1,"circlesType",'');
              }
+                 this.$set(this.form1,"periodType",'');
                 if(val=='' || val==null){
+                
+                    this.jblist=[];
                     return;
                 }
                  var obj={};
@@ -3244,10 +3439,20 @@ export default {
                   });
                                   
                   this.form1.levelType=obj.lvl
-
                   this.getTB(obj.xzqh,obj.lvl);
+                
+                  if(obj.xzqh!="" && obj.xzqh!=undefined)
+                   {
+                     this.xzqh=obj.xzqh;
+                    }
+                //    console.log(obj.xzqh,'---',this.xzqh);
+                  this.getNJB();
+               
+                  
+                  
 
             },
+          
             goClose(){
                
                 if(this.wtitle!=''  && this.wtitle!=null && this.wtitle!=undefined && this.wtitle!='11'){
@@ -3322,10 +3527,61 @@ export default {
                  this.pairsDialogVisible=false;
               }else{
                   this.getsaveinfo(data);
-              }
+            }
+           
               
         },
-        
+         //可结对职务列表
+            getJDZWLB(val){
+               let pp={
+                    'levelType':this.lvl,
+                  };
+                this.$api.post(this.Global.aport1+"/representative/pairPosition",pp,
+                    r =>{
+                         if(r.code==1){
+                           var arr=r.data;
+                           if(arr && arr.length>0){
+                           this.kjdshow=arr.indexOf(val)==1?true:false;
+                             }
+                          
+                           }
+                        
+                    });
+            },
+         //不可结对团别列表 用于选择团别为解放军时
+            getBJDTB(val){
+              if(this.addtype=='1'){
+                this.$api.post(this.Global.aport1+"/representative/pairGroupType",{},
+                    r =>{
+                        if(r.code==1){
+                           var arr=r.data;
+                           if(arr && arr.length>0){
+                            //    console.log(arr.join(","),'=====',val,'++++',arr.join(",").indexOf(val));
+                               
+                              this.jdshow=arr.join(",").indexOf(val)==0?false:true;
+                           }
+                       
+                           
+                         }
+                    });
+                    }
+            },
+            //特约职务类别
+            getTYLBList(xzqh){
+                if(xzqh!=null){
+                    this.$set(this.form1,"specialType",'');
+                }
+                    
+                    let p={
+                        'level':this.form1.levelType,
+                        'administrativeDivision':xzqh==null?this.xzqh:xzqh,
+                    };
+                    this.$api.post(this.Global.tylburl,p,
+                            r =>{
+                                this.tylblist=ToArray(r.data);
+                              
+                    });
+            },
     },
     beforeDestroy(){
       window.removeEventListener("scroll",this.getscroll);

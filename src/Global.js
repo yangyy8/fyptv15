@@ -99,6 +99,7 @@ const rddw="/org/getCourtOrg";//人大单位
 const zxdw="/org/getCourtOrg";//政协单位
 const tysf=zddz+"dic_ioex_specialIdentitytype";//身份  人大代表【同时间的身份】、政协委员【同时间的身份】、各界人士
 const zfxwjb=zddz+"dic_ioex_forwardmediaLevel";//转发新闻级别
+const lxss=zddz+"dic_ioex_contactdistinction";//联系形式
 
 const jburl="/sessionType"//届别地址
 const tyjburl="/specialSessionType";//特别届别地址
@@ -150,5 +151,6 @@ export default
     docformat,jgwyh,qtb,zddz,gkzt,zsqf,zszt,shqf,shzt,fbqf,fbzt,fyywlx,fyywly,qxnbj,tyzxytjdw,tyjdytjdw,
     cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,menuurl,
     REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL,jpyy,tysf,tyjburl,
-    MZDP1,MZDP2,MZDP3,MZDP4,MZDP5,MZDP6,MZDP7,MZDP8,sflr,jdqf,jburl,tburl,jjburl,tylburl,bxqf,zfxwjb
+    MZDP1,MZDP2,MZDP3,MZDP4,MZDP5,MZDP6,MZDP7,MZDP8,sflr,jdqf,jburl,tburl,jjburl,tylburl,bxqf,zfxwjb,
+    lxss,
 }

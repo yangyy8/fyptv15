@@ -47,10 +47,8 @@ export default {
                       if(r.code==1){
                         this.$store.commit('getOrgname',r.data.ssdw.mc)
                         this.$store.commit('getOrgid',r.data.ssdw.dm)
-                        this.$message({
-                                   message: '切换成功！',
-                                   type: 'success'
-                                });
+                        
+                        this.$message.success("切换成功");
                         this.$router.push({name:"Index"});
 
                       }else{

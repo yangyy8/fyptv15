@@ -180,7 +180,7 @@ export default {
                 if(this.allshow[0]==true){
                   state="1";
                 }
-            this.$router.push({name:'BaseAdd',query:{type:'4',status:state,pbid:id,reid:dm,orgdm:orgid}});
+            this.$router.push({name:'BaseAdd',query:{type:'4',status:state,pbid:id,reid:dm,orgdm:orgid,jb:this.jb}});
             }
         },
         getDR(){

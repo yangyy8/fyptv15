@@ -115,6 +115,7 @@ export default new Vuex.Store({
         jpyy:[],//解聘原因
         tysf:[],//特约身份
         zfxwjb:[],//转发新闻级别
+        lxss:[],//联系形式
       },
       mutations: {
         //state代表了最开始存放的区域，即驱动应用的数据源
@@ -458,6 +459,9 @@ export default new Vuex.Store({
         },
         getZfxwjb(state,data){
           state.zfxwjb = data;
+        },
+        getLxss(state,data){
+          state.lxss = data;
         },
       },
       actions: {
@@ -1004,6 +1008,12 @@ export default new Vuex.Store({
           api.get(global_.aport4 + global_.zfxwjb, null,
             r => {
               context.commit('getZfxwjb', ToArray(r.data))
+          })
+        },
+        getLxss(context) {
+          api.get(global_.aport4 + global_.lxss, null,
+            r => {
+              context.commit('getLxss', ToArray(r.data))
           })
         },
       }

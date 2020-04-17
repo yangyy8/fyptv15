@@ -762,115 +762,115 @@ const menu=[
             },
             //二级
             childs: [
-              {
-                entity: {
-                  id: 21,
-                  name: "qg48",
-                  icon: "el-icon-phone-outline\r\n",
-                  alias: "结对活动",
-                  url: "/Home/PairAdd?type=1"
-                },
+              //{
+              //   entity: {
+              //     id: 21,
+              //     name: "qg48",
+              //     icon: "el-icon-phone-outline\r\n",
+              //     alias: "结对活动",
+              //     url: "/Home/PairAdd?type=1"
+              //   },
                 
-              },
-              {
-                entity: {
-                  id: 22,
-                  name: "qg49",
-                  icon: "el-icon-picture",
-                  alias: "专项视察",
-                  url: "/Home/SpecialAdd?type=2"
-                }
-              },
-              {
-                entity: {
-                  id: 23,
-                  name: "qg50",
-                  icon: "el-icon-picture",
-                  alias: "专题调研",
-                  url: "/Home/SpecialAdd?type=3"
-                }
-              },
-              {
-                entity: {
-                  id: 24,
-                  name: "qg51",
-                  icon: "el-icon-picture",
-                  alias: "旁听庭审",
-                  url: "/Home/SpecialAdd?type=4"
-                }
-              },
-              {
-                entity: {
-                  id: 25,
-                  name: "qg52",
-                  icon: "el-icon-picture",
-                  alias: "见证执行",
-                  url: "/Home/SpecialAdd?type=5"
-                }
-              },
-              {
-                entity: {
-                  id: 26,
-                  name: "qg53",
-                  icon: "el-icon-picture",
-                  alias: "会议座谈",
-                  url: "/Home/SpecialAdd?type=6"
-                }
-              },
-              {
-                entity: {
-                  id: 27,
-                  name: "qg54",
-                  icon: "el-icon-picture",
-                  alias: "日常走访",
-                  url: "/Home/SpecialAdd?type=7"
-                }
-              },
-              {
-                entity: {
-                  id: 28,
-                  name: "qg55",
-                  icon: "el-icon-picture",
-                  alias: "新闻宣传",
-                  url: "/Home/SpecialAdd?type=8"
-                }
-              },
-              {
-                entity: {
-                  id: 29,
-                  name: "qg56",
-                  icon: "el-icon-picture",
-                  alias: "日常接待",
-                  url: "/Home/SpecialAdd?type=9"
-                }
-              },
-              {
-                entity: {
-                  id: 290,
-                  name: "qg57",
-                  icon: "el-icon-picture",
-                  alias: "年度工作总结与计划",
-                  url: "/user/integral"
-                }
-              },
-              {
-                entity: {
-                  id: 291,
-                  name: "qg58",
-                  icon: "el-icon-picture",
-                  alias: "其他",
-                  url: "/Home/SpecialAdd?type=10"
-                }
-              },
-              {
-                entity: {
-                  id: 292,
-                  name: "qg59",
-                  icon: "el-icon-picture",
-                  alias: "高级查询",
-                  url: "/Home/PairList"
-                }
-              },
+              // },
+              // {
+              //   entity: {
+              //     id: 22,
+              //     name: "qg49",
+              //     icon: "el-icon-picture",
+              //     alias: "专项视察",
+              //     url: "/Home/SpecialAdd?type=2"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 23,
+              //     name: "qg50",
+              //     icon: "el-icon-picture",
+              //     alias: "专题调研",
+              //     url: "/Home/SpecialAdd?type=3"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 24,
+              //     name: "qg51",
+              //     icon: "el-icon-picture",
+              //     alias: "旁听庭审",
+              //     url: "/Home/SpecialAdd?type=4"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 25,
+              //     name: "qg52",
+              //     icon: "el-icon-picture",
+              //     alias: "见证执行",
+              //     url: "/Home/SpecialAdd?type=5"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 26,
+              //     name: "qg53",
+              //     icon: "el-icon-picture",
+              //     alias: "会议座谈",
+              //     url: "/Home/SpecialAdd?type=6"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 27,
+              //     name: "qg54",
+              //     icon: "el-icon-picture",
+              //     alias: "日常走访",
+              //     url: "/Home/SpecialAdd?type=7"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 28,
+              //     name: "qg55",
+              //     icon: "el-icon-picture",
+              //     alias: "新闻宣传",
+              //     url: "/Home/SpecialAdd?type=8"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 29,
+              //     name: "qg56",
+              //     icon: "el-icon-picture",
+              //     alias: "日常接待",
+              //     url: "/Home/SpecialAdd?type=9"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 290,
+              //     name: "qg57",
+              //     icon: "el-icon-picture",
+              //     alias: "年度工作总结与计划",
+              //     url: "/user/integral"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 291,
+              //     name: "qg58",
+              //     icon: "el-icon-picture",
+              //     alias: "其他",
+              //     url: "/Home/SpecialAdd?type=10"
+              //   }
+              // },
+              // {
+              //   entity: {
+              //     id: 292,
+              //     name: "qg59",
+              //     icon: "el-icon-picture",
+              //     alias: "高级查询",
+              //     url: "/Home/PairList"
+              //   }
+              // },
               {
                 entity: {
                   id: 12001,

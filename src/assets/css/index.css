@@ -1,6 +1,10 @@
 .sreen{
      background: url('../../assets/img/screen/bg.png') no-repeat;
      background-size: 100% 100%; min-height: 1080px; min-width: 1920px; overflow: hidden;}
+.sreen1{
+      background: url('../../assets/img/screen/bg.jpg') no-repeat!important;
+      background-size: 100% 100%; min-height: 1080px; min-width: 1920px; overflow: hidden;}
+ 
 .cont{
    background: url('../../assets/img/screen/contbg.png') no-repeat;
    background-size: 100% 100%; min-height: 1080px; min-width: 1920px; overflow: hidden;}
@@ -55,28 +59,65 @@
 .sreen .fg{text-shadow: 3px 5px 19px #346BF1;}
 .sreen .r-1{color: #2961BA; font-weight: bold;font-size: 16px;}
 .sreen .r-2{color: #5CBEFF;font-weight: bold;font-size: 60px;}
-.sreen .c-title{font-size: 14px;color: #cccccc;}
+.sreen .c-title{font-size: 12px;color: #cccccc;}
 .sreen .gettop_head_img{height: 140px;width: 140px;border-radius:50%;-webkit-border-radius:50%;-moz-border-radius:50%;}
 .sreen .lable{background: #0F2744; color: #ffffff;padding:5px 4px; margin-right: 5px;}
 .sreen .contc{border-left: 1px solid #1F3547;border-right: 1px solid #1F3547; min-height: 500px;padding: 0px 20px;}
 .sreen .contc .title{color: #327AE4; background: url('../../assets/img/screen/cline.png') no-repeat; height: 30px; background-size: 100% 100%; padding-left: 15px;font-size: 18px;}
+
 .sreen  .ctitle{color: #327AE4; padding-left: 15px;font-size: 18px;}
 .sreen .contc .xh{font-size: 11px;text-align: center;padding:0 15px;}
 .sreen .contc .listl{ height: 35px;line-height: 36px; cursor: pointer;background: url('../../assets/img/screen/sz-1.png') no-repeat left;color: #EFF0F2; font-size: 15px;}
 .sreen .contc .listl:hover{ height: 35px;line-height: 36px; cursor: pointer;background: url('../../assets/img/screen/sz-0.png') no-repeat left; color: #ffffff;}
+
 .sreen .overf{ max-width: 360px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;}
 .sreen .contc .state{background: #3477E0; padding: 3px 5px;border-radius: 3px;}
 .sreen .contc .state1{background: #E35329; padding: 5px 5px;border-radius: 3px;}
 .sreen .zk{background: #0E2643; color: #3067C1;padding: 5px 5px; font-size: 12px;border-radius: 3px;cursor: pointer;}
 .sreen .zk:hover{background: #3879DF; color: #eeeeee; }
 .sreen .info{background: #0B1C39;color: #428AEB;padding-left: 20px; font-size: 14px;}
-
+.sreen .contc1{padding-right: 50px; text-align: center;}
+.sreen .contc1 .listl{ height: 35px;line-height: 36px; cursor: pointer;background: url('../../assets/img/screen/sz-1.png') no-repeat left;color: #EFF0F2; font-size: 15px;}
+.sreen .contc1 .listl:hover{ height: 35px;line-height: 36px; cursor: pointer;background: url('../../assets/img/screen/sz-0.png') no-repeat left; color: #ffffff;}
+.sreen .contc1 .xh{font-size: 11px;text-align: center;padding:0 15px;}
+.sreen .contc1 .title{background: #102751; color: #4990F8; line-height: 25px; font-size: 14px;}
 .datapic .el-progress .el-progress-circle  svg path:first-child{stroke:none;}
 .datapic .el-progress .el-progress-circle .el-progress-circle__path{stroke:#5C23F6;}
-.el-progress__text{font-size: 16px!important;}
-.datapicont .el-progress .el-progress-circle  svg path:first-child{stroke:rgba(255,255,255,0.5);}
+.datapic .el-progress__text{font-size: 16px!important;}
+.datapicont .el-progress .el-progress-circle  svg path:first-child{stroke:rgba(255,255,255,0.1);}
 .datapicont .el-progress-circle__path{stroke:#5C23F6;}
-
-.chselect .el-input--mini .el-input__inner{background-color: #232D43;border-color: #367AFC; color: #999999;}
+.datapicont .el-progress__text{font-size: 16px!important;}
+.chselect .el-input--small .el-input__inner{background-color: #020C18;border-color: #204B7E; color: #999999;}
 .chselect .el-select .el-input.is-focus .el-input__inner{background-color: #232D43;}
 .chselect .el-input__inner{border-radius: 0;}
+.chselect .el-input--small{font-size: 15px;}
+.chselect .el-input--small .el-input__icon{line-height: 32px!important;}
+.chselect1 .el-input--mini .el-input__inner{background-color: #020C18;border-color: #204B7E; color: #999999;}
+.chselect1 .el-input--mini{font-size: 15px;}
+.sreen .casebg{
+   background: url('../../assets/img/screen/casebg.png') no-repeat;
+  
+}
+.sreen .new-list{
+  
+    height: 160px;
+    margin: 10px auto;
+    overflow: hidden;
+    transition: all 0.5s;
+    line-height: 20px;
+
+}
+.sreen .new-list ul li{
+  width: 100%;
+
+}
+.sreen .new-list .el-progress-bar{
+   width: 150px!important;
+}
+.sreen .new-list .el-progress-bar__outer{
+   background-color: RGB(255,255,255,0.2)!important;
+}
+ .anim{
+   transition: all 0.5s;
+   margin-top: -28px;
+}

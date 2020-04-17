@@ -27,10 +27,10 @@
                     <span class="cursor homef">  <i class="el-icon-user-solid"></i>  {{name}}
                       (<span style="font-size:12px;"> {{orgname}}<span v-if='zwname!="null"'> ，{{zwname}}</span></span>)</span>
                     <el-dropdown-menu slot="dropdown" style="margin-top:-15px;">
-                    <el-dropdown-item  command="b" v-if="allshow[0]">修改账号</el-dropdown-item>
-                    <el-dropdown-item command="a" v-if="allshow[1]">修改密码</el-dropdown-item>
-                    <el-dropdown-item command="c" v-if="allshow[2]">快捷菜单</el-dropdown-item>
-                    <el-dropdown-item command="d" v-if="allshow[3]">权限切换</el-dropdown-item>
+                    <el-dropdown-item  command="b">修改账号</el-dropdown-item>
+                    <el-dropdown-item command="a">修改密码</el-dropdown-item>
+                    <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
+                    <el-dropdown-item command="d" >权限切换</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>              
               <span @click="loginout" class="cursor homef"><i class="iconfont el-icon-yy-tuichu" ></i> 退出 </span> 
@@ -174,18 +174,20 @@ export default {
     mounted(){
     //   getSearh();
      //权限start
-            this.$api.post(this.Global.menuurl,{'menuId':'10002000'},
-                     r =>{
-                           if(r.code==1 && r.data!=null){
-                            for (let i = 0; i < this.alldata.length; i++) {
-                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+            // this.$api.post(this.Global.menuurl,{'menuId':'10002000'},
+            //          r =>{
+            //                if(r.code==1 && r.data!=null){
+            //                 for (let i = 0; i < this.alldata.length; i++) {
+            //                     this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
                          
-                            }   
-                          }else if(r.code==0){
-                            this.$router.push({path:'/limitmsg'});
-                          }
-             });
+            //                 }   
+            //               }else if(r.code==0){
+            //                 this.$router.push({path:'/limitmsg'});
+            //               }
+            //  });
       //权限end
+     
+      
       this.getMenu();
       
       this.getfooter();
@@ -235,9 +237,13 @@ export default {
                 // this.updateInfo(r.data);
                    this.$store.commit('getOrgname',r.data.ssdw.mc)
                    this.$store.commit('getOrgid',r.data.ssdw.dm)
+                   this.$store.commit('getToken',r.data.token)
+                   this.orgname=this.$store.state.orgname
                    this.addDialogVisible=false;
-                   this.reload();
-                  // this.$router.push({name: 'Index'});
+                  // this.reload();
+                   //this.$router.push({name: 'Index'});
+                   this.getMenu();
+                   this.getfooter();
                }
 
           })
@@ -252,8 +258,7 @@ export default {
                      
                     for (let i = 0; i < array.length; i++) {
                          var id=array[i].entity.id;
-                          if(id=="1100"){
-                            this.show1=true;}
+                          if(id=="1100"){this.show1=true;}
                           else if(id=="1200"){this.show2=true;}
                           else if(id=="1300"){this.show3=true;}
                           else if(id=="1500"){this.show4=true;}

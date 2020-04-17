@@ -33,6 +33,16 @@ export default new Router({
       component: resolve => require(['@/components/Screen/contacts'], resolve),
     },
     {
+      path: '/suggtions',
+      name: 'suggtions',
+      component: resolve => require(['@/components/Screen/suggtions'], resolve),
+    },
+    {
+      path: '/followcase',
+      name: 'followcase',
+      component: resolve => require(['@/components/Screen/followcase'], resolve),
+    },
+    {
       path: '/IndexO',
       name: 'IndexO',
       component: resolve => require(['@/components/Indexold'], resolve),

@@ -132,7 +132,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">连任</span>
-                            <el-select v-model="pd.reelectionNum"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd.isReelection"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option
                                   v-for="(item,ind) in $store.state.sflr"
                                   :key="ind"
@@ -179,7 +179,7 @@
                             <span class="yy-input-text">专门委员会 
                                <!-- <el-checkbox v-model="pd.is3"></el-checkbox> -->
                             </span>
-                           <el-select v-model="pd.specialCommitteeIds" :disabled="!pd.is3"  multiple  filterable clearable default-first-option placeholder="请选择专门委员会"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.specialCommitteeIds" multiple :disabled="!pd.is3"    filterable clearable default-first-option placeholder="请选择专门委员会"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in wyhlist"
                                  :key="ind"
@@ -200,7 +200,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                            <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <!-- <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">常委会委员</span>
                            <el-select v-model="pd.specialCommit" multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -210,7 +210,7 @@
                                  :value="item.orgid">
                                  </el-option>
                             </el-select>
-                        </el-col>
+                        </el-col> -->
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">职业类别</span>
                            <el-select v-model="pd.jobType" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -545,7 +545,7 @@ export default {
            this.getCheckList();
           
            this.getList(this.CurrentPage, this.pageSize, this.pd);
-           this.getnotin();
+          
        
         },
           handleSelectionChange(val) {
@@ -650,7 +650,7 @@ export default {
         },
         getList(currentPage, showCount, pd){
            this.changeList();
-
+            this.getnotin();
            //最高人民法院特约人员
            if(this.pd.is1){
                 this.pd.isSpecialPerson="1"
@@ -867,7 +867,7 @@ export default {
                        }
                    })
            },
-           getnotin(){
+        getnotin(){
              this.activeNum=0;this.inactiveNum=0;
            let p={
              "pd":this.pd,

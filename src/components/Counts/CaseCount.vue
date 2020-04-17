@@ -11,20 +11,20 @@
 
        <el-row style="line-height:45px; color:#999999">
            <el-col :span="12">
-               <div :class="bt==1?'chover':'ccbl'" style=" float: right;" @click="gethover(1)">按我院</div>
+               <div :class="bt==1?'chover':'ccbl'" style=" float: right;" @click="gethover(1)">我院</div>
            </el-col>
             <el-col :span="12">
-               <div :class="bt==2?'chover':'ccbl'" style=" float: left;" @click="gethover(2)">按全国</div>
+               <div :class="bt==2?'chover':'ccbl'" style=" float: left;" @click="gethover(2)">各高院</div>
            </el-col>
            
        </el-row>
        <el-row class="mt-30">
            <el-col :span="24" v-if='bt==1' style="text-align:center">
                 <el-button class="ccbnt" @click="getOpen(1,'我院办理全国人大代表关注案件情况')" >我院办理全国人大代表关注案件情况</el-button>
-                 <el-button class="ccbnt" @click="getOpen(2,'各高院办理全国人大代表关注案件情况')" >各高院办理全国人大代表关注案件情况</el-button>
+                <el-button class="ccbnt"  @click="getOpen(3,'我院办理全国人大代表关注重点案件情况')" >我院办理全国人大代表关注重点案件情况</el-button>
            </el-col>
            <el-col :span="24"  v-if='bt==2'  style="text-align:center">
-                <el-button class="ccbnt"  @click="getOpen(3,'我院办理全国人大代表关注重点案件情况')" >我院办理全国人大代表关注重点案件情况</el-button>
+                <el-button class="ccbnt" @click="getOpen(2,'各高院办理全国人大代表关注案件情况')" >各高院办理全国人大代表关注案件情况</el-button>
                  <el-button class="ccbnt" @click="getOpen(4,'各高院办理全国人大代表关注重点案件情况')" >各高院办理全国人大代表关注重点案件情况</el-button>
            </el-col>
        </el-row>

@@ -4,9 +4,9 @@
         <el-row>
             <el-col :span="24">
                <span class="yy-input-text trt">领衔人员：</span>
-                   <el-select v-model="spd.leaderPerson" :disabled="sbnt"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                   <el-select v-model="leaderPerson" :disabled="sbnt" @change="getReset(leaderPerson)"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                      <el-option
-                                   v-for="(item,ind) in dbdata"
+                                   v-for="(item,ind) in namelist"
                                    :key="ind"
                                    :label="item.fullName"
                                    :value="item.personId">
@@ -15,7 +15,7 @@
              </el-col>
              <el-col :span="24" class="mt-10">
               <span class="yy-input-text trt topt">意见建议：</span>
-              <el-input placeholder="请输入内容" type="textarea" :disabled="sbnt" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable v-model="spd.contents"  class="yy-input-input inputw" ></el-input>
+              <el-input placeholder="请输入内容" type="textarea" :disabled="sbnt" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable v-model="contents"  class="yy-input-input inputw" ></el-input>
               </el-col>
              <el-col :span="24" class="mt-10"  style="text-align: center;">
                       <el-button type="success" size="small" plain @click="getAdd()">加入列表</el-button>
@@ -45,11 +45,11 @@
              </el-col>
              <el-col :span='24' class="mt-10">
               <span class="yy-input-text trt topt">总体评价：</span>
-              <el-input placeholder="请输入内容" type="textarea" :disabled="sbnt" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable v-model="spd.contenwts"  class="yy-input-input inputw" ></el-input>
+              <el-input placeholder="请输入内容" type="textarea" :disabled="sbnt" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable v-model="spd.overallAssessment"  class="yy-input-input inputw" ></el-input>
               </el-col>
              <el-col :span='24' class="mt-10">
                  <span class="yy-input-text trt topt">备注：</span>
-              <el-input placeholder="请输入内容" type="textarea" :disabled="sbnt" :autosize="{ minRows: 3, maxRows: 3}" size="small" clearable v-model="spd.contentws"  class="yy-input-input inputw" ></el-input>
+              <el-input placeholder="请输入内容" type="textarea" :disabled="sbnt" :autosize="{ minRows: 3, maxRows: 3}" size="small" clearable v-model="spd.remark"  class="yy-input-input inputw" ></el-input>
               </el-col>
         </el-row>
 
@@ -63,30 +63,43 @@
 
 export default {
     name:'SUGGEST',
-    props:['url','data','type','random'],
+    props:['url','data','namelist','type','random'],
     data()
     {
         return{
               spd:{},
-              
+              leaderPerson:'',
               dbdata:[],
               yjlistdata:[],
               sbnt:false,
+              yjdata:[],
+              contents:'',
+              tempdata:[],
           }
     },
     mounted()
     {
+      
+        
         this.getinit();
     },
     watch:{
+      type:function(newVal,oldVal){
+       
+        this.getinit();
+      },
       random:function(newVal,oldVal){
-        
-         this.getinit();
+        this.yjlistdata=[];
+        this.spd={};
+        this.leaderPerson='';
+        this.contents="";
+        this.tempdata=[];
+        this.yjdata=this.data;
       },
     },
     methods:{
         getinit(){
-            this.getLbName();
+         
         },
         //代表、委员以及特约人员列表
          getLbName(){
@@ -103,11 +116,75 @@ export default {
             if(t==0){
                     this.$emit('yjsfatherMethod','99'); 
             }else{
+               
+               if(this.yjlistdata && this.yjlistdata.length==0){
+                   this.$message.error("请输入意见建议");return;
+               }
 
+
+                if(this.yjdata && this.yjdata.length>0){
+                    var ff=false;
+                var index = this.yjdata.findIndex(item =>{
+　　　　　　　　　  if(item.leaderPerson==this.leaderPerson){
+                          ff=true;
+        　　　　　　　　　　return ff;
+        　　　　　　　　　}
+        　　　　　　})
+                 if(ff){this.yjdata.splice(index,1)}
+                 
+                //  console.log(this.yjdata,'this.yjdata删除后',index);
+                 }
+
+                 this.tempdata=[];
+
+                 if(this.yjdata && this.yjdata.length>0){
+
+                   this.tempdata=this.yjdata;
+                  }
+                  var obj={};
+                  obj = this.namelist.find(item =>{
+                        return item.personId === this.leaderPerson
+                    });
+                  
+                  var oobj={};
+                  oobj.leaderPerson=this.leaderPerson;
+                  oobj.leaderPersonName=obj.fullName;
+                  oobj.overallAssessment=this.spd.overallAssessment;
+                  oobj.remark=this.spd.remark
+                  oobj.yjlistdata=this.yjlistdata;
+
+                  this.tempdata.push(oobj);
+                   
+
+                    // console.log(this.tempdata,'tempdata添加后');
+
+                 this.$emit('yjsfatherMethod',this.type,this.tempdata);
             }
 
         },
+       
+         getReset(val){
+            
+             if(this.yjdata.length==0){
+                this.spd={};
+             }else{
+                  var obj={};
+                   obj = this.yjdata.find(item =>{
+                        return item.leaderPerson === val
+                    });
+                
+                   if(obj==undefined){
+                       this.spd={};
+                       this.yjlistdata=[];
 
+                   }else{
+                        this.spd=obj;
+                        this.yjlistdata=obj.yjlistdata;
+                    }
+                
+             }
+
+         },
         delyj(n){
              var arr=[];
                 arr.push(n);
@@ -122,18 +199,17 @@ export default {
                }
         },
         getAdd(){
-            if(this.spd.leaderPerson=='' || this.spd.leaderPerson==null || this.spd.leaderPerson==undefined){
+            if(this.leaderPerson=='' || this.leaderPerson==null || this.leaderPerson==undefined){
                 this.$message.error('请选择领衔人员');return;
             }
-            if(this.spd.contents=='' || this.spd.contents==null || this.spd.contents==undefined){
+            if(this.contents=='' || this.contents==null || this.contents==undefined){
                 this.$message.error('请输入意见建议');return;
             }
             var obj={};
-            obj.leaderPerson=this.spd.leaderPerson;
-            obj.contents=this.spd.contents;
+            obj.leaderPerson=this.leaderPerson;
+            obj.contents=this.contents;
             this.yjlistdata.push(obj);
-            this.$set(this.spd,'leaderPerson','')
-            this.$set(this.spd,'contents','')
+            this.contents='';
         }
 
     },

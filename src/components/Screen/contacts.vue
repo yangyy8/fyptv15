@@ -312,7 +312,7 @@
                                 <div style="margin-top:-17%;margin-left:8%"><img src="../../assets/img/screen/bard.png" width="99%"></div>
                             </div>
                                <div class="fleft chselect">
-                                     <el-select v-model="year" placeholder="请选择" style="width:80px;"   size="mini">
+                                     <el-select v-model="year" placeholder="请选择" style="width:80px;"   size="small">
                                      <el-option
                                         v-for="(item,ind) in yearlist"
                                         :key="ind"

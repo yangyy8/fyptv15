@@ -29,11 +29,35 @@
              </el-col>
               <el-col :span="12">
                <span class="yy-input-text trt">出生日期：</span>
-                <el-date-picker 
+                <!-- <el-date-picker 
                                             v-model="pd.birthday" format="yyyy-MM-dd"
                                             type="date" size="small" value-format="yyyy-MM-dd"
                                             placeholder="选择日期" class="yy-input-input" >
-                     </el-date-picker>
+                     </el-date-picker> -->
+                        <el-select v-model="pd.year"  @change="getZmonth(pd.year);getZday(pd.year,pd.month);" style="width:22%"  filterable clearable default-first-option placeholder="年"  size="small">
+                                            <el-option
+                                                v-for="(item,ind) in byear"
+                                                :key="ind"
+                                                :label="item"
+                                                :value="item">
+                                            </el-option>
+                                         </el-select>
+                                        <el-select v-model="pd.month"   @change="getZday(pd.year,pd.month);" style="width:18%"  filterable clearable default-first-option placeholder="月"  size="small" :no-data-text="pd.year==''|| pd.year==undefined?'先选择年':'无数据'">
+                                            <el-option
+                                                v-for="(item,ind) in bmonth"
+                                                :key="ind"
+                                                :label="item"
+                                                :value="item">
+                                            </el-option>
+                                         </el-select>
+                                         <el-select v-model="pd.day"  style="width:20%"  filterable clearable default-first-option placeholder="日"  size="small" :no-data-text="pd.month==''|| pd.month==undefined?'先选择年月':'无数据'">
+                                            <el-option
+                                                v-for="(item,ind) in bday"
+                                                :key="ind"
+                                                :label="item"
+                                                :value="item">
+                                            </el-option>
+                                         </el-select>
              </el-col>
               <el-col :span="12">
                <span class="yy-input-text trt">手机号码：</span>
@@ -73,7 +97,8 @@
                               </el-table-column>
                                 <el-table-column
                                   prop="birthday"
-                                  label="出生日期">
+                                  label="出生日期"
+                                  width="120">
                               </el-table-column>
                                 <el-table-column
                                   prop="birthPlaceName"
@@ -81,7 +106,8 @@
                               </el-table-column>
                               <el-table-column
                                   prop="orgName"
-                                  label="所属">
+                                  label="所属"
+                                   width="150">
                               </el-table-column>
                              <el-table-column
                                   prop="periodTypeName"
@@ -93,15 +119,18 @@
                               </el-table-column>
                               <el-table-column
                                   prop="partisanName"
-                                  label="党派">
+                                  label="党派"
+                                   width="100">
                               </el-table-column>
                               <el-table-column
                                   prop="mobilePhone"
-                                  label="手机">
+                                  label="手机"
+                                  width="100">
                               </el-table-column>
                               <el-table-column
                                   prop="fixedPhone"
-                                  label="固定电话">
+                                  label="固定电话"
+                                  width="100">
                               </el-table-column>
                              <el-table-column
                                 label="代表照片">
@@ -122,7 +151,7 @@
           </div> 
 </template>
 <script>
-
+import {formatDate,birthdayDay,birthdayMonth,birthdayYear} from '@/assets/js/date.js'
 export default {
     name:'RGZN',
     props:['data','type','random'],
@@ -132,6 +161,9 @@ export default {
            pd:{},
            id:'',
            multipleSelection:[],
+            byear:birthdayYear(),
+            bmonth:[],
+            bday:[],
         }
     },
 
@@ -142,12 +174,21 @@ export default {
     },
     watch:{
       random:function(newVal,oldVal){
-         this.getinit();
+        // this.getinit();
       },
     },
     methods:{
     pdchange(){},
         getinit(){
+            console.log(this.data);
+            if(this.data.year!=undefined && this.data.year!=null ){
+                this.getZmonth(this.data.year);
+                if(this.data.month!=undefined && this.data.month!=null){
+                    this.getZday(this.data.year,this.data.month);
+                }else{
+                    this.$set(this.pd,'day','')
+                }
+            }
             this.pdsearch(this.data)
         },
        clickRow(row){
@@ -160,7 +201,7 @@ export default {
         },
        pdsearch(pp){
         //this.$set(this.pd,'personName',pp.personName)
-        this.pd=pp;
+        this.pd= Object.assign({}, pp);//浅拷贝,用于将所有可枚举属性的值从一个或多个源对象复制到目标对象
         if(this.pd.personName==undefined || this.pd.personName=="")
             {
             this.$message.error("姓名不能为空！");return;
@@ -184,6 +225,27 @@ export default {
                this.$emit('ZNfatherMethod','99',this.type); 
            }
        },
+      getZmonth(y){
+       
+          
+                if(y!='' && y!=null && y!=undefined){
+                     this.bmonth=birthdayMonth();
+                }else{
+                    this.bmonth=[];this.bday=[];
+                    this.$set(this.pd,'month','');
+                    this.$set(this.pd,'day','');
+                }
+            },
+     getZday(y,m){
+       
+                if(y!='' && y!=null && y!=undefined
+                   && m!='' && m!=null && m!=undefined){
+                       this.bday=birthdayDay(y,m);
+                }else{
+                    this.bday=[];
+                    this.$set(this.pd,'day','');
+                }
+            },
     },
 }
 </script>

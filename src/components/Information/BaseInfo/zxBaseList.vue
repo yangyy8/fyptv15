@@ -112,7 +112,7 @@
                     <el-row class="lh" v-if="open">
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">连任</span>
-                            <el-select v-model="pd.reelectionNum" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd.isReelection"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                 <el-option
                                   v-for="(item,ind) in $store.state.sflr"
                                   :key="ind"
@@ -121,10 +121,9 @@
                                   </el-option>
                              </el-select>
                         </el-col>
-                        
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">不再担任</span>
-                           <el-select v-model="pd.isNotHoldReason"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.isNotHoldReasons" multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                    v-for="(item,ind) in $store.state.bzdr"
                                    :key="ind"
@@ -253,7 +252,7 @@
                               <el-checkbox v-model="pd.is3">省部级以上</el-checkbox>
                               <el-checkbox v-model="pd.is4" @change="getZM">专门委员会委员</el-checkbox>
                                <el-checkbox v-model="pd.is5">常委会委员</el-checkbox>
-                               <el-checkbox v-model="pd.is6">不再担任</el-checkbox>
+                               <!-- <el-checkbox v-model="pd.is6">不再担任</el-checkbox> -->
                             
                         </el-col>  
                     </el-row>
@@ -424,7 +423,7 @@ export default {
         this.getinit(this.$route);
         this.getCheckList();
         this.getList(this.CurrentPage, this.pageSize, this.pd);
-        this.getoutin();
+    
     },
     methods:{
            tableRowClassName({row, rowIndex}) {
@@ -602,7 +601,7 @@ export default {
         },
         getList(currentPage, showCount, pd){
            this.changeList();
-        
+            this.getoutin();
             //最高人民法院特约人员
            if(this.pd.is1){
                 this.pd.isSpecialPerson="1"

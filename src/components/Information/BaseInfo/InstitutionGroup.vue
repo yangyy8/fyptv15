@@ -29,7 +29,7 @@
                     </el-col>
                </el-row>
                 <el-row :gutter="2" class="ah-50 pborder mt-20 mb-20" v-if='show'>
-                   <el-col :sm="24" :md="12" :lg="8" v-for="(t,ind) in Data" :key="ind">
+                   <el-col :sm="24" :md="12" :lg="6" v-for="(t,ind) in Data" :key="ind">
                     <span class="address"  @click="getlistto(t.orgid,t.mc)">{{t.mc}}</span>
                   </el-col>
                 </el-row>
@@ -39,7 +39,6 @@
                   </el-col>
                 </el-row>
              </el-col>
-           
             </el-row>
      </div>
       <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false' width="630px">

@@ -340,7 +340,7 @@
                       <el-col :span="8">
                            <span class="yy-input-text">案件编号</span>
                            <el-input placeholder="请输入内容" size="small" :disabled="editshow" clearable v-model="pd1.casenum"  class="yy-input-input" ></el-input> 
-                            <!-- <i class="el-icon-search"></i> -->
+                            <i class="el-icon-search"></i>
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 案件类型</span>
@@ -364,7 +364,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select>
-                         <!-- <i class="el-icon-plus cursor" style="color:red"></i> -->
+                         <i class="el-icon-plus cursor" style="color:red"></i>
                       </el-col>
                       <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 案件状态</span>
@@ -376,7 +376,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select>
-                         <!-- <i class="el-icon-plus cursor" style="color:red"></i> -->
+                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                       <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 利害关系</span>
@@ -388,7 +388,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" style="color:red"></i>
+                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                         <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 是否重点案件</span>
@@ -423,7 +423,7 @@
                            :value="item.orgid">
                            </el-option>
                         </el-select> 
-                        <!-- <i class="el-icon-plus cursor" style="color:red"></i> -->
+                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 涉及法院级别</span>
@@ -435,7 +435,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <!-- <i class="el-icon-plus cursor" style="color:red"></i> -->
+                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 不服本院</span>
@@ -447,7 +447,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <!-- <i class="el-icon-plus cursor" style="color:red"></i> -->
+                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                         <el-col :span="24">
                            <span class="yy-input-text" style="width:11%!important;vertical-align: top;" title="当事人及案由"><font class="red">*</font> 当事人及案由</span>
@@ -538,12 +538,12 @@
                            </el-select>
                      </el-col>
                       <el-col :span="24">
-                        <span class="yy-input-text" style="width:11%!important;vertical-align: top;" >审批意见</span>
+                        <span class="yy-input-text" style="width:11%!important;vertical-align: top;" ><font class="red">*</font>  审批意见</span>
                         <el-input placeholder="请输入内容" :disabled="ckshow || spshow" type="textarea" :autosize="{ minRows: 3, maxRows: 4}" size="small" clearable v-model="pd4.checkcontents"  class="yy-input-input" style="width:86.8%!important;"></el-input>
                                 
                      </el-col>
                       <el-col :span="8">
-                           <span class="yy-input-text">审批人</span>
+                           <span class="yy-input-text"><font class="red">*</font> 审批人</span>
                            <!-- <el-input placeholder="请输入内容" size="small" clearable v-model="pd4.checkuserid"  class="yy-input-input" ></el-input>  -->
                           <el-select v-model="pd4.checkuserid" :disabled="ckshow || spshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -556,7 +556,7 @@
                    
                      </el-col>
                      <el-col :span="8">
-                         <span class="yy-input-text">审批结果</span>
+                         <span class="yy-input-text"><font class="red">*</font> 审批结果</span>
                          <el-select v-model="pd4.checkresult" :disabled="ckshow || spshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in $store.state.spjg"
@@ -567,7 +567,7 @@
                            </el-select>
                      </el-col>
                        <el-col :span="8">
-                                <span class="yy-input-text">审批时间</span>
+                                <span class="yy-input-text"><font class="red">*</font> 审批时间</span>
                                 <el-date-picker :disabled="ckshow || spshow"
                                     v-model="pd4.checktime" format="yyyy-MM-dd"
                                     type="date" size="small" value-format="yyyy-MM-dd"
@@ -605,7 +605,7 @@
                                 <el-input placeholder="自动生成文号" :disabled="true" size="small" clearable v-model="pd2.assigninformno"  class="yy-input-input" ></el-input> 
                              </el-col>
                               <el-col :span="8">
-                                <span class="yy-input-text">转办时间</span>
+                                <span class="yy-input-text"><font class="red">*</font> 转办时间</span>
                                 <el-date-picker :disabled="ckshow" @change="getBJtime(pd2.assigntime)"
                                     v-model="pd2.assigntime" format="yyyy-MM-dd"
                                     type="date" size="small" value-format="yyyy-MM-dd"
@@ -613,7 +613,7 @@
                                 </el-date-picker>
                              </el-col>
                                <el-col :span="8">
-                                <span class="yy-input-text">应办结时间</span>
+                                <span class="yy-input-text"><font class="red">*</font> 应办结时间</span>
                                 <el-date-picker
                                     v-model="bjsj2" format="yyyy-MM-dd" :disabled="ckshow"
                                     type="date" size="small" value-format="yyyy-MM-dd"
@@ -621,7 +621,7 @@
                                 </el-date-picker>
                              </el-col>
                               <el-col :span="8">
-                                <span class="yy-input-text">承办单位</span>
+                                <span class="yy-input-text"><font class="red">*</font> 承办单位</span>
                                     <el-select v-model="pd2.undertakingorgid" :disabled="ckshow" @change="getBM(pd2.undertakingorgid,0),getFYJB(pd2.undertakingorgid,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                         <el-option
                                         v-for="(item,ind) in cbdw"
@@ -643,7 +643,7 @@
                                     </el-select>
                                </el-col>
                                <el-col :span="8">
-                                <span class="yy-input-text">承办部门</span>
+                                <span class="yy-input-text"><font class="red">*</font> 承办部门</span>
                                     <el-select v-model="pd2.undertakingsuborgid" :disabled="ckshow" @change="getCBR('1',pd2.undertakingorgid,pd2.undertakingsuborgid,1);getFYJB(pd2.undertakingorgid,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                         <el-option
                                         v-for="(item,ind) in jdbm"
@@ -654,7 +654,7 @@
                                     </el-select>
                                </el-col>
                                <el-col :span="8">
-                                <span class="yy-input-text">承办人</span>
+                                <span class="yy-input-text"><font class="red">*</font> 承办人</span>
                                     <el-select v-model="pd2.undertakinguserid" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                         <el-option
                                         v-for="(item,ind) in cbrdata1"
@@ -798,7 +798,7 @@
                 <div class="pborder" v-if="zshow3">
                     <el-row class="ah-40">
                        <el-col :span="8">
-                           <span class="yy-input-text">承办单位</span>
+                           <span class="yy-input-text"><font class="red">*</font> 承办单位</span>
                                 <el-select v-model="pd5.undertakingorgid" :disabled="ckshow" @change="getBM(pd5.undertakingorgid,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                     <el-option
                                         v-for="(item,ind) in cbdw"
@@ -809,7 +809,7 @@
                                  </el-select>
                           </el-col>
                      <el-col :span="8">
-                         <span class="yy-input-text">承办部门</span>
+                         <span class="yy-input-text"><font class="red">*</font>  承办部门</span>
                          <el-select v-model="pd5.undertakingsuborgid" :disabled="ckshow" @change="getCBR(2,pd5.undertakingorgid,pd5.undertakingsuborgid,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in jdbm"
@@ -820,7 +820,7 @@
                         </el-select>
                      </el-col>
                       <el-col :span="8">
-                         <span class="yy-input-text">承办人</span>
+                         <span class="yy-input-text"><font class="red">*</font> 承办人</span>
                          <el-select v-model="pd5.undertakinguserid" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in cbrdata2"
@@ -831,7 +831,7 @@
                         </el-select>
                      </el-col>
                         <el-col :span="8">
-                                <span class="yy-input-text">承办时间</span>
+                                <span class="yy-input-text"><font class="red">*</font> 承办时间</span>
                                 <el-date-picker :disabled="ckshow"
                                     v-model="pd5.handletime" format="yyyy-MM-dd"
                                     type="date" size="small" value-format="yyyy-MM-dd"
@@ -2479,6 +2479,23 @@ export default {
                   };        
                break;
              case '1':
+            if(this.pd4.checkcontents==undefined || this.pd4.checkcontents=="")
+              {
+                  this.$message.error("审批意见不能为空！");return;
+              }
+            if(this.pd4.checkuserid==undefined || this.pd4.checkuserid=="")
+              {
+                  this.$message.error("审批人不能为空！");return;
+              }
+           if(this.pd4.checkresult==undefined || this.pd4.checkresult=="")
+              {
+                  this.$message.error("审批结果不能为空！");return;
+              }
+            if(this.pd4.checktime==undefined || this.pd4.checktime=="")
+              {
+                  this.$message.error("审批时间不能为空！");return;
+              }
+
                  url='/CaseCheckController/saveCaseCheck';
               p={
                   'token':this.$store.state.token,
@@ -2488,6 +2505,26 @@ export default {
                   };        
                break;
             case '2':
+              if(this.pd2.assigntime==undefined || this.pd2.assigntime=="")
+              {
+                  this.$message.error("转办时间不能为空！");return;
+              }
+              if(this.bjsj2==undefined || this.bjsj2=="")
+              {
+                  this.$message.error("应办结时间不能为空！");return;
+              }
+              if(this.pd2.undertakingorgid==undefined || this.pd2.undertakingorgid=="")
+              {
+                  this.$message.error("承办单位不能为空！");return;
+              }
+               if(this.pd2.undertakingsuborgid==undefined || this.pd2.undertakingsuborgid=="")
+              {
+                  this.$message.error("承办部门不能为空！");return;
+              }
+            if(this.pd2.undertakinguserid==undefined || this.pd2.undertakinguserid=="")
+              {
+                  this.$message.error("承办人不能为空！");return;
+              }
                  url='/CaseAssignController/saveCaseAssign';
                  this.pd2.assignfinishtime=this.bjsj2;
                 
@@ -2510,6 +2547,22 @@ export default {
                   };   
                break;
               case '3':
+             if(this.pd5.undertakingorgid==undefined || this.pd5.undertakingorgid=="")
+              {
+                  this.$message.error("承办单位不能为空！");return;
+              }
+              if(this.pd5.undertakingsuborgid==undefined || this.pd5.undertakingsuborgid=="")
+              {
+                  this.$message.error("承办部门不能为空！");return;
+              }
+            if(this.pd5.undertakinguserid==undefined || this.pd5.undertakinguserid=="")
+              {
+                  this.$message.error("承办人不能为空！");return;
+              }
+            if(this.pd5.handletime==undefined || this.pd5.handletime=="")
+              {
+                  this.$message.error("承办时间不能为空！");return;
+              }
                  url='/CaseHandleController/saveCaseHandle';
                  p={
                   'token':this.$store.state.token,

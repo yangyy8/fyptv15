@@ -140,9 +140,15 @@ export default {
         this.getinit();
     },
     watch:{
-      random:function(newVal,oldVal){
-        
+      type:function(newVal,oldVal){
+         
          this.getinit();
+      },
+       random:function(newVal,oldVal){
+         this.casepd={};
+         this.casedata=[];
+         this.TotalResult=0;
+       
       },
     },
     methods:{

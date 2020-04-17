@@ -589,6 +589,9 @@ export default {
          clickRow(row){
            this.focusCaseId=row.focuscaseid;
            var num=row.focuscasestatus
+           var  state=row.userCheckPower;
+         
+           
            this.bnt=false;
           
              this.pd3={bnt0:false,bnt1:true,bnt2:true,bnt3:true,bnt4:true,bnt5:true,bnt6:true}
@@ -602,10 +605,11 @@ export default {
             //    催办状态:   5  展示按钮(登记、查看、催办)
            switch (num) {
               case '0':
-                   this.pd3.bnt1=false;
+                  if(state){
+                     this.pd3.bnt1=false;
+                   }
                    break;
               case '2':
-                     
                      this.pd3.bnt2=false;
                      this.pd3.bnt3=false;
                      this.pd3.bnt5=false;
@@ -638,6 +642,9 @@ export default {
                  
                    break;
            }
+
+
+
             
           // this.$refs.multipleTable.toggleRowSelection(row)
            

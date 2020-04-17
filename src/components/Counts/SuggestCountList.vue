@@ -163,7 +163,8 @@
                         </el-table-column>
                          <el-table-column
                             prop="underNature"
-                            label="承办性质">
+                            label="承办性质"
+                            v-if="type!='09' && type!='10' && type!='13' && type!='16'">
                         </el-table-column>
                          <el-table-column
                             prop="innerSubOrg"

@@ -603,8 +603,8 @@
                     </el-row>
                  </div>
                    <!-- 办理信息 -->
-                <div class="ptitle mb-20 mt-20" v-if="zt=='9'">办理信息</div>
-                 <div class="pborder" v-if="zt=='9'">
+                <div class="ptitle mb-20 mt-20" v-if="zt=='9' && blshow">办理信息</div>
+                 <div class="pborder" v-if="zt=='9' && blshow">
                     <el-row class="ah-50">
 
                         <el-col :span="24">
@@ -1187,6 +1187,7 @@ export default {
              Remark:'',
              ctitle:'录入',
              blxxtableData:[],//办理信息
+             blshow:false,
         
 
         }
@@ -1384,6 +1385,7 @@ export default {
          this.ywzllist=[];
          this.lableList=[];
          this.labeladress="";
+         this.blshow=false
 
          
       },
@@ -1439,8 +1441,10 @@ export default {
                           }
                      
                           
-                        if(r.data.processInfo.handVOList!=null){//办理信息
+                        if(r.data.processInfo.handVOList && r.data.processInfo.handVOList.length>0){//办理信息
+                             
                              this.blxxtableData=r.data.processInfo.handVOList;
+                             this.blshow=true;
                          }
 
 
@@ -2072,7 +2076,10 @@ export default {
                  arr.push(n);
                 for (let i = 0; i < arr.length; i++) {
                      var index = this.jbtableData.findIndex(item =>{
-　　　　　　　　　  　 if(item.assignOrgIdName==arr[i].assignOrgIdName){
+　　　　　　　　　  　 if(item.assignOrgIdName==arr[i].assignOrgIdName
+                      && item.assignSubOrgIdName==arr[i].assignSubOrgIdName
+                      && item.assignUserIdName==arr[i].assignUserIdName
+                      && item.assignFinishTime==arr[i].assignFinishTime){
         　　　　　　　　　　　　return true
         　　　　　　　　　　}
         　　　　　　　　})
