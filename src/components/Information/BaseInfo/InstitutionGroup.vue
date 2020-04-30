@@ -22,7 +22,7 @@
                    </el-col>
                     <el-col :span="8" style="text-align:right">
                           <el-button type="primary" style="width:80px" @click="goto(0)"  v-if='allshow[0]'><span>添加</span></el-button>
-                          <el-button type="success" @click="goto('1',orgid)" v-if='orgid!=""'>编辑</el-button>
+                          <el-button type="success" @click="goto('1',orgid)" v-if='orgid!="" && orgid!=null'>编辑</el-button>
                           <el-button @click='getDR'  v-if='allshow[1]'>导入</el-button>
                           <el-button style="width:80px" @click="goseach()"  v-if='allshow[2]'>查询</el-button>
                           <el-button style="width:80px" @click="goback()" v-if='back'>返回</el-button>
@@ -114,6 +114,8 @@ export default {
                this.orgid=this.info.orgid;
                this.orgmc=this.info.orgmc;
                this.num=this.info.num;
+              
+               
              
                }catch(e){
                    this.$router.push({name:'limitmsg',query:{msg:'该地址参数不对！'}});
@@ -135,7 +137,6 @@ export default {
                           if(r.code==1 && r.data!=null){
                             for (let i = 0; i < this.alldata.length; i++) {
                                 this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
-                            
                             }   
                              this.getLb();
                              this.getInfo();
@@ -365,9 +366,8 @@ export default {
       },
    getList(){
 
-        if(this.orgid!='' && this.orgmc!=''){
+        if(this.orgid!='' && this.orgmc!='' && this.num!=undefined){
           
-            
            this.getListBM(this.orgid,this.orgmc);
         }else{
             let p={
@@ -389,26 +389,38 @@ export default {
         }
        },
   getlistto(id,mc){
-      
-       let p={
-          'cname1':this.cname1,
-          'cname2':this.cname2,
-          'cname3':this.cname3,
-          'cname4':this.cname4,
-          'mzname':this.mzname,
-          'title':this.title,
-          'type':this.addtype,
-          'code':this.code,
-          'mc':this.mc,
-          'jb':this.jb,
-          'lx':this.lx,
-          'orgid':id,
-          'orgmc':mc,
-          'num':this.num+1,
-        
-      }
-    var str=Base64.encode(JSON.stringify(p));
-    this.$router.push({path:'InstitutionGroup',query:{info:str}});
+       let pp={
+                'orgId':id,
+            };
+            this.$api.get(this.Global.aport1+'/org/getSubDept',pp,
+            r=>{
+                if(r.code==1){
+                    if(r.data && r.data.length>0){
+                         let p={
+                        'cname1':this.cname1,
+                        'cname2':this.cname2,
+                        'cname3':this.cname3,
+                        'cname4':this.cname4,
+                        'mzname':this.mzname,
+                        'title':this.title,
+                        'type':this.addtype,
+                        'code':this.code,
+                        'mc':this.mc,
+                        'jb':this.jb,
+                        'lx':this.lx,
+                        'orgid':id,
+                        'orgmc':mc,
+                        'num':this.num+1,
+                        
+                    }
+                    var str=Base64.encode(JSON.stringify(p));
+                    this.$router.push({path:'InstitutionGroup',query:{info:str}});
+                  }else{
+                       this.goto(1,id,mc);
+                  }
+
+                }
+            });
   },
    getListBM(id,mc){
       
@@ -426,8 +438,6 @@ export default {
                         //  this.num++;
                          this.back=true;
                          this.Data=r.data;
-                    }else{
-                        this.goto(1,id);
                     }
                 }
             })
@@ -455,15 +465,16 @@ export default {
     //    }
     },
   
-      goto(t,id){
- var tt="";
- if(this.title==""){
-     tt=this.cname4;
- }
+      goto(t,id,mc){
+            var tt=this.cname4;
+            mc=mc==undefined?"":mc;
+            if(this.title!="" || mc!=''){
+                tt=this.cname4+mc;
+            }
              if(t==1){
                 this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'1',jgid:id,title:tt,lx:this.lx,num:this.num}});
             }else if(t==0){
-                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:tt,jb:this.jb,xzqh:this.code,lx:this.lx,num:this.num}});
+                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:tt,jb:this.jb,xzqh:this.code,lx:this.lx,num:this.num,cdx:1}});
             }
         },
      goseach(){

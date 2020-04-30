@@ -75,7 +75,7 @@ export default {
           drDialogVisible:false,
           vvurl:'/courtPerson/import',
           vvurlErr:'',
-           alldata:[],
+          alldata:[],
           allshow:[],
           depid:'',
           

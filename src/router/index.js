@@ -38,6 +38,11 @@ export default new Router({
       component: resolve => require(['@/components/Screen/suggtions'], resolve),
     },
     {
+      path: '/activities',
+      name: 'activities',
+      component: resolve => require(['@/components/Screen/activities'], resolve),
+    },
+    {
       path: '/followcase',
       name: 'followcase',
       component: resolve => require(['@/components/Screen/followcase'], resolve),
@@ -62,6 +67,11 @@ export default new Router({
           path: '/limitmsg',
           name: 'limitmsg',
           component: resolve => require(['@/components/limitmsg'], resolve),
+        },
+        {
+          path: '/construction',
+          name: 'construction',
+          component: resolve => require(['@/components/construction'], resolve),
         },
        
         // LiaisonWork(联络工作)  PairWork(结对活动)  AnnualWork(年度工作总结)

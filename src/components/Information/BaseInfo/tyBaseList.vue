@@ -26,36 +26,33 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">政治面貌</span>
-                           <el-select v-model="pd.partisans" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                               <el-option
-                                 v-for="(item,ind) in $store.state.dp"
-                                 :key="ind"
-                                 :label="item.mc"
-                                 :value="item.dm">
-                                 </el-option>
-                            </el-select>
+                            <span class="yy-input-text">出生日期</span>
+                            <div class="yy-input-input  t-flex  t-date">
+                                <el-date-picker
+                                v-model="pd.beginBirthday" format="yyyy-MM-dd"
+                                type="date" size="small" value-format="yyyy-MM-dd"
+                                placeholder="开始时间" >
+                                </el-date-picker>
+                                <span class="septum">-</span>
+                                <el-date-picker
+                                    v-model="pd.endBirthday" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="结束时间" >
+                                </el-date-picker>
+                            </div>
                         </el-col>
-                        
-                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">届别</span>
-                           <el-select v-model="pd.periodTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                               <el-option
-                                 v-for="(item,ind) in jblist"
-                                 :key="ind"
-                                 :label="item.mc"
-                                 :value="item.dm">
-                                 </el-option>
-                            </el-select>
-                        </el-col>
-                       
-                          <!-- <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">连任届数</span>
-                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.reelectionNum"  class="yy-input-input" ></el-input>
-                        </el-col> -->
-                        
+                      <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">所属单位</span>
+                             <el-select v-model="pd.orgId" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                      <el-option
+                                        v-for="(item,ind) in ssdwdata"
+                                        :key="ind"
+                                        :label="item.mc"
+                                        :value="item.orgid">
+                                      </el-option>
+                              </el-select>
+                        </el-col>  
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">层级</span>
                             <el-select v-model="pd.levelType" multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -66,22 +63,8 @@
                                        :value="item.dm">
                                      </el-option>
                              </el-select>
-                        </el-col>
-                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">所属单位</span>
-                             <el-select v-model="pd.orgId" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                                      <el-option
-                                        v-for="(item,ind) in ssdwdata"
-                                        :key="ind"
-                                        :label="item.mc"
-                                        :value="item.orgid">
-                                      </el-option>
-                              </el-select>
-                        </el-col>    
-                     
-                                              
-                    </el-row>
-                    <el-row class="lh" v-if="open" :gutter="2">
+                        </el-col> 
+                       
                           <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">特约职务</span>
                            <el-select v-model="pd.specialTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -93,6 +76,86 @@
                                  </el-option>
                             </el-select>
                         </el-col>
+                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">届别</span>
+                           <el-select v-model="pd.periodTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in jblist"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                                 </el-option>
+                            </el-select>
+                        </el-col>
+                     <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">省部级以上</span>
+                            <el-select v-model="pd.isProvincial"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                <el-option
+                                  v-for="(item,ind) in $store.state.sbjys"
+                                  :key="ind"
+                                  :label="item.mc"
+                                  :value="item.dm">
+                                  </el-option>
+                             </el-select>
+                    </el-col>
+                    <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">在京</span>
+                            <el-select v-model="pd.isInBeijing"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                <el-option
+                                  v-for="(item,ind) in $store.state.zjqf"
+                                  :key="ind"
+                                  :label="item.mc"
+                                  :value="item.dm">
+                                  </el-option>
+                             </el-select>
+                    </el-col>   
+                    </el-row>
+                     <el-row class="lh" v-if="open" :gutter="2">
+                     <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">政治面貌</span>
+                           <el-select v-model="pd.partisans" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in $store.state.dp"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                                 </el-option>
+                            </el-select>
+                        </el-col>
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">民族</span>
+                           <el-select v-model="pd.nationalitys" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in $store.state.mz"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                                 </el-option>
+                            </el-select>
+                        </el-col>
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">籍贯</span>
+                           <el-select v-model="pd.birthPlaces" multiple @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in xzdata"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                                 </el-option>
+                            </el-select>
+                        </el-col>
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">学历</span>
+                           <el-select v-model="pd.education" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in $store.state.xl"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                                 </el-option>
+                            </el-select>
+                        </el-col>
+                  
                             <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">推荐单位</span>
                            <el-select v-model="pd.recommendedUnitsIDs" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -104,17 +167,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">民族</span>
-                           <el-select v-model="pd.nationalitys" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                               <el-option
-                                 v-for="(item,ind) in $store.state.mz"
-                                 :key="ind"
-                                 :label="item.mc"
-                                 :value="item.dm">
-                                 </el-option>
-                            </el-select>
-                        </el-col>
+                         
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">职业类别</span>
                            <el-select v-model="pd.jobTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -135,45 +188,51 @@
                             <span class="yy-input-text">社会职务</span>
                              <el-input placeholder="请输入内容" size="small" clearable v-model="pd.socialDuty"  class="yy-input-input" ></el-input>
                         </el-col>
-                        
-                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">学历</span>
-                           <el-select v-model="pd.education" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                               <el-option
-                                 v-for="(item,ind) in $store.state.xl"
-                                 :key="ind"
-                                 :label="item.mc"
-                                 :value="item.dm">
-                                 </el-option>
-                            </el-select>
-                        </el-col>
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">籍贯</span>
-                           <el-select v-model="pd.birthPlaces" multiple @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <span class="yy-input-text">身份</span>
+                           <el-select v-model="pd.sf" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
-                                 v-for="(item,ind) in xzdata"
+                                 v-for="(item,ind) in $store.state.tysf"
                                  :key="ind"
                                  :label="item.mc"
                                  :value="item.dm">
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">出生日期</span>
+                        
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">增补
+                                 <el-checkbox v-model="pd1.is1" ></el-checkbox>
+                            </span>
                             <div class="yy-input-input  t-flex  t-date">
-                                <el-date-picker
-                                v-model="pd.beginBirthday" format="yyyy-MM-dd"
+                                <el-date-picker :disabled="!pd1.is1"
+                                v-model="pd.beginRepairTime" format="yyyy-MM-dd"
                                 type="date" size="small" value-format="yyyy-MM-dd"
                                 placeholder="开始时间" >
                                 </el-date-picker>
                                 <span class="septum">-</span>
-                                <el-date-picker
-                                    v-model="pd.endBirthday" format="yyyy-MM-dd"
+                                <el-date-picker :disabled="!pd1.is1"
+                                    v-model="pd.endRepairTime" format="yyyy-MM-dd"
                                     type="date" size="small" value-format="yyyy-MM-dd"
                                     placeholder="结束时间" >
                                 </el-date-picker>
                             </div>
                         </el-col>
+                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">解聘
+                                 <el-checkbox v-model="pd1.is2" ></el-checkbox>
+                            </span>
+                                <el-select v-model="pd.fireReasons" :disabled="!pd1.is2" multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                                  <el-option
+                                                     v-for="(item,ind) in $store.state.jpyy"
+                                                     :key="ind"
+                                                     :label="item.mc"
+                                                     :value="item.dm">
+                                                  </el-option>
+                                     </el-select>
+                          </el-col>
+                       
+                        
                          
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属巡回法庭</span>
@@ -187,41 +246,16 @@
                             </el-select>
                            
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">增补区分</span>
-                           <el-select v-model="pd.repair" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                               <el-option
-                                 v-for="(item,ind) in $store.state.bxqf"
-                                 :key="ind"
-                                 :label="item.mc"
-                                 :value="item.dm">
-                                 </el-option>
-                            </el-select>
-                        </el-col>
-                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">增补时间</span>
-                            <div class="yy-input-input  t-flex  t-date">
-                                <el-date-picker
-                                v-model="pd.beginRepairTime" format="yyyy-MM-dd"
-                                type="date" size="small" value-format="yyyy-MM-dd"
-                                placeholder="开始时间" >
-                                </el-date-picker>
-                                <span class="septum">-</span>
-                                <el-date-picker
-                                    v-model="pd.endRepairTime" format="yyyy-MM-dd"
-                                    type="date" size="small" value-format="yyyy-MM-dd"
-                                    placeholder="结束时间" >
-                                </el-date-picker>
-                            </div>
-                        </el-col>
-                        <el-col :sm="24" :md="12" :lg="24">
+                       
+                        
+                        <!-- <el-col :sm="24" :md="12" :lg="24">
                          
                             <el-checkbox v-model="pd.is1">人大代表</el-checkbox>
                             <el-checkbox v-model="pd.is2">政协委员</el-checkbox>
                             <el-checkbox v-model="pd.is3">在京特约人员</el-checkbox>
                             <el-checkbox v-model="pd.is4">省部级以上</el-checkbox>
                             
-                        </el-col>  
+                        </el-col>   -->
                     </el-row>
                   
                 </div>
@@ -336,6 +370,7 @@ export default {
             pageSize: 10,
             TotalResult: 0,
             pd:{},
+            pd1:{is1:false,is2:false},
             options:this.pl.ps,
             open:false,
             all:true,
@@ -383,9 +418,13 @@ export default {
         this.$store.dispatch("getSydw");
         this.$store.dispatch("getFydw");
         this.$store.dispatch("getFyjb");
+        this.$store.dispatch("getSbjys");
+        this.$store.dispatch("getZjqf");
+        this.$store.dispatch('getJpyy');
+        this.$store.dispatch('getTysf');
         this.getinit(this.$route);
         this.getCheckList();
-        this.getList(this.CurrentPage, this.pageSize, this.pd);
+        //this.getList(this.CurrentPage, this.pageSize, this.pd);
     },
     methods:{
         clickRow(row){
@@ -490,7 +529,8 @@ export default {
             }
         },
         reset(){
-            this.pd={is1:false,is2:false,is3:false,is4:false};
+            this.pd={};
+            this.pd1={is1:false,is2:false};
         },
         getAll(n){
             if(n==1){
@@ -547,23 +587,33 @@ export default {
         },
         getList(currentPage, showCount, pd){
           this.changeList();
-           //全国人大代表
-           if(this.pd.is1){
-               this.pd.isRepresentative="1";
-           }
-           //全国政协委员
-           if(this.pd.is2){
-               this.pd.isCppcMember="1";
-           }
+          //  //全国人大代表
+          //  if(this.pd.is1){
+          //      this.pd.isRepresentative="1";
+          //  }
+          //  //全国政协委员
+          //  if(this.pd.is2){
+          //      this.pd.isCppcMember="1";
+          //  }
 
-           //在京特约人员
-           if(this.pd.is3){
-               this.pd.isInBeijing="0209000001";
+          //  //在京特约人员
+          //  if(this.pd.is3){
+          //      this.pd.isInBeijing="0209000001";
+          //  }
+          //  //省部级以上领导
+          //    if(this.pd.is4){
+          //       this.pd.isProvincial="0181000001"
+          //  }
+           //补选
+           if(this.pd1.is1){
+               this.pd.repair="0272000001"
            }
-           //省部级以上领导
-             if(this.pd.is4){
-                this.pd.isProvincial="0181000001"
+           //补选
+           if(this.pd1.is2){
+               this.pd.fire="0292000001"
            }
+          
+
           let p={
              "pd":this.pd,
              "pageInfo":{

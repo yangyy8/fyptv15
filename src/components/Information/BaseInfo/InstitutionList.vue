@@ -606,4 +606,7 @@ export default {
    line-height:40px!important;
  }
  </style>
+ <style scoped>
+  .yy-input-text{font-size: 14px;}
+  </style>
  

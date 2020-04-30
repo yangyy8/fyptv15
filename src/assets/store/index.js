@@ -26,6 +26,7 @@ export default new Vuex.Store({
         personid:localStorage.getItem('PERSONID') || '',//PERSONID
         auth:localStorage.getItem('AUTH') || '',//权限组
         repeat:localStorage.getItem('REPEAT') || '',//判断菜单是否重复点击
+        yxdate:localStorage.getItem('YXDATE') || '',//影像忽略时间
         gjdq:[],//国家地区
         xb:[],//性别 
         lwqj:[],//来文期间
@@ -116,6 +117,9 @@ export default new Vuex.Store({
         tysf:[],//特约身份
         zfxwjb:[],//转发新闻级别
         lxss:[],//联系形式
+        cwhwy:[],//常委会委员区分
+        sbjys:[],//省部级以上领导区分
+        zjqf:[],//在京区分
       },
       mutations: {
         //state代表了最开始存放的区域，即驱动应用的数据源
@@ -190,6 +194,10 @@ export default new Vuex.Store({
         getRepeat(state, data) {
           localStorage.setItem('REPEAT', data)
           state.repeat = data;
+        },
+        getYxdate(state, data) {
+          localStorage.setItem('YXDATE', data)
+          state.yxdate = data;
         },
         getGjdq(state, data) {
           state.gjdq = data;
@@ -462,6 +470,15 @@ export default new Vuex.Store({
         },
         getLxss(state,data){
           state.lxss = data;
+        },
+        getCwhwy(state,data){
+          state.cwhwy = data;
+        },
+        getSbjys(state,data){
+          state.sbjys = data;
+        },
+        getZjqf(state,data){
+          state.zjqf = data;
         },
       },
       actions: {
@@ -1014,6 +1031,24 @@ export default new Vuex.Store({
           api.get(global_.aport4 + global_.lxss, null,
             r => {
               context.commit('getLxss', ToArray(r.data))
+          })
+        },
+        getCwhwy(context) {
+          api.get(global_.aport4 + global_.cwhwy, null,
+            r => {
+              context.commit('getCwhwy', ToArray(r.data))
+          })
+        },
+        getSbjys(context) {
+          api.get(global_.aport4 + global_.sbjys, null,
+            r => {
+              context.commit('getSbjys', ToArray(r.data))
+          })
+        },
+        getZjqf(context) {
+          api.get(global_.aport4 + global_.zjqf, null,
+            r => {
+              context.commit('getZjqf', ToArray(r.data))
           })
         },
       }

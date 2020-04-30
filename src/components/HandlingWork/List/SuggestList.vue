@@ -448,7 +448,8 @@
                                 v-for="(val,i) in configHeader" 
                                 :key="i"
                                 :prop="val.code"
-                                :label="val.label">
+                                :label="val.label"
+                                >
                             </el-table-column>
                            </el-table>
                            <div class="middle-foot">

@@ -54,7 +54,7 @@
 import {getYear} from '@/assets/js/date.js'
 export default {
     name:'UPLOAD',
-    props:['url','type','urlErr','periodType','proposalType','random'],
+    props:['url','type','urlErr','periodType','proposalType','specialType','random'],
     data(){
         return{
         actions:this.Global.uploads+this.url,
@@ -207,8 +207,9 @@ export default {
              this.fileData.append('filetype',this.type);
              this.fileData.append("personRelFileType",this.type);
 
-              if(this.periodType!=null){
+              if(this.periodType!=null && this.specialType!=null){
                 this.fileData.append("periodType",this.periodType);
+                this.fileData.append('specialType',this.specialType);
               }else if(this.type=='1000'){
                 this.fileData.append("periodType",this.periodTypes);
               }
@@ -219,9 +220,9 @@ export default {
               }
               if(this.error==1){return;}
               
-
                this.$api.post(this.actions, this.fileData,
                   r => {
+
                     if(r.code==1){
                         if(this.type.length==10 || this.periodType!=null || this.periodTypes!=""){
                         
@@ -250,9 +251,15 @@ export default {
                               
                             }
                         }
-                    }else if(code==3){
-                        window.location.href=r.message;
+                    }else if(r.code==3){
+
+                      this.$message.error(r.message);
+                      if(r.data!=null){
+                         window.location.href=r.data;
+                       }
                     }else{
+                   
+                      
                         this.$message.error(r.message);
                     }
                   })

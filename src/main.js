@@ -18,6 +18,8 @@ import 'video.js/dist/video-js.css';
 import 'vue-video-player/src/custom-theme.css'
 import DonMessage from '@/./assets/js/message.js'
 import interfaces from '@/./assets/js/interfaces.js'
+import 'default-passive-events'
+import "babel-polyfill"
 Vue.use(VideoPlayer)
 Vue.use(interfaces)
 Vue.prototype.$message = DonMessage

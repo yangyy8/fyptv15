@@ -84,8 +84,8 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                         <el-col :sm="24" :md="12" :lg="8" v-if="(addtype=='1' || addtype=='2') && jb==null">
-                            <span class="yy-input-text"> 委员会</span>
+                         <el-col :sm="24" :md="12" :lg="8" v-if="(addtype=='1' || addtype=='2') && (jb==null || cdx==1)">
+                            <span class="yy-input-text"><font class="red">&ensp;</font> 委员会</span>
                            <el-select v-model="pd.zmwyh" :disabled="ck || pd.sfbm=='0223000001'"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in  $store.state.jgwyh "
@@ -108,7 +108,7 @@
                             <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.qh"  class="yy-input-input" ></el-input>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text"><font class="red">*</font> 固定电话</span>
+                            <span class="yy-input-text"><font class="red" v-if='addtype!="7"'>*</font> <font class="red" v-else>&ensp;</font> 固定电话</span>
                             <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.zxdm"  class="yy-input-input" ></el-input>
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8">
@@ -122,7 +122,7 @@
                     <!-- </el-row>
                      <el-row class="lh con"> -->
                           <el-col :sm="24" :md="12" :lg="16">
-                            <span class="yy-input-text" style="width:13.5%;"><font class="red">*</font> 地址</span>
+                            <span class="yy-input-text" style="width:13.5%;"><font class="red" v-if='addtype!="7"'>*</font> <font class="red" v-else>&ensp;</font> 地址</span>
                              <el-input placeholder="请输入内容" :disabled="ck" size="small" clearable v-model="pd.dz"  class="yy-input-input" style="width:80%!important;"></el-input>
                         </el-col>
                     </el-row>
@@ -139,6 +139,7 @@
                            <el-table
                             ref="multipleTable"
                             :data="tableData"
+                            :row-class-name="tableRowClassName"
                             @row-click="clickRow"
                             @selection-change="changeFun">
                             <el-table-column
@@ -207,7 +208,7 @@
                          </el-option>
                         </el-select> -->
                     </el-col>
-                     <el-col :span="24">
+                     <!-- <el-col :span="24">
                           <span class="yy-input-text trt">部门：</span>
                             <el-select v-model="form.subOrgId" @change="getSelectName(form.isOutContactPerson,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -217,7 +218,7 @@
                                  :value="item.orgid">
                                  </el-option>
                      </el-select>
-                    </el-col>
+                    </el-col> -->
                      <el-col :span="24">
                           <span class="yy-input-text trt"><font class="red">*</font> 职务：</span>
                          <el-input   placeholder="请输入内容"  v-model="form.position" class="yy-input-input" maxlength="13" size="small"></el-input>
@@ -265,11 +266,8 @@
        </el-dialog>
  <el-dialog title="智能搜索" :visible.sync="znDialogVisible" :close-on-click-modal='false'>
      <RGZN  :type="1" :data="zndata"  @ZNfatherMethod="ZNfatherMethod" :random="new Date().getTime()"></RGZN>
-     <div slot="footer" class="dialog-footer">
-              <el-button @click="znDialogVisible = false" size="small">取 消</el-button>
-            </div>
    </el-dialog>
-<br/>
+  <br/>
          </div>
     </div>
 </template>
@@ -310,6 +308,8 @@ export default {
             cbbm:[],
             lx:'',
             num:2,
+            cdx:0,
+            nowindex:null,
         }
     },
    
@@ -338,6 +338,7 @@ export default {
             this.cname1=val.query.title;
             this.jb=val.query.jb;
             this.lx=val.query.lx;
+            this.cdx=val.query.cdx;
             this.num=val.query.num;
             if(val.query.xzqh!=null && val.query.xzqh!=undefined){
                 this.xzqh=val.query.xzqh;
@@ -453,7 +454,12 @@ export default {
                this.getList();
 
         },
+        tableRowClassName({row, rowIndex}){
+                row.index = rowIndex;
+        },
          clickRow(row){
+         
+           this.nowindex=row.index;
            this.$refs.multipleTable.toggleRowSelection(row)
         },
         remoteMethod(query){
@@ -490,7 +496,14 @@ export default {
         },
           ZNfatherMethod(data,type){
 
-            this.znDialogVisible=false;
+             if(data){
+                 console.log(data.job,data.fixedPhone);
+                 
+                 this.$set(this.form,'position',data.job);
+                 this.$set(this.form,'outsideLine',data.fixedPhone);
+                 console.log(this.form.outsideLine);
+             }
+             this.znDialogVisible=false;
             
             },
          getZNSB(){
@@ -558,6 +571,8 @@ export default {
               }
      
             if(obj.xzqh!=undefined && obj.xzqh!=null && this.pd.sfbm=='0223000001'){
+           
+                
                 this.getxzqh(obj.lvl,obj.xzqh);
             }
           },
@@ -590,7 +605,9 @@ export default {
                        if(this.multipleSelection.length>1){
                                this.$message.error("只能选择一条信息！");return;
                        }
-                       this.form=this.multipleSelection[0];
+                       console.log(this.multipleSelection[0],this.nowindex);
+                       
+                       this.form=Object.assign({},this.multipleSelection[0]);
                        this.lxrdia="编辑联系人";
                    }else{
                         if(this.multipleSelection.length>1){
@@ -621,12 +638,18 @@ export default {
             if(this.form.mobilePhone.length<11){
                 this.$message.error("手机号码不正确！");return;
             }
+                if(this.tb==0){
+                    this.tableData.push(this.form);
+                    this.tableData=this.unique(this.tableData);
+                }else{
+                    this.$set(this.tableData,this.nowindex,this.form);
+                }
+                 
 
-                     this.tableData.push(this.form);
-                     this.tableData=this.unique(this.tableData);
                      this.addDialogVisible=false;
                      
             },
+
             del(){
             this.$confirm('此操作将删除该信息, 是否继续?', '提示', {
                 confirmButtonText: '确定',
@@ -658,7 +681,7 @@ export default {
             },
           getList()
           {     
-              this.getLWDW();
+              this.getLWDW('0223000002');
               let p={
                   'orgId':this.jgid,
               };
@@ -670,10 +693,7 @@ export default {
                           
                            this.getLWDW(this.pd.sfbm);
                         //    this.getJB(this.pd.sj);
-                           if(this.pd.xzqh!=null && this.pd.xzqh!=''){
-                            
-                               this.getxzqh(null,this.pd.xzqh);
-                           }
+                          
 
                            this.tableData=r.data.contactVOS;
                       }
@@ -682,38 +702,30 @@ export default {
           submit(){
              if(this.pd.mc=="" || this.pd.mc==undefined)
              {
-                  
-                    this.$message.error('机构名称不能为空'); 
-                    return;
+                   this.$message.error('机构名称不能为空'); return;
              }
            
              if(this.pd.sfbm=="" || this.pd.sfbm==undefined)
              {
-                
-                    this.$message.error('是否部门不能为空'); 
-                    return;
+                this.$message.error('是否部门不能为空'); return;
              }
            
               if((this.pd.sj=="" || this.pd.sj==undefined) && this.pd.sfbm=="0223000002")
              {
-                 
-                    this.$message.error('机构隶属不能为空');
-                    return;
+                 this.$message.error('机构隶属不能为空');return;
              }
+
+            if(this.addtype!='7'){
            
                if(this.pd.zxdm=="" || this.pd.zxdm==undefined)
              {
-                
-                    this.$message.error('固定电话不能为空');
-                    return;
+                this.$message.error('固定电话不能为空'); return;
              }
               if(this.pd.dz=="" || this.pd.dz==undefined)
              {
-                  
-                    this.$message.error('地址不能为空');
-                    return;
+                   this.$message.error('地址不能为空');return;
              }
-
+            }
 
              this.pd.contacts=this.tableData;
              this.pd.lb=this.lb;
@@ -794,6 +806,17 @@ export default {
                           if(r.data.defaultId!=''){
                               this.$set(this.pd,'sj',r.data.defaultId);
                           }
+
+                        //   if(this.status!='0'){
+                        //        var obj = {};
+                        //         obj = this.jgdata.find(item =>{
+                        //             return item.value === this.sj;
+                        //         });
+                        //        if(this.pd.xzqh!=null && this.pd.xzqh!=''){
+
+                        //           this.getxzqh(obj.lvl,this.pd.xzqh);
+                        //        }
+                        //   }
                       
                     }
                 });

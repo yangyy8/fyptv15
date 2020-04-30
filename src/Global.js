@@ -2,6 +2,7 @@ const aport1="";//李志鹏
 const aport2="";//任智强
 const aport3="";//刘逸文
 const aport4=window.IPConfig.Login;//用户管理
+const aporttj=window.IPConfig.TJ+'/risk/analysis';//统计分析
 const uploads=window.IPConfig.IP;
 const fycount=3;//分页
 const imgformat="jpg,jpeg,png";//图片格式
@@ -90,6 +91,9 @@ const fyywlx=zddz+"dic_ioex_courtnewstype";//法院要闻类型
 const fyywly=zddz+"dic_ioex_courtnewssource";//法院要闻来源
 const bxqf=zddz+"dic_ioex_supplementdistinction";//补选区分
 const jpyy=zddz+"dic_ioex_dismissalreason";//解聘原因
+const cwhwy=zddz+"dic_osbu_standcommitteedistinguish";//常委会委员区分
+const sbjys=zddz+"dic_osbu_provincialdistinguish";//省部级以上领导区分
+const zjqf=zddz+'dic_osbu_inbeijingdistinguish';//在京区分
 const qxnbj=zddz+"dic_osbu_intimecompleteddistinguish";//期限内办结区分
 const tyjdytjdw=zddz+"dic_ioex_supervisorrecommendedunit";//特约监督员推荐单位
 const tyzxytjdw=zddz+"dic_ioex_consultantrecommendedunit";//特邀咨询员推荐单位
@@ -97,8 +101,8 @@ const sydw="/org/getAllOrg";//所有单位
 const fydw="/org/getCourtOrg";//法院单位
 const rddw="/org/getCourtOrg";//人大单位
 const zxdw="/org/getCourtOrg";//政协单位
-const tysf=zddz+"dic_ioex_specialIdentitytype";//身份  人大代表【同时间的身份】、政协委员【同时间的身份】、各界人士
-const zfxwjb=zddz+"dic_ioex_forwardmediaLevel";//转发新闻级别
+const tysf=zddz+"dic_ioex_specialidentitytype";//身份  人大代表【同时间的身份】、政协委员【同时间的身份】、各界人士
+const zfxwjb=zddz+"dic_ioex_forwardmedialevel";//转发新闻级别
 const lxss=zddz+"dic_ioex_contactdistinction";//联系形式
 
 const jburl="/sessionType"//届别地址
@@ -144,7 +148,7 @@ const GSL="0227000014";//工商联
 const TL="0227000015";//台联
 export default
 {
-    aport1,aport2,aport3,uploads,aport4,xb,lwqj,ajlx,sljd,lhgx,fyjb,bfby,zbxs,bjjg,jb,cb,
+    aport1,aport2,aport3,uploads,aport4,xb,lwqj,ajlx,sljd,lhgx,fyjb,bfby,zbxs,bjjg,jb,cb,aporttj,
     ajzt,xxcz,spjg,jgydbyj,gtxs,gtxg,dfxs,dfxz,cbxs,lwlylb,xzqh,tyry,tb,jjb,dp,jbb,
     mz,xl,zylb,zmwyh,bzdr,hdlx,hdfs,tylb,zzfl,dwlxr,jg,sfbm,taywzl,yalx,cblb,cbxz,taxs,
     dflx,zdywfl,tgxs,gkqf,zdqf,scfl,xwdwfl,xwdwjb,xw,sydw,fydw,rddw,zxdw,tazz,zdaj,imgformat,
@@ -152,5 +156,5 @@ export default
     cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,menuurl,
     REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL,jpyy,tysf,tyjburl,
     MZDP1,MZDP2,MZDP3,MZDP4,MZDP5,MZDP6,MZDP7,MZDP8,sflr,jdqf,jburl,tburl,jjburl,tylburl,bxqf,zfxwjb,
-    lxss,
+    lxss,cwhwy,sbjys,zjqf,
 }

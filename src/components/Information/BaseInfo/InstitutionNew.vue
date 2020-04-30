@@ -18,7 +18,7 @@
                        <div class="title">{{cname4!=''?cname4:cname3}}{{title}}</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
-                          <el-button type="primary" style="width:80px" @click="goBase()" v-if='allshow[0]'><span>录入</span></el-button>
+                          <el-button type="primary" style="width:80px" @click="goBase()" v-if='allshow[0]'><span>添加</span></el-button>
                           <el-button @click='getDR' v-if='allshow[1]'>导入 </el-button>
                           <el-button style="width:80px" @click="goseach()" v-if='allshow[2]'>查询</el-button>
                            
@@ -176,6 +176,7 @@ export default {
           'mc':mc,
           'jb':this.jb,
           'lx':this.lx,
+          
       }
     var str=Base64.encode(JSON.stringify(p));
     this.$router.push({path:'InstitutionGroup',query:{info:str}});

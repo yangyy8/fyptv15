@@ -17,12 +17,26 @@
                     </el-col>
                     </el-row>
                       <el-row class="ah-40">
-                          <el-col :span="12">
+                          
+                        <el-col :span="12">
+                            <span class="yy-input-text trt"> 届别：</span>
+                             <el-select v-model="form1.periodType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                            <el-option
+                                                v-for="(item,ind) in $store.state.jb"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.dm">
+                                            </el-option>
+                                         </el-select>
+                         </el-col>
+                      </el-row>
+                       <el-row class="ah-40">
+                         <el-col :span="12">
                             <span class="yy-input-text trt"><font class="red">*</font> 代表姓名：</span>
                             <el-input placeholder="请输入内容" size="small" clearable v-model="form1.jointperson"  class="yy-input-input" ></el-input>
                          </el-col>
                           <el-col :span="12">
-                             <el-button type="primary" size="small" @click="getLmName(form1.jointperson)">检索</el-button>
+                             <el-button type="primary" size="small" @click="getLmName(form1.jointperson,form1.periodType)">检索</el-button>
                           </el-col>
                       </el-row>
                       <el-row class="mt-20">
@@ -153,13 +167,14 @@ export default {
    },
    mounted()
     {
+       this.$store.dispatch("getJb");
        this.getinit();
     },
-    watch:{
-      data:function(newVal,oldVal){
-        this.getinit();
-      },
-    },
+    // watch:{
+    //   data:function(newVal,oldVal){
+    //     this.getinit();
+    //   },
+    // },
    
    methods:{
         getinit(){
@@ -184,7 +199,6 @@ export default {
             
              
             nname=nname.substr(0,nname.length-1);
-          
             
             if(nname!='')
             {
@@ -276,21 +290,34 @@ export default {
             }
         },
          //代表姓名
-        getLmName(n){
+        getLmName(n,jb){
 
             this.listdatadb=[];
              if(n==null || n==""){
                  this.$message.error("请输入代表姓名!");return;
                }
+            // let  p={
+            //  'personName':n,
+            //  'personType':this.Global.REPRESENTATIVE,
+            // };
+            //   this.$api.post(this.Global.aport1+'/baseinfo/personlistbytype',p,
+            //  r =>{
+            //      if(r.code==1){
+                  
+                          
+            //                this.listdatadb=r.data;
+            //       }
+
+            // });
+
             let  p={
              'personName':n,
-             'personType':this.Global.REPRESENTATIVE,
+             'periodType':jb,
             };
-              this.$api.post(this.Global.aport1+'/baseinfo/personlistbytype',p,
+              this.$api.post(this.Global.aport1+'/representative/getPairInfo',p,
              r =>{
                  if(r.code==1){
                   
-                          
                            this.listdatadb=r.data;
                   }
 

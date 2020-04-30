@@ -74,12 +74,15 @@ function apiAxios (method, url, params, success, failure,header,responseType) {
          
           if (err) {
             if (res && res.status === 901) {//超时
-              window.location.href ="#/";
+               window.location.href ="#/";
             } else if (res && res.status === 902) { //不能用
               window.location.href ="#/Message";
             }else{
-               console.log('api error, HTTP CODE: ' +err+'==='+store.state.token);
-               //window.location.href ="#/";
+             
+               if(err=='Error: Network Error'){
+                 window.location.href ="#/";
+               }
+               console.log('api error, HTTP CODE: --' +err,err=='Error: Network Error');
             }
           }
       })

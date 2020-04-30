@@ -19,7 +19,7 @@
                                  :value="item.orgid">
                                  </el-option>
                 </el-select>&nbsp;&nbsp;
-                <el-select v-model="year"  placeholder="" style="width:80px;"   size="small">
+                <el-select v-model="year" @change="getinit"  placeholder="" style="width:80px;"   size="small">
                              <el-option
                                   v-for="(item,ind) in yearlist"
                                   :key="ind"
@@ -60,7 +60,7 @@
             <el-row class="mt-20 mb-25">
                 <el-col :span="24">
                     <div class="fleft chselect1">
-                        <el-select v-model="month" placeholder="" style="width:80px;"   size="mini">
+                        <el-select v-model="month" placeholder="" @change="getMonthdata" style="width:80px;"   size="mini">
                                 <el-option
                                         v-for="(item,ind) in monthlist"
                                         :key="ind"
@@ -75,29 +75,29 @@
             <el-row class="mt-10">
               <el-col :span='24'>
                    <div class="datapicont fleft center"> 
-                    <el-progress type="circle"  :width="70" :percentage="47"></el-progress>
+                    <el-progress type="circle"  :width="70" :percentage="mp1"></el-progress>
                     <br/>
                     <div class="c-title mt-10">代表议案</div>
              
                   </div>
                   <div class=" datapicont fleft center"> 
-                    <el-progress type="circle"  :width="70" :percentage="38" ></el-progress>
+                    <el-progress type="circle"  :width="70" :percentage="mp3" ></el-progress>
                     <br/>
                     <div class="c-title mt-10">建议、批评和意见</div>
              
                   </div>
                    <div class=" datapicont fleft center"> 
-                    <el-progress type="circle"  :width="70" :percentage="10" ></el-progress>
+                    <el-progress type="circle"  :width="70" :percentage="mp2" ></el-progress>
                     <br/>
                     <div class="c-title mt-10">政协提案</div>
                   </div>
                    <div class="datapicont fleft center"> 
-                    <el-progress type="circle"  :width="70" :percentage="2" ></el-progress>
+                    <el-progress type="circle"  :width="70" :percentage="mp4" ></el-progress>
                     <br/>
                     <div class="c-title mt-10">审议意见</div>
                   </div>
                    <div class=" datapicont fleft center"> 
-                    <el-progress type="circle"  :width="70" :percentage="3" ></el-progress>
+                    <el-progress type="circle"  :width="70" :percentage="mp5" ></el-progress>
                     <br/>
                     <div class="c-title mt-10">日常意见建议</div>
                   </div>
@@ -117,7 +117,7 @@
               
             <el-row  style="margin:8% 11% 0 10%" v-if='show'>
               <el-col :span='24'>
-                <EchartsMap></EchartsMap>
+                <EchartsMap :sdata='mapdata'></EchartsMap>
               </el-col>
             </el-row>
              <el-row :class="show==true?'yamargin1':'yamargin2'">
@@ -148,7 +148,7 @@
                        <el-col :span="24" class="mt-20 ml-20">
                            <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">1</div>    
+                                    <div class="fleft xhs">1</div>    
                                     <div class="fleft overf">中新公司申请设立海事赔偿责任有限公司</div>
                                </el-col>
                                 <el-col :span="2">领衔</el-col>
@@ -157,7 +157,7 @@
                            </el-row>
                             <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">2</div>    
+                                    <div class="fleft xhs">2</div>    
                                     <div class="fleft overf">中国建设银行股份有限公司广...</div>
                                </el-col>
                                <el-col :span="2">领衔</el-col>
@@ -167,7 +167,7 @@
                            </el-row>
                             <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">3</div>    
+                                    <div class="fleft xhs">3</div>    
                                     <div class="fleft overf">安徽省外经建设(集团)有限公司</div>
                                </el-col>
                                 <el-col :span="2">领衔</el-col>
@@ -193,16 +193,16 @@
               <el-col :span='24' class="mt-10 center">
                
                  <div class=" datapic fleft center" style="margin-left:15%">   
-                    <el-progress type="circle"  :width="80" :percentage="39" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">383</div>
+                    <el-progress type="circle"  :width="80" :percentage="lhdata.Importantpercent" :show-text="false"></el-progress>
+                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">{{lhdata.total}}</div>
                     <br/>
-                    <div class="c-title mt-20">重点</div>
+                    <div class="c-title mt-20">两会期间</div>
                   </div>
                   <div class="ml-20 datapic fleft center"> 
-                    <el-progress type="circle"  :width="80" :percentage="61" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">247</div>
+                    <el-progress type="circle"  :width="80" :percentage="bhdata.Importantpercent" :show-text="false"></el-progress>
+                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">{{bhdata.total}}</div>
                     <br/>
-                    <div class="c-title mt-20">非重点</div>
+                    <div class="c-title mt-20">闭会期间</div>
                   </div>
               </el-col>
             </el-row>
@@ -240,12 +240,12 @@
                 </el-col>
                 <el-col :span="24" class="mt-10">
                    <ul class="new-list" :class="{anim:animate}" @mouseenter="Stop()" @mouseleave="Up()">
-                      <li v-for="(t,ind) in noticeList" :key='ind'>
-                        <div class="fleft ml-20 color f-14 right" style="width:28%">{{t}}见证执行：</div>    
+                      <li v-for="(t,ind) in noticetypeList" :key='ind'>
+                        <div class="fleft ml-20 color f-14 right" style="width:28%">{{t.name}}：</div>    
                         <div class="fleft">
-                            <img src="../../assets/img/screen/jd-1.png" class="mr-5" v-for="t in 20" :key="t">
+                            <img src="../../assets/img/screen/jd-1.png" class="mr-5" v-for="t in t.value" :key="t">
                         </div>
-                        <div class="fleft color f-14 ml-10">457</div>
+                        <div class="fleft color f-14 ml-10">{{t.value}}</div>
                         <div class="clear"></div>
                       </li>
                     </ul>
@@ -275,33 +275,243 @@ export default {
          nowdate:setNowTimes(),
          ssfydata:[],
          pd:{orgId:'0e10a51827e511ea9e3700155dbaef87'},
-         year:'2019',
+         year:'2020',
          yearlist:getYear(),
          month:'1',
          monthlist:birthdayMonth(),
          noticeList: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
+         noticetypeList:[],
          animate:false,
          intNum: undefined,
          num:1,
          show:true,
          labelname:'展开',
+         monthdata:[],
+         mapdata:{},//地图对象
+         mp1:0,
+         mp2:0,
+         mp3:0,
+         mp4:0,
+         mp5:0,
+         bhdata:{},
+         lhdata:{},
        }
     },
     mounted(){
-       this.phbcharts(['4月', '3月', '2月', '1月'],['代表议案未办结', '代表议案已办结','总数']);
-       this.yearcharts(['2020', '2019', '2018', '2017','2016','2015','2014','2013','2012','2011','2010']);
+      this.getSSFY();
+       //历处数据对比
+           let p={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId
+              },
+              "itemIndex": [
+                "YiAn_lnsjdb"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p,
+           
+            r =>{
+                    if(r.code==200){
+                       this.yearcharts(r.data.indexItemsValues.YiAn_lnsjdb.date,r.data.indexItemsValues.YiAn_lnsjdb.data);
+                    }  
+       });
+      this.getinit();
+      // this.phbcharts(['4月', '3月', '2月', '1月'],['代表议案未办结', '代表议案已办结','总数']);
+      // this.yearcharts(['2020', '2019', '2018', '2017','2016','2015','2014','2013','2012','2011','2010']);
       //  this.handlecharts(['1','2','3','4','5','6','7','8','9','10','11','12']);
-       this.getSSFY();
       //  this.monthcharts();
-       this.sljdcharts();
-       this.rjcharts(['1','2','3','4']);
+      //  this.sljdcharts();
+      //  this.rjcharts(['1','2','3','4']);
        this.ScrollUp();
        this.timer = setInterval(() => {
         this.nowdate=setNowTimes();
       }, 1000)
    },
     methods:{
-        yearcharts(xdata){
+        getinit(){
+            this.mapdata={};
+            this.mapdata.orgId=this.pd.orgId;
+            this.mapdata.year=this.year;
+            console.log(this.mapdata,'this.mapdata');
+            
+            //年度代表 议案办理情况
+           let p1={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                 "Year": this.year,
+              },
+              "itemIndex": [
+                "YiAn_blqk"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p1,
+           
+            r =>{
+                    if(r.code==200){
+                      console.log(r.data.indexItemsValues.YiAn_blqk.data,'r.data.indexItemsValues.YiAn_blqk');
+                      
+                       if(r.data.indexItemsValues.YiAn_blqk.date!=undefined && r.data.indexItemsValues.YiAn_blqk.data!=undefined){
+                          this.phbcharts(r.data.indexItemsValues.YiAn_blqk.date,r.data.indexItemsValues.YiAn_blqk.data);
+                       }else{
+                          this.phbcharts('','');
+                       }
+                    }  
+            });
+
+              //月度代表 议案办理情况
+           let p2={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "YiAn_ydblqk"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p2,
+            r =>{
+                  
+                  
+                    if(r.code==200){
+                        this.monthdata=r.data.indexItemsValues.YiAn_ydblqk
+                        this.getMonthdata();
+                         
+                    }  
+            });
+
+             //办理增长&燃尽图
+           let p3={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "YiAn_blzzrjt"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p3,
+            r =>{
+               
+                    if(r.code==200){
+                    
+                      
+                         this.rjcharts(['1','2','3','4']);
+                         
+                    }  
+            });
+
+            //议案建议-内部科室办理情况排名
+           let p4={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "YiAn_ksblpm"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p4,
+            r =>{
+             
+                    if(r.code==200){
+                         this.noticeList=[];
+                         
+                    }  
+            });
+
+            //开展活动分析
+           let p5={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "YiAn_KZHD"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p5,
+            r =>{
+                    if(r.code==200){
+                        this.sljdcharts();
+                         
+                    }  
+            });
+
+              //活动类型分析
+           let p6={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "YiAn_HDLX"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p6,
+            r =>{
+              
+                    if(r.code==200){
+                        this.noticetypeList=r.data.indexItemsValues.YiAn_HDLX.data;
+                         
+                    }  
+            });
+
+              //来文期间
+           let p7={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "YiAn_LWQJ"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p7,
+            r =>{
+            
+                    if(r.code==200){
+                    console.log(r.data.indexItemsValues.YiAn_LWQJ['0159000001'].total,'r.data.indexItemsValues.YiAn_LWQJ.data');
+                    
+                       this.lhdata=r.data.indexItemsValues.YiAn_LWQJ['0159000001'];//两会
+                       this.bhdata=r.data.indexItemsValues.YiAn_LWQJ['0159000002'];//闭会
+                        
+                         
+                    }  
+            });
+
+       
+
+        },
+        getMonthdata(){
+           var ss=this.month;
+          
+          if(this.monthdata[ss]!=undefined && this.monthdata[ss]!=null){
+               this.mp1=this.monthdata[ss]['0204000001'].percent;
+               this.mp2=this.monthdata[ss]['0204000002'].percent;
+               this.mp3=this.monthdata[ss]['0204000003'].percent;
+               this.mp4=this.monthdata[ss]['0204000004'].percent;
+               this.mp5=this.monthdata[ss]['0204000005'].percent;
+           }
+        },
+        yearcharts(xdata,rdata){
+          console.log(xdata,rdata);
+          
         this.yearcharts = echarts.init(document.getElementById('yearcharts'));
         let _this = this;
         _this.yearcharts.setOption({
@@ -320,25 +530,25 @@ export default {
         },
         xAxis: [
               {
-            type: 'category',
-            boundaryGap: true,
-            axisPointer: {
-                  type: 'none'
-              },
-           axisLine:{show:false},
-             axisTick:{
-               show:false,
-             },
-             axisLabel: {
-               interval:0, //强制显示文字
-               textStyle:{
-                 color:'#cccccc',  //坐标的字体颜色
-                 fontSize:9
-               },
-             },
-             data: xdata
-           
-        }
+                  type: 'category',
+                  boundaryGap: true,
+                  axisPointer: {
+                        type: 'none'
+                    },
+                axisLine:{show:false},
+                  axisTick:{
+                    show:false,
+                  },
+                  axisLabel: {
+                    interval:0, //强制显示文字
+                    textStyle:{
+                      color:'#cccccc',  //坐标的字体颜色
+                      fontSize:9
+                    },
+                  },
+                  data: xdata!=undefined?xdata:0
+                
+              }
               
           ],
           yAxis: [
@@ -351,7 +561,10 @@ export default {
                   },
                 },
                 splitLine:{show:false},
-
+                axisLine:{show:false},
+                  axisTick:{
+                    show:false,
+                  },
              }
 
           ],
@@ -359,42 +572,58 @@ export default {
             left: '8%',
             right: '4%',
             bottom: '36%',
-            top:'5%',
+            top:'10%',
           },
         series: [
           {
               name: '总数',
               type: 'bar',
               // barGap: 0,
-              data: [398, 333, 581, 356,403,420,604,574,658,673,520]
+                // itemStyle:{
+                //     normal:{
+                //       label: {
+      					// 				show: true, //开启显示
+      					// 				position: 'top', //在上方显示
+      					// 				textStyle: { //数值样式
+      					// 					color: '#fff',
+      					// 					fontSize: 12
+  							// 		    }
+      					// 			},
+                //     },
+                  
+                //   },
+              data: rdata!=undefined?rdata['total']:[0]
           },
           {
               name: '代表议案',
               type: 'bar',
-              data: [31, 78, 150, 145, 56,27,23,81,187,126,162]
+              data: rdata!=undefined?rdata['0204000001']:[0]
           },
           {
               name: '建议、批评与意见',
               type: 'bar',
-              data: [129, 15, 95, 103, 90,69,119,138,142,168,13]
+              data: rdata!=undefined?rdata['0204000003']:[0]
           },
           {
               name: '政协提案',
               type: 'bar',
-              data: [101, 176, 173, 0, 180,123,132,162,187,144,16]
+              data: rdata!=undefined?rdata['0204000002']:[0]
           },
           {
               name: '审议意见',
               type: 'bar',
-              data: [15, 16, 4, 30, 3,41,39,47,5,33,35]
+              data: rdata!=undefined?rdata['0204000004']:[0]
           },
           {
               name: '日常意见建议',
               type: 'bar',
-              data: [122, 48, 159, 78, 74,160,291,146,137,203,294]
+              data: rdata!=undefined?rdata['0204000005']:[0]
           },
         
-          ]
+          ],
+
+        
+        
           })
         },
         //年度办理情况
@@ -512,11 +741,13 @@ export default {
 
         });
         },
-      phbcharts(xdata,xleg,series){
-         this.phbcharts = echarts.init(document.getElementById('phbcharts'));
+      phbcharts(xdata,series){
+      
+        this.phbcharts = echarts.init(document.getElementById('phbcharts'));
+        console.log('000111');
         let _this = this;
         _this.phbcharts.setOption({
-          color: ['#7900F0', '#332EB5', '#3969F8', '#83AEDD'],
+          color: ['#7900F0', '#83AEDD', '#3969F8'],
            tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -534,8 +765,6 @@ export default {
               color:'#cccccc',
               fontSize:14,
             },
-            data: xleg,
-            
         },
         grid: {
             left: '3%',
@@ -598,7 +827,7 @@ export default {
                         fontSize:12
                       },
                     },
-                    data: xdata
+                    data: xdata!=undefined?xdata:0
                   
                 }
             ],
@@ -607,17 +836,17 @@ export default {
                     name: '代表议案未办结',
                     type: 'bar',
                     barGap: 0,
-                    data: [120, 136, 36, 78,66]
+                    data: series!=undefined?series['other']:[0]
                 },
                 {
                     name: '代表议案已办结',
                     type: 'bar',
-                    data: [110, 132, 101, 44, 90]
+                    data: series!=undefined?series['0205000006']:[0]
                 },
                 {
                     name: '总数',
                     type: 'bar',
-                    data: [110, 132, 101, 44, 90]
+                    data: series!=undefined?series['total']:[0]
                 },
               
                 ]
@@ -625,120 +854,121 @@ export default {
                 
       },
      
-      monthcharts(xdata,series){
-        this.monthcharts = echarts.init(document.getElementById('monthcharts'));
-        let _this = this;
-          _this.monthcharts.setOption({
-           radar: {
-                    name:{
-                      color:"#eeeeee"  
-                    },
-                    axisLine:{show:false},
-                    axisTick:{show:false},
-                    splitLine:{show:false},
-                    splitArea:{show:false},
-                    indicator: [
-                        { name: '刑事案件', max: 6500},
-                        { name: '民事案件', max: 16000},
-                        { name: '行政案件', max: 30000},
-                        { name: '赔偿案件', max: 38000},
-                        { name: '执行案件', max: 52000},
-                        { name: '其他案件', max: 82000},
-                    ]
-                },
-                series: [{
+      // monthcharts(xdata,series){
+      //   this.monthcharts = echarts.init(document.getElementById('monthcharts'));
+      //   let _this = this;
+      //     _this.monthcharts.setOption({
+      //      radar: {
+      //               name:{
+      //                 color:"#eeeeee"  
+      //               },
+      //               axisLine:{show:false},
+      //               axisTick:{show:false},
+      //               splitLine:{show:false},
+      //               splitArea:{show:false},
+      //               indicator: [
+      //                   { name: '刑事案件', max: 6500},
+      //                   { name: '民事案件', max: 16000},
+      //                   { name: '行政案件', max: 30000},
+      //                   { name: '赔偿案件', max: 38000},
+      //                   { name: '执行案件', max: 52000},
+      //                   { name: '其他案件', max: 82000},
+      //               ]
+      //           },
+      //           series: [{
 
-                    type: 'radar',
-                    data: [
-                        {
-                            value: [4300, 10000, 28000, 35000, 50000,50000],
-                            areaStyle: {
-                                  color: 'rgba(50,88,205,0.6)'
-                            },
-                            lineStyle:{
-                                   color: 'rgba(20,48,114)'
-                            },
-                            itemStyle:{
-                               borderWidth:0,
-                            },
-                             symbol:'none',
+      //               type: 'radar',
+      //               data: [
+      //                   {
+      //                       value: [4300, 10000, 28000, 35000, 50000,50000],
+      //                       areaStyle: {
+      //                             color: 'rgba(50,88,205,0.6)'
+      //                       },
+      //                       lineStyle:{
+      //                              color: 'rgba(20,48,114)'
+      //                       },
+      //                       itemStyle:{
+      //                          borderWidth:0,
+      //                       },
+      //                        symbol:'none',
                             
-                        },
-                        {
-                            value: [5000, 3900, 25000, 28000, 35000,70000],
-                            areaStyle: {
-                                color: 'rgba(50,88,205,0.4)'
-                            },
-                             lineStyle:{
-                                  color: 'rgba(20,48,114)'
-                            },
-                            itemStyle:{
-                               borderWidth:0,
+      //                   },
+      //                   {
+      //                       value: [5000, 3900, 25000, 28000, 35000,70000],
+      //                       areaStyle: {
+      //                           color: 'rgba(50,88,205,0.4)'
+      //                       },
+      //                        lineStyle:{
+      //                             color: 'rgba(20,48,114)'
+      //                       },
+      //                       itemStyle:{
+      //                          borderWidth:0,
                               
-                            },
-                            symbol:'none',
+      //                       },
+      //                       symbol:'none',
 
-                        },
-                        {
-                            value: [6450, 15000, 10000, 30000, 18000,10000],
-                            areaStyle: {
-                                color: 'rgba(50,88,205,0.3)'
-                            },
-                             lineStyle:{
-                                  color: 'rgba(20,48,114)'
-                            },
-                            itemStyle:{
-                               borderWidth:0,
-                            },
-                             symbol:'none',
-                        },
-                       {
-                            value: [5000, 10000, 30000, 3000, 40000,20000],
-                            areaStyle: {
-                                color: 'rgba(50,88,205,0.5)'
-                            },
-                             lineStyle:{
-                                  color: 'rgba(20,48,114.0.7)'
-                            },
-                            itemStyle:{
-                               borderWidth:0,
-                            },
-                             symbol:'none',
-                        },
-                        {
-                            value: [2000, 8000, 9000, 10000, 20000,50000],
-                            areaStyle: {
-                                color: 'rgba(50,88,205,0.7)'
-                            },
-                             lineStyle:{
-                                   color: 'rgba(20,48,114,0.8)'
-                            },
-                            itemStyle:{
-                               borderWidth:0,
+      //                   },
+      //                   {
+      //                       value: [6450, 15000, 10000, 30000, 18000,10000],
+      //                       areaStyle: {
+      //                           color: 'rgba(50,88,205,0.3)'
+      //                       },
+      //                        lineStyle:{
+      //                             color: 'rgba(20,48,114)'
+      //                       },
+      //                       itemStyle:{
+      //                          borderWidth:0,
+      //                       },
+      //                        symbol:'none',
+      //                   },
+      //                  {
+      //                       value: [5000, 10000, 30000, 3000, 40000,20000],
+      //                       areaStyle: {
+      //                           color: 'rgba(50,88,205,0.5)'
+      //                       },
+      //                        lineStyle:{
+      //                             color: 'rgba(20,48,114.0.7)'
+      //                       },
+      //                       itemStyle:{
+      //                          borderWidth:0,
+      //                       },
+      //                        symbol:'none',
+      //                   },
+      //                   {
+      //                       value: [2000, 8000, 9000, 10000, 20000,50000],
+      //                       areaStyle: {
+      //                           color: 'rgba(50,88,205,0.7)'
+      //                       },
+      //                        lineStyle:{
+      //                              color: 'rgba(20,48,114,0.8)'
+      //                       },
+      //                       itemStyle:{
+      //                          borderWidth:0,
                                
-                            },
-                             symbol:'none',
-                        },
-                        {
-                            value: [3000, 6000, 15000, 10000, 20000,60000],
-                            areaStyle: {
-                                color: 'rgba(50,88,205,0.7)'
-                            },
-                             lineStyle:{
-                                   color: 'rgba(20,48,114,0.8)'
-                            },
-                            itemStyle:{
-                               borderWidth:0,
+      //                       },
+      //                        symbol:'none',
+      //                   },
+      //                   {
+      //                       value: [3000, 6000, 15000, 10000, 20000,60000],
+      //                       areaStyle: {
+      //                           color: 'rgba(50,88,205,0.7)'
+      //                       },
+      //                        lineStyle:{
+      //                              color: 'rgba(20,48,114,0.8)'
+      //                       },
+      //                       itemStyle:{
+      //                          borderWidth:0,
                                
-                            },
-                             symbol:'none',
-                        }
-                    ]
-                }]
-          });
-       },
+      //                       },
+      //                        symbol:'none',
+      //                   }
+      //               ]
+      //           }]
+      //     });
+      //  },
        //饼图
-       sljdcharts(){
+       sljdcharts(max){
+         max=50000;
           this.sljdcharts = echarts.init(document.getElementById('sljdcharts'));
         let _this = this;
           _this.sljdcharts.setOption({
@@ -812,11 +1042,11 @@ export default {
                             }
                         },
                     indicator: [
-                        { name: '议案', max: 50000},
-                        { name: '建议', max: 50000},
-                        { name: '提案', max: 50000},
-                        { name: '审议', max: 50000},
-                        { name: '日常建议', max: 50000},
+                        { name: '议案', max: max},
+                        { name: '建议', max: max},
+                        { name: '提案', max: max},
+                        { name: '审议', max: max},
+                        { name: '日常建议', max: max},
                     ]
                 },
                 series: [{
@@ -841,7 +1071,7 @@ export default {
 
          });
        },
-       rjcharts(xdata){
+       rjcharts(xdata,data){
           this.rjcharts = echarts.init(document.getElementById('rjcharts'));
           let _this = this;
           _this.rjcharts.setOption({

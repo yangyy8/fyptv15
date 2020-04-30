@@ -11,7 +11,7 @@
           <div class="content">
         <el-row>
              <el-col :span="18" style="padding-left:3%">
-               <el-row >
+               <el-row>
                    <el-col :span="10">
                      <div class="title"><span >{{jmc==null?'':jmc}}{{lbmc}}</span>名单</div>
                         <div style="margin:20px 20px 0 20px;">共<span style="color:red"> {{count}} </span>名特约人员</div>
@@ -53,9 +53,9 @@
         </el-row>
           <br/>
         </div>
-  <el-dialog :title="diatxt" :visible.sync="fileDialogVisible" :close-on-click-modal='false' width="700px">
+  <el-dialog :title="diatxt" :visible.sync="fileDialogVisible" :close-on-click-modal='false' class="subtable" width="700px">
              <el-row class="ah-50">
-               <el-col :span="24">
+               <!-- <el-col :span="24">
                   <span class="yy-input-text trt" style="width:200px;">届别：</span>
                    <el-select v-model="periodType"  @change="getFile(periodType)" filterable clearable default-first-option placeholder="请选择"  size="small" >
                          <el-option
@@ -65,7 +65,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select>
-               </el-col>
+               </el-col> -->
                <el-col :span="24">
                               <span class="yy-input-text trt" style="width:200px;">相关工作文件：</span>
                                <el-button type="primary" plain style="width:150px;font-size:14px;" size="small" icon="el-icon-plus" @click="getUpload('0171000001')">上传文件</el-button> <span class="ts"></span>
@@ -90,13 +90,13 @@
                                  <template slot-scope="scope">
                                    <div>
                                       <el-button type="text"  class="a-btn"  title="下载"  icon="el-icon-download" @click="downData(scope.row)"></el-button>
-                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="del(scope.row)"></el-button>
+                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delfile(scope.row,'0171000001')"></el-button>
                                   </div>
                                 </template>
                             </el-table-column>
                            </el-table>
                         </el-col>
-                         <el-col :span="24">
+                         <!-- <el-col :span="24">
                               <span class="yy-input-text trt" style="width:200px;">相关工作规定文件：</span>
                                <el-button type="primary" plain style="width:150px;font-size:14px;" size="small" icon="el-icon-plus" @click="getUpload('0171000002')">上传文件</el-button> <span class="ts"></span>
                          </el-col>
@@ -126,7 +126,7 @@
                                 </template>
                             </el-table-column>
                            </el-table>
-                        </el-col>
+                        </el-col> -->
 
                           <el-col :span="24">
                               <span class="yy-input-text  trt" style="width:200px;">相关工作聘任决定文件：</span>
@@ -137,7 +137,7 @@
                             :data="filedata2">
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="80">
                             </el-table-column>
                              <el-table-column
                                 prop="fileName"
@@ -153,7 +153,7 @@
                                  <template slot-scope="scope">
                                    <div>
                                       <el-button type="text"  class="a-btn"  title="下载"  icon="el-icon-download" @click="downData(scope.row)"></el-button>
-                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="del(scope.row)"></el-button>
+                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delfile(scope.row,'0171000003')"></el-button>
                                   </div>
                                 </template>
                             </el-table-column>
@@ -162,7 +162,7 @@
                 </el-row>
         </el-dialog>
   <el-dialog title="上传文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false' width="630px">
-      <UPLOAD :url="uurl" :type="ptype" :periodType='periodType' :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
+      <UPLOAD :url="uurl" :type="ptype" :periodType='jkey' :specialType='lb' :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
  <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false' width="630px">
       <UPLOAD :url="vvurl" :type="1001"  :urlErr="vvurlErr" :periodType='jkey'  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
@@ -293,7 +293,8 @@ export default {
           this.filedata2=[];
             let p={
                     'periodType':val,
-                    'fileType':'0171000001'
+                    'fileType':'0171000001',
+                    'specialType':this.lb,
                   };
                   this.$api.post(this.Global.aport1+'/specialPerson/getpersonfile',p,
                   r =>{
@@ -305,21 +306,23 @@ export default {
                             console.log(this.filedata0,this.filedata0.length);
                           }
                   });
-                  let pp={
-                    'periodType':val,
-                    'fileType':'0171000002'
-                  };
-                  this.$api.post(this.Global.aport1+'/specialPerson/getpersonfile',pp,
-                  r =>{
-                          if(r.code==1){
-                             if(r.data!=null){
-                              this.filedata1.push(r.data);
-                             }
-                          }
-                  });
+                  // let pp={
+                  //   'periodType':val,
+                  //   'fileType':'0171000002',
+                  //    'specialType':this.lb,
+                  // };
+                  // this.$api.post(this.Global.aport1+'/specialPerson/getpersonfile',pp,
+                  // r =>{
+                  //         if(r.code==1){
+                  //            if(r.data!=null){
+                  //             this.filedata1.push(r.data);
+                  //            }
+                  //         }
+                  // });
                    let ppp={
                     'periodType':val,
-                    'fileType':'0171000003'
+                    'fileType':'0171000003',
+                    'specialType':this.lb,
                   };
                   this.$api.post(this.Global.aport1+'/specialPerson/getpersonfile',ppp,
                   r =>{
@@ -331,21 +334,57 @@ export default {
                   });
         },
          getUpload(t){
-          if(this.periodType=="" || this.periodType==undefined)
-          {
-            this.$message.error("届别不能为空！");return;
+          // if(this.periodType=="" || this.periodType==undefined)
+          // {
+          //   this.$message.error("届别不能为空！");return;
+          // }
+          if(t=='0171000001' && this.filedata0.length>0){
+            this.$message.error("同届别同类型文件已存在！");return;
+          }else if(t=='0171000003' && this.filedata2.length>0){
+            this.$message.error("同届别同类型文件已存在！");return;
           }
             this.ptype=t;
             this.uploadDialogVisible=true;
+        },
+        delfile(n,t){
+           let p={
+                    'fileId':n.specialPersonRelFileId,
+                    'token':this.$store.state.token
+               };
+             this.$api.post(this.Global.aport1+'/specialPerson/delpersonfile',p,
+              r =>{
+                   if(r.code==1){
+                       if(t=='0171000001'){
+                        var index = this.filedata0.findIndex(item =>{
+    　　　　　　　　　  　 if(item.specialPersonRelFileId==n.specialPersonRelFileId){
+            　　　　　　　　　　　　return true
+            　　　　　　　　　　}
+            　　　　　　　　})
+            　　　　　   this.filedata0.splice(index,1)
+                       }else{
+                         var index = this.filedata2.findIndex(item =>{
+    　　　　　　　　　  　 if(item.specialPersonRelFileId==n.specialPersonRelFileId){
+            　　　　　　　　　　　　return true
+            　　　　　　　　　　}
+            　　　　　　　　})
+            　　　　　   this.filedata2.splice(index,1)
+                       }
+                    }
+            });
+        },
+        downData(n){
+            window.location.href=n.serverPath
         },
          openfile()
         {
             this.periodType="";
 
             this.diatxt=this.lbmc+"相关文件";
+
             this.filedata0=[];
-            this.filedata1=[];
+            // this.filedata1=[];
             this.filedata2=[];
+            this.getFile(this.jkey)
             this.fileDialogVisible=true;
         },
         getDR(){
@@ -395,8 +434,8 @@ export default {
            }
          }
        
-         this.getFile(this.periodType);
-        this.uploadDialogVisible = false;
+              this.getFile(this.jkey);
+              this.uploadDialogVisible = false;
             },
          getTB(l,v){
             let p={
@@ -464,7 +503,7 @@ export default {
           if(this.allshow[0]==true){
             state="1";
           }
-            this.$router.push({name:'BaseAdd',query:{type:'3',status:state,pbid:t.pbId,reid:reid,lbmc:this.lbmc}});
+            this.$router.push({name:'BaseAdd',query:{type:'3',status:state,pbid:t.pbId,reid:reid,lbmc:this.lbmc,lb:this.lb}});
         },
         goBase(){
               this.$router.push({name:'BaseAdd',query:{type:'3',jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,lb:this.lb,jmc:this.jmc,jkey:this.jkey,lbmc:this.lbmc}})

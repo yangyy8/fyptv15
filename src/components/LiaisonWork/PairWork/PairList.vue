@@ -90,8 +90,8 @@
                         </el-select>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">组织单位</span>
-                           <el-select v-model="pd.orgUnitId" @change="getcbbm(pd.orgUnitId,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <span class="yy-input-text">开展单位</span>
+                           <el-select v-model="pd.developmentUnitId" @change="getcbbm(pd.developmentUnitId,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -101,8 +101,8 @@
                             </el-select>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">组织部门</span>
-                           <el-select v-model="pd.orgDepartmentId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <span class="yy-input-text">开展部门</span>
+                           <el-select v-model="pd.devDepartmentId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fybmdata"
                                  :key="ind"
@@ -197,7 +197,7 @@
                 <div class="pborder mt-20">
                     <el-row>
                             <el-col :span="20" class="ah-40">
-                              <el-button type="primary" size="small" @click="add('0')" v-if='allshow[0]'>录入</el-button>
+                              <el-button type="primary" size="small" @click="add('0')" v-if='allshow[0]'>添加</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('9')" v-if='allshow[1]'>查看</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1')" v-if='allshow[2]'>修改</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="delpair" v-if='allshow[3]'>删除</el-button>
@@ -273,21 +273,21 @@
                 </div>
          <el-dialog title="选择类型" :visible.sync="addDialogVisible" :close-on-click-modal='false'>
              <div style="text-align:center;height:50px;">
-                <el-radio v-model="addtype" label="1" border>结对活动录入</el-radio>
-                <el-radio v-model="addtype" label="2" border>专项视察录入</el-radio>
-                <el-radio v-model="addtype" label="3" border>专题调研录入</el-radio>
-                <el-radio v-model="addtype" label="4" border>旁听庭审录入</el-radio>
-                <el-radio v-model="addtype" label="5" border>见证执行录入</el-radio>
+                <el-radio v-model="addtype" label="1" border>结对活动</el-radio>
+                <el-radio v-model="addtype" label="2" border>专项视察</el-radio>
+                <el-radio v-model="addtype" label="3" border>专题调研</el-radio>
+                <el-radio v-model="addtype" label="4" border>旁听庭审</el-radio>
+                <el-radio v-model="addtype" label="5" border>见证执行</el-radio>
              </div><div style="text-align:center">
-                <el-radio v-model="addtype" label="6" border>会议座谈录入</el-radio>
-                <el-radio v-model="addtype" label="7" border>日常走访录入</el-radio>
-                <el-radio v-model="addtype" label="8" border>新闻宣传录入</el-radio>
-                <el-radio v-model="addtype" label="9" border>日常接待录入</el-radio>
-                <el-radio v-model="addtype" label="10" border>其它活动录入</el-radio>
+                <el-radio v-model="addtype" label="6" border>会议座谈</el-radio>
+                <el-radio v-model="addtype" label="7" border>日常走访</el-radio>
+                <el-radio v-model="addtype" label="8" border>新闻宣传</el-radio>
+                <el-radio v-model="addtype" label="9" border>日常接待</el-radio>
+                <el-radio v-model="addtype" label="10" border>其它活动</el-radio>
              </div>
 
             <div slot="footer" class="dialog-footer">
-              <el-button type="primary" size="small" @click="goadd()">进行录入</el-button>
+              <el-button type="primary" size="small" @click="goadd()">提交</el-button>
               <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
             </div>
        </el-dialog>
@@ -367,6 +367,7 @@ export default {
             //0录入,1查看,2修改,3删除,4导入,5下载全部,6下载当页,
             //7公开,8审核,9发布,10回收
             allshow:[],
+            kzdwdata:[],
         }
     },
     mounted(){
@@ -405,8 +406,9 @@ export default {
                 this.tableData=[];
                 this.getXQ();
                 this.getCheckList();
-                this.getFY();this.getJBR();
-                this.getName();
+               // this.getFY();
+                this.getJBR();
+                this.getName();this.getKZDW();
                 this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
         handleSelectionChange(val) {
@@ -465,8 +467,11 @@ export default {
                 case '0149000008'://日常接待
                      types='9';
                      break;
-                case '0149000010'://其他
+                case '0149000011'://其他
                      types='10';
+                     break;
+                case '0149000010'://日常沟通
+                     types='11';
                      break;
                  default:
                      break;
@@ -675,6 +680,16 @@ export default {
                 r =>{
                     if(r.code==1){
                         this.fydwdata=r.data;
+                    }
+           });
+        },
+        //开展单位
+        getKZDW(){
+           
+          this.$api.post(this.Global.aport1+'/org/getDevelopOrg',{},
+                r =>{
+                    if(r.code==1){
+                        this.kzdwdata=r.data;
                     }
            });
         },

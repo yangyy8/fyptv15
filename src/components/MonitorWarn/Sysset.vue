@@ -112,6 +112,13 @@
                         <el-col class="setstit">
                             影像资料
                         </el-col>
+                        <el-col> <span class="yy-input-text">忽略之前日期</span>
+                         <el-date-picker
+                           v-model="pd.checkDeadLine" 
+                           type="date" size="small"  
+                           placeholder="选择日期" format="yyyy-MM-dd">
+                        </el-date-picker>
+                        </el-col>
                         <el-col>
                              <span class="yy-input-text">最大上传文件数</span>
                               <el-radio v-model="pd.limitUpload" label="0">不限</el-radio>
@@ -270,7 +277,8 @@
         </div>
     </div>   
 </template>
-<script>
+<script scoped>
+import {formatDate} from '@/assets/js/date.js'
 export default {
     data(){
         return{
@@ -427,13 +435,14 @@ export default {
           this.pd.defaultMonth=this.pb.defaultMonth.toString();
           this.pd.defaultDay=this.pb.defaultDay.toString();
           this.pd.picFormList=this.imgtableData;
+          this.pd.checkDeadLine=formatDate(new Date(this.pd.checkDeadLine),'yyyy-MM-dd');
           
           this.$api.post(this.Global.aport3+'/SystemSettingsController/saveSystemSettings',this.pd,
                 r =>{
                   
                       if(r.code==1){
                            
-                            this.$message.success("设定成功");
+                           this.$message.success("设定成功");
                            this.getList();
                          
                       }else{
@@ -459,7 +468,8 @@ export default {
                                sum+=array[i].picForm+',';
                              }
                              this.$store.commit('getImgformat',sum.substr(0,sum.length-1));
-                             this.$store.commit('getPagesize',r.data.defaultNum)
+                             this.$store.commit('getPagesize',r.data.defaultNum);
+                             this.$store.commit('getYxdate',r.data.checkDeadLine)
                       }
                           
                          

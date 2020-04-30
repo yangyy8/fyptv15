@@ -18,12 +18,12 @@
                            <el-col :span="18">
                                   <el-row :gutter="2" class="context">
                                     <el-col :span="12" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 姓名</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 姓名</span>
                                         <el-input placeholder="请输入内容" size="small"  :disabled="ckshow"
                                          @blur="getZNSB()" clearable v-model="form.personName"   class="yy-input-input" ></el-input>
                                      </el-col>
                                        <el-col :span="12" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 性别</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 性别</span>
                                           <el-select v-model="form.sex" :disabled="ckshow" @change="getZNSB()" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.xb"
@@ -34,7 +34,7 @@
                                          </el-select>
                                      </el-col>
                                         <el-col :span="12" v-if='ntype!="3"' class="input-item">
-                                        <span class="yy-input-text">籍贯</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 籍贯</span>
                                         <!-- :filter-method="userFilter" -->
                                            <el-select v-model="form.birthPlace" :disabled="ckshow" @change="getZNSB()"  @visible-change="getXz()"  filterable clearable  placeholder="请选择"  size="small" class="yy-input-input" >
                                                 <el-option
@@ -46,7 +46,7 @@
                                             </el-select>
                                      </el-col>
                                          <el-col :span="12" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 出生日期</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 出生日期</span>
                                         <!-- <el-date-picker @change="getZNSB()"
                                             v-model="form.birthday" format="yyyy-MM-dd"
                                             type="date" size="small" value-format="yyyy-MM-dd"
@@ -78,10 +78,10 @@
                                          </el-select>
                                      </el-col>
                                     
-                                     
-                                      <el-col :span="12">
-                                        <span class="yy-input-textleft"><font class="red" v-if="(ntype=='1' || ntype=='3') &&  !pd.is1">*</font> 
-                                          手机号码</span>
+                                    
+                                      <el-col :span="12" v-if='allshow'>
+                                        <span class="yy-input-textleft">
+                                          <img src="../../../assets/img/xh.png" v-if="(ntype=='1' || ntype=='3') &&  !pd.is1">  <img v-else src="../../../assets/img/xhw.png"> 手机号码</span>
                                         <div  class="yy-input-inputleft">
                                             <div v-for="(tt,ind) in rows" :key='ind'>
                                             <el-input placeholder="请输入内容" size="small" :disabled="ckshow" @blur="getZNSB(tt.mobilePhone)" v-model="tt.mobilePhone" clearable  maxlength="11" class="rwidth"></el-input>
@@ -92,13 +92,13 @@
                                         </div>
                                      </el-col>
                                     
-                                      <el-col :span="12" class="input-item">
-                                        <span class="yy-input-text">固定电话</span>
+                                      <el-col :span="12" class="input-item" v-if='allshow'>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 固定电话</span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" @blur="getZNSB()" clearable v-model="form.fixedPhone" maxlength="15"  class="yy-input-input" ></el-input>
                                      </el-col>
                                    
                                       <el-col :span="12" v-if="lbmc==''" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png">  
                                         {{labelorg}}
                                         </span>
                                         <el-select v-model="form1.orgId" :disabled="ckshow || (jb!=null  && xzqh!=null && xzqh!='') "  @change="getJB(form1.orgId);getBM(form1.orgId,0);getXJDW(form1.orgId,0);getXHFT(form1.orgId,0);getZMWFY(form1.orgId,0);getWorkList(form1.orgId,0);getJDXX(form1.orgId,0);getJJB();getTYLBList()"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -110,19 +110,9 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                                       <el-col :span="12" v-if="ntype=='4'" class="input-item">
-                                        <span class="yy-input-text">所属部门</span>
-                                        <el-select v-model="form1.subOrgId"  :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择所属单位':'无数据'">
-                                            <el-option
-                                                v-for="(item,ind) in wyhdata1"
-                                                :key="ind"
-                                                :label="item.mc"
-                                                :value="item.orgid">
-                                            </el-option>
-                                         </el-select>
-                                     </el-col>
-                                       <el-col :span="12" v-if="(ntype=='1' || ntype=='2' ) || ( (jkey==null && ntype=='3') && (state=='1' && ntype=='3' && lbmc!=null))" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 层级</span>
+                                      
+                                       <el-col :span="12" v-if="(ntype=='1' || ntype=='2' ) || (ntype=='3' && lbshow)" class="input-item">
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 层级</span>
                                         <el-select v-model="form1.levelType" v-if='addtype=="1" || addtype=="2"' @change="getNJB();getJJB();getTYLBList()"  :disabled="ckshow || (jb!=null && form1.levelType!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.jbb"
@@ -141,7 +131,7 @@
                                          </el-select>
                                      </el-col>
                                        <el-col :span="12" v-if="ntype=='3' && lbshow" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font>  特约职务</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 特约职务</span>
                                           <el-select v-model="form1.specialType" @change="getTJ(form1.specialType);getTYJB();" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in tylblist"
@@ -152,8 +142,8 @@
                                          </el-select>
                                      </el-col>
                                        <el-col :span="12" v-if="ntype!='4'" class="input-item">
-                                        <span class="yy-input-text"> <font class="red">*</font> 届别</span>
-                                        <el-select v-model="form1.periodType" @change="getjblist(1,form1.periodType);getJJB()" :disabled="ckshow || (jb!=null && form1.periodType!=null && form1.periodType!='' && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择层级和特约职务':'请先选择'+labelorg+'和层级'):'无数据'">
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 届别</span>
+                                        <el-select v-model="form1.periodType" @change="getjblist(1,form1.periodType);getJJB()" :disabled="ckshow || (jb!=null && form1.periodType!=null && form1.periodType!='' && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择'+labelorg+'和特约职务':'请先选择'+labelorg+'和层级'):'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in jblist"
                                                 :key="ind"
@@ -163,7 +153,7 @@
                                          </el-select>
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='1'" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 团别</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 团别</span>
                                         <el-select v-model="form1.groupType" :disabled="ckshow || (jb!=null && form1.groupType!=null && code!=null)" @change="getJDXX(form1.orgId,0,form1.groupType);getBJDTB(form1.groupType);getXHFT(form1.orgId,0);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in tbdata"
@@ -174,7 +164,7 @@
                                          </el-select>
                                      </el-col>
                                          <el-col :span="12" v-if="ntype=='2'" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 界别</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 界别</span>
                                         <el-select v-model="form1.circlesType" :disabled="ckshow || (jb!=null && form1.circlesType!=null && form1.circlesType!='' && code!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg+'和届别':'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in jjblist"
@@ -186,13 +176,13 @@
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='1' || ntype=='2'" class="input-item">
                                         <span class="yy-input-text" :title='label1'>
-                                            <font class="red">*</font> {{label1}}
+                                            <img src="../../../assets/img/xh.png"> {{label1}}
                                             </span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form1.cardNumber"  class="yy-input-input" ></el-input>
                                      </el-col>
                                     
                                     <el-col :span="12" v-if="ntype=='3'" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font>  推荐单位</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 推荐单位</span>
                                           <el-select v-model="form1.recommendedUnitsID" v-if='tjshow' :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.tyjdytjdw"
@@ -213,7 +203,7 @@
                                          </el-select>
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='1'" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 选举单位</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 选举单位</span>
                                         <el-select v-model="form1.electUnitsid" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in xjdwdata"
@@ -224,7 +214,7 @@
                                          </el-select>
                                      </el-col>
                                         <el-col :span="12" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 民族</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 民族</span>
                                         <el-select v-model="form.nationality" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.mz"
@@ -234,10 +224,53 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                                      
+                                       <el-col :span="12" v-if="ntype=='4'" class="input-item">
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 所属部门</span>
+                                        <el-select v-model="form1.subOrgId"  :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择所属单位':'无数据'">
+                                            <el-option
+                                                v-for="(item,ind) in wyhdata1"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.orgid">
+                                            </el-option>
+                                         </el-select>
+                                     </el-col>
+                                      <el-col :span="12" v-if="ntype=='4'" class="input-item">
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 职务</span>
+                                         <el-select v-model="form1.subOrgPosition" @change="getJDZWLB(form1.subOrgPosition)" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                            <el-option
+                                                v-for="(item,ind) in $store.state.zw"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.dm">
+                                            </el-option>
+                                         </el-select>
+                                     </el-col>
+                                      <!-- <el-col :span="12" v-if="ntype=='4'" class="input-item">
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 兼职部门</span>
+                                        <el-select v-model="form1.jzsubOrgId"  :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择所属单位':'无数据'">
+                                            <el-option
+                                                v-for="(item,ind) in wyhdata1"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.orgid">
+                                            </el-option>
+                                         </el-select>
+                                     </el-col>
+                                      <el-col :span="12" v-if="ntype=='4'" class="input-item">
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 兼职职务</span>
+                                         <el-select v-model="form1.jzsubOrgPosition" @change="getJDZWLB(form1.jzsubOrgPosition)" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                            <el-option
+                                                v-for="(item,ind) in $store.state.zw"
+                                                :key="ind"
+                                                :label="item.mc"
+                                                :value="item.dm">
+                                            </el-option>
+                                         </el-select>
+                                     </el-col> -->
                                       
                                       <el-col :span="12">
-                                        <span class="yy-input-textleft"><font class="red">*</font> 
+                                        <span class="yy-input-textleft"><img src="../../../assets/img/xh.png"> 
                                          <span>政治面貌</span>
                                         </span>
                                        <div class="yy-input-inputleft">
@@ -255,9 +288,9 @@
                                         </div>
                                      </el-col>
                                      <el-col :span="12" v-if='ntype=="3"' class="input-item">
-                                        <span class="yy-input-text">身份</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 身份</span>
                                         <!-- :filter-method="userFilter" -->
-                                           <el-select v-model="form.sf" :disabled="ckshow" @visible-change="getXz()"  filterable clearable  placeholder="请选择"  size="small" class="yy-input-input" >
+                                           <el-select v-model="form1.specialIdentityType" :disabled="ckshow"   filterable clearable  placeholder="请选择"  size="small" class="yy-input-input" >
                                                 <el-option
                                                     v-for="(item,ind) in $store.state.tysf"
                                                     :key="ind"
@@ -268,9 +301,9 @@
                                      </el-col>
                                     
                                       <el-col :span="12" v-if='ntype=="3"' class="input-item">
-                                        <span class="yy-input-text">地区</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 地区</span>
                                         <!-- :filter-method="userFilter" -->
-                                           <el-select v-model="form.area" :disabled="ckshow" filterable clearable  placeholder="请选择"  size="small" class="yy-input-input" >
+                                           <el-select v-model="form.area" :disabled="ckshow" filterable clearable @change="getXHFT(form1.orgId)"  placeholder="请选择"  size="small" class="yy-input-input" >
                                                 <el-option
                                                     v-for="(item,ind) in $store.state.xzqh"
                                                     :key="ind"
@@ -280,17 +313,15 @@
                                             </el-select>
                                      </el-col>
                                       <el-col :span="12" class="input-item" v-if='ntype=="3"'>
-                                        <span class="yy-input-text">传真</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 传真</span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow"  clearable v-model="form.fax" maxlength="15"  class="yy-input-input" ></el-input>
                                      </el-col>
                                      <el-col :span="12" class="input-item" v-if='ntype=="3"'>
-                                        <span class="yy-input-text">邮编</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 邮编</span>
                                         <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form.postCode" maxlength="15"  class="yy-input-input" ></el-input>
                                      </el-col>
-
-                                
                                       <el-col :span="12" v-if="ntype!='3'" class="input-item">
-                                        <span class="yy-input-text">学历</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 学历</span>
                                         <el-select v-model="form.education" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.xl"
@@ -301,7 +332,7 @@
                                          </el-select>
                                      </el-col>
                                     <el-col :span="12" v-if="ntype!='3'" class="input-item">
-                                        <span class="yy-input-text">学位</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 学位</span>
                                         <el-select v-model="form.degree" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.xw"
@@ -321,20 +352,10 @@
                                         <span class="yy-input-text">密码</span>
                                         <el-input placeholder="请输入" size="small" show-password :disabled="ckshow" clearable v-model="pr.intranetPassword"  class="yy-input-input" ></el-input>
                                      </el-col> -->
-                                      <el-col :span="12" v-if="ntype=='4'" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 职务</span>
-                                         <el-select v-model="form1.subOrgPosition" @change="getJDZWLB(form1.subOrgPosition)" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                                            <el-option
-                                                v-for="(item,ind) in $store.state.zw"
-                                                :key="ind"
-                                                :label="item.mc"
-                                                :value="item.dm">
-                                            </el-option>
-                                         </el-select>
-                                     </el-col>
+                                     
                                      
                                      <el-col :span="24" >
-                                        <div class="yy-input-textleft" style="width:13.5%!important">职业类别</div>
+                                        <div class="yy-input-textleft" style="width:13.5%!important"><img src="../../../assets/img/xhw.png"> 职业类别</div>
                                         <div class="yy-input-inputleft"  style="width:80%!important">
                                         <el-select v-model="form.jobType" :disabled="ckshow" multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择"  size="small"  style="width:100%" >
                                             <el-option
@@ -348,11 +369,11 @@
                                         </div>
                                      </el-col>                                
                                       <el-col :span="24" v-if='addtype!="4"' class="input-item">
-                                        <span class="yy-input-text" style="width:13.5%!important"><font class="red">*</font> 单位职务</span>
+                                        <span class="yy-input-text" style="width:13.5%!important"><img src="../../../assets/img/xh.png"> 单位职务</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.job"  class="yy-input-input" style="width:80%!important;"></el-input>
                                      </el-col>
                                      <el-col :span="24" v-if='addtype!="4"' class="input-item">
-                                        <span class="yy-input-text" style="width:13.5%!important">社会职务</span>
+                                        <span class="yy-input-text" style="width:13.5%!important"><img src="../../../assets/img/xhw.png"> 社会职务</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.socialDuty"  class="yy-input-input" style="width:80%!important;"></el-input>
                                      </el-col>
                                     
@@ -360,27 +381,28 @@
                                         <span class="yy-input-text" style="width:13.5%!important">推荐信息</span>
                                         <el-input placeholder="" size="small" clearable  :disabled="ckshow" v-model="form1.recommendedInformation"  class="yy-input-input" style="width:80%!important;" ></el-input>
                                      </el-col> -->
-                                     <el-col :span="24" class="input-item">
+                                     <el-col :span="24" class="input-item" v-if='allshow'>
                                         <span class="yy-input-text" style="width:13.5%!important">
+                                            <img src="../../../assets/img/xhw.png"> 
                                            <span v-if="ntype=='3'">联系地址</span>
                                            <span v-else> 通讯地址</span>
                                             </span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.address"  class="yy-input-input" style="width:80%!important;" ></el-input>
                                      </el-col>
                                       <el-col :span="24" v-if="ntype!='3'" class="input-item">
-                                        <span class="yy-input-text" style="width:13.5%!important">研究方向</span>
+                                        <span class="yy-input-text" style="width:13.5%!important"><img src="../../../assets/img/xhw.png"> 研究方向</span>
                                         <el-input placeholder="" size="small"  :disabled="ckshow" clearable v-model="form.resdirection"  class="yy-input-input" style="width:80%!important;" ></el-input>
                                      </el-col>
                                       <el-col :span="24" v-if="ntype!='3'" class="input-item">
-                                        <span class="yy-input-text" style="width:13.5%!important">专业特长</span>
+                                        <span class="yy-input-text" style="width:13.5%!important"><img src="../../../assets/img/xhw.png"> 专业特长</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.specialties"  class="yy-input-input" style="width:80%!important;" ></el-input>
                                      </el-col>
                                       <el-col :span="24" v-if="ntype!='3'" class="input-item">
-                                        <span class="yy-input-text" style="width:13.5%!important">关注领域</span>
+                                        <span class="yy-input-text" style="width:13.5%!important"><img src="../../../assets/img/xhw.png"> 关注领域</span>
                                         <el-input placeholder="" size="small" :disabled="ckshow" clearable v-model="form.focusareas"  class="yy-input-input" style="width:80%!important;" ></el-input>
                                      </el-col>
                                  <el-col :span="12" v-if="ntype=='1' && jdshow" class="input-item">
-                                        <span class="yy-input-text">结对信息</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 结对信息</span>
                                       <el-select v-model="form1.pairPersonId" @change="getClear" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in fyrydata"
@@ -391,7 +413,7 @@
                                          </el-select>
                                      </el-col>
                                      <el-col :span="12" v-if="ntype=='1' && jdshow" class="input-item">
-                                        <span class="yy-input-text"><font class="red">*</font> 结对时间</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 结对时间</span>
                                         <el-date-picker 
                                             v-model="form1.pairTime" format="yyyy-MM-dd"
                                             type="date" size="small" value-format="yyyy-MM-dd"
@@ -399,7 +421,7 @@
                                         </el-date-picker>
                                      </el-col>
                                     <el-col :span="12" v-if="ntype=='1' || ntype=='3'" class="input-item">
-                                        <span class="yy-input-text">所属巡回法庭</span>
+                                        <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 所属巡回法庭</span>
                                         <el-select v-model="form1.circuitCourtId" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'" >
                                             <el-option
                                                 v-for="(item,ind) in xhftdata"
@@ -412,7 +434,7 @@
                                      </el-row>
                                     <el-row :gutter="2" class="context" v-if="ntype!='4'">
                                         <el-col :span="12">
-                                             <el-row>
+                                             <el-row style="padding-left:8px;">
                                                 <!-- <el-col :span="12" v-if="ntype=='3'">
                                                     <el-checkbox v-model="pd.is9" :disabled="ckshow">人大代表</el-checkbox>
                                                 </el-col>
@@ -465,21 +487,14 @@
                                                  <el-col :span="24" v-if="ntype=='1' || ntype=='2'" class="input-item">
                                                     <el-checkbox v-model="pd.is10" :disabled="true">特约人员</el-checkbox>
                                                 
-                                                    <!-- <el-select v-model="form1.specialType" v-if="pd.is10"  filterable clearable default-first-option placeholder="请选择" size="mini" class="ml-20" style="width:57%;">
-                                                        <el-option
-                                                            v-for="(item,ind) in $store.state.tylb"
-                                                            :key="ind"
-                                                            :label="item.mc"
-                                                            :value="item.dm">
-                                                        </el-option>
-                                                    </el-select> -->
+                                                  
                                                 </el-col>
                                              </el-row>
                                         </el-col>
                                          <el-col :span="12">
                                              <el-row>
                                                 <el-col :span="24" class="input-item">
-                                                    <el-checkbox v-model="pd.is5" :disabled="ckshow">
+                                                    <el-checkbox v-model="pd.is5" :disabled="ckshow" @change="getckdata(1)">
                                                         连任 &nbsp;
                                                         </el-checkbox>  
                                                     <!-- <span class="lfont ml-20" v-if='pd.is5'>连任</span> -->
@@ -496,11 +511,10 @@
                                                     &nbsp;
                                                     <span class="lfont" v-if='pd.is5'>届</span>
                                                 </el-col>
-                                                <el-col :span="24" class="input-item">
-                                                    <el-checkbox v-model="pd.is14" :disabled="ckshow">
+                                                <el-col :span="24" class="input-item" v-if="ntype=='1' || ntype=='2'">
+                                                    <el-checkbox v-model="pd.is14" :disabled="ckshow" @change="getckdata(2)">
                                                         曾任代表  &nbsp;
                                                         </el-checkbox>  
-                                                    
                                                     <el-select v-model="form1.formerRepresentatives" :disabled="ckshow" v-if='pd.is14' multiple  filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
                                                         <el-option
                                                             v-for="(item,ind) in jblistdb"
@@ -511,8 +525,8 @@
                                                     </el-select>
                                                     
                                                 </el-col>
-                                                <el-col :span="24" class="input-item">
-                                                    <el-checkbox v-model="pd.is15" :disabled="ckshow">
+                                                <el-col :span="24" class="input-item" v-if="ntype=='1' || ntype=='2'">
+                                                    <el-checkbox v-model="pd.is15" :disabled="ckshow" @change="getckdata(3)">
                                                         曾任委员  &nbsp;
                                                         </el-checkbox> 
                                                     <el-select v-model="form1.formerMembers" :disabled="ckshow" v-if='pd.is15' multiple  filterable clearable default-first-option placeholder="请选择" size="mini" style="width:45%">
@@ -526,7 +540,7 @@
                                                     
                                                 </el-col>
                                                 <el-col :span="24" v-if="ntype!='4'" :disabled="ckshow" class="input-item">
-                                                    <el-checkbox v-model="pd.is11" :disabled="ckshow">
+                                                    <el-checkbox v-model="pd.is11" :disabled="ckshow" @change="getckdata(4)">
                                                         <span v-if='ntype=="3"'>增补</span> 
                                                         <span v-else>补选</span>  &nbsp;
                                                         </el-checkbox>
@@ -537,7 +551,7 @@
                                                     </el-date-picker>
                                                 </el-col>
                                                 <el-col :span="24" v-if="ntype=='3'" class="input-item">
-                                                    <el-checkbox v-model="pd.is12" :disabled="ckshow">
+                                                    <el-checkbox v-model="pd.is12" :disabled="ckshow" @change="getckdata(5)">
                                                         解聘 </el-checkbox>   &nbsp;
                                                     <el-select v-model="form1.fireReason" :disabled="ckshow"  v-if="pd.is12" filterable clearable default-first-option placeholder="请选择"  size="mini" >
                                                         <el-option
@@ -549,7 +563,7 @@
                                                     </el-select>
                                             </el-col>
                                             <el-col :span="24" v-if="ntype!='3'" class="input-item">
-                                                <el-checkbox v-model="pd.is7" :disabled="ckshow">不再担任</el-checkbox> &nbsp;
+                                                <el-checkbox v-model="pd.is7" :disabled="ckshow" @change="getckdata(6)">不再担任</el-checkbox> &nbsp;
                                                 <!-- <span class="lfont ml-20" v-if='pd.is7' >原因</span> -->
                                                 <el-select v-model="form1.isNotHoldReason" :disabled="ckshow"  v-if="pd.is7" filterable clearable default-first-option placeholder="请选择"  size="mini" >
                                                     <el-option
@@ -749,10 +763,10 @@
                                 prop="activityType"
                                 label="类型">
                             </el-table-column>
-                              <el-table-column
+                              <!-- <el-table-column
                                 prop="orgUnit"
                                 label="组织单位">
-                            </el-table-column>
+                            </el-table-column> -->
                               <el-table-column
                                 prop="developmentUnit"
                                 label="开展单位">
@@ -1158,7 +1172,6 @@
                                   label="操作">
                                   <template slot-scope="scope">
                                     <div>
-
                                       <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="jddel(scope.row,1)"></el-button>
                                      </div>
                                   </template>
@@ -1172,7 +1185,7 @@
                 <el-button @click="jdDialogVisible = false" size="small">取 消</el-button>
                 </div>
                  </el-dialog>
-      <el-dialog title="修改定向结对"  :visible.sync="pairsDialogVisible" :close-on-click-modal='false'>
+      <el-dialog title="修改定向结对"  :visible.sync="pairsDialogVisible" v-if='pairsDialogVisible' :close-on-click-modal='false'>
       <PAIR  :data="pairdata" :type="addtype" @pairfatherMethod="pairfatherMethod" :random="new Date().getTime()"></PAIR>
   </el-dialog>
     
@@ -1191,7 +1204,7 @@ export default {
             form:{},
             form1:{reelectionNum:'0',levelType:''},
             pd:{is2:false,is1:false,is3:false,
-            is4:false,is6:false,is7:false,is8:false,
+            is4:false,is5:false,is6:false,is7:false,is8:false,
             is9:false,is10:false,is11:false,
             is12:false,is13:false,is14:false,is15:false},
             cname:"",
@@ -1318,6 +1331,8 @@ export default {
             tylblist:[],
             kjdshow:true,
             jdshow:true,
+            orglvl:'',
+            allshow:true,
         };
     },
     mounted()
@@ -1353,11 +1368,11 @@ export default {
     activated(){
          this.getinit(this.$route);
     },
-    watch:{
+    //watch:{
         // $route:function(val){
         //    this.getinit(val);
         // },
-    },
+   //},
     methods:{
         getLR(n){
             if(n=='0'){
@@ -1413,6 +1428,8 @@ export default {
               }
             },
          getTJ(dm){
+             this.$set(this.form1,'periodType','');
+             this.$set(this.form1,'recommendedUnitsID','');
              if(dm=='0185000001'){
                   this.tjshow=true;
              }else{
@@ -1566,6 +1583,23 @@ export default {
                     this.getUUID();
                 }
                 else if(this.state=="9"){
+                    if(this.addtype=='1' || this.addtype=='2'){
+                        var mid='11072112'
+                        var adata='21123245';
+                        if(this.addtype=='2'){
+                              mid='11132124';
+                              adata='21243246';
+                        }
+                    //权限start
+                    this.$api.post(this.Global.menuurl,{'menuId':mid},
+                            r =>{
+                            
+                                if(r.code==1 && r.data!=null){
+                                    
+                                        this.allshow=this.global_auth(r.data,adata);
+                                }
+                        });
+                }
                     this.ckshow=true;
                 }
               
@@ -1656,11 +1690,13 @@ export default {
                             this.cname1="基层";
                             this.lvl="0222000004";
                         }
-
+                       
                         if(this.lb!=null)
                         {
-                            this.form1.specialType=this.lb;
-                        
+                          
+                              this.$set(this.form1,'specialType',this.lb);
+                              console.log(this.form1.specialType,'this.form1.specialType');
+                            
                               if(this.lb=='0185000001'){
                                     this.tjshow=true;
                                 }else{
@@ -1668,14 +1704,15 @@ export default {
                                 }
                             this.lbshow=false;
                         }else if(this.lbmc!=''){
-                              this.lbshow=false;
+                            this.lbshow=false;
                         }
                         this.$set(this.form1,'levelType',this.lvl);
-                        this.getTYJB();
+                        
                         if(this.xzqh!=undefined && this.form1.levelType!=null)
                         {
                             this.getTYLBList(this.xzqh);
                         }
+                         this.getTYJB();
                        
                         break;
                      
@@ -1721,6 +1758,7 @@ export default {
           },
          
           getZNSB(phone){
+
               if(this.state!="0"){
                   return;
               }
@@ -1964,7 +2002,10 @@ export default {
                       if(r.data.photoUrl!=null){ //头像
                         this.tximg=r.data.photoUrl;
                       }
+                    
+                      
                       this.form1=r.data;
+                 
                       this.personId=r.data.personId;
                       this.getSSDW(this.form1.orgId,1);//所属单位
                       
@@ -1976,8 +2017,6 @@ export default {
                               oobj.mobilePhone=mrr[i];
                               this.rows.push(oobj);
                           }
-                      
-                         
                       }
                      if(this.form.year!=null && this.form.year!='' && this.form.year!=undefined){
                          this.getBmonth(this.form.year);
@@ -2005,6 +2044,7 @@ export default {
                                  this.pd.is5=true;
                                 //  this.getBM(this.form.orgId);
                              }
+                             
                               if(r.data.isNotHold=='0112000001'){
                                  this.pd.is7=true;
                              }
@@ -2023,7 +2063,7 @@ export default {
                         this.getTB(this.xzqh,this.form1.levelType);
                        // this.getNJB();
                         this.getJJB('1');
-                       
+                        this.getBJDTB(this.form1.groupType);
 
                       }else if(this.addtype=='3'){
 
@@ -2088,15 +2128,15 @@ export default {
              }else{
                  //初始加载
                    this.getSSDW();//所属单位
-                  
-                   
-                   
-                   
+                    if(this.jkey!=null && this.jkey!='' && this.jkey!=undefined){
+                     this.$set(this.form1,"periodType",this.jkey);
+                    }
+                    
                     if(this.code!=null || this.code!='' ){
                              if(this.jb!='xq'){
                                 this.$set(this.form1,"groupType",this.code);
                              }
-                        }
+                    }
 
              }
                
@@ -2174,7 +2214,6 @@ export default {
                  ){
                    return;
                 }
-
                 let pp={
                         'level':this.form1.levelType,
                         'administrativeDivision':this.xzqh==undefined?"":this.xzqh,
@@ -2195,6 +2234,7 @@ export default {
                          var arr=[];
                          arr.push(this.jkey);
                          this.$set(this.form1,'reelections',arr); 
+                        
                      }
                     
                     this.getcrdb(data);
@@ -2203,41 +2243,56 @@ export default {
                          var arr=[];
                          arr.push(data);
                          this.$set(this.form1,'reelections',arr);
+                         
                          this.getcrdb(this.jblist);
                          this.getcrwy(this.jblist);
                  }
+
+                  this.form1.reelectionNum=this.form1.reelections.length
                 
             },
             getcrdb(data){
                  if(this.addtype=='1'){
                      var arr=this.form1.reelections;
-                     for (let i = 0; i < arr.length; i++) {
-                         data = data.filter(t => t.dm != arr[i])
-                     }
+                 
+                    
                      if(arr && arr.length>0){
+                        for (let i = 0; i < arr.length; i++) {
+                          data = data.filter(t => t.dm != arr[i])
+                        }
                          var val="0"+(parseInt(arr[0])-1);
                          data = data.filter(t => t.dm != val)
-                     }
+                       }else{
+                            data = data.filter(t => t.dm != this.form1.periodType);
+                           var val="0"+(parseInt(this.form1.periodType)-1);
+                           data = data.filter(t => t.dm != val)
+                       }
+                     
                      this.jblistdb=data;
                  }else if(this.addtype=="3"){
                      this.getNJB(0);
                  }else{
-               
                      this.jblistdb=data;
                  }
                
-                   
             },
             getcrwy(data){
                  if(this.addtype=='2'){
                     //  console.log('22----',this.form1.reelections,this.form1.periodType);
                      var arr=this.form1.reelections;
-                     for (let i = 0; i < arr.length; i++) {
-                         data = data.filter(t => t.dm != arr[i])
-                     }
+                   
+                   
                      if(arr && arr.length>0){
+                          
+                        for (let i = 0; i < arr.length; i++) {
+                            data = data.filter(t => t.dm != arr[i])
+                        }
                          var val="0"+(parseInt(arr[0])-1);
                          data = data.filter(t => t.dm != val)
+                     }else{
+                          data = data.filter(t => t.dm != this.form1.periodType);
+                           var val="0"+(parseInt(this.form1.periodType)-1);
+                           data = data.filter(t => t.dm != val)
                      }
                      this.jblistwy=data;
                  }else if(this.addtype=="3"){
@@ -2245,8 +2300,6 @@ export default {
                  }else{
                        this.jblistwy=data;
                  }
-               
-
             },
             getLRData(val){
                 if(this.pd.is5){
@@ -2259,16 +2312,14 @@ export default {
                          if(parseInt(val[i+1])-parseInt(val[i])!=1){
                                 this.$message.error("请选择连续届别!");
                                 val = val.filter(t => t != array[i]);
-                                 console.log(val,'val');
                                 return;
                             }
                         }
                         
                     }
-
                     this.$set(this.form1,'reelectionNum',val.length);
                     this.getcrdb(this.jblistlr);
-                    this.getcrdb(this.jblistlr);
+                    this.getcrwy(this.jblistlr);
                 } 
             },
             getJDHD(num,t){
@@ -2340,6 +2391,7 @@ export default {
                     'pbid':this.pbid,
                     'pageSize':num,
                     'token':this.$store.state.token,
+                    'identityType':this.form.identityType,
                 };
                  this.$api.post(this.Global.aport2+'/proposalHome/selectProposalInfoByPbId',pp,
                    r =>{
@@ -2476,10 +2528,20 @@ export default {
               this.uploadDialogVisible = false;
             },
             ZNfatherMethod(data,type){
+                this.getXz();
                 console.log(data,'dsata',type);
                 
             if(data!='99'){
               this.form=data;
+              if(this.form.mobilePhone && this.form.mobilePhones.length>0){
+                        var mrr=this.form.mobilePhones;this.rows=[];
+                          for (let i = 0; i < mrr.length; i++) {
+                              var oobj={}
+                              oobj.id=i+1;
+                              oobj.mobilePhone=mrr[i];
+                              this.rows.push(oobj);
+                          }
+              }
             //   if(data.identityTypeId==this.type){
             //      this.form1=data;
             //    }
@@ -2761,6 +2823,8 @@ export default {
                 //       this.$message.error("学历不能为空!");return;
                 //   }
                   if(this.ntype=='3'){
+                       console.log(this.form1.specialType,'this.form1.specialType',this.jkey);
+                       
                     if((this.form1.specialType==undefined || this.form1.specialType=="") && this.lbshow==true)
                     {
                         this.$message.error("特约职务不能为空!");return;
@@ -2778,9 +2842,36 @@ export default {
                         }
                     }
                   if(this.pd.is5){
-                       if(this.form1.reelectionNum==undefined || this.form1.reelectionNum=="")
+                      console.log(this.form1.reelections.length,'this.form1.reelections');
+                      
+                       if(this.form1.reelections==undefined || this.form1.reelections=="")
                         {
                             this.$message.error("连任届数不能为空!");return;
+                        }else if(this.form1.reelections.length==1){
+                            this.$message.error("连任届数至少选择两项!");return;
+                        }else if(this.form1.periodType!=''){
+                            var rff=true;
+                               for (let ii = 0; ii < this.form1.reelections.length; ii++) {
+                                  if(this.form1.periodType==this.form1.reelections[ii]){
+                                        rff=false;
+                                  } 
+                               }
+                               if(rff){
+                                   this.$message.error("连任届数必须有一项是当前届!");return;
+                               }
+                        }else{
+                            var val=this.form1.reelections;
+                                val=val.sort(function(a,b){return a-b});
+                                if(val.length>1){
+                                    for (let i = 0; i < val.length-1; i++) {
+                                     if(parseInt(val[i+1])-parseInt(val[i])!=1){
+                                            this.$message.error("连任时请选择连续届别!");
+                                            val = val.filter(t => t != val[i]);
+                                            return;
+                                        }
+                                    }
+                                    
+                                }
                         }
                   }
                   if(this.pd.is6){
@@ -2814,26 +2905,38 @@ export default {
                     //省部级以上领导
                     if(this.pd.is1){
                         this.form1.isProvincial="0181000001";
+                    }else{
+                         this.form1.isProvincial="0181000002";
                     }
                     //全国常委会委员
                     if(this.pd.is3){
                         this.form1.isInStandCommittee="0115000001";
+                    }else{
+                        this.form1.isInStandCommittee="0115000002";
                     }
                    //专门委员会
                     if(this.pd.is6){
                         this.form1.isInSpecialCommittees="0216000001";
+                    }else{
+                         this.form1.isInSpecialCommittees="0216000002";
                     }
                     //在京代表
                    if(this.pd.is4){
                         this.form1.isInBeijing="0209000001";
+                    }else{
+                         this.form1.isInBeijing="0209000002";
                     }
                     //连任代表
                     if(this.pd.is5){
                         this.form1.isReelection="0162000001";
+                    }else{
+                        this.form1.isReelection="0162000002";
                     }
                     //不再担任
                      if(this.pd.is7){
                         this.form1.isNotHold="0112000001";
+                    }else{
+                         this.form1.isNotHold="0112000002";
                     }
                     //补选区分
                      if(this.pd.is11){
@@ -2857,14 +2960,12 @@ export default {
                     }else{
                         this.form1.formerMember="0285000002";
                     }
-
-                      //工作委员会委员区分
+                    //工作委员会委员区分
                      if(this.pd.is13){
                         this.form1.workCommitteesDistinction="0273000001";
                     }else{
                         this.form1.workCommitteesDistinction="0273000002";
                     }
-                                 
                         p={
                         'baseInfo':this.form,
                         'representative':this.form1,
@@ -2882,26 +2983,38 @@ export default {
                    //省部级以上领导
                     if(this.pd.is1){
                         this.form1.isProvincial="0181000001";
+                    }else{
+                        this.form1.isProvincial="0181000002";
                     }
                    //全国常委会委员
                     if(this.pd.is3){
                         this.form1.isInStandCommittee="0115000001";
+                    }else{
+                        this.form1.isInStandCommittee="0115000002";
                     }
                     //专门委员会
                       if(this.pd.is6){
                         this.form1.isInSpecialCommittees="0216000001";
+                    }else{
+                         this.form1.isInSpecialCommittees="0216000002";
                     }
                     //在京代表
                      if(this.pd.is4){
                         this.form1.isInBeijing="0209000001";
+                    }else{
+                         this.form1.isInBeijing="0209000002";
                     }
                     //连任代表
                      if(this.pd.is5){
                         this.form1.isReelection="0162000001";
+                    }else{
+                         this.form1.isReelection="0162000002";
                     }
                     //不再担任
                       if(this.pd.is7){
                         this.form1.isNotHold="0112000001";
+                    }else{
+                         this.form1.isNotHold="0112000002";
                     }
                      //补选区分
                      if(this.pd.is11){
@@ -2936,10 +3049,14 @@ export default {
                     //省部级以上领导
                      if(this.pd.is1){
                         this.form1.isProvincial="0181000001";
+                    }else{
+                        this.form1.isProvincial="0181000002";
                     }
                     //是否政协委员
                     if(this.pd.is8){
                         this.form1.isCppcMember='1';
+                    }else{
+                        this.form1.isCppcMember='0';
                     }
                     // //在京代表
                     // if(this.pd.is4){
@@ -2948,14 +3065,20 @@ export default {
                      //连任代表
                      if(this.pd.is5){
                         this.form1.isReelection="0162000001";
+                    }else{
+                          this.form1.isReelection="0162000002";
                     }
                      //是否在京特约人员
                      if(this.pd.is4){
                         this.form1.isInBeijing='0209000001';
+                    }else{
+                       this.form1.isInBeijing='0209000002';
                     }
                     //是否人大代表
                     if(this.pd.is9){
                         this.form1.isRepresentative='1';
+                    }else{
+                         this.form1.isRepresentative='0';
                     }
 
                      //补选区分
@@ -3055,7 +3178,8 @@ export default {
                                         obj = this.ssdwdata.find(item =>{
                                             return item.orgid === this.form1.orgId
                                             });
-                                        this.lvl = obj.lvl
+                                        this.lvl = obj.lvl//obj.orglvl
+                                        this.orglvl=obj.orglvl;
                                        
                                        this.getBM(this.form1.orgId);//部门
                                        this.getJDZWLB(this.form1.subOrgPosition);
@@ -3265,16 +3389,53 @@ export default {
             });
 
         },
-        getworkout(t){
-                        
+        getworkout(t){  
               if(t==0){
                   this.pd.is13=false;
                   this.$set(this.form1,'workCommitteeId','')
+                if(!this.pd.is6){
+                   this.$set(this.form1,"specialCommitteeId","")
+                  }
               }else if(t==1){
                    this.pd.is6=false;
                    this.$set(this.form1,'specialCommitteeId','')
+                if(!this.pd.is13){
+                    this.$set(this.form1,"workCommitteeId","")
+                  }
               }
         },
+        getckdata(t){
+             if(t==1){
+            
+               if(!this.pd.is5){
+                  var arr=[];
+                  arr.push(this.form1.periodType);
+                  this.$set(this.form1,"reelections",'')
+                }
+
+             }else if(t==2){
+                if(!this.pd.is14){
+               this.$set(this.form1,"formerRepresentatives","")
+               }
+             }else if(t==3){
+                if(!this.pd.is15){
+                 this.$set(this.form1,"formerMembers","")
+               }
+             }else if(t==4){
+                if(!this.pd.is11){
+                 this.$set(this.form1,"repairTime","")
+               }
+             }else if(t==5){
+                if(!this.pd.is12){
+                 this.$set(this.form1,"fireReason","")
+               }
+             }else if(t==6){
+                if(!this.pd.is7){
+                 this.$set(this.form1,"isNotHoldReason","")
+               }
+             }
+               
+           },
          addlist(val){
              
              this.listdata2.push(val);
@@ -3426,6 +3587,8 @@ export default {
                 this.$set(this.form1,'groupType','');
              }else if(this.addtype==2){
                    this.$set(this.form1,"circlesType",'');
+             }else if(this.addtype==3){
+                   this.$set(this.form1,"specialType",'');
              }
                  this.$set(this.form1,"periodType",'');
                 if(val=='' || val==null){
@@ -3533,15 +3696,23 @@ export default {
         },
          //可结对职务列表
             getJDZWLB(val){
+                console.log('--',val);
+                
                let pp={
-                    'levelType':this.lvl,
+                    'levelType':this.orglvl,
                   };
                 this.$api.post(this.Global.aport1+"/representative/pairPosition",pp,
                     r =>{
                          if(r.code==1){
                            var arr=r.data;
                            if(arr && arr.length>0){
-                           this.kjdshow=arr.indexOf(val)==1?true:false;
+                            //  this.kjdshow=arr.indexOf(val)==1?true:false;
+                             for (let i = 0; i < arr.length; i++) {
+                                 if(arr[i]==val){
+                                     this.kjdshow=true;break;
+                                 }
+                                 
+                              }
                              }
                           
                            }
@@ -3568,9 +3739,9 @@ export default {
             },
             //特约职务类别
             getTYLBList(xzqh){
-                if(xzqh!=null){
-                    this.$set(this.form1,"specialType",'');
-                }
+                //if(xzqh!=null){
+                   // this.$set(this.form1,"specialType",'');
+               // }
                     
                     let p={
                         'level':this.form1.levelType,

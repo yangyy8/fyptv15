@@ -27,6 +27,8 @@
                  <el-col :span="24"  class="l-1-1">● &nbsp;&nbsp;企业数据经济胡统计与分析</el-col>
                  <el-col :span="24"  class="l-1-1">● &nbsp;&nbsp;张三的申请审批</el-col>
                  <el-col :span="24"  class="l-1-1">● &nbsp;&nbsp;张三的申请审批</el-col>
+                 <el-col :span="24"  class="l-1-1">● &nbsp;&nbsp;张三的申请审批</el-col>
+                 <el-col :span="24"  class="l-1-1">● &nbsp;&nbsp;张三的申请审批</el-col>
                </el-row>
             <el-row class="mt-40 mb-25">
                 <el-col :span="24">
@@ -36,7 +38,24 @@
             </el-row>
             <el-row>
               <el-col :span='24'>
-                <img src='../../assets/img/screen/l-2.png'>
+                    <div class="datapicont fleft center"> 
+                    <el-progress type="circle"  :width="85" :percentage="30"></el-progress>
+                    <br/>
+                    <div class="c-title mt-10">联络活动统计</div>
+             
+                  </div>
+                    <div class="datapicont fleft center ml-20"> 
+                    <el-progress type="circle"  :width="85" :percentage="20"></el-progress>
+                    <br/>
+                    <div class="c-title mt-10">议案建议统计</div>
+             
+                  </div>
+                    <div class="datapicont fleft center ml-20"> 
+                    <el-progress type="circle"  :width="85" :percentage="47"></el-progress>
+                    <br/>
+                    <div class="c-title mt-10">关注案件统计</div>
+             
+                  </div>
               </el-col>
             </el-row>
 
@@ -48,7 +67,7 @@
             </el-row>
             <el-row>
               <el-col :span='24'>
-                  <div id='phbcharts' style='width:100%;height:300px;'></div>
+                  <div id='phbcharts' style='width:100%;height:350px;'></div>
               </el-col>
             </el-row>
                
@@ -86,7 +105,7 @@
                 <EchartsMap></EchartsMap>
               </el-col>
             </el-row>
-             <el-row class="mt-60">
+             <el-row style="margin-top:15%">
               <el-col :span='8' >
                 <div class="fleft"><img src="../../assets/img/screen/ic-1.png" class="mr-10"></div>    
                 <div class="fleft c-3t">组织联络活动</div><br/>

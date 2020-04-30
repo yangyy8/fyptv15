@@ -14,7 +14,7 @@
              <el-col :span='(addtype=="1" || addtype=="2")?18:22' class="ptit">
                 <el-row>
                    <el-col :span='16'>
-                       <div class="title">{{jjbmc==null?'':jjbmc}}{{cname4}}{{cname2}}</div>
+                       <div class="title">{{jjbmc==null?'':jjbmc}}{{cname4==''?orgmc:cname4}}{{cname2}}</div>
                    </el-col>
                     <el-col :span="8" style="text-align:right">
                           <el-button type="primary" style="width:80px" @click="goBase()" v-if='allshow[0] && addtype!="3"' key='0'><span>添加</span></el-button>
@@ -109,6 +109,11 @@ export default {
            jjblist:[],
            tyjblist:[],
            lbpd:{},
+           orgid:'',
+           orgmc:'',
+           sorgid:'',
+           falg:false,
+          
         }
     },
     mounted(){
@@ -136,6 +141,7 @@ export default {
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
               
+              console.log(this.info,'this.infos');
               
                this.addtype=this.info.type;
                this.jb=this.info.jb;
@@ -149,7 +155,10 @@ export default {
                this.mc=this.info.mc;
                this.ltitle=this.info.ltitle;
                this.cinfo=this.info.cinfo;
-             
+               this.orgid=this.info.orgid;
+               this.orgmc=this.info.orgmc;
+               this.sorgid=this.info.sorgid;
+               
                }catch(e){
                    this.$router.push({name:'limitmsg',query:{msg:'该地址参数不对！'}});
                }
@@ -234,11 +243,10 @@ export default {
                    let p={
                         'level':this.lvltype,
                         'administrativeDivision':this.code,
-                        
                     };
                     this.$api.post(this.Global.tylburl,p,
                             r =>{
-                                this.tylblist=ToArray(r.data);
+                            this.tylblist=ToArray(r.data);
                               
                     });
             }
@@ -246,7 +254,7 @@ export default {
            
         },
         getlb(dm,mc){
-            this.lbpd={};
+           this.lbpd={};
            this.lbpd.dm=dm,
            this.lbpd.mc=mc;
             let pp={
@@ -287,7 +295,7 @@ export default {
                this.mc='';
                this.ltitle='';
                this.cinfo='';     
-               this.back=true;this.leveldatatb=[];this.fydata=[];
+               this.back=true;this.leveldatatb=[];this.fydata=[];this.orgmc='';this.orgid='';this.sorgid='';
       },
       getInfo(){
            if(this.addtype=='1' || this.addtype=='2'){
@@ -408,9 +416,60 @@ export default {
           
            this.$router.push({name:'SpecialPersonDeatil',query:{lb:this.lbpd.dm,lbmc:this.lbpd.mc,mc:this.cname3,jb:this.jb,jblv:this.lvltype,code:this.code,codemc:this.mc,jkey:this.lbpd.tyjb,jmc:this.lbpd.tyjbmc}});
        },
+    
       gotoFy(orgid,sjOrgId,mc){
-           this.$router.push({name:'CourtMeber',query:{orgid:sjOrgId,depid:orgid,jb:this.jb,type:this.addtype,xzqh:this.code,xzqhmc:this.mc,cname:this.cname3,fname:mc}});
+        
+        let pp={
+                'orgId':orgid,
+            };
+            this.$api.get(this.Global.aport1+'/org/getSubDept',pp,
+            r=>{
+                if(r.code==1){
+                    if(r.data && r.data.length>0){
+                          let p={
+                            'cname1':this.cname1,
+                            'cname2':this.cname2,
+                            'cname3':this.cname3,
+                            'cname4':this.cname4,
+                            'type':this.addtype,
+                            'code':this.code,
+                            'mc':this.mc,
+                            'jb':this.jb,
+                            'jjb':this.jjb,
+                            'jjbmc':this.jjbmc,
+                            'ltitle':this.ltitle,
+                            'cinfo':this.cinfo,
+                            'sorgid':sjOrgId,
+                            'orgid':orgid,
+                            'orgmc':mc,
+                            
+                            };
+                            var str=Base64.encode(JSON.stringify(p));
+                            this.$router.push({path:'Grouplist',query:{info:str}});
+                    }
+                    else{
+                         this.$router.push({name:'CourtMeber',query:{orgid:sjOrgId,depid:orgid,jb:this.jb,type:this.addtype,xzqh:this.code,xzqhmc:this.mc,cname:this.cname3,fname:mc}});
+                    }
+                }
+            });
+     
        },
+        getListBM(sjOrgId,orgid,mc){
+      
+            let p={
+                'orgId':orgid,
+            };
+            this.$api.get(this.Global.aport1+'/org/getSubDept',p,
+            r=>{
+                if(r.code==1){
+                    if(r.data && r.data.length>0){
+                      
+                         this.fydata=r.data;
+                    }
+                }
+            })
+        },
+
         //团别
       getTB(l,v){
           
@@ -433,6 +492,13 @@ export default {
         },
      //法院机构
      getFY(){
+         
+         
+          if(this.orgid!='' && this.orgmc!='' && this.sorgid!='' && this.orgid!=undefined && this.orgmc!=undefined && this.sorgid!=undefined){
+          
+            
+           this.getListBM(this.sorgid,this.orgid,this.orgmc);
+         }else{
             let p={
                 'lb':this.Global.FY,
                 'xzqh':this.code,
@@ -449,6 +515,7 @@ export default {
                        }
                 }
             })
+        }
         },
       goBase(){
            this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,jmc:this.jjbmc,jkey:this.jjb}})

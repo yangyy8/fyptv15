@@ -30,17 +30,16 @@
                   </el-select>
                 </div>
              </div>
-              <div class="fright mt-20 topr" style="min-width:340px;text-align:left">关注案件分析</div><div class="fright mt-20"><img src="../../assets/img/screen/left.png" class="mt-10 mr-10"></div>
+              <div class="fright mt-20 topr" style="min-width:340px;text-align:left">联络活动分析</div><div class="fright mt-20"><img src="../../assets/img/screen/left.png" class="mt-10 mr-10"></div>
              </el-col>
            </el-row>
-
          </div>
          <div class="main">
             <div class="fleft w-25 left mt-10">
             <el-row class="mb-10">
                 <el-col :span="24">
                     <div class="fleft"><img src="../../assets/img/screen/left.png" class="mr-10"></div>    
-                   <div class="fleft ">历史关注案件</div>
+                   <div class="fleft ">历史数据对比</div>
                  </el-col>
             </el-row>
                <el-row>
@@ -48,10 +47,9 @@
                       <div id='yearcharts' style='width:100%;height:200px;'></div>
                  </el-col>
                </el-row>
-            <el-row class="mt-20 mb-25">
+            <el-row class="mt-20">
                 <el-col :span="24">
-                        
-                     <div class="fleft" > {{year}} 年度关注案件办理情况</div>
+                     <div class="fleft" > {{year}} 年度联络活动办理情况</div>
                 </el-col>
             </el-row>
             <el-row>
@@ -59,7 +57,7 @@
                 <div id='handlecharts' style='width:100%;height:200px;'></div>
               </el-col>
             </el-row>
-            <el-row class="mt-30 mb-25">
+            <el-row class="mt-30">
                 <el-col :span="24">
                     <div class="fleft chselect1">
                         <el-select v-model="month" placeholder="" style="width:80px;"   size="mini">
@@ -71,7 +69,7 @@
                                         </el-option>
                          </el-select>
                     </div>    
-                     <div class="fleft" style="padding:5px 0px 0px 8px">月关注案件受理情况</div>
+                     <div class="fleft" style="padding:5px 0px 0px 8px">月关联络活动重要占比</div>
                 </el-col>
             </el-row>
             <el-row class="mt-10">
@@ -93,57 +91,21 @@
                     <br/>
                     <div class="c-title mt-10">新增</div>
                   </div>
-                   <div class="ml-10 datapicont fleft center"> 
-                    <el-progress type="circle"  :width="70" :percentage="2" ></el-progress>
-                    <br/>
-                    <div class="c-title mt-10">新增办结</div>
-                  </div>
-                   <div class="ml-10 datapicont fleft center"> 
-                    <el-progress type="circle"  :width="70" :percentage="3" ></el-progress>
-                    <br/>
-                    <div class="c-title mt-10">新增遗留</div>
-                  </div>
+                 
               </el-col>
             </el-row>
-               <el-row class="mt-40">
-                <el-col :span="12">
+               <el-row class="mt-20">
+                <el-col :span="24">
                     <div class="fleft"><img src="../../assets/img/screen/left.png" class="mr-10"></div>    
-                     <div class="fleft ">重点案件分析</div>
+                     <div class="fleft ">联络活动关联情况</div>
                 </el-col>
-                 <el-col :span="12">
-                    <div class="fleft"><img src="../../assets/img/screen/left.png" class="mr-10"></div>    
-                     <div class="fleft ">重复案件分析</div>
-                </el-col>
+                
                </el-row>
-                 <el-row class="mt-20">
-                   <el-col :span="12">
-                  <div class=" datapic fleft center">   
-                    <el-progress type="circle"  :width="80" :percentage="29" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">180</div>
-                    <br/>
-                    <div class="c-title mt-20">重点</div>
-                  </div>
-                  <div class="ml-20 datapic  fleft center"> 
-                    <el-progress type="circle"  :width="80" :percentage="71" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">450</div>
-                    <br/>
-                    <div class="c-title mt-20">非重点</div>
-                  </div>
+                 <el-row>
+                   <el-col :span="24">
+                     <div id='phbcharts' style='width:100%;height:200px;'></div>
                    </el-col>
-                    <el-col :span="12">
-                  <div class=" datapic fleft center">   
-                    <el-progress type="circle"  :width="80" :percentage="39" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">383</div>
-                    <br/>
-                    <div class="c-title mt-20">重复</div>
-                  </div>
-                  <div class="ml-20 datapic  fleft center"> 
-                    <el-progress type="circle"  :width="80" :percentage="61" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">247</div>
-                    <br/>
-                    <div class="c-title mt-20">非重复</div>
-                  </div>
-                    </el-col>
+                 
                  </el-row>
 
              </div>
@@ -158,7 +120,7 @@
              <el-col :span="24">
                <div class="casebg">
                  <el-row >
-                   <el-col :span="6" style="padding:10px 0px 0px 30px">关注案件列表</el-col>
+                   <el-col :span="6" style="padding:10px 0px 0px 30px">联络活动列表</el-col>
                    <el-col :span="18">
                      <!-- <el-button round size="mini">圆角按钮</el-button>
                      <el-button round size="mini">圆角按钮</el-button> -->
@@ -221,7 +183,7 @@
                      <div class="fleft ">关注人群分析</div>
                 </el-col>
               <el-col :span='24'>
-                <div id='phbcharts' style='width:100%;height:200px;'></div>
+                
               </el-col>
             </el-row>
                <el-row class="mt-10">
@@ -299,7 +261,7 @@ export default {
        }
     },
     mounted(){
-       this.phbcharts(['全国人大代表', '全国政协委员', '特约监督员', '特约咨询员','其他'],['联名', '领衔']);
+       this.phbcharts(['1', '2', '3', '4','5'],['议案建议', '关注案件','无关联']);
        this.yearcharts(['2020', '2019', '2018', '2017','2016','2015','2014','2013','2012','2011','2010']);
        this.handlecharts(['1','2','3','4','5','6','7','8','9','10','11','12']);
        this.getSSFY();
@@ -593,15 +555,20 @@ export default {
     ],
     series: [
         {
-            name: '联名',
+            name: '议案建议',
             type: 'bar',
             barGap: 0,
             data: [120, 136, 36, 78,66]
         },
         {
-            name: '领衔',
+            name: '关注案件',
             type: 'bar',
             data: [110, 132, 101, 44, 90]
+        },
+        {
+            name: '无关联',
+            type: 'bar',
+            data: [13, 112, 85, 59, 150]
         },
        
        

@@ -45,6 +45,7 @@ import '../../../node_modules/echarts/map/js/province/zhejiang.js' // 浙江
 
 export default {
      name:'EchartsMap',
+      props: ['sdata'],
      data(){
          return{
               chart: null,
@@ -54,8 +55,9 @@ export default {
          }
      },
     mounted() {
-      this.getInfo();
-      this.drawLine(this.data,this.maptype);
+      console.log(this.sdata,'this.data');
+      this.getinit();
+  
     },
       beforeDestroy() {
       if (!this.chart) {
@@ -65,6 +67,30 @@ export default {
       this.chart = null;
     },
     methods: {
+
+       getinit(){
+           //中间地图
+           let p8={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": '0e10a51827e511ea9e3700155dbaef87',
+                "Year": '2020',
+              },
+              "itemIndex": [
+                "YiAn_centermap"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p8,
+            r =>{
+                    console.log(JSON.stringify(r));
+                    if(r.code==200){
+                          this.getInfo();
+                          this.drawLine(this.data,this.maptype);
+                          
+                    }  
+            });
+       },
         back(){
            this.bj=this.bj-1;
            this.drawLine(this.data,this.maptype);
@@ -307,7 +333,7 @@ export default {
             case '天津':
               return [
                   {"name": "宝坻区", "value": 72.1},
-                  { "name": "和平区","value": 41.97},
+                  {"name": "和平区","value": 41.97},
                   {"name": "河东区","value": 74.47},
                   {"name": "河西区","value": 82.22},
                   {"name": "南开区","value": 85.95},

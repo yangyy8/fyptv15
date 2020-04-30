@@ -202,7 +202,7 @@ export default {
         },
         handleCurrentChange(val) {
           this.CurrentPage=val;
-          this.casesearch(val, this.pageSize, this.casepd);
+          this.suggsearch(val, this.pageSize, this.suggpd);
         },
         suggclickRow(row){
            this.$refs.suggTable.toggleRowSelection(row)

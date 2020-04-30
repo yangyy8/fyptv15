@@ -23,7 +23,7 @@
                                     <el-col :sm="24" :md="24" :lg="12"  v-for="(t,ind) in leveldata" :key="ind">
                                          <span class="area" @click="gopro(t.dm,'tb',t.mc)" v-if="t.dm!='0190900000'">{{t.mc}}</span>
                                     </el-col>
-                                  <el-col :sm="24" :md="24" :lg="24"  v-for="(ts,inde) in leveldata">
+                                  <el-col :sm="24" :md="24" :lg="24"  v-for="(ts,inde) in leveldata" :key='inde'>
                                          <span class="area" v-if="ts.dm=='0190900000'"  @click="gopro('0190900000','tb','解放军和武警部队')">解放军和武警部队</span>
                                   </el-col>
                                 </el-row>

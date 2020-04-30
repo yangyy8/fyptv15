@@ -66,7 +66,7 @@
                         </el-select>
 
                       </el-col>
-                        <el-col :sm="24" :md="12" :lg="12">
+                        <el-col :sm="24" :md="12" :lg="12" v-if='type!="06"'>
                           <span class="yy-input-text" style="width:18%!important;">
                        是否重点办理</span>
                             <el-select v-model="pd.isImportant"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >

@@ -181,6 +181,7 @@ export default {
                              }
                              this.$store.commit('getImgformat',sum.substr(0,sum.length-1));
                       }
+                      this.$store.commit('getYxdate',r.data.checkDeadLine)
                     }
                 });
     },
@@ -241,12 +242,12 @@ export default {
   color: #fff;
 
 }
-
-.logtop{margin-top: 40px;height: 77px;margin-left: -7px;position: absolute;z-index: 9;}
+/* position: absolute; */
+.logtop{margin-top: 40px;margin-left: -13px;z-index: 9;}
 .logintitle{
   width: 440px;
   text-align: center; 
-  margin: 140px 0 15px 0;
+  margin: 5% 0 15px 0;
   background: url('../assets/img/logod.png'); height: 65px;
 }
 .loginmessage{font-size: 12px; text-align:center;color: #999999; padding-top: 10px;}

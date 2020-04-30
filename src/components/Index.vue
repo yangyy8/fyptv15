@@ -64,17 +64,23 @@
                           </div>
                       </el-col>
                     </el-row>
-                    <el-row :class="(show2 || show3)?'mt-10':''" v-if="show4 || show5">
-                      <el-col :span="(show4 && show5)?8:(show5?0:24)">
+                    <el-row :class="(show2 || show3)?'mt-10':''" v-if="show4 || show5 || show6">
+                      <el-col :span="getkz(1)">
                           <div class="jkyj  mr-10" @click="getZX('1500')">
-                           <img src="../assets/img/newindex/img20.png" v-if='show2 || show3' alt="监控预警">
-                          <img src="../assets/img/newindex/img200.png" v-else alt="监控预警">
+                           <img src="../assets/img/newindex/img20.png" v-if='show2 || show3' alt="监控和预警">
+                          <img src="../assets/img/newindex/img200.png" v-else alt="监控和预警">
                           </div>
                       </el-col>
-                      <el-col :span="(show4 && show5)?16:(show4?0:24)">
+                      <el-col :span="getkz(2)">
+                          <div class="gzwj  mr-10" @click="getZX('1700')">
+                           <img src="../assets/img/newindex/img70.png" v-if='show2 || show3' alt="工作文件">
+                          <img src="../assets/img/newindex/img700.png" v-else alt="工作文件">
+                          </div>
+                      </el-col>
+                      <el-col :span="getkz(3)">
                            <div class="tjxx mr-10" @click="getZX('1400')">
-                           <img src="../assets/img/newindex/img50.png" v-if='show2 || show3' alt="统计信息">
-                            <img src="../assets/img/newindex/img500.png" v-else alt="统计信息">
+                           <img src="../assets/img/newindex/img50.png" v-if='show2 || show3' alt="统计查询">
+                            <img src="../assets/img/newindex/img500.png" v-else alt="统计查询">
                           </div>
                       </el-col>
                     </el-row>
@@ -136,7 +142,7 @@
   </div>
 </template>
 <script>
-import {getSearh} from '@/assets/js/cc.js'
+// import {getSearh} from '@/assets/js/cc.js'
 import NavMenu from "./Common/NavMenu.vue";
 export default {
     components: {
@@ -163,6 +169,7 @@ export default {
            show3:false,//办理
            show4:false,//联络
            show5:false,//统计
+           show6:false,//工作文件
            addDialogVisible:false,
            form:{},
            xzdw:[],
@@ -263,6 +270,7 @@ export default {
                           else if(id=="1300"){this.show3=true;}
                           else if(id=="1500"){this.show4=true;}
                           else if(id=="1400"){this.show5=true;}
+                          else if(id=="1700"){this.show6=true;}
                     }
                   }
            });
@@ -294,7 +302,8 @@ export default {
             n=='1200' || 
             n=='1300' || 
             n=='1400' || 
-            n=='1500'){
+            n=='1500' ||
+            n=='1700'){
             this.id=[];
         }
          this.id.push(n);
@@ -353,6 +362,52 @@ export default {
     goto(url){
     
        this.$router.push({path:url});
+    },
+    getkz(t){
+      console.log( this.show4,this.show5,this.show6);
+      
+       if(t==1){
+           if(this.show4 && this.show5 && this.show6)
+           {
+             return 8;
+           }else{
+               if(!this.show4){
+                  return 0;
+               }else if( !this.show5 && !this.show6){
+                  return  24
+               }else{
+                 return 12
+               }
+           }
+      }else if(t==2){
+           if(this.show4 && this.show5 && this.show6)
+           {
+           
+             return 8;
+           }else{
+               if(!this.show6){
+                  return 0;
+               }else if( !this.show5 && !this.show4){
+                  return  24
+               }else{
+                 return 12
+               }
+           }
+      }else if(t==3){
+           if(this.show4 && this.show5 && this.show6)
+           {
+          
+             return 8;
+           }else{
+               if(!this.show5){
+                  return 0;
+               }else if( !this.show4 && !this.show6){
+                  return  24
+               }else{
+                 return 12
+               }
+           }
+      }
     },
       loginout(){
         var formData = new FormData();
@@ -495,6 +550,11 @@ export default {
 .indexn .center .jkyj{
   background: url('../assets/img/newindex/img2.png') no-repeat center;
   background-size: 100% 100%;
+  text-align: center;
+  cursor: pointer;
+}
+.indexn .center .gzwj{
+  background:#48cdde;
   text-align: center;
   cursor: pointer;
 }

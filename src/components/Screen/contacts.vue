@@ -113,7 +113,7 @@
                        <el-col :span="24" class="mt-20 ml-20 mr-20">
                            <el-row class="listl">
                                <el-col :span="13" class="f-15">
-                                    <div class="fleft xh">1</div>    
+                                    <div class="fleft xhs">1</div>    
                                     <div class="fleft overf">中新公司申请设立海事赔偿责任案件的旁听庭审</div>
                                </el-col>
                                <el-col :span="3">旁听庭审</el-col>
@@ -123,7 +123,7 @@
                            </el-row>
                             <el-row class="listl">
                                <el-col :span="13" class="f-15">
-                                    <div class="fleft xh">2</div>    
+                                    <div class="fleft xhs">2</div>    
                                     <div class="fleft overf">中国建设银行股份有限公司广州荔湾支行诉广东蓝天集团</div>
                                </el-col>
                                <el-col :span="3">会议座谈</el-col>
@@ -133,7 +133,7 @@
                            </el-row>
                             <el-row class="listl">
                                <el-col :span="13" class="f-15">
-                                    <div class="fleft xh">3</div>    
+                                    <div class="fleft xhs">3</div>    
                                     <div class="fleft overf">安徽省外经建设(集团)有限公司诉东方置业房地产</div>
                                </el-col>
                                <el-col :span="3">旁听庭审</el-col>
@@ -152,7 +152,7 @@
                        <el-col :span="24" class="mt-20 ml-20 mr-20">
                            <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">1</div>    
+                                    <div class="fleft xhs">1</div>    
                                     <div class="fleft overf">中新公司申请设立海事赔偿责任案件的旁听庭审</div>
                                </el-col>
                                 <el-col :span="2">领衔</el-col>
@@ -165,7 +165,7 @@
                            </el-row>
                             <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">2</div>    
+                                    <div class="fleft xhs">2</div>    
                                     <div class="fleft overf">中国建设银行股份有限公司广州荔湾支行诉广东蓝天集团</div>
                                </el-col>
                                <el-col :span="2">领衔</el-col>
@@ -178,7 +178,7 @@
                            </el-row>
                             <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">3</div>    
+                                    <div class="fleft xhs">3</div>    
                                     <div class="fleft overf">安徽省外经建设(集团)有限公司诉东方置业房地产</div>
                                </el-col>
                                 <el-col :span="2">领衔</el-col>
@@ -200,7 +200,7 @@
                        <el-col :span="24" class="mt-20 ml-20 mr-20">
                            <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">1</div>    
+                                    <div class="fleft xhs">1</div>    
                                     <div class="fleft overf">中新公司申请设立海事赔偿责任案件的旁听庭审</div>
                                </el-col>
                                 <el-col :span="2">领衔</el-col>
@@ -213,7 +213,7 @@
                            </el-row>
                             <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">2</div>    
+                                    <div class="fleft xhs">2</div>    
                                     <div class="fleft overf">中国建设银行股份有限公司广州荔湾支行诉广东蓝天集团</div>
                                </el-col>
                                <el-col :span="2">领衔</el-col>
@@ -226,7 +226,7 @@
                            </el-row>
                             <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xh">3</div>    
+                                    <div class="fleft xhs">3</div>    
                                     <div class="fleft overf">安徽省外经建设(集团)有限公司诉东方置业房地产</div>
                                </el-col>
                                 <el-col :span="2">领衔</el-col>

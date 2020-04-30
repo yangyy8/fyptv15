@@ -66,7 +66,7 @@
 .sreen .contc .title{color: #327AE4; background: url('../../assets/img/screen/cline.png') no-repeat; height: 30px; background-size: 100% 100%; padding-left: 15px;font-size: 18px;}
 
 .sreen  .ctitle{color: #327AE4; padding-left: 15px;font-size: 18px;}
-.sreen .contc .xh{font-size: 11px;text-align: center;padding:0 15px;}
+.sreen .contc .xhs{font-size: 11px;text-align: center;padding:0 15px;}
 .sreen .contc .listl{ height: 35px;line-height: 36px; cursor: pointer;background: url('../../assets/img/screen/sz-1.png') no-repeat left;color: #EFF0F2; font-size: 15px;}
 .sreen .contc .listl:hover{ height: 35px;line-height: 36px; cursor: pointer;background: url('../../assets/img/screen/sz-0.png') no-repeat left; color: #ffffff;}
 
@@ -79,7 +79,7 @@
 .sreen .contc1{padding-right: 50px; text-align: center;}
 .sreen .contc1 .listl{ height: 35px;line-height: 36px; cursor: pointer;background: url('../../assets/img/screen/sz-1.png') no-repeat left;color: #EFF0F2; font-size: 15px;}
 .sreen .contc1 .listl:hover{ height: 35px;line-height: 36px; cursor: pointer;background: url('../../assets/img/screen/sz-0.png') no-repeat left; color: #ffffff;}
-.sreen .contc1 .xh{font-size: 11px;text-align: center;padding:0 15px;}
+.sreen .contc1 .xhs{font-size: 11px;text-align: center;padding:0 15px;}
 .sreen .contc1 .title{background: #102751; color: #4990F8; line-height: 25px; font-size: 14px;}
 .datapic .el-progress .el-progress-circle  svg path:first-child{stroke:none;}
 .datapic .el-progress .el-progress-circle .el-progress-circle__path{stroke:#5C23F6;}
@@ -107,6 +107,7 @@
     line-height: 20px;
 
 }
+.sreen ul li{list-style: none;}
 .sreen .new-list ul li{
   width: 100%;
 

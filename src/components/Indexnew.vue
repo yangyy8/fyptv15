@@ -164,7 +164,7 @@
   </div>
 </template>
 <script>
-import {getSearh} from '@/assets/js/cc.js'
+// import {getSearh} from '@/assets/js/cc.js'
 import NavMenu from "./Common/NavMenu.vue";
 export default {
     components: {

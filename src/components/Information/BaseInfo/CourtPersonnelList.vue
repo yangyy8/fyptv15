@@ -300,7 +300,7 @@ export default {
                 this.addtype=val.query.type;
                 this.getSSFY();
                 this.getCheckList();
-                this.getList(this.CurrentPage, this.pageSize, this.pd);
+               // this.getList(this.CurrentPage, this.pageSize, this.pd);
                 if(val.query.jgid && val.query.sjid){
                     this.pd.orgId=val.query.sjid;
                     this.getSSBM(val.query.sjid);
