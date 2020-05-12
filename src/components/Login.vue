@@ -104,20 +104,31 @@ export default {
           this.$api.post(url,p,
              r => {
               if(r.success){
-                   this.updateInfo(r.data);
-                    this.$store.commit('getUid',this.user.userName)
-                     this.getJID();
-                     if(r.data.first){
-                        this.$router.push({name: 'EditPwd'});return;
-                     }
+                
+                  
+                     if(r.data.pbId!=null){
+                            this.$store.commit('getPbid',r.data.pbId)
+                      }   
+                      if(r.data.personId!=null){
+                            this.$store.commit('getPersonid',r.data.personId)
+                      }
                      
                      if(!r.data.isDefault){
+                     
                       //  this.getInfo(r.data.personId);
                         this.$router.push({name: 'AuthoritySwith'});
                      }else{
-                     
+                         this.$store.commit('getUid',this.user.userName)
+                         
+                         this.updateInfo(r.data);
+                        if(r.data.first){
+                          this.$router.push({name: 'EditPwd'});return;
+                         }
+                         this.getJID();
                          this.$router.push({name: 'Index'});
                      }
+
+                
                   
               }else {
                   this.$message.error(r.message);return;
@@ -142,12 +153,7 @@ export default {
                       if(r.zw!=null){
                         this.$store.commit('getZwname',r.zw.mc)
                       }
-                      if(r.pbId!=null){
-                            this.$store.commit('getPbid',r.pbId)
-                      }   
-                      if(r.personId!=null){
-                            this.$store.commit('getPersonid',r.personId)
-                      }
+                    
                        if(r.funids!=null){
                             this.$store.commit('getAuth',r.funids)
                       }

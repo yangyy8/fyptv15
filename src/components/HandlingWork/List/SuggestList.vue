@@ -926,7 +926,7 @@ export default {
                 });
         },
     gotoinfo(t,title){
-      console.log('------',t,title);
+    
       
         var proposalInfoId="";
         if(t=='0'){

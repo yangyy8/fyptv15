@@ -11,6 +11,7 @@ textarea{resize: none!important;}
 .mb-15{margin-bottom: 15px;}
 .mt-20{margin-top: 20px;}
 .mt-30{margin-top: 30px;}
+.mb-10{margin-bottom: 10px;}
 .mb-20{margin-bottom: 20px;}
 .mb-50{margin-bottom: 50px;}
 .mt-50{margin-top: 50px;}
@@ -119,7 +120,7 @@ textarea{resize: none!important;}
 .el-table .warning-row {
   background: oldlace;
 }
-  .el-table .success-row {
+.el-table .success-row {
   background: #FBECD5;
 }
 .el-table .flag-row {

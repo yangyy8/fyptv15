@@ -132,10 +132,7 @@
                                  </el-option>
                             </el-select>
                       </el-col>
-                       
                    </el-row>
-                
-
                    <el-row class="ah-40"  v-if="addtype==6 || addtype==5 || addtype==7 || addtype==4">
                          <el-col :span="8" class="input-item">
                           <span class="yy-input-text textn"><font class="red">*</font> 承办单位</span>
@@ -369,11 +366,9 @@
                         </el-row>
                         <el-row  class="ah-40" v-if="addtype==9">
                        <el-col :span="24"  class="input-item">
-                      
                              <el-table
                             ref="multipleTable"
                             :data="ListData7">
-                         
                             <el-table-column
                                 type="index"
                                 label="序号" width="50">
@@ -399,7 +394,6 @@
                                   </template>
                             </el-table-column>
                            </el-table>
-                           
                          </el-col>
                           <el-col :span="8"  class="input-item">
                             <span class="yy-input-text"><font class="red">&ensp;</font> 接待人数</span>
@@ -439,7 +433,6 @@
                                 label="单位">
                             </el-table-column>
                              <el-table-column
-                    
                                 label="职务">
                                   <template slot-scope="scope">
                                     <div>
@@ -456,7 +449,6 @@
                                 </template>
                             </el-table-column>
                            </el-table>
-                           
                          </el-col>
                           <el-col :span="8"  class="input-item">
                             <span class="yy-input-text" style="width:31%"><font class="red">&ensp;</font> 走访人数</span>
@@ -464,14 +456,14 @@
                          </el-col>
                    </el-row>
                   <el-row class="mt-20" >
-                        <el-col :span="15"  class="input-item">
+                      <el-col :span="15"  class="input-item">
                         <span class="yy-input-text" style="min-width:180px" title="代表、委员以及特约人员"><font class="red">&ensp;</font> 代表、委员以及特约人员 </span>
                         <el-select v-model="lmdbid" v-if="!llbnt"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                           <el-option
                            v-for="(item,ind) in xmdata"
                            :key="ind"
                            :label="item.fullName"
-                           :value="item.pbId+'|'+item.personId">
+                           :value="item.pbId">
                            </el-option>
                         </el-select>
                         </el-col>
@@ -480,7 +472,7 @@
                         </el-col>
                   </el-row>
                   <el-row>
-                        <el-col :span="24"  class="input-item">
+                    <el-col :span="24"  class="input-item">
                             <el-table
                             ref="multipleTable"
                             :data="ListData4">
@@ -545,7 +537,6 @@
                       </el-col>
                         <el-col :span="8" v-if="!llbnt">
                             <el-button type="success"  size="small" plain @click="ChangeFYNameList(fyld)">加入列表</el-button>
-                            
                         </el-col>
                    </el-row>
                    <el-row class="ah-40" v-if='addtype!="9" && addtype!="7" && addtype!="8"'>
@@ -595,7 +586,7 @@
                              <el-checkbox v-model="pd5.ck1" :disabled="llbnt">人民法院各部门组织开展的特约人员活动</el-checkbox>
                        </el-col>
                         <el-col :span="24" style="margin-left:10.2%;">
-                             <el-checkbox v-model="pd5.ck11" @change="getwx()" :disabled="llbnt">是否建立微信群</el-checkbox>  
+                             <el-checkbox v-model="pd5.ck11" @change="getwx()" :disabled="llbnt">建立微信群</el-checkbox>  
                              <el-input placeholder="请输入微信群名称" size="small" :disabled="llbnt" v-if='pd5.ck11' clearable v-model="wxname" style="width:20%;margin-left:10px;" ></el-input>
                               
                        </el-col>
@@ -1526,7 +1517,8 @@ export default {
            let p={
              'name':''
            };
-           this.$api.post(this.Global.aport1+'/baseinfo/personlist',p,
+           // /baseinfo/personlist
+           this.$api.post(this.Global.aport1+'/baseinfo/personlistforactivity',p,
              r =>{
                   
                    this.xmdata=r.data;
@@ -1537,19 +1529,18 @@ export default {
               this.$message.error("代表、委员以及特约人员不能为空！");return;
             }
             if(val=='' || val==null){
-              
-              return;}
-            var arr=val.split('|');
+              return;
+            }
+          
              var obj = {};
                  obj = this.xmdata.find(item =>{
-                     return item.pbId === arr[0] && item.personId === arr[1]
+                     return item.pbId === val
                 });
-  
             var srr=this.ListData4;
               console.log(obj,'代表、委员以及特约人员',srr.length);
             var ff=false;
             for (let i = 0; i < srr.length; i++) {
-               if(srr[i].pbId==arr[0] && srr[i].personId==arr[1])
+               if(srr[i].pbId==val)
                {
                    ff=true;
                 // this.$confirm(srr[i].personName+'已经存在?', '提示', {
@@ -1584,6 +1575,8 @@ export default {
             }
               if(!ff){
                this.ListData4.push(obj);
+               console.log("排序功能。。。。",this.ListData4);
+               
                this.count1=this.ListData4.length;
                }
                this.lmdbid="";
@@ -2294,7 +2287,7 @@ export default {
                 arr.push(n);
                 for (let i = 0; i < arr.length; i++) {
                         var index = this.ListData4.findIndex(item =>{
-    　　　　　　　　　  　 if(item.personId==arr[i].personId){
+    　　　　　　　　　  　 if(item.pbId==arr[i].pbId){
             　　　　　　　　　　　　return true
             　　　　　　　　　　}
             　　　　　　　　})

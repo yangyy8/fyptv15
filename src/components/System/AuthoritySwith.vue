@@ -1,4 +1,8 @@
 <template>
+  <div class="authwidth">
+   
+      <div class="top topba"> <img style="margin-top:16px;" src="../../assets/img/index/banner.png"/></div>
+      <div class="homemain ba" >
      <div class="pairadd subtable">
           <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 系统管理 
               <span class="mlr_10">/</span>  <b>权限切换</b></span> </div>
@@ -22,6 +26,8 @@
                    </div>
           </div>
     </div>
+     </div>
+ </div>
 </template>
 <script>
 export default {
@@ -29,13 +35,14 @@ export default {
         return{
             pd:{},
             msg:'',
-            radio:'1',
+            radio:'',
             zwdw:[],
         }
     },
     mounted(){
-        this.setDw();
+         this.setDw();
     },
+    
     methods:{
         save(){
             var ff=new FormData();
@@ -48,7 +55,7 @@ export default {
                         this.$store.commit('getOrgname',r.data.ssdw.mc)
                         this.$store.commit('getOrgid',r.data.ssdw.dm)
                         
-                        this.$message.success("切换成功");
+                        this.$message.success("设置成功！请重新登录");
                         this.$router.push({name:"Index"});
 
                       }else{
@@ -57,12 +64,14 @@ export default {
             });
         },
         setDw(){
+         
+            
             var ff=new FormData();
             ff.append("userId",this.$store.state.personid);
             let p=ff;
              this.$api.post(this.Global.aport4+'/user/getUserOrgs',p,
             r=>{
-                      if(r.code==1){
+                      if(r.code==1 && r.data && r.data.length>0){
                          this.zwdw=r.data;
                          if(r.data.length>0){
                              var array=r.data;
@@ -85,4 +94,12 @@ export default {
 </script>
 <style scoped>
 .txtr{text-align: right!important;}
+.authwidth{  overflow: hidden;
+  text-align: left;}
+.top {
+  height: 80px;
+  line-height: 80px;
+  background-color: #fff;
+  border-bottom: 1px solid #cccccc;
+}
 </style>

@@ -119,7 +119,7 @@
                               </el-table-column>
                               <el-table-column
                                   prop="partisanName"
-                                  label="党派"
+                                  label="政治面貌"
                                    width="100">
                               </el-table-column>
                               <el-table-column

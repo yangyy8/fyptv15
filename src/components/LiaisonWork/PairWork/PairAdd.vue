@@ -113,7 +113,6 @@
                            <span class="yy-input-text" style="width:10.8%;"><font class="red">*</font> 地点</span>
                            <el-input placeholder="请输入内容" size="small" :disabled="llbnt" clearable v-model="form.location"  class="yy-input-input" style="width:88%!important;"></el-input>
                      </el-col>
-                    
                        <el-col :span="8" class="input-item">
                             <span class="yy-input-text" style="width:32.5%;"><font class="red">*</font> 活动方式</span>
                             <el-select v-model="form.activityMode" :disabled="llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -134,7 +133,7 @@
                     
                     <el-row class="ah-40 mt-20">
                        <el-col :span="24" style="margin-left:11%;">
-                             <el-checkbox v-model="pd5.ck1" @change="getwx()" :disabled="llbnt">是否建立微信群</el-checkbox>  
+                             <el-checkbox v-model="pd5.ck1" @change="getwx()" :disabled="llbnt">建立微信群</el-checkbox>  
                              <el-input placeholder="请输入微信群名称" size="small" :disabled="llbnt" v-if='pd5.ck1' clearable v-model="wxname" style="width:20%;margin-left:10px;" ></el-input>
                              
                        </el-col>
@@ -853,7 +852,7 @@ export default {
                   "pageInfo":{
                             "pageNumber":currentPage,
                             "pageSize":showCount,
-                            },
+                       },
                   "token":this.$store.state.token
               };
              
@@ -1673,7 +1672,8 @@ export default {
            let p={
              'name':''
            };
-           this.$api.post(this.Global.aport1+'/baseinfo/personlist',p,
+           // /baseinfo/personlist
+           this.$api.post(this.Global.aport1+'/baseinfo/personlistforactivity',p,
              r =>{
                   
                    this.xmdata=r.data;
@@ -1743,6 +1743,7 @@ export default {
            if(t==1){
              this.suggDialogVisible=true;
            }else if(t==2){
+             
              this.caseDialogVisible=true;
            }
         },

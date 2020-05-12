@@ -35,10 +35,8 @@
                            :label="item.mc"
                            :value="item.dm">
                            </el-option>
-
                         </el-select>
                       </el-col>
-                     
                       </el-row>
                        <el-row class="ah-40" v-if="!editshow">
                        <el-col :span="8">
@@ -603,8 +601,8 @@
                     </el-row>
                  </div>
                    <!-- 办理信息 -->
-                <div class="ptitle mb-20 mt-20" v-if="zt=='9' && blshow">办理信息</div>
-                 <div class="pborder" v-if="zt=='9' && blshow">
+                <div class="ptitle mb-20 mt-20" v-if="blshow">办理信息</div>
+                 <div class="pborder" v-if="blshow">
                     <el-row class="ah-50">
 
                         <el-col :span="24">
@@ -1439,7 +1437,7 @@ export default {
                             }
 
                           }
-                     
+ 
                           
                         if(r.data.processInfo.handVOList && r.data.processInfo.handVOList.length>0){//办理信息
                              
@@ -1524,7 +1522,7 @@ export default {
                               break;
                             case '0205000004'://办理
                               this.yastate1=false;
-                              this.yastate2=true;
+                              this.yastate2=false;
                               this.yastate3=false;
                               this.yastate4=false;
                               break;

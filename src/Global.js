@@ -1,9 +1,9 @@
 const aport1="";//李志鹏
 const aport2="";//任智强
 const aport3="";//刘逸文
-const aport4=window.IPConfig.Login;//用户管理
 const aporttj=window.IPConfig.TJ+'/risk/analysis';//统计分析
 const uploads=window.IPConfig.IP;
+const aport4=window.IPConfig.Login;//用户管理
 const fycount=3;//分页
 const imgformat="jpg,jpeg,png";//图片格式
 const docformat="doc,docx,xls,xlsx";//文件格式
@@ -104,6 +104,7 @@ const zxdw="/org/getCourtOrg";//政协单位
 const tysf=zddz+"dic_ioex_specialidentitytype";//身份  人大代表【同时间的身份】、政协委员【同时间的身份】、各界人士
 const zfxwjb=zddz+"dic_ioex_forwardmedialevel";//转发新闻级别
 const lxss=zddz+"dic_ioex_contactdistinction";//联系形式
+const dyzt=zddz+"dic_ioex_subscriptionstatus";//订阅状态
 
 const jburl="/sessionType"//届别地址
 const tyjburl="/specialSessionType";//特别届别地址
@@ -156,5 +157,5 @@ export default
     cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,menuurl,
     REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL,jpyy,tysf,tyjburl,
     MZDP1,MZDP2,MZDP3,MZDP4,MZDP5,MZDP6,MZDP7,MZDP8,sflr,jdqf,jburl,tburl,jjburl,tylburl,bxqf,zfxwjb,
-    lxss,cwhwy,sbjys,zjqf,
+    lxss,cwhwy,sbjys,zjqf,dyzt,
 }

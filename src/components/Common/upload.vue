@@ -226,7 +226,7 @@ export default {
                     if(r.code==1){
                         if(this.type.length==10 || this.periodType!=null || this.periodTypes!=""){
                         
-                              if(r.code==1){
+                             if(r.code==1){
                               
                               this.$message.success(r.message);
                               if(this.type=='1000' || this.type=='1001'){
@@ -239,15 +239,17 @@ export default {
                               this.$message.error(r.message);
                             }
                         }else{
+                          
                             
-                              if(r.data.success=='success'){
+                            if(r.data && r.data.success && r.data.success=='success'){
                               
                               this.$message.success('上传成功');
                               
                               this.$emit('fatherMethod',r.data.relFileList,this.type); 
                             }else{
-                              
-                              this.$message.error(r.message);
+                            
+                                this.$message.success('上传成功');
+                                this.$emit('fatherMethod',this.type); 
                               
                             }
                         }
@@ -258,8 +260,6 @@ export default {
                          window.location.href=r.data;
                        }
                     }else{
-                   
-                      
                         this.$message.error(r.message);
                     }
                   })

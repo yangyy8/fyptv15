@@ -11,7 +11,7 @@
              <el-col :span="8" class="right" >
              <div class="fright mt-10" style="min-width:340px;text-align:right">
                 <div class="chselect">
-                 <el-select v-model="pd.orgId" filterable clearable default-first-option placeholder="请选择"  size="small">
+                 <el-select v-model="pd.orgId" @change='getfirst();getinit();' filterable clearable default-first-option placeholder="请选择"  size="small">
                                <el-option
                                  v-for="(item,ind) in ssfydata"
                                  :key="ind"
@@ -48,7 +48,6 @@
                </el-row>
             <el-row class="mt-20">
                 <el-col :span="24">
-                        
                      <div class="fleft" > {{year}} 年度代表议案办理情况</div>
                 </el-col>
             </el-row>
@@ -72,7 +71,7 @@
                      <div class="fleft" style="padding:5px 0px 0px 8px">月代表议案已办结办理情况</div>
                 </el-col>
             </el-row>
-            <el-row class="mt-10">
+            <el-row class="mt-10" style="height:100px;">
               <el-col :span='24'>
                    <div class="datapicont fleft center"> 
                     <el-progress type="circle"  :width="70" :percentage="mp1"></el-progress>
@@ -84,7 +83,6 @@
                     <el-progress type="circle"  :width="70" :percentage="mp3" ></el-progress>
                     <br/>
                     <div class="c-title mt-10">建议、批评和意见</div>
-             
                   </div>
                    <div class=" datapicont fleft center"> 
                     <el-progress type="circle"  :width="70" :percentage="mp2" ></el-progress>
@@ -103,7 +101,7 @@
                   </div>
               </el-col>
             </el-row>
-               <el-row class="mt-20">
+             <el-row class="mt-20">
                 <el-col :span="24">
                     <div class="fleft"><img src="../../assets/img/screen/left.png" class="mr-10"></div>    
                      <div class="fleft ">办理增长&燃尽图</div>
@@ -111,72 +109,73 @@
                   <el-col :span="24">
                      <div id='rjcharts' style='width:100%;height:200px'></div>
                    </el-col>
-               </el-row>
+              </el-row>
              </div>
              <div class="fleft w-50 left">
-              
-            <el-row  style="margin:8% 11% 0 10%" v-if='show'>
+              <el-row  style="margin:8% 11% 0 10%" v-if='show'>
               <el-col :span='24'>
-                <EchartsMap :sdata='mapdata'></EchartsMap>
+                             <EchartsMap :sdata='mapdata' :random="new Date().getTime()"  @mapfatherMethod="mapfatherMethod" v-if="mapshow"></EchartsMap>
               </el-col>
             </el-row>
              <el-row :class="show==true?'yamargin1':'yamargin2'">
              <el-col :span="24">
                <div class="casebg">
-                 <el-row >
+                 <el-row>
                    <el-col :span="6" style="padding:10px 0px 0px 30px">详细信息列表</el-col>
                    <el-col :span="18" class="sugg">
                      <el-button round size="mini" :class="num==1?'color':''" @click="getsugg(1)">全部</el-button>
-                     <el-button round size="mini" :class="num==2?'color':''" @click="getsugg(2)">议案</el-button>
-                     <el-button round size="mini" :class="num==3?'color':''" @click="getsugg(3)">建议</el-button>
-                     <el-button round size="mini" :class="num==4?'color':''" @click="getsugg(4)">提案</el-button>
-                     <el-button round size="mini" :class="num==5?'color':''" @click="getsugg(5)">审议</el-button>
-                     <el-button round size="mini" :class="num==6?'color':''" @click="getsugg(6)">日常建议</el-button>
+                     <el-button round size="mini" :class="num==2?'color':''" @click="getsugg(2,'0204000001')">议案</el-button>
+                     <el-button round size="mini" :class="num==3?'color':''" @click="getsugg(3,'0204000003')">建议</el-button>
+                     <el-button round size="mini" :class="num==4?'color':''" @click="getsugg(4,'0204000002')">提案</el-button>
+                     <el-button round size="mini" :class="num==5?'color':''" @click="getsugg(5,'0204000004')">审议</el-button>
+                     <el-button round size="mini" :class="num==6?'color':''" @click="getsugg(6,'0204000005')">日常建议</el-button>
                    </el-col>
                    <el-col :span="24" class="contc1">
                        <el-row class="mb-25">
                          <el-col :span="24" class="mt-20 ml-20">
                            <el-row class="title">
-                               <el-col :span="12">
-                                     标题
-                               </el-col>
-                                <el-col :span="2">代表</el-col>
+                               <el-col :span="12">标题</el-col>
+                               <el-col :span="4">代表</el-col>
                                <el-col :span="4">身份</el-col>
                                <el-col :span="4">办理单位</el-col>
                            </el-row>
                          </el-col>
-                       <el-col :span="24" class="mt-20 ml-20">
+                       <el-col :span="24" class="mt-20 ml-20" v-if='list.length>0'>
+                         <!-- @click="getyyjy(t.ProposalInfoID,t.ProposalType)" -->
+                         <div   v-for="(t,ind) in list" :key='ind'>
                            <el-row class="listl">
                                <el-col :span="12" class="f-15">
-                                    <div class="fleft xhs">1</div>    
-                                    <div class="fleft overf">中新公司申请设立海事赔偿责任有限公司</div>
+                                 <div class="fleft xhs">{{ind+1}}</div>    
+                                 <div class="fleft overf" :title="t.Title">{{getsubstr(t.Title,15)}}</div>
                                </el-col>
-                                <el-col :span="2">领衔</el-col>
-                               <el-col :span="4">建议、批评</el-col>
-                               <el-col :span="4">广东高院</el-col>
+                               <el-col :span="4" :title="t.IdentityTypeValue">{{getsubstr(t.IdentityTypeValue,6)}}</el-col>
+                               <el-col :span="4" :title="t.PeriodTypeValue+t.LevelTypeValue+t.IdentityTypeValue">{{getsubstr(t.PeriodTypeValue+t.LevelTypeValue+t.IdentityTypeValue,6)}}</el-col>
+                               <el-col :span="4" :title="t.OrgName">{{getsubstr(t.OrgName,6)}}</el-col>
                            </el-row>
-                            <el-row class="listl">
-                               <el-col :span="12" class="f-15">
-                                    <div class="fleft xhs">2</div>    
-                                    <div class="fleft overf">中国建设银行股份有限公司广...</div>
-                               </el-col>
-                               <el-col :span="2">领衔</el-col>
-                               <el-col :span="4">建议、批评</el-col>
-                               <el-col :span="4">广东高院</el-col>
-                            
-                           </el-row>
-                            <el-row class="listl">
-                               <el-col :span="12" class="f-15">
-                                    <div class="fleft xhs">3</div>    
-                                    <div class="fleft overf">安徽省外经建设(集团)有限公司</div>
-                               </el-col>
-                                <el-col :span="2">领衔</el-col>
-                               <el-col :span="4">建议、批评</el-col>
-                               <el-col :span="4">广东高院</el-col>
-                           </el-row>
+
+                           </div>
+
+                           <div class="middle-foot" v-if='!show' style="font-size:12px">
+                                <div class="page-msg">
+                                    <div class="">
+                                    共{{TotalResult}}条记录
+                                    </div>
+                                </div>
+                                <el-pagination
+                                    background
+                                    @current-change="handleCurrentChange"
+                                    :current-page.sync="CurrentPage"
+                                    :page-size="pageSize"
+                                    layout="prev, pager, next"
+                                    :total="TotalResult">
+                                </el-pagination>
+                            </div>
                            
                        </el-col>
-                       <el-col :span="24" class="right"> <span class="zk" @click="getall">{{labelname}}</span></el-col>
+                       <el-col :span="24" v-else>
+                          <div style="text-align:center;padding:50px 0px;color:#999999"> 暂无数据</div> 
+                         </el-col>
+                      <el-col :span="24" class="right" > <span class="zk" @click="getall">{{labelname}}</span></el-col>
                    </el-row>
                    </el-col>
                  </el-row>
@@ -190,39 +189,44 @@
                     <div class="fleft"><img src="../../assets/img/screen/left.png" class="mr-10"></div>    
                      <div class="fleft ">来文期间对比</div>
                 </el-col>
-              <el-col :span='24' class="mt-10 center">
-               
-                 <div class=" datapic fleft center" style="margin-left:15%">   
-                    <el-progress type="circle"  :width="80" :percentage="lhdata.Importantpercent" :show-text="false"></el-progress>
+              <el-col :span='24' class="mt-10 center" v-if='lhdata && bhdata'>
+              <div class=" datapic fleft center" style="margin-left:15%" v-if='lhdata'>   
+                    <el-progress type="circle"  :width="80" :percentage="lhdata.percent" :show-text="false"></el-progress>
                      <div style="margin-top:-70%; font-size:21px; font-weight:bold">{{lhdata.total}}</div>
                     <br/>
                     <div class="c-title mt-20">两会期间</div>
                   </div>
-                  <div class="ml-20 datapic fleft center"> 
-                    <el-progress type="circle"  :width="80" :percentage="bhdata.Importantpercent" :show-text="false"></el-progress>
+               <div class="ml-20 datapic fleft center" v-if='bhdata'> 
+                    <el-progress type="circle"  :width="80" :percentage="bhdata.percent" :show-text="false"></el-progress>
                      <div style="margin-top:-70%; font-size:21px; font-weight:bold">{{bhdata.total}}</div>
                     <br/>
                     <div class="c-title mt-20">闭会期间</div>
                   </div>
               </el-col>
+              <el-col :span="24" style="height:135px;" v-else>
+               <div style="text-align:center;padding-top:80px;color:#999999"> 暂无数据</div> 
+              </el-col>
             </el-row>
-               <el-row class="mt-20">
+          <el-row class="mt-20">
                 <el-col :span="24">
                     <div class="fleft"><img src="../../assets/img/screen/left.png" class="mr-10"></div>    
                      <div class="fleft ">内部科室办理情况排名</div>
                 </el-col>
-                <el-col :span="24" class="mt-20">
+                <el-col :span="24" class="mt-20" v-if='noticeList && noticeList.length>0'>
                       <ul class="new-list" :class="{anim:animate}" @mouseenter="Stop()" @mouseleave="Up()">
                       <li v-for="(t,ind) in noticeList" :key='ind'>
-                        <div class="fleft ml-20 color f-14 right" style="width:28%">{{t}}环境资源厅：</div>    
+                        <div class="fleft ml-20 color f-14 right" style="width:28%">{{t.name}}：</div>    
                         <div class="fleft" style="padding-top:8px;">
-                             <el-progress type='line' :percentage="t" :show-text="false"></el-progress>
+                             <el-progress type='line' :percentage="t.percent" :show-text="false"></el-progress>
                         </div>
-                        <div class="fleft color f-14 ml-10">{{t}}</div>
+                        <div class="fleft color f-14 ml-10">{{t.value}}</div>
                         <div class="clear"></div>
                       </li>
                     </ul>
                 </el-col>
+                <el-col :span="24" style="height:160px;" v-else>
+               <div style="text-align:center;padding-top:80px;color:#999999"> 暂无数据</div> 
+              </el-col>
             </el-row>
             <el-row class="mt-20">
                 <el-col :span="24">
@@ -231,31 +235,40 @@
                 </el-col>
                 <el-col :span="24">
                  <div id="sljdcharts" style="width:100%;height:250px;"></div>
-                </el-col>
+              </el-col>
             </el-row>
               <el-row class="mt-20">
                 <el-col :span="24">
                     <div class="fleft"><img src="../../assets/img/screen/left.png" class="mr-10"></div>    
                      <div class="fleft ">活动类型分析</div>
                 </el-col>
-                <el-col :span="24" class="mt-10">
+                <el-col :span="24" class="mt-10" v-if="noticetypeList && noticetypeList.length>0">
                    <ul class="new-list" :class="{anim:animate}" @mouseenter="Stop()" @mouseleave="Up()">
                       <li v-for="(t,ind) in noticetypeList" :key='ind'>
                         <div class="fleft ml-20 color f-14 right" style="width:28%">{{t.name}}：</div>    
                         <div class="fleft">
-                            <img src="../../assets/img/screen/jd-1.png" class="mr-5" v-for="t in t.value" :key="t">
+                            <img src="../../assets/img/screen/jd-1.png" class="mr-5" v-for="t in t.value%20+1" :key="t">
                         </div>
                         <div class="fleft color f-14 ml-10">{{t.value}}</div>
                         <div class="clear"></div>
                       </li>
                     </ul>
-                 
                 </el-col>
+                  <el-col :span="24" style="height:160px;" v-else>
+               <div style="text-align:center;padding-top:80px;color:#999999"> 暂无数据</div> 
+              </el-col>
             </el-row>
-         
              </div>
              <div class="clear"></div>
          </div>
+         <div class="popContainer" v-if='yyjyshow'>
+           <div class="content">
+             <div class="close" @click="yyjyshow=false"><img src="../../assets/img/screen/close.png"></div>
+              <YYJY :type='1' :data='yyjydata' :random="new Date().getTime()"></YYJY>
+           </div>
+         
+         </div>
+        
     </div>
 </template>
 <style>
@@ -264,22 +277,26 @@
 <script>
 import echarts from 'echarts'
 import EchartsMap from "../Common/maps"
+import YYJY from "../Common/screen/yyjy"
 import {setNowTimes} from '@/assets/js/date.js'
 import {getYear,birthdayMonth} from '@/assets/js/date.js'
 export default {
-   components:{EchartsMap},
+   components:{EchartsMap,YYJY},
     data(){
       return{
+         CurrentPage: 1,
+         pageSize: 3,
+         TotalResult: 0,
          city:'北京',
          timer: null,
          nowdate:setNowTimes(),
          ssfydata:[],
          pd:{orgId:'0e10a51827e511ea9e3700155dbaef87'},
-         year:'2020',
+         year:'',
          yearlist:getYear(),
-         month:'1',
+         month:'',
          monthlist:birthdayMonth(),
-         noticeList: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16],
+         noticeList: [],
          noticetypeList:[],
          animate:false,
          intNum: undefined,
@@ -295,11 +312,36 @@ export default {
          mp5:0,
          bhdata:{},
          lhdata:{},
+         yyjyshow:false,
+         yyjydata:{},
+         list:[],
+         protype:'',
+         mapshow:true,
        }
     },
     mounted(){
+      this.year=new Date().getFullYear();
+      this.month=new Date().getMonth();
       this.getSSFY();
-       //历处数据对比
+      this.getfirst();
+      
+      this.getinit();
+      // this.phbcharts(['4月', '3月', '2月', '1月'],['代表议案未办结', '代表议案已办结','总数']);
+      // this.yearcharts(['2020', '2019', '2018', '2017','2016','2015','2014','2013','2012','2011','2010']);
+      //  this.handlecharts(['1','2','3','4','5','6','7','8','9','10','11','12']);
+      //  this.monthcharts();
+      //  this.sljdcharts();
+      //  this.rjcharts(['1','2','3','4']);
+       this.ScrollUp();
+      
+       this.timer = setInterval(() => {
+        this.nowdate=setNowTimes();
+      }, 1000)
+
+   },
+    methods:{
+      getfirst(){
+         //历处数据对比
            let p={
               "primaryId": "",
               "riskDate": "",
@@ -313,29 +355,22 @@ export default {
            this.$api.post(this.Global.aporttj,p,
            
             r =>{
-                    if(r.code==200){
-                       this.yearcharts(r.data.indexItemsValues.YiAn_lnsjdb.date,r.data.indexItemsValues.YiAn_lnsjdb.data);
-                    }  
-       });
-      this.getinit();
-      // this.phbcharts(['4月', '3月', '2月', '1月'],['代表议案未办结', '代表议案已办结','总数']);
-      // this.yearcharts(['2020', '2019', '2018', '2017','2016','2015','2014','2013','2012','2011','2010']);
-      //  this.handlecharts(['1','2','3','4','5','6','7','8','9','10','11','12']);
-      //  this.monthcharts();
-      //  this.sljdcharts();
-      //  this.rjcharts(['1','2','3','4']);
-       this.ScrollUp();
-       this.timer = setInterval(() => {
-        this.nowdate=setNowTimes();
-      }, 1000)
-   },
-    methods:{
-        getinit(){
-            this.mapdata={};
-            this.mapdata.orgId=this.pd.orgId;
-            this.mapdata.year=this.year;
-            console.log(this.mapdata,'this.mapdata');
-            
+             if(r.code==200){
+                 this.yearcharts(r.data.indexItemsValues.YiAn_lnsjdb.date,r.data.indexItemsValues.YiAn_lnsjdb.data);
+             }  
+          });
+      },
+        getinit(val){
+          // debugger
+           
+          
+        if(val==null){
+              this.mapshow=false;
+              this.mapdata={};
+              this.mapdata.orgId=this.pd.orgId;
+              this.mapdata.year=this.year;
+              this.mapshow=true;
+            }
             //年度代表 议案办理情况
            let p1={
               "primaryId": "",
@@ -351,40 +386,14 @@ export default {
            this.$api.post(this.Global.aporttj,p1,
            
             r =>{
-                    if(r.code==200){
-                      console.log(r.data.indexItemsValues.YiAn_blqk.data,'r.data.indexItemsValues.YiAn_blqk');
-                      
-                       if(r.data.indexItemsValues.YiAn_blqk.date!=undefined && r.data.indexItemsValues.YiAn_blqk.data!=undefined){
-                          this.phbcharts(r.data.indexItemsValues.YiAn_blqk.date,r.data.indexItemsValues.YiAn_blqk.data);
-                       }else{
-                          this.phbcharts('','');
+                  if(r.code==200){
+                       if(r.data.indexItemsValues.YiAn_blqk){
+                          this.funphbcharts(r.data.indexItemsValues.YiAn_blqk.date,r.data.indexItemsValues.YiAn_blqk.data);
                        }
                     }  
             });
 
-              //月度代表 议案办理情况
-           let p2={
-              "primaryId": "",
-              "riskDate": "",
-              "params": {
-                "UndertakeOrgID": this.pd.orgId,
-                "Year": this.year,
-              },
-              "itemIndex": [
-                "YiAn_ydblqk"
-              ]
-            }
-           this.$api.post(this.Global.aporttj,p2,
-            r =>{
-                  
-                  
-                    if(r.code==200){
-                        this.monthdata=r.data.indexItemsValues.YiAn_ydblqk
-                        this.getMonthdata();
-                         
-                    }  
-            });
-
+           this.getfunmonth();
              //办理增长&燃尽图
            let p3={
               "primaryId": "",
@@ -402,9 +411,17 @@ export default {
                
                     if(r.code==200){
                     
-                      
-                         this.rjcharts(['1','2','3','4']);
-                         
+                      if(r.data.indexItemsValues.YiAn_blzzrjt){
+                            var date=r.data.indexItemsValues.YiAn_blzzrjt.date;
+                            var arr=[];
+                            if(date.length>0){
+                              for (let i = 0; i < date.length; i++) {
+                                arr.push(parseInt(date[i].split('-')[1]));
+                                
+                              }
+                           }
+                        this.funrjcharts(arr,r.data.indexItemsValues.YiAn_blzzrjt.data);
+                       }  
                     }  
             });
 
@@ -424,7 +441,9 @@ export default {
             r =>{
              
                     if(r.code==200){
-                         this.noticeList=[];
+                      if(r.data.indexItemsValues.YiAn_ksblpm){
+                         this.noticeList=r.data.indexItemsValues.YiAn_ksblpm.data;
+                        }
                          
                     }  
             });
@@ -444,7 +463,9 @@ export default {
            this.$api.post(this.Global.aporttj,p5,
             r =>{
                     if(r.code==200){
-                        this.sljdcharts();
+                      if(r.data.indexItemsValues.YiAn_KZHD){
+                        this.funsljdcharts(r.data.indexItemsValues.YiAn_KZHD.data);
+                      }
                          
                     }  
             });
@@ -465,8 +486,10 @@ export default {
             r =>{
               
                     if(r.code==200){
+
+                      if(r.data.indexItemsValues.YiAn_HDLX){
                         this.noticetypeList=r.data.indexItemsValues.YiAn_HDLX.data;
-                         
+                      }
                     }  
             });
 
@@ -486,22 +509,73 @@ export default {
             r =>{
             
                     if(r.code==200){
-                    console.log(r.data.indexItemsValues.YiAn_LWQJ['0159000001'].total,'r.data.indexItemsValues.YiAn_LWQJ.data');
-                    
+                      if(r.data.indexItemsValues.YiAn_LWQJ){
                        this.lhdata=r.data.indexItemsValues.YiAn_LWQJ['0159000001'];//两会
                        this.bhdata=r.data.indexItemsValues.YiAn_LWQJ['0159000002'];//闭会
-                        
-                         
+                      }                         
                     }  
             });
 
-       
+            this.getlist(this.CurrentPage, this.pageSize);
 
+        },
+        handleCurrentChange(val) {
+          this.CurrentPage=val;
+          this.getlist(val, this.pageSize,this.protype);
+        },
+        getlist(currentPage, showCount,type){
+          this.protype=type;
+          let pp={
+
+             "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "ProposalType": type,
+                "pageNumber": currentPage,
+                "pageSize": showCount,
+                "Year": this.year,
+                "UndertakeOrgID":this.pd.orgId,
+              },
+             
+              "itemIndex": [
+                "YiAn_xxxxList"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,pp,
+            r =>{
+               if(r.code==200){
+                    this.list=r.data.indexItemsValues.YiAn_xxxxList.data;
+                    this.TotalResult=r.data.indexItemsValues.YiAn_xxxxList.totalSize;
+                }  
+            });
+        },
+         //月度代表 议案办理情况
+        getfunmonth(){
+          let p2={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "YiAn_ydblqk"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p2,
+            r =>{
+               if(r.code==200){
+                 if(r.data.indexItemsValues.YiAn_ydblqk){
+                    this.monthdata=r.data.indexItemsValues.YiAn_ydblqk
+                    this.getMonthdata();
+                  }
+                }  
+            });
         },
         getMonthdata(){
            var ss=this.month;
-          
-          if(this.monthdata[ss]!=undefined && this.monthdata[ss]!=null){
+                    
+          if(this.monthdata[ss]){
                this.mp1=this.monthdata[ss]['0204000001'].percent;
                this.mp2=this.monthdata[ss]['0204000002'].percent;
                this.mp3=this.monthdata[ss]['0204000003'].percent;
@@ -510,11 +584,9 @@ export default {
            }
         },
         yearcharts(xdata,rdata){
-          console.log(xdata,rdata);
-          
-        this.yearcharts = echarts.init(document.getElementById('yearcharts'));
+        var yearcharts = echarts.init(document.getElementById('yearcharts'));
         let _this = this;
-        _this.yearcharts.setOption({
+        yearcharts.setOption({
         color: ['#5B9BD5', '#ED7D31','#A5A5A5','#FFC000','#4472C4','#70AD47'],
         legend: {
             bottom:0,
@@ -628,9 +700,9 @@ export default {
         },
         //年度办理情况
         handlecharts(xdata){
-        this.handlecharts = echarts.init(document.getElementById('handlecharts'));
+         var  handlecharts = echarts.init(document.getElementById('handlecharts'));
         let _this = this;
-        _this.handlecharts.setOption({
+        handlecharts.setOption({
           color: ['#3969F8', '#83AEDD','#81FEFF'],
             tooltip: {
                 trigger: 'axis',
@@ -741,12 +813,12 @@ export default {
 
         });
         },
-      phbcharts(xdata,series){
+      funphbcharts(xdata,series){
       
-        this.phbcharts = echarts.init(document.getElementById('phbcharts'));
-        console.log('000111');
+        var phbcharts = echarts.init(document.getElementById('phbcharts'));
+      
         let _this = this;
-        _this.phbcharts.setOption({
+        phbcharts.setOption({
           color: ['#7900F0', '#83AEDD', '#3969F8'],
            tooltip: {
             trigger: 'axis',
@@ -967,11 +1039,11 @@ export default {
       //     });
       //  },
        //饼图
-       sljdcharts(max){
-         max=50000;
-          this.sljdcharts = echarts.init(document.getElementById('sljdcharts'));
-        let _this = this;
-          _this.sljdcharts.setOption({
+       funsljdcharts(data){
+        
+          var sljdcharts = echarts.init(document.getElementById('sljdcharts'));
+          let _this = this;
+          sljdcharts.setOption({
           //  color:['#3F5F9A','#E3C678'],
           //   tooltip: {
           //       trigger: 'item',
@@ -1042,11 +1114,11 @@ export default {
                             }
                         },
                     indicator: [
-                        { name: '议案', max: max},
-                        { name: '建议', max: max},
-                        { name: '提案', max: max},
-                        { name: '审议', max: max},
-                        { name: '日常建议', max: max},
+                        { name: '议案', max: data.makValue[0]},
+                        { name: '建议', max: data.makValue[1]},
+                        { name: '提案', max: data.makValue[2]},
+                        { name: '审议', max: data.makValue[3]},
+                        { name: '日常建议', max: data.makValue[4]},
                     ]
                 },
                 series: [{
@@ -1055,14 +1127,14 @@ export default {
                     data: [
                         {
                            name:'开展活动',
-                           value: [45000, 30000, 28000, 35000, 50000],
+                           value: data.KValue,
                             
                             
                         },
                         {   
                            name:'未开展活动',
                            
-                           value: [25000, 35000, 15000, 39000, 48000],
+                           value: data.unKValue,
                           
                         },
                         
@@ -1071,10 +1143,10 @@ export default {
 
          });
        },
-       rjcharts(xdata,data){
-          this.rjcharts = echarts.init(document.getElementById('rjcharts'));
+       funrjcharts(xdata,data){
+          var rjcharts = echarts.init(document.getElementById('rjcharts'));
           let _this = this;
-          _this.rjcharts.setOption({
+           rjcharts.setOption({
              color:  ['#83AEDD', '#3969F8', '#675bba'],
               tooltip: {
                   trigger: 'none',
@@ -1147,37 +1219,44 @@ export default {
                         type: 'line',
                         xAxisIndex: 1,
                         smooth: true,
-                        data: [192,390,510,636]
+                        data: data.total
                     },
                     {
                         name: '消化',
                         type: 'line',
                         smooth: true,
-                        data: [606,598,509,519]
+                        data: data.finish
                     }
                 ]
           }); 
        },
         getSSFY(){
-                 this.$api.get(this.Global.aport1+'/org/getCourtOrg',null,
+          this.$api.get(this.Global.aport1+'/org/getCourtOrg',null,
                 r =>{
-                  
-                      if(r.code==1){
-
-                          this.ssfydata=r.data;
-                      }
-                });
+                 if(r.code==1){
+                      this.ssfydata=r.data;
+                 }
+          });
         },
        ScrollUp() {
-          this.intNum = setInterval(() => {
-            this.animate=true;// 向上滚动的时候需要添加css3过渡动画
-             var that = this; // 在异步函数中会出现this的偏移问题，此处一定要先保存好this的指向
-            setTimeout(()=>{
-              that.noticeList.push(that.noticeList[0]);// 将数组的第一个元素添加到数组的
-              that.noticeList.shift(); //删除数组的第一个元素
-               that.animate=!that.animate;
-            },0)
-          }, 1000);
+
+            this.intNum = setInterval(() => {
+              this.animate=true;// 向上滚动的时候需要添加css3过渡动画
+              var that = this; // 在异步函数中会出现this的偏移问题，此处一定要先保存好this的指向
+              setTimeout(()=>{
+                  if(this.noticeList && this.noticeList.length>0){
+                that.noticeList.push(that.noticeList[0]);// 将数组的第一个元素添加到数组的
+                that.noticeList.shift(); //删除数组的第一个元素
+                 }
+                  if(this.noticetypeList && this.noticetypeList.length>0){
+                that.noticetypeList.push(that.noticetypeList[0]);// 将数组的第一个元素添加到数组的
+                that.noticetypeList.shift(); //删除数组的第一个元素
+                 }
+                that.animate=!that.animate;
+                
+              },0)
+            }, 1000);
+        
         },
           //鼠标移上去停止
         Stop() {
@@ -1186,39 +1265,49 @@ export default {
         Up() {
           this.ScrollUp();
         },
-        getsugg(t){
+        getsugg(t,type){
           this.num=t;
-
+          this.CurrentPage=1;
+          this.getlist(this.CurrentPage,this.pageSize,type);
         },
         getall(){
           this.show=!this.show;
           if(this.show){
+            this.pageSize=3;
+            this.getlist(this.CurrentPage,this.pageSize,this.protype);
             this.labelname="展开";
           }else{
+           this.pageSize=20;
+            this.getlist(this.CurrentPage,this.pageSize,this.protype);
            this.labelname="收起";
           }
         },
+        getyyjy(id,type){
+           this.yyjydata={
+             "id":id,
+             "type":type
+           }
+           this.yyjyshow=true;
+
+        },
+        getsubstr(n,h){
+          var len= n.substr(0,h);
+          if(n.length>h){
+            return len+'...';
+          }else{
+           return n
+          }
+        },
+       mapfatherMethod(orgid){
+        if(orgid){
+       
+            this.$set(this.pd,'orgId',orgid);
+            this.getfirst();
+            this.getinit('orgId');
+           
+        }
+      },
      
     }
 }
 </script>
-<style scoped>
-.sugg{text-align:right}
-.sugg .el-button--mini, .el-button--mini.is-round{
-    padding: 5px 20px!important;
-    background: #0E2C6A;
-    color: #4C85D4;
-    border: 1px solid #528FE0;
-}
-.sugg .color{
-  color: #ffffff;
-}
- .yamargin1{
-  margin:9% 10% 0 10%
-}
- .yamargin2{
-  margin:0 10% 0 10%;
-   background-color: rgba(63,95,154,0.1);
-}
-
-</style>

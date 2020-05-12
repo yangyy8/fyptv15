@@ -80,13 +80,11 @@
                     <el-progress type="circle"  :width="70" :percentage="47"></el-progress>
                     <br/>
                     <div class="c-title mt-10">上月办结</div>
-             
                   </div>
                   <div class="ml-10 datapicont fleft center"> 
                     <el-progress type="circle"  :width="70" :percentage="38" ></el-progress>
                     <br/>
                     <div class="c-title mt-10">上月遗留未办结</div>
-             
                   </div>
                    <div class="ml-10 datapicont fleft center"> 
                     <el-progress type="circle"  :width="70" :percentage="10" ></el-progress>
@@ -118,28 +116,28 @@
                  <el-row class="mt-20">
                    <el-col :span="12">
                   <div class=" datapic fleft center">   
-                    <el-progress type="circle"  :width="80" :percentage="29" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">180</div>
+                    <el-progress type="circle"  :width="80" :percentage="EmphasisCase['0212000001']?EmphasisCase['0212000001'].percent:0" :show-text="false"></el-progress>
+                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">{{EmphasisCase['0212000001']?EmphasisCase['0212000001'].subTotal:0}}</div>
                     <br/>
                     <div class="c-title mt-20">重点</div>
                   </div>
                   <div class="ml-20 datapic  fleft center"> 
-                    <el-progress type="circle"  :width="80" :percentage="71" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">450</div>
+                    <el-progress type="circle"  :width="80" :percentage="EmphasisCase['0212000002']?EmphasisCase['0212000002'].percent:0" :show-text="false"></el-progress>
+                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">{{EmphasisCase['0212000002']?EmphasisCase['0212000002'].subTotal:0}}</div>
                     <br/>
                     <div class="c-title mt-20">非重点</div>
                   </div>
                    </el-col>
                     <el-col :span="12">
                   <div class=" datapic fleft center">   
-                    <el-progress type="circle"  :width="80" :percentage="39" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">383</div>
+                    <el-progress type="circle"  :width="80" :percentage="RepeatCase['0215000001']?RepeatCase['0215000001'].percent:0" :show-text="false"></el-progress>
+                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">{{RepeatCase['0215000001']?RepeatCase['0215000001'].subTotal:0}}</div>
                     <br/>
                     <div class="c-title mt-20">重复</div>
                   </div>
                   <div class="ml-20 datapic  fleft center"> 
-                    <el-progress type="circle"  :width="80" :percentage="61" :show-text="false"></el-progress>
-                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">247</div>
+                    <el-progress type="circle"  :width="80" :percentage="RepeatCase['0215000002']?RepeatCase['0215000002'].percent:0" :show-text="false"></el-progress>
+                     <div style="margin-top:-70%; font-size:21px; font-weight:bold">{{RepeatCase['0215000002']?RepeatCase['0215000002'].subTotal:0}}</div>
                     <br/>
                     <div class="c-title mt-20">非重复</div>
                   </div>
@@ -151,7 +149,7 @@
               
             <el-row  style="margin:10% 11% 0 10%">
               <el-col :span='24'>
-                <EchartsMap></EchartsMap>
+              <EchartsMap :sdata='mapdata' :random="new Date().getTime()"  @mapfatherMethod="mapfatherMethod" v-if="mapshow"></EchartsMap>
               </el-col>
             </el-row>
              <el-row style="margin:10% 10% 0 10%">
@@ -295,13 +293,20 @@ export default {
          yearlist:getYear(),
          month:'1',
          monthlist:birthdayMonth(),
+         mapdata:{},
+         mapshow:false,
+         RepeatCase:[],
+         EmphasisCase:[],
+         
 
        }
     },
     mounted(){
+       this.year=new Date().getFullYear();
+       this.month=new Date().getMonth()+1;
+       this.getinit();
        this.phbcharts(['全国人大代表', '全国政协委员', '特约监督员', '特约咨询员','其他'],['联名', '领衔']);
-       this.yearcharts(['2020', '2019', '2018', '2017','2016','2015','2014','2013','2012','2011','2010']);
-       this.handlecharts(['1','2','3','4','5','6','7','8','9','10','11','12']);
+      
        this.getSSFY();
        this.monthcharts();
        this.sljdcharts();
@@ -310,10 +315,121 @@ export default {
       }, 1000)
    },
     methods:{
-        yearcharts(xdata){
-        this.yearcharts = echarts.init(document.getElementById('yearcharts'));
+        getinit(val){
+            if(val==null){
+              this.mapshow=false;
+              this.mapdata={};
+              this.mapdata.orgId=this.pd.orgId;
+              this.mapdata.year=this.year;
+              this.mapshow=true;
+            }
+      //历史关注案件
+      let p1={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "GZAN_LSGZAJ"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p1,
+            r =>{
+                  if(r.code==200){
+                       if(r.data.indexItemsValues.GZAN_LSGZAJ){
+                        this.funyearcharts(r.data.indexItemsValues.GZAN_LSGZAJ.date,r.data.indexItemsValues.GZAN_LSGZAJ.total,r.data.indexItemsValues.GZAN_LSGZAJ.banjieTotal);
+                      }
+                }  
+            });
+        //年度关注案件办理情况
+      let p2={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "GZAN_YEARGZAJ"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p2,
+            r =>{
+                  if(r.code==200){
+                       if(r.data.indexItemsValues.GZAN_YEARGZAJ){
+                       
+                         var arr=r.data.indexItemsValues.GZAN_YEARGZAJ.date;
+                         var date=[]
+                         if(arr && arr.length>0){
+                           for (let i = 0; i < arr.length; i++) {
+                            date.push(parseInt(arr[i].split('-')[1]));
+                             
+                           }
+                           
+                           
+                         }
+                         var zs=r.data.indexItemsValues.GZAN_YEARGZAJ.total;
+                         var bj=r.data.indexItemsValues.GZAN_YEARGZAJ.banjieTotal;
+                         var bjl=r.data.indexItemsValues.GZAN_YEARGZAJ.banjiePercent;
+                          this.funhandlecharts(date,zs,bj,bjl);
+                      }
+                }  
+            });
+           //月度关注案件受理情况
+          this.getmonthwith()
+          //重点+重复案件分析
+          let p4={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+              },
+              "itemIndex": [
+                "GZAN_ZDANFX"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p4,
+            r =>{
+                  if(r.code==200){
+                       if(r.data.indexItemsValues.GZAN_ZDANFX){
+                         console.log(r.data.indexItemsValues.GZAN_ZDANFX,'r.data.indexItemsValues.GZAN_ZDANFX');
+                         this.EmphasisCase=r.data.indexItemsValues.GZAN_ZDANFX.EmphasisCase;
+                         this.RepeatCase=r.data.indexItemsValues.GZAN_ZDANFX.RepeatCase;
+                   }
+                }  
+            });
+
+        },
+          //月度关注案件受理情况
+        getmonthwith(){
+          let p3={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "UndertakeOrgID": this.pd.orgId,
+                "Year": this.year,
+                'Month':this.month
+              },
+              "itemIndex": [
+                "GZAN_LSGZAJ"
+              ]
+            }
+           this.$api.post(this.Global.aporttj,p3,
+            r =>{
+                  if(r.code==200){
+                       if(r.data.indexItemsValues.GZAN_LSGZAJ){
+                         
+                      }
+                }  
+            });
+        },
+       funyearcharts(xdata,total,bj){
+        var yearcharts = echarts.init(document.getElementById('yearcharts'));
         let _this = this;
-        _this.yearcharts.setOption({
+        yearcharts.setOption({
         color: ['#83AEDD', '#7900F0'],
         legend: {
             bottom:0,
@@ -375,22 +491,28 @@ export default {
               name: '总数',
               type: 'bar',
               // barGap: 0,
-              data: [185, 106, 43, 88,85,71,72,154,65,200,190]
+              data: total,
+              itemStyle: {
+                     barBorderRadius: [5, 5, 0, 0],
+               },
           },
           {
               name: '办结',
               type: 'bar',
-              data: [113, 36, 17, 62, 78,63,39,58,51,119,107]
+              data: bj,
+               itemStyle: {
+                     barBorderRadius: [5, 5, 0, 0],
+               },
           },
         
           ]
           })
         },
         //年度办理情况
-        handlecharts(xdata){
-        this.handlecharts = echarts.init(document.getElementById('handlecharts'));
+        funhandlecharts(xdata,zs,bj,bjl){
+         var handlecharts = echarts.init(document.getElementById('handlecharts'));
         let _this = this;
-        _this.handlecharts.setOption({
+         handlecharts.setOption({
           color: ['#3969F8', '#83AEDD','#81FEFF'],
             tooltip: {
                 trigger: 'axis',
@@ -484,23 +606,28 @@ export default {
                 {
                     name: '总数',
                     type: 'bar',
-                    data: [31, 41, 7, 20, 23, 33, 38, 11, 18, 19, 30, 41]
+                    //  itemStyle: {barBorderRadius: [5, 5, 0, 0],},
+                    data: zs
                 },
                 {
                     name: '办结',
                     type: 'bar',
-                    data: [23, 8, 3, 15, 2, 3, 32, 3, 11, 12, 20, 30]
+                    //  itemStyle: {barBorderRadius: [5, 5, 0, 0],},
+                    data: bj
                 },
                 {
                     name: '办结率',
                     type: 'line',
                     yAxisIndex: 1,
-                    data: [73.33, 20.13, 45.19, 75.86, 10.69, 10.29, 83.70, 28.95, 62.53, 61.38, 66.41, 72.99]
+                    smooth: true,
+                    data: bjl
                 }
             ]
 
         });
+       
         },
+      
       phbcharts(xdata,xleg,series){
          this.phbcharts = echarts.init(document.getElementById('phbcharts'));
         let _this = this;
@@ -801,6 +928,15 @@ export default {
                       }
                 });
         },
+        mapfatherMethod(orgid){
+        if(orgid){
+       
+            this.$set(this.pd,'orgId',orgid);
+          
+            this.getinit('orgId');
+         
+        }
+      },
      
     }
 }

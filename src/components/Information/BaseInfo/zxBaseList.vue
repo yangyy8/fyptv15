@@ -201,7 +201,7 @@
                             <span class="yy-input-text">曾任代表 
                                <el-checkbox v-model="pd1.is3" @change="getckdata(1)"></el-checkbox>
                            </span> 
-                           <el-select v-model="pd.formerRepresentatives"  :disabled="!pd1.is3"   multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属人大和层级':'无数据'">
+                           <el-select v-model="pd.formerRepresentatives"  :disabled="!pd1.is3"   multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属政协和层级':'无数据'">
                                <el-option
                                  v-for="(item,ind) in jblist"
                                  :key="ind"
@@ -214,7 +214,7 @@
                             <span class="yy-input-text">曾任委员 
                                <el-checkbox v-model="pd1.is4" @change="getckdata(2)"></el-checkbox>
                            </span> 
-                           <el-select v-model="pd.formerMembers"  :disabled="!pd1.is4"   multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属人大和层级':'无数据'">
+                           <el-select v-model="pd.formerMembers"  :disabled="!pd1.is4"   multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属政协和层级':'无数据'">
                                <el-option
                                  v-for="(item,ind) in jblist"
                                  :key="ind"

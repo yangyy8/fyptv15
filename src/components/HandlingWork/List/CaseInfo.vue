@@ -338,7 +338,7 @@
                 <div class="pborder" >
                      <el-row class="ah-40">
                       <el-col :span="8">
-                           <span class="yy-input-text">案件编号</span>
+                           <span class="yy-input-text"><font class="red">&ensp;</font> 案件编号</span>
                            <el-input placeholder="请输入内容" size="small" :disabled="editshow" clearable v-model="pd1.casenum"  class="yy-input-input" ></el-input> 
                             <i class="el-icon-search"></i>
                       </el-col>
@@ -379,8 +379,8 @@
                         <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                       <el-col :span="8">
-                        <span class="yy-input-text"><font class="red">*</font> 利害关系</span>
-                        <el-select v-model="pd1.interestrelations" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <span class="yy-input-text"><font class="red">&ensp;</font> 利害关系</span>
+                        <el-select v-model="pd1.interestrelations" :disabled="editshow" @change="getIslhgx(pd1.interestrelations)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in $store.state.lhgx"
                            :key="ind"
@@ -390,6 +390,17 @@
                         </el-select> 
                         <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
+                       <el-col :span="8">
+                         <span class="yy-input-text"><font class="red">&ensp;</font> 是否有利害关系</span>
+                     
+                               <el-select v-model="pd1.isinterestrelations" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                    <el-option value="1" label="是">
+                                    </el-option>
+                                    <el-option value="0" label="否">
+                                  </el-option>
+                           </el-select>
+                        </el-col>
+                     
                         <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 是否重点案件</span>
                         <el-select v-model="pd1.emphasiscase" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -489,17 +500,17 @@
                 <div class="ptitle mb-20 mt-20" v-if="zshow1">审批信息</div>
                 <div class="pborder" v-if="zshow1">
                   <el-row class="ah-40">
-                    <el-col :span="8">
+                    <!-- <el-col :span="8">
                         <span class="yy-input-text">是否转办</span>
                       <el-select v-model="pd4.isassign" :disabled="ckshow || spshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                             <el-option
                                         v-for="(item,ind) in $store.state.zbqf"
                                         :key="ind"
-                                        :label="item.mc"
+                                        :label="item.mc+item.dm"
                                         :value="item.dm">
                                         </el-option>
                            </el-select>
-                    </el-col>
+                    </el-col> -->
                      <el-col :span="8">
                          <span class="yy-input-text">转办形式</span>
                          <el-select v-model="pd4.assigntype" :disabled="ckshow || spshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -523,10 +534,7 @@
                                         </el-option>
                            </el-select>
                     </el-col>
-                    </el-row>
-                     <el-row class="ah-40">
-                    
-                     <el-col :span="8">
+                    <el-col :span="8">
                          <span class="yy-input-text">信息操作</span>
                          <el-select v-model="pd4.informationoperation" :disabled="ckshow || spshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -537,6 +545,10 @@
                               </el-option>
                            </el-select>
                      </el-col>
+                    </el-row>
+                     <el-row class="ah-40">
+                    
+                     
                       <el-col :span="24">
                         <span class="yy-input-text" style="width:11%!important;vertical-align: top;" ><font class="red">*</font>  审批意见</span>
                         <el-input placeholder="请输入内容" :disabled="ckshow || spshow" type="textarea" :autosize="{ minRows: 3, maxRows: 4}" size="small" clearable v-model="pd4.checkcontents"  class="yy-input-input" style="width:86.8%!important;"></el-input>
@@ -851,11 +863,11 @@
                          <el-col :span="8">
                          <span class="yy-input-text">是否办结</span>
                      
-                               <el-select v-model="pd6.iscompleted" :disabled="ckshow || zshow5" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-select v-model="pd6.iscompleted" :disabled="ckshow || zshow5" @change="getIswith(pd6.iscompleted)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                          <el-option value="1" label="是">
                                         </el-option>
                                         <el-option value="0" label="否">
-                                        </el-option>
+                                  </el-option>
                            </el-select>
                         </el-col>
                             <el-col :span="8">
@@ -941,7 +953,7 @@
                          <el-col :span="8">
                          <span class="yy-input-text">是否答复</span>
                
-                           <el-select v-model="pd6.isreply" :disabled="ckshow || zshow5" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd6.isreply" :disabled="ckshow || zshow5" @change="getIswith(pd6.iscompleted,pd6.isreply)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                          <el-option value="1" label="是">
                                         </el-option>
                                         <el-option value="0" label="否">
@@ -1484,12 +1496,12 @@ export default {
         return{
              casename:'关注案件信息',
              pd0:{},
-             pd1:{},
+             pd1:{isinterestrelations:'0'},
              pd2:{undertakingsuborgid:'',undertakinguserid:''},
              pd3:{},
              pd4:{},
              pd5:{undertakingsuborgid:'',undertakinguserid:''},
-             pd6:{outcompletedtime:'0'},
+             pd6:{outcompletedtime:'0',iscompleted:'0'},
              pd7:{},
              pd8:{urgenttime:''},
              pb:{},
@@ -1669,7 +1681,9 @@ export default {
 
          if(this.year=="" || this.year==null){
              this.year=new Date().getFullYear();
+
           }
+        
        
         },
         // gethdlx(){
@@ -2105,8 +2119,9 @@ export default {
                     }
         },
         getList(){
+       
         
-           if(this.focusCaseId!=""){
+           if(this.focusCaseId!="" && this.focusCaseId!=undefined && this.focusCaseId!=null){
             let p={
                'focuscaseid':this.focusCaseId,
                'token':this.$store.state.token
@@ -2178,9 +2193,14 @@ export default {
                       }
                   });
                  
+            
                  //交办
                       this.$api.post(this.Global.aport2+'/CaseAssignController/queryCaseAssign',p,
                         r =>{
+                           if(this.$store.state.dbnf && this.$store.state.dbnf.length>0){
+                              this.pd2.assignyear=this.$store.state.dbnf[0].dm;
+                              this.chChangelist(this.pd2.assignyear,3,3)
+                            }
                             if(r.data.showstatus && this.addtype=='9'){
                             this.ffshow=true;
                             this.pd2=r.data.bucaseassignvo;
@@ -2324,12 +2344,12 @@ export default {
              leadershipinstruction:''}]
              this.formListN=[{lmdbid:''}]
             this.pd0={};
-            this.pd1={};
+            this.pd1={isinterestrelations:'0'};
             this.pd2={undertakingsuborgid:'',undertakinguserid:''};
             this.pd3={};
             this.pd4={};
             this.pd5={undertakingsuborgid:'',undertakinguserid:''};
-            this.pd6={};
+            this.pd6={outcompletedtime:'0',iscompleted:'0'};
             this.pd7={};
             this.pd8={};
             this.pd={};
@@ -2415,10 +2435,10 @@ export default {
               {
                   this.$message.error("案件状态不能为空！");return;
               }
-               if(this.pd1.interestrelations==undefined || this.pd1.interestrelations=="")
-              {
-                  this.$message.error("利害关系不能为空！");return;
-              }
+              //  if(this.pd1.interestrelations==undefined || this.pd1.interestrelations=="")
+              // {
+              //     this.$message.error("利害关系不能为空！");return;
+              // }
                if(this.pd1.emphasiscase==undefined || this.pd1.emphasiscase=="")
               {
                   this.$message.error("是否重点案件不能为空！");return;
@@ -2497,6 +2517,7 @@ export default {
               }
 
                  url='/CaseCheckController/saveCaseCheck';
+                 this.pd4.isassign='0218000001';
               p={
                   'token':this.$store.state.token,
                   'focuscaseid':this.focusCaseId,
@@ -2571,7 +2592,16 @@ export default {
                   'activityvolist':this.tableData3,
                   };   
                break;
-              case '4':
+              case '4'://办结信息
+                
+               
+                  if(this.pd6.iscompleted && this.pd6.replynature && this.pd6.replynature && !(this.pd6.iscompleted=='0' && this.pd6.isreply=='1' && this.pd6.replynature=='0124000001')){
+                     this.$message.error("如果'是否办结'选择'否'，并且'是否答复'选择'是'，则答复性质为'进展性'!");return;
+                  }else if(this.pd6.iscompleted && this.pd6.replynature && !(this.pd6.iscompleted=='1' && this.pd6.replynature=='0124000002')){
+                      this.$message.error("如果'是否办结'选择'是'，答复性质为'实体性'!");return;
+                  }
+
+
                  url='/CaseCompletedController/saveCaseCompleted';
                  p={
                   'token':this.$store.state.token,
@@ -3027,10 +3057,14 @@ export default {
           }else if(n==6){
              var obj = {};
              obj = this.jbrdata.find(item =>{
-                    return item.pbId === val 
+                    return item.courtPersonId === val 
                });
-             this.pd1.checkorgid = obj.orgId
-             this.pd1.checksuborgid = obj.subOrgId
+
+           
+               if(obj){
+                this.pd1.checkorgid = obj.orgId
+                this.pd1.checksuborgid = obj.subOrgId
+             }
           }
         },
         //关注案件在办结界面选择办结时间是自动计算是否期限内办结和超期时间
@@ -3070,7 +3104,21 @@ export default {
                         }
                     }
                 });
-        }
+        },
+        getIswith(val,m){
+            if(val=='1'){
+              this.$set(this.pd6,'replynature','0124000002');
+            }else if(val=='0' && m=='1'){
+              this.$set(this.pd6,'replynature','0124000001');
+            }
+        },
+        getIslhgx(val){
+          if(val){
+            this.$set(this.pd1,'isinterestrelations','1')
+          }else{
+            this.$set(this.pd1,'isinterestrelations','0')
+          }
+        },
     },
     filters:{
         filertype(t){

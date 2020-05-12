@@ -20,7 +20,7 @@
                                 </el-row>
                                 <el-row  v-else> -->
                                   <el-row>
-                                    <el-col :sm="24" :md="24" :lg="12"  v-for="(t,ind) in leveldata" :key="ind">
+                                    <el-col :sm="24" :md="24" :lg="12"  v-for="(t,indm) in leveldata" :key="indm + '-only'">
                                          <span class="area" @click="gopro(t.dm,'tb',t.mc)" v-if="t.dm!='0190900000'">{{t.mc}}</span>
                                     </el-col>
                                   <el-col :sm="24" :md="24" :lg="24"  v-for="(ts,inde) in leveldata" :key='inde'>
@@ -28,7 +28,7 @@
                                   </el-col>
                                 </el-row>
                            </el-col>
-                             <el-col :span="24" v-for="(t,ind) in jjblist" :key="ind" v-if="addtype=='2'">
+                             <el-col :span="24" v-for="(t,inds) in jjblist" :key="inds" v-if="addtype=='2'">
                                 <span class="area" @click="gopro(t.dm,'jjb',t.mc)">{{t.mc}}</span>
                            </el-col>
                        </el-row>
@@ -70,7 +70,7 @@
              </el-col>
              <el-col :span="6" style="padding-left:45px;">
                      <div class="title mb-20">历届{{cname4==""?cname3:cname4}}名单</div>
-                     <div v-for='(tt,ind) in jblist' :key="ind">
+                     <div v-for='(tt,ind) in jblist' :key="ind + '-only'">
                          <div @click="gopro(tt.dm,'jb',tt.mc)"  class="ljinfo">{{tt.mc}}{{cinfo}}</div>
                      </div>
              </el-col>

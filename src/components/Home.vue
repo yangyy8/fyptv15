@@ -1,5 +1,5 @@
 <template>
-  <div class="indexnew2" >
+  <div class="indexnew2">
     <div id="nav">
       <div class="top topba">
         <el-row type="flex">

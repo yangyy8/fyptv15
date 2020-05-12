@@ -182,6 +182,9 @@ export default {
            pd.pagenum=currentPage;
            pd.inum=showCount;
            pd.type='0';
+           if(this.type=='1'){
+               pd.personType=this.Global.REPRESENTATIVE;
+           }
          let p={
                            'pd':pd,
                             // "pageInfo":{

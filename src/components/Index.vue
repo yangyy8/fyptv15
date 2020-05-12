@@ -30,7 +30,7 @@
                     <el-dropdown-item  command="b">修改账号</el-dropdown-item>
                     <el-dropdown-item command="a">修改密码</el-dropdown-item>
                     <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
-                    <el-dropdown-item command="d" >权限切换</el-dropdown-item>
+                    <el-dropdown-item command="d">权限切换</el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>              
               <span @click="loginout" class="cursor homef"><i class="iconfont el-icon-yy-tuichu" ></i> 退出 </span> 
@@ -258,21 +258,37 @@ export default {
     getMenu(){
       this.$api.get(this.Global.aport1+'/menu/getMenu', null,
                 r => {
-                  this.menuData=r.data;
-                  if(this.menuData.length>0){
-                    this.show1=false;this.show2=false;this.show3=false;this.show4=false;this.show5=false;
-                    var array=this.menuData;
-                     
-                    for (let i = 0; i < array.length; i++) {
-                         var id=array[i].entity.id;
-                          if(id=="1100"){this.show1=true;}
-                          else if(id=="1200"){this.show2=true;}
-                          else if(id=="1300"){this.show3=true;}
-                          else if(id=="1500"){this.show4=true;}
-                          else if(id=="1400"){this.show5=true;}
-                          else if(id=="1700"){this.show6=true;}
-                    }
-                  }
+                  if(r.code==1){
+
+                 
+                    
+                    if(r.data && r.data.length>0){
+                       this.menuData=r.data;
+                        if(this.menuData.length>0){
+                          this.show1=false;this.show2=false;this.show3=false;this.show4=false;this.show5=false;
+                          var array=this.menuData;
+                          
+                          for (let i = 0; i < array.length; i++) {
+                              var id=array[i].entity.id;
+                                if(id=="1100"){this.show1=true;}
+                                else if(id=="1200"){this.show2=true;}
+                                else if(id=="1300"){this.show3=true;}
+                                else if(id=="1500"){this.show4=true;}
+                                else if(id=="1400"){this.show5=true;}
+                                else if(id=="1700"){this.show6=true;}
+                          }
+                        }
+                   }else{
+              
+                   this.menuData=[];
+                   this.show1=false;
+                   this.show2=false;
+                   this.show3=false;
+                   this.show4=false;
+                   this.show5=false;
+                   this.show6=false;
+                }
+                }
            });
     },
     getStyle(list){
@@ -364,8 +380,7 @@ export default {
        this.$router.push({path:url});
     },
     getkz(t){
-      console.log( this.show4,this.show5,this.show6);
-      
+ 
        if(t==1){
            if(this.show4 && this.show5 && this.show6)
            {
@@ -416,6 +431,7 @@ export default {
         this.$api.post(this.Global.aport4+'/user/logout', p,
           r => {
             if(r.code==1){
+              formData.append("token",'');
               this.$router.push({name:'Login'});
             }
 

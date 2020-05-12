@@ -18,9 +18,7 @@
                     <el-button size="mini" type="danger"  @click="del(scope.$index, scope.row)" icon="el-icon-delete"  title="删除" class="a-btn"></el-button>
                 </div>
                 </template>
-
             </el-table-column>
-
         </el-table>
          <div slot="footer" class="mt-20" style="text-align:center">
               <el-button type="primary" style="width:120px;" @click="goadd()">保存</el-button>
@@ -28,7 +26,6 @@
     </div>
 </template>
 <script>
-
 export default {
     name:'DIC',
     props:['type','random'],
@@ -51,15 +48,13 @@ export default {
             this.tableData.push({name:''});
         },
         add(t){
-            
-                 this.tableData.push({name:''});
-            
-             this.$emit('DfatherMethod',this.type); 
+            this.tableData.push({name:''});
+            this.$emit('DfatherMethod',this.type); 
         },
         del(index,r){
-           if(index!=0){
-            
-          this.tableData.splice(index, 1)}
+            if(index!=0){
+              this.tableData.splice(index, 1)
+            }
         },
     },
 }

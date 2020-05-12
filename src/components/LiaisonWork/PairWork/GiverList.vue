@@ -7,38 +7,87 @@
                 <div class="ptitle mb-20">{{cinfo}}</div>
                 <div class="pborder">
                   <el-row class="ah-40">
-                        <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">年份</span>
-                           <el-select v-model="pd.year" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                       <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">姓名</span>
+                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.senderName"  class="yy-input-input"></el-input>
+                        </el-col>
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">订阅年度</span>
+                           <el-select v-model="pd.sendYear" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
-                                 v-for="(item,ind) in yearlist"
+                                 v-for="(item,ind) in $store.state.dbnf"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.mc">
+                                 </el-option>
+                            </el-select>
+                        </el-col>
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">订阅状态</span>
+                           <el-select v-model="pd.subscriptionStatusid" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in $store.state.dyzt"
                                  :key="ind"
                                  :label="item.mc"
                                  :value="item.dm">
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
-                            <span class="yy-input-text">工作相关文件类型</span>
-                           <el-select v-model="pd.workRelFileType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">级别</span>
+                           <el-select v-model="pd.levelType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
-                                 v-for="(item,ind) in $store.state.zzxgwjlx"
+                                 v-for="(item,ind) in $store.state.jbb"
                                  :key="ind"
                                  :label="item.mc"
                                  :value="item.dm">
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="24" :lg="24">
-                            <span class="yy-input-text" style="width:9%!important;">主题</span>
-                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.theme"  class="yy-input-input"  style="width:86.8%!important;"></el-input>
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">行政区划</span>
+                           <el-select v-model="pd.administrativeDivision" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in $store.state.xzqh"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm">
+                                 </el-option>
+                            </el-select>
                         </el-col>
-                         
+                      
+                        <el-col :sm="24" :md="24" :lg="24" class="input-item">
+                            <span class="yy-input-text" style="width:9%!important;">地址</span>
+                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.sendAddress"  class="yy-input-input"  style="width:86.8%!important;"></el-input>
+                        </el-col>
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">订阅人</span>
+                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.courtpersonName"  class="yy-input-input"></el-input>
+                        </el-col>
+                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">订阅时间</span>
+                            <div class="yy-input-input  t-flex  t-date">
+                                <el-date-picker
+                                v-model="pd.subscriptionStartTime" format="yyyy-MM-dd"
+                                type="date" size="small" value-format="yyyy-MM-dd"
+                                placeholder="开始时间" >
+                                </el-date-picker>
+                                <span class="septum">-</span>
+                                <el-date-picker
+                                    v-model="pd.subscriptionEndTime" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="结束时间" >
+                                </el-date-picker>
+                            </div>
+                          </el-col>
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">邮政编码</span>
+                            <el-input placeholder="请输入内容" size="small" clearable v-model="pd.postcode"  class="yy-input-input"></el-input>
+                        </el-col>
                     </el-row>
                     <el-row class="lh" v-if="open">
                        
-                     
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">录入单位</span>
                            <el-select v-model="pd.entryUnitId" @change="getcbbm(pd.entryUnitId,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -49,7 +98,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                        <el-col :sm="24" :md="12" :lg="8">
+                        <el-col :sm="24" :md="12" :lg="8"  class="input-item">
                             <span class="yy-input-text">录入部门</span>
                            <el-select v-model="pd.entryDepartmentId" @change="getJBR(pd.entryUnitId,pd.entryDepartmentId,0)"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -60,7 +109,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                      <el-col :sm="24" :md="12" :lg="8">
+                      <el-col :sm="24" :md="12" :lg="8" class="input-item">
                        <span class="yy-input-text">录入人</span>
                          <el-select v-model="pd.entryPersonId"   filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input">
                          <el-option
@@ -71,6 +120,22 @@
                          </el-option>
                         </el-select>
                         </el-col>
+                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                            <span class="yy-input-text">录入时间</span>
+                            <div class="yy-input-input t-flex t-date">
+                                <el-date-picker
+                                v-model="pd.entryStartTime" format="yyyy-MM-dd"
+                                type="date" size="small" value-format="yyyy-MM-dd"
+                                placeholder="开始时间" >
+                                </el-date-picker>
+                                <span class="septum">-</span>
+                                <el-date-picker
+                                    v-model="pd.entryEndTime" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="结束时间" >
+                                </el-date-picker>
+                            </div>
+                          </el-col>
                     </el-row>
                 </div>
                  <div class="footer">
@@ -79,14 +144,7 @@
                 </div>
                 <div class="loadmore" v-if="all" @click="getAll(1)">全部展开 <i class="el-icon-arrow-down"></i></div>
                 <div class="loadmore" v-else @click="getAll(2)">部分收起 <i class="el-icon-arrow-up"></i></div>
-                <div class="pairleft" >
-                    <div class="anseacrch">
-
-                   <el-checkbox-group v-model="checkedList" @change="changeList()">
-                    <el-checkbox v-for="item in checkItem" :label="item.code" :key="item.code" :checked="item.checked" :disabled="item.checked">{{item.label}}</el-checkbox>
-                  </el-checkbox-group>
-                    </div>
-                </div>
+            
 
                 <div class="pborder mt-20">
                     <el-row>
@@ -120,10 +178,36 @@
                                  </template>
                            </el-table-column>
                             <el-table-column
-                                v-for="(val,i) in configHeader"
-                                :key="i"
-                                :prop="val.code"
-                                :label="val.label">
+                                prop="personName"
+                                label="姓名" width="400">
+                            </el-table-column>
+                             <el-table-column
+                                prop="sendYear"
+                                label="年度" width="100">
+                            </el-table-column>
+                            <el-table-column
+                                prop="postcode"
+                                label="邮政编码" width="100">
+                            </el-table-column>
+                            <el-table-column
+                                prop="sendAddress"
+                                label="地址">
+                            </el-table-column>
+                            <el-table-column
+                                prop="subscriptionTime"
+                                label="订阅时间" width="150">
+                            </el-table-column>
+                            <el-table-column
+                                prop="courtPersonPersonName"
+                                label="订阅人" width="100">
+                            </el-table-column>
+                             <el-table-column
+                                prop="subscriptionStatus"
+                                label="订阅状态" width="100">
+                            </el-table-column>
+                            <el-table-column
+                                prop="nextYearSubscriptionStatus"
+                                label="下一年订阅状况" width="130">
                             </el-table-column>
                            </el-table>
                            <div class="middle-foot">
@@ -155,17 +239,14 @@
                                     layout="prev, pager, next"
                                     :total="TotalResult">
                                 </el-pagination>
-                            </div>
-
+                      </div>
                 </div>
-      
- 
-<br/>
+            <br/>
          </div>
     </div>
 </template>
 <script>
-import {format,getYear} from '@/assets/js/date.js'
+import {format} from '@/assets/js/date.js'
 import UPLOAD from "../../Common/upload"
 import {sortByKey} from '@/assets/js/ToArray.js'
 export default {
@@ -182,9 +263,8 @@ export default {
             bnt:true,
             checkedList:[],
             addtype:'1',
-            cname:'联络工作信息查询',
-            cinfo:'联络工作信息',
-            yearlist:getYear(),
+            cname:'赠阅法院报查询',
+            cinfo:'赠阅法院报',
             uploadDialogVisible:false,
             addDialogVisible:false,
             tableData:[],
@@ -209,15 +289,15 @@ export default {
     },
     mounted(){
       
-         this.$store.dispatch("getZzxgwjlx");
-      
+         this.$store.dispatch("getDbnf");
+         this.$store.dispatch("getDyzt");
+         this.$store.dispatch("getJbb");
+         this.$store.dispatch("getXzqh");
          this.getinit(this.$router);
     },
-    watch:{
-        $router:function (val) {
-                this.getinit(val);
-        }
-    },
+   activated(){
+ this.getinit(this.$router);
+   },
     methods:{
         clickRow(row){
            this.$refs.multipleTable.toggleRowSelection(row)
@@ -236,8 +316,8 @@ export default {
                           }
             });
          //权限end
-          this.tableData=[];
-          this.getCheckList();
+       
+    
           this.getFY();
           this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
@@ -259,7 +339,7 @@ export default {
         },
         getCK(t){
          if(t=='0'){
-          this.$router.push({name:'AnnualWork',query:{}});
+          this.$router.push({name:'GiverAdd',query:{}});
          }else{
            if(this.multipleSelection.length>1){
                this.$message.error("只能选择一条数据!");return;
@@ -267,7 +347,7 @@ export default {
                this.$message.error("请选择一条数据!");return;
              }
             var array=this.multipleSelection[0].workRelFilesId;
-            this.$router.push({name:'AnnualWork',query:{state:t,workRelFilesId:this.multipleSelection[0].workRelFilesId}});
+            this.$router.push({name:'GiverAdd',query:{state:t,sendCourtNewspaperId:this.multipleSelection[0].sendCourtNewspaperId}});
          }
         },
        
@@ -283,50 +363,10 @@ export default {
                 this.all=true;
             }
         },
-         getCheckList(){
-               let p={
-                  'type':'0246000013'
-              };
-              this.$api.post(this.Global.aport2+'/CaseHomeController/getCaseListInfo',p,
-                r =>{
-                      if(r.code==1){
-                        
-                          this.checkItem=r.data;
-                          this.configHeader=[];
-                            for(var j=0;j<this.checkItem.length;j++){
-                                if(this.checkItem[j].checked)
-                                    this.configHeader.push(this.checkItem[j])
-                                }
-                          if(this.configHeader.length==0){
-                                this.cc=false;
-                            }else{
-                                this.cc=true;
-                            }
-                       }
-
-
-                });
-        },
-        changeList(){
-          this.configHeader=[];
-            for(var i=0;i<this.checkedList.length;i++){
-            for(var j=0;j<this.checkItem.length;j++){
-              if(this.checkedList[i] == this.checkItem[j].code){
-                this.configHeader.push(this.checkItem[j])
-              }
-            }
-           }
-
-           if(this.configHeader.length==0){
-                this.cc=false;
-            }else{
-                this.cc=true;
-            }
-        this.configHeader=sortByKey(this.configHeader,'sort');
-        },
+       
+      
         getList(currentPage, showCount, pd){
-           this.changeList();
-     
+         
           let p={
              "pd":this.pd,
              "pageInfo":{
@@ -334,11 +374,11 @@ export default {
                  "pageSize":showCount,
              }
           };
-          this.$api.post(this.Global.aport2+'/WorkRelFilesController/queryWorkRelFiles',p,
+          this.$api.post(this.Global.aport2+'/SendCourtNewspaperController/querySendCourtNewspaper',p,
                 r =>{
 
                       if(r.code==1){
-                          this.tableData=r.data.workRelFilesVOList;
+                          this.tableData=r.data.sendCourtNewspaperVOList;
                           this.TotalResult=r.data.pageInfo.total;
                       }else{
                           this.tableData=[];
@@ -360,13 +400,13 @@ export default {
                            var arr=[];
                            
                             for (let i = 0; i < this.multipleSelection.length; i++) {
-                                obj.workRelFilesId=this.multipleSelection[i].workRelFilesId;
+                                obj.sendCourtNewspaperId=this.multipleSelection[i].sendCourtNewspaperId;
                                 arr.push(obj);
                             }
                             let p = {
                                 'idList':arr
                             };
-                            this.$api.post(this.Global.aport2+'/WorkRelFilesController/delete',p,
+                            this.$api.post(this.Global.aport2+'/SendCourtNewspaperController/delete',p,
                             r =>{
                                 if(r.code==1){
                                    

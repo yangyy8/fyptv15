@@ -58,6 +58,13 @@ export default new Router({
       component: resolve => require(['@/components/Indexnew'], resolve),
     },
     {
+      path: '/AuthoritySwith',
+      name: 'AuthoritySwith',
+      meta:{title:['系统管理','权限切换']},
+      component: resolve => require(['@/components/System/AuthoritySwith'], resolve),
+    },
+   
+    {
       path: '/Home',
       name: 'Home',
       meta: {logined:true},
@@ -95,6 +102,24 @@ export default new Router({
           name: 'AnnualWork',
           meta:{title:['联络工作','年度工作计划和总结']},
           component: resolve => require(['@/components/LiaisonWork/AnnualWork/AnnualWork'], resolve),
+        },
+        {
+          path: 'GiverAdd',
+          name: 'GiverAdd',
+          meta:{
+          title:['联络工作','赠阅法院报'], 
+          keepAlive: false // 需要被缓存
+          },
+          component: resolve => require(['@/components/LiaisonWork/PairWork/GiverAdd'], resolve),
+        },
+        {
+          path: 'GiverList',
+          name: 'GiverList',
+          meta:{
+          title:['联络工作','赠阅法院报查询'], 
+          keepAlive: false // 需要被缓存
+          },
+          component: resolve => require(['@/components/LiaisonWork/PairWork/GiverList'], resolve),
         },
         {
           path: 'PairList',
@@ -445,13 +470,7 @@ export default new Router({
           meta:{title:['系统管理','快捷菜单']},
           component: resolve => require(['@/components/System/ShortcutMenu'], resolve),
         },
-        {
-          path: 'AuthoritySwith',
-          name: 'AuthoritySwith',
-          meta:{title:['系统管理','权限切换']},
-          component: resolve => require(['@/components/System/AuthoritySwith'], resolve),
-        },
-       
+      
       ]
     }
   ]

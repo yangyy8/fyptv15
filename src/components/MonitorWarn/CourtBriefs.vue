@@ -642,11 +642,9 @@ export default {
                this.$api.post(this.Global.aport2+'/courtNewsEntry/saveCourtnews',this.form,
                 r =>{
 
-                      if(r.data.code==1){
-                      
-                          
-                            this.$message.success(r.message);
-                             this.addDialogVisible=false;
+                      if(r.code==1){
+                           this.$message.success(r.message);
+                           this.addDialogVisible=false;
                            this.getList(this.CurrentPage, this.pageSize, this.pd);  
                       
                       }else{
@@ -656,9 +654,7 @@ export default {
                 });
         },
          upload(t){
-           
                this.uploadDialogVisible=true;
-            
         },
         getImgV(n){
            var array=this.$store.state.imgformat.split(',');
@@ -672,8 +668,7 @@ export default {
           return false;
         },
         delImg(data){
-            console.log(data,'---');
-            
+         
           let p={
               'courtnewsimageid':data,
           };

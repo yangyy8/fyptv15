@@ -1,13 +1,13 @@
 
 <template>
-    <div class="pairadd subtable">
+    <div class="pairadd ">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
          <span> 基本信息库 
               <span class="mlr_10">/</span> <b>联络机构</b>
         <span class="mlr_10">/</span> <b>{{cname}}</b>
          <span class="mlr_10" v-if='cname1!=null'>/</span><b>{{cname1}}</b></span>
           </div>
-         <div class="content">
+         <div class="content subtable">
              <div class="pairleft">
                 
                 <div class="top tit">{{cname1==null?cname:cname1}}信息</div>
@@ -184,8 +184,8 @@
                   <div class="footer">
                         <el-button type="primary"  style="width:130px;" @click="submit" v-if="status!='2'">保 存</el-button>
                         <el-button style="width:130px;" @click="gonum">关 闭</el-button>
-                    </div>
-
+                </div>
+  </div>
          <el-dialog :title="lxrdia" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="600px">
              <el-form :model="form" >
                 <el-row class="ah-40">
@@ -268,7 +268,7 @@
      <RGZN  :type="1" :data="zndata"  @ZNfatherMethod="ZNfatherMethod" :random="new Date().getTime()"></RGZN>
    </el-dialog>
   <br/>
-         </div>
+       
     </div>
 </template>
 <script>
@@ -642,6 +642,8 @@ export default {
                     this.tableData.push(this.form);
                     this.tableData=this.unique(this.tableData);
                 }else{
+                
+                    
                     this.$set(this.tableData,this.nowindex,this.form);
                 }
                  
@@ -680,8 +682,9 @@ export default {
                
             },
           getList()
-          {     
-              this.getLWDW('0223000002');
+          {   
+         
+             var ff=true;
               let p={
                   'orgId':this.jgid,
               };
@@ -690,14 +693,19 @@ export default {
                     
                       if(r.code==1){
                            this.pd=r.data;
+                           if(this.pd.sfbm!=undefined && this.pd.sfbm!=null && this.pd.sfbm!=''){
                           
-                           this.getLWDW(this.pd.sfbm);
+                             ff=false; this.getLWDW(this.pd.sfbm);
+                           }
+                         
                         //    this.getJB(this.pd.sj);
                           
 
                            this.tableData=r.data.contactVOS;
                       }
                 });
+           if(ff){ this.getLWDW('0223000002');}
+                
           },
           submit(){
              if(this.pd.mc=="" || this.pd.mc==undefined)
@@ -825,7 +833,13 @@ export default {
      
          //得到下拉名称
          getSelectName(val,t){
-             if(val=="" || val==null){return;}
+             if(val=="" || val==null){
+                if(t==0){
+                  this.$set(this.form,'contactResponsibilityTypeName','');
+                }else if(t==1){
+                  this.$set(this.form,'isOutContactPersonName','');
+                }
+                return;}
              var obj={};
                  switch (t) {
                      case 0:

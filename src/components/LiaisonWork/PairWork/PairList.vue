@@ -726,7 +726,7 @@ export default {
            let p={
              'name':''
            };
-           this.$api.post(this.Global.aport1+'/baseinfo/personlist',p,
+           this.$api.post(this.Global.aport1+'/baseinfo/personlistforactivity',p,
              r =>{
                   
                    this.xmdata=r.data;

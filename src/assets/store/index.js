@@ -120,6 +120,7 @@ export default new Vuex.Store({
         cwhwy:[],//常委会委员区分
         sbjys:[],//省部级以上领导区分
         zjqf:[],//在京区分
+        dyzt:[],//订阅状态
       },
       mutations: {
         //state代表了最开始存放的区域，即驱动应用的数据源
@@ -479,6 +480,9 @@ export default new Vuex.Store({
         },
         getZjqf(state,data){
           state.zjqf = data;
+        },
+        getDyzt(state,data){
+          state.dyzt = data;
         },
       },
       actions: {
@@ -1049,6 +1053,12 @@ export default new Vuex.Store({
           api.get(global_.aport4 + global_.zjqf, null,
             r => {
               context.commit('getZjqf', ToArray(r.data))
+          })
+        },
+        getDyzt(context) {
+          api.get(global_.aport4 + global_.dyzt, null,
+            r => {
+              context.commit('getDyzt', ToArray(r.data))
           })
         },
       }

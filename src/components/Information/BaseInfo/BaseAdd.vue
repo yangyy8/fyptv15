@@ -77,8 +77,7 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                                    
-                                    
+
                                       <el-col :span="12" v-if='allshow'>
                                         <span class="yy-input-textleft">
                                           <img src="../../../assets/img/xh.png" v-if="(ntype=='1' || ntype=='3') &&  !pd.is1">  <img v-else src="../../../assets/img/xhw.png"> 手机号码</span>
@@ -141,7 +140,7 @@
                                             </el-option>
                                          </el-select>
                                      </el-col>
-                                       <el-col :span="12" v-if="ntype!='4'" class="input-item">
+                                       <el-col :span="12" v-if="ntype!='4' && !(ntype=='3'&&form1.periodType&&lb)" class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 届别</span>
                                         <el-select v-model="form1.periodType" @change="getjblist(1,form1.periodType);getJJB()" :disabled="ckshow || (jb!=null && form1.periodType!=null && form1.periodType!='' && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择'+labelorg+'和特约职务':'请先选择'+labelorg+'和层级'):'无数据'">
                                             <el-option
@@ -601,6 +600,7 @@
                             ref="hjmultiple"
                             @row-click="hjclickRow"
                             :data="hjTableData1"
+                            :row-class-name="hjtableRowClassName"
                             @selection-change="hjchangeFun">
                             <el-table-column
                                 type="selection"
@@ -646,6 +646,7 @@
                             ref="zwmultiple"
                             :data="zwTableData1"
                             @row-click="zwclickRow"
+                            :row-class-name="zwtableRowClassName"
                             @selection-change="changeFun">
                             <el-table-column
                                 type="selection"
@@ -681,7 +682,7 @@
                          </div>
                      </div>
                       <!-- 结对信息 -->
-                    <div v-if="(state=='1' || state=='9') && kjdshow"  style="margin-top:30px;">
+                    <div v-if="(state=='1' || state=='9')"  style="margin-top:30px;">
                     <div class="pairleft" id="box7" v-if='addtype==4 && kjdshow'>
                          <div class="top" ><div class="title">结对信息</div></div>
                          <div class="list">
@@ -962,17 +963,16 @@
                          <el-date-picker
                                 v-model="hjform.getTime" format="yyyy-MM-dd"
                                 type="date" size="small" value-format="yyyy-MM-dd"
-                                placeholder="选择时间" class="yy-input-input" >
+                                placeholder="选择时间" class="yy-input-input" :disabled="!hjck">
                                 </el-date-picker>
                     </el-col>
                     <el-col :span="24">
                           <span class="yy-input-text trt topt"><font class="red">*</font> 获奖名称：</span>
-                         <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}"  placeholder="请输入内容" v-model="hjform.awardName" class="yy-input-input"></el-input>
+                         <el-input type="textarea" :disabled="!hjck" :autosize="{ minRows: 2, maxRows: 4}"  placeholder="请输入内容" v-model="hjform.awardName" class="yy-input-input"></el-input>
                     </el-col>
-                  
                      <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 颁奖单位：</span>
-                        <el-input placeholder="请输入内容" size="small" clearable v-model="hjform.awardUnit"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" :disabled="!hjck" size="small" clearable v-model="hjform.awardUnit"  class="yy-input-input" ></el-input>
                     </el-col>
                 </el-row>
              </el-form>
@@ -986,37 +986,37 @@
                 <el-row class="ah-40">
                     <el-col :span="24">
                         <span class="yy-input-text trt">原工作单位：</span>
-                        <el-input placeholder="请输入内容" size="small" clearable v-model="zwform.beforeOrg"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" size="small" :disabled="!zwck" clearable v-model="zwform.beforeOrg"  class="yy-input-input" ></el-input>
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt">原任职务：</span>
-                        <el-input placeholder="请输入内容" size="small" clearable v-model="zwform.beforePosition"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" size="small" :disabled="!zwck" clearable v-model="zwform.beforePosition"  class="yy-input-input" ></el-input>
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 现工作单位：</span>               
-                            <el-input placeholder="请输入内容" size="small" clearable v-model="zwform.nowOrg"  class="yy-input-input" ></el-input>
+                            <el-input placeholder="请输入内容" size="small" :disabled="!zwck" clearable v-model="zwform.nowOrg"  class="yy-input-input" ></el-input>
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font>  现任职务：</span>
-                        <el-input placeholder="请输入内容" size="small" clearable v-model="zwform.nowPosition"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" size="small" :disabled="!zwck" clearable v-model="zwform.nowPosition"  class="yy-input-input" ></el-input>
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 变动时间：</span>
                          <el-date-picker
                                 v-model="zwform.changeDate" format="yyyy-MM-dd"
                                 type="date" size="small" value-format="yyyy-MM-dd"
-                                placeholder="选择时间" class="yy-input-input" >
+                                placeholder="选择时间" class="yy-input-input" :disabled="!zwck">
                                 </el-date-picker>
                     </el-col>
                     <el-col :span="24">
                           <span class="yy-input-text trt topt">备注：</span>
-                         <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="zwform.remark" class="yy-input-input"></el-input>
+                         <el-input type="textarea" :disabled="!zwck" :autosize="{ minRows: 2, maxRows: 4}" placeholder="请输入内容" v-model="zwform.remark" class="yy-input-input"></el-input>
                     </el-col>
                 </el-row>
              </el-form>
             <div slot="footer" class="dialog-footer">
             <el-button type="primary"  size="small" @click="addsave(2)" v-if="zwck">保 存</el-button>
-              <el-button @click="zwDialogVisible=false" size="small">取 消</el-button>
+              <el-button @click="zwDialogVisible=false" size="small">关 闭</el-button>
             </div>
          </el-dialog>
 
@@ -1233,12 +1233,15 @@ export default {
             hjck:true,
             hdtype:'1',
             yatype:'0',
+          
             hjDialogVisible:false,
             hdDialogVisible:false,
             yaDialogVisible:false,
             jdDialogVisible:false,
             multipleSelection:[],
             hjmultipleSelection:[],
+            hjindex:null,
+            zwindex:null,
             filedata1:[],
             filedata2:[],
             filedata3:[],
@@ -1329,7 +1332,7 @@ export default {
             lvl:'',
             jjblist:[],
             tylblist:[],
-            kjdshow:true,
+            kjdshow:false,
             jdshow:true,
             orglvl:'',
             allshow:true,
@@ -1505,12 +1508,25 @@ export default {
                 }
             
           },
+          //获奖信息
         hjclickRow(row){
+     
+            
+           this.hjindex=row.index;
            this.$refs.hjmultiple.toggleRowSelection(row)
         },
+         hjtableRowClassName({row, rowIndex}){
+                row.index = rowIndex;
+        },
+        //职务变动
         zwclickRow(row){
+            this.zwindex=row.index;
            this.$refs.zwmultiple.toggleRowSelection(row)
         },
+         zwtableRowClassName({row, rowIndex}){
+                row.index = rowIndex;
+        },
+
         hdclickRow(row){
            this.$refs.multipleTablehd.toggleRowSelection(row)
         },
@@ -1695,8 +1711,7 @@ export default {
                         {
                           
                               this.$set(this.form1,'specialType',this.lb);
-                              console.log(this.form1.specialType,'this.form1.specialType');
-                            
+                             
                               if(this.lb=='0185000001'){
                                     this.tjshow=true;
                                 }else{
@@ -1956,7 +1971,7 @@ export default {
             //团别
            getTB(code,jb)
            {       
-               console.log(code,jb);
+              
                
             //    if(code==null || code==undefined){
             //        code="";
@@ -2278,7 +2293,6 @@ export default {
             },
             getcrwy(data){
                  if(this.addtype=='2'){
-                    //  console.log('22----',this.form1.reelections,this.form1.periodType);
                      var arr=this.form1.reelections;
                    
                    
@@ -2529,8 +2543,7 @@ export default {
             },
             ZNfatherMethod(data,type){
                 this.getXz();
-                console.log(data,'dsata',type);
-                
+              
             if(data!='99'){
               this.form=data;
               if(this.form.mobilePhone && this.form.mobilePhones.length>0){
@@ -2602,6 +2615,7 @@ export default {
 
             },
             add(t,n){
+
                 if(t==2){
                    this.zwtb=n;
                    this.zwck=true;
@@ -2614,15 +2628,17 @@ export default {
                        }else if(this.multipleSelection.length==0){
                                this.$message.error("请选择一条数据！");return;
                        }
-                       this.zwform=this.multipleSelection[0];
+                       this.zwform=Object.assign({},this.multipleSelection[0]);
                        this.zwdia="编辑职务变动";
                    }else{
+                       this.zwdia="查看职务变动";
                        if(this.multipleSelection.length>1){
                                this.$message.error("只能选择一条信息！");return;
                        }else if(this.multipleSelection.length==0){
                                this.$message.error("请选择一条数据！");return;
                        }
-                       this.zwform=this.multipleSelection[0];
+                     
+                       this.zwform=Object.assign({},this.multipleSelection[0]);
                        this.zwck=false;
                    }
                     this.zwDialogVisible=true;
@@ -2638,19 +2654,21 @@ export default {
                        }else if(this.hjmultipleSelection.length==0){
                          this.$message.error("请选择一条数据！");return;
                        }
-                       this.hjform=this.hjmultipleSelection[0];
+                   
+                       this.hjform=Object.assign({},this.hjmultipleSelection[0]);
                        this.hjdia="编辑获奖信息";
                    }else{
+                       this.hjdia="查看获奖信息";
                         if(this.hjmultipleSelection.length>1){
                                this.$message.error("只能选择一条信息！");return;
                         }else if(this.hjmultipleSelection.length==0){
                                this.$message.error("请选择一条数据！");return;
                        }
-                       this.hjform=this.hjmultipleSelection[0];
+                      
+                       this.hjform=Object.assign({},this.hjmultipleSelection[0]);
                        this.hjck=false;
                    }
-                    
-                    this.hjDialogVisible=true;
+                   this.hjDialogVisible=true;
                 }
             },
             remove(t)
@@ -2695,9 +2713,19 @@ export default {
                      }
 
                     //  this.id=formatDate(new Date(), 'yyyymmddhhmmss');
+                 
+                  
+
+
+                 if(this.zwtb==0){
                      this.zwTableData.push(this.zwform);
                      this.zwTableData=this.unique(this.zwTableData,2);
-                     this.zwDialogVisible=false;
+                }else{
+                
+                    this.$set(this.zwTableData,this.zwindex,this.zwform);
+                }
+
+                   this.zwDialogVisible=false;
                     
                       this.getHDZW(this.hyanum,2); 
                      
@@ -2711,8 +2739,15 @@ export default {
                      if(this.hjform.awardUnit==undefined || this.hjform.awardUnit==""){
                          this.$message.error("颁奖单位不能为空！");return;
                      }
-                     this.hjTableData.push(this.hjform);
-                     this.hjTableData=this.unique(this.hjTableData,1);
+                   
+                     if(this.hjtb==0){
+                       this.hjTableData.push(this.hjform);
+                       this.hjTableData=this.unique(this.hjTableData,1);
+                    }else{
+                      
+                       this.$set(this.hjTableData,this.hjindex,this.hjform);
+                    }
+
                      this.getHDZW(this.hyanum,1); 
                      this.hjDialogVisible=false;
   
@@ -2823,8 +2858,7 @@ export default {
                 //       this.$message.error("学历不能为空!");return;
                 //   }
                   if(this.ntype=='3'){
-                       console.log(this.form1.specialType,'this.form1.specialType',this.jkey);
-                       
+                   
                     if((this.form1.specialType==undefined || this.form1.specialType=="") && this.lbshow==true)
                     {
                         this.$message.error("特约职务不能为空!");return;
@@ -2842,8 +2876,7 @@ export default {
                         }
                     }
                   if(this.pd.is5){
-                      console.log(this.form1.reelections.length,'this.form1.reelections');
-                      
+                   
                        if(this.form1.reelections==undefined || this.form1.reelections=="")
                         {
                             this.$message.error("连任届数不能为空!");return;
@@ -3407,32 +3440,33 @@ export default {
         getckdata(t){
              if(t==1){
             
-               if(!this.pd.is5){
+            //    if(!this.pd.is5){
                   var arr=[];
                   arr.push(this.form1.periodType);
-                  this.$set(this.form1,"reelections",'')
-                }
+                  this.$set(this.form1,"reelections",arr)
+                  this.form1.reelectionNum=this.form1.reelections.length;
+                // }
 
              }else if(t==2){
-                if(!this.pd.is14){
-               this.$set(this.form1,"formerRepresentatives","")
-               }
+                // if(!this.pd.is14){
+               this.$set(this.form1,"formerRepresentatives",[])
+            //    }
              }else if(t==3){
-                if(!this.pd.is15){
-                 this.$set(this.form1,"formerMembers","")
-               }
+                // if(!this.pd.is15){
+                 this.$set(this.form1,"formerMembers",[])
+            //    }
              }else if(t==4){
-                if(!this.pd.is11){
+                // if(!this.pd.is11){
                  this.$set(this.form1,"repairTime","")
-               }
+            //    }
              }else if(t==5){
-                if(!this.pd.is12){
+                // if(!this.pd.is12){
                  this.$set(this.form1,"fireReason","")
-               }
+            //    }
              }else if(t==6){
-                if(!this.pd.is7){
+                // if(!this.pd.is7){
                  this.$set(this.form1,"isNotHoldReason","")
-               }
+            //    }
              }
                
            },
@@ -3608,7 +3642,7 @@ export default {
                    {
                      this.xzqh=obj.xzqh;
                     }
-                //    console.log(obj.xzqh,'---',this.xzqh);
+           
                   this.getNJB();
                
                   
@@ -3696,8 +3730,7 @@ export default {
         },
          //可结对职务列表
             getJDZWLB(val){
-                console.log('--',val);
-                
+               
                let pp={
                     'levelType':this.orglvl,
                   };
@@ -3709,7 +3742,8 @@ export default {
                             //  this.kjdshow=arr.indexOf(val)==1?true:false;
                              for (let i = 0; i < arr.length; i++) {
                                  if(arr[i]==val){
-                                     this.kjdshow=true;break;
+                                     this.kjdshow=true;
+                                     break;
                                  }
                                  
                               }
@@ -3727,8 +3761,7 @@ export default {
                         if(r.code==1){
                            var arr=r.data;
                            if(arr && arr.length>0){
-                            //    console.log(arr.join(","),'=====',val,'++++',arr.join(",").indexOf(val));
-                               
+                            
                               this.jdshow=arr.join(",").indexOf(val)==0?false:true;
                            }
                        
