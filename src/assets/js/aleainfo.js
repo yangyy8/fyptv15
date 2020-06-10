@@ -1,42 +1,42 @@
-export function getlljgmenu(type,lvl)
+export function getlljgmenu(type,jb)
 {
     
     var mid='';
    switch (type) {
        case '1'://人大
-           if(lvl==1){
+           if(jb=='sj'){
                mid='11042103';
-           }else if(lvl==2){
+           }else if(jb=='ds'){
                mid='11052106';
-           }else if(lvl=3){
+           }else if(jb=='xq'){
                mid="11062109";
            }
           
            break;
          case '2'://政协
-           if(lvl==1){
+           if(jb=='sj'){
                mid='11102116';
-           }else if(lvl==2){
+           }else if(jb=='ds'){
                mid='11112119';
-           }else if(lvl=3){
+           }else if(jb=='xq'){
                mid="11122122";
            }
            break;
          case '3'://特约
-           if(lvl==1){
+           if(jb=='sj'){
                mid='11162128';
-           }else if(lvl==2){
+           }else if(jb=='ds'){
                mid='11172131';
-           }else if(lvl=3){
+           }else if(jb=='xq'){
                mid="11182134";
            }
            break;
         case '4'://法院
-           if(lvl==1){
+           if(jb=='sj'){
                mid='11662196';
-           }else if(lvl==2){
+           }else if(jb=='ds'){
                mid='11672199';
-           }else if(lvl=3){
+           }else if(jb=='xq'){
                mid="11682202";
            }
            break;
@@ -47,47 +47,47 @@ export function getlljgmenu(type,lvl)
 }
 
 
-export function getlljgdata(type,lvl)
+export function getlljgdata(type,jb)
 {
      var data=[];
      switch (type) {
          case '1'://人大
-            if(lvl==1){
+            if(jb=='sj'){
                 data=['21033106','21033107'];
-            }else if(lvl==2){
+            }else if(jb=='ds'){
                 data=['21063113','21063114'];
             }
-            else if(lvl==3){
+            else if(jb=='xq'){
                 data=['21093120','21093121'];
             }
              break;
          case '2'://政协
-             if(lvl==1){
+             if(jb=='sj'){
                  data=['21163142','21163143'];
-             }else if(lvl==2){
+             }else if(jb=='ds'){
                  data=['21193149','21193150'];
              }
-             else if(lvl==3){
+             else if(jb=='xq'){
                  data=['21223156','21093121'];
              }
             break;
         case '3'://特约
-            if(lvl==1){
+            if(jb=='sj'){
                 data=['21283176','21283177'];
-            }else if(lvl==2){
+            }else if(jb=='ds'){
                 data=['21313184','21313185'];
             }
-            else if(lvl==3){
+            else if(jb=='xq'){
                 data=['21343192','21343193'];
             }
            break;
         case '4'://法院
-           if(lvl==1){
+           if(jb=='sj'){
                data=['21963214','21963216'];
-           }else if(lvl==2){
+           }else if(jb=='ds'){
                data=['21993223','21993225'];
            }
-           else if(lvl==3){
+           else if(jb=='xq'){
                data=['22023232','22023234'];
            }
           break;

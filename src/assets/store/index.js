@@ -41,6 +41,7 @@ export default new Vuex.Store({
         cb:[],//次别
         ajzt:[],//案件状态
         xxcz:[],//信息操作
+        xxczbq:[],// 报批信息操作
         spjg:[],//审批结果
         jgydbyj:[],//结果与代表意见
         gtxs:[],//沟通形式
@@ -121,6 +122,8 @@ export default new Vuex.Store({
         sbjys:[],//省部级以上领导区分
         zjqf:[],//在京区分
         dyzt:[],//订阅状态
+        wjlb:[],//工作文件类别
+
       },
       mutations: {
         //state代表了最开始存放的区域，即驱动应用的数据源
@@ -241,6 +244,9 @@ export default new Vuex.Store({
         },
         getXxcz(state, data) {
           state.xxcz = data;
+        },
+        getXxczbq(state, data) {
+          state.xxczbq = data;
         },
         getSpjg(state, data) {
           state.spjg = data;
@@ -484,6 +490,9 @@ export default new Vuex.Store({
         getDyzt(state,data){
           state.dyzt = data;
         },
+        getWjlb(state,data){
+          state.wjlb = data;
+        },
       },
       actions: {
         getGjdq(context) {
@@ -569,6 +578,12 @@ export default new Vuex.Store({
           api.get(global_.aport4 + global_.xxcz, null,
             r => {
               context.commit('getXxcz', ToArray(r.data))
+            })
+        },
+        getXxczbq(context) {
+          api.get(global_.aport4 + global_.xxczbq, null,
+            r => {
+              context.commit('getXxczbq', ToArray(r.data))
             })
         },
         getSpjg(context) {
@@ -1059,6 +1074,12 @@ export default new Vuex.Store({
           api.get(global_.aport4 + global_.dyzt, null,
             r => {
               context.commit('getDyzt', ToArray(r.data))
+          })
+        },
+        getWjlb(context) {
+          api.get(global_.aport4 + global_.wjlb, null,
+            r => {
+              context.commit('getWjlb', ToArray(r.data))
           })
         },
       }

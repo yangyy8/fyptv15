@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="personnel">
           <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 
-              基本信息库 <span class="mlr_10">/</span> 法院人员  <span class="mlr_10">/</span><b>{{cname}}</b>
+              基本信息 <span class="mlr_10">/</span> 法院人员  <span class="mlr_10">/</span><b>{{cname}}</b>
                <span class="mlr_10" v-if='xzqhmc!=""'>/</span><b v-if='xzqhmc!=""'>{{xzqhmc}}法院人员</b>
               </span> </div>
           <div class="content">

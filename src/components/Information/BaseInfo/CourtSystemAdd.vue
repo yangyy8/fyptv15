@@ -1,7 +1,7 @@
 <!-- 法院系统机构录入 -->
 <template>
     <div class="pairadd subtable">
-         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息库 <span class="mlr_10">/</span>  <b>{{cname}}</b></span> </div>
+         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息 <span class="mlr_10">/</span>  <b>{{cname}}</b></span> </div>
          <div class="content">
              <div class="pairleft">
                 
@@ -18,7 +18,7 @@
                                 <el-cascader  :disabled="ck"
                             v-model="pd.sj"
                             :options="jgdata"
-                            :show-all-levels="false"
+                            :show-all-levels="true"
                             :props="{ checkStrictly: true }"
                             clearable size="small" class="yy-input-input"></el-cascader>
                             </el-col>

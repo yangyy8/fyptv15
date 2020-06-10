@@ -1,7 +1,7 @@
 <template>
     <div class="personnel">
           <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-            <span> 基本信息库 <span class="mlr_10">/</span> 联络对象 
+            <span> 基本信息 <span class="mlr_10">/</span> 联络对象 
             <span class="mlr_10">/</span>  {{cname}}</span>
             <span class="mlr_10" v-if="xzqhmc != ''">/</span> <span v-if="xzqhmc != ''"> {{xzqhmc}}</span>
             <span class="mlr_10" v-if="cname1 != ''">/</span><span v-if="cname1 != ''"><b>{{cname1}}</b></span>

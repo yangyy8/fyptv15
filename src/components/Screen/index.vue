@@ -432,13 +432,13 @@ export default {
                   if(r.code==200){
                        if(r.data.indexItemsValues.SY_yearWork){
                           var act =r.data.indexItemsValues.SY_yearWork.activityinfo;
-                          this.mp1=act.percent==0?act.total:act.percent;
+                          this.mp1=this.numfloat(act.percent==0?act.total:act.percent);
                      
                           var pro=r.data.indexItemsValues.SY_yearWork.proposalinfo;
-                          this.mp2=pro.percent==0?pro.total:pro.percent;
+                          this.mp2=this.numfloat(pro.percent==0?pro.total:pro.percent);
                       
                           var fcase=r.data.indexItemsValues.SY_yearWork.focuscaseinfo;
-                          this.mp3=fcase.percent==0?fcase.total:fcase.percent;
+                          this.mp3=this.numfloat(fcase.percent==0?fcase.total:fcase.percent);
                   
                       }
                 }  
@@ -493,7 +493,6 @@ export default {
                         //  for (let ii = 0; ii < array.length; ii++) {
                         //   date.push(array[ii].replace("法院","").replace("人民","").replace("高级",""));
                         //  }
-
                          this.funphbcharts(array,phb);
                       }
                     }  
@@ -966,13 +965,28 @@ export default {
         },
       mapfatherMethod(orgid){
         if(orgid){
-       
             this.$set(this.pd,'orgId',orgid);
             this.getfirst();
             this.getinit('orgId');
             this.getMinit();
         }
       },
-    }
+      numfloat (value) {
+          let realVal = ''
+          if (!isNaN(value) && value!== '') {
+            // 截取当前数据到小数点后三位
+            if((value+'').split('.').length>0){
+            let tempVal = parseFloat(value).toFixed(3)
+            realVal = tempVal.substring(0, tempVal.length - 1)
+            }else{
+              realVal=value;
+            }
+          } else {
+            realVal=0;
+          }
+          return  parseFloat(realVal);
+        }
+    },
+   
 }
 </script>

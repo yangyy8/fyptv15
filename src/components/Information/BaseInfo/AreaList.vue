@@ -2,7 +2,7 @@
     <div class="personnel">
       <div class="homebread">
           <i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-          <span> 基本信息库 
+          <span> 基本信息 
           <span class="mlr_10">/</span><span>{{cname1}}</span>
           <span class="mlr_10" v-if="cname2 != ''">/</span><span v-if="cname2 != ''"><b>{{cname2}}</b></span>
           <span class="mlr_10" v-if="cname3 != ''">/</span><span v-if="cname3 != ''"><b>{{cname3}}</b></span>
@@ -119,8 +119,10 @@ export default {
             //    this.jjbmc=this.$store.state.jmc;
             //    this.jjb=this.$store.state.jid;
            }
-          var mid=getlljgmenu(this.addtype,parseInt(this.lvl));
-          this.alldata=getlljgdata(this.addtype,parseInt(this.lvl));
+          
+           
+          var mid=getlljgmenu(this.addtype,this.jb);
+          this.alldata=getlljgdata(this.addtype,this.jb);
           
             //权限start
             this.$api.post(this.Global.menuurl,{'menuId':mid},
@@ -330,7 +332,7 @@ export default {
           
      },
      goBase(){
-            this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,jmc:this.jjbmc,jkey:this.jjb}})
+            this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,jmc:this.jjbmc,jkey:this.jjb,pt:'0'}})
       },
      goseach(){
            switch (this.addtype) {

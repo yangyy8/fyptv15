@@ -1,6 +1,6 @@
 <template>
     <div class="pairadd subtable">
-         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息库 <span class="mlr_10">/</span> 法院内部管理 <span class="mlr_10">/</span> <b>{{cname}}查询</b></span> </div>
+         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息 <span class="mlr_10">/</span> 法院内部管理 <span class="mlr_10">/</span> <b>{{cname}}查询</b></span> </div>
          <div class="content">
              <div class="ptitle mb-20">{{cname}}信息</div>
                 <div class="pborder">

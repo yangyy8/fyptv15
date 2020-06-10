@@ -2,7 +2,7 @@
     <div class="personnel">
          <div class="homebread">
           <i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-          <span> 基本信息库 
+          <span> 基本信息 
           <span class="mlr_10">/</span><span>{{cname1}}</span>
           <span class="mlr_10" v-if="cname2 != ''">/</span><span v-if="cname2 != ''"><b>{{cname2}}</b></span>
           <span class="mlr_10" v-if="mzname != ''">/</span><span v-if="mzname != ''"><b>{{mzname}}</b></span>
@@ -99,7 +99,7 @@ export default {
          }else if(val.query.info!=undefined && val.query.info!=''){
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
-              console.log(this.info,'this.info');
+             
               
                this.addtype=this.info.type;
                this.jb=this.info.jb;
@@ -472,9 +472,9 @@ export default {
                 tt=this.cname4+mc;
             }
              if(t==1){
-                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'1',jgid:id,title:tt,lx:this.lx,num:this.num}});
+                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'1',jgid:id,title:tt,lx:this.lx,num:this.num-1==0?this.num:this.num-1,pt:1}});
             }else if(t==0){
-                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:tt,jb:this.jb,xzqh:this.code,lx:this.lx,num:this.num,cdx:1}});
+                this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:tt,jb:this.jb,xzqh:this.code,lx:this.lx,num:this.num-1==0?this.num:this.num-1,cdx:1,pt:1}});
             }
         },
      goseach(){

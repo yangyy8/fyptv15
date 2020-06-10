@@ -54,18 +54,16 @@ export default {
                       if(r.code==1){
                         this.$store.commit('getOrgname',r.data.ssdw.mc)
                         this.$store.commit('getOrgid',r.data.ssdw.dm)
-                        
-                        this.$message.success("设置成功！请重新登录");
+                        this.$store.commit('getToken',r.data.token)
+                        this.$store.commit('getUname',r.data.mc)
+                        this.$message.success("设置成功！");
                         this.$router.push({name:"Index"});
-
                       }else{
                           this.msg=r.message;
                       }
             });
         },
-        setDw(){
-         
-            
+        setDw(){ 
             var ff=new FormData();
             ff.append("userId",this.$store.state.personid);
             let p=ff;
@@ -75,7 +73,7 @@ export default {
                          this.zwdw=r.data;
                          if(r.data.length>0){
                              var array=r.data;
-                             for (let i = 0; i < array.length; i++) {
+                            for (let i = 0; i < array.length; i++) {
                                  if(array[i].isDefault=='0167000001'){
                                      this.radio=array[i].orgId;
                                  }
@@ -88,7 +86,6 @@ export default {
         reset(){
             this.pd={};
         },
-
     },
 }
 </script>

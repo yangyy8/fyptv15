@@ -107,7 +107,9 @@ export default {
            this.$api.post(this.Global.aport1+"/baseinfo/getPhotos", formdata,
                   r => {
                          if(r.code==1){
+                         
                               this.images=r.data;
+                              
                               var arr=this.images;
                               this.snum=arr.length;
                                for (let i = 0; i < arr.length; i++) {
@@ -116,6 +118,8 @@ export default {
                                     this.check[i]=true;
                                  }
                                 }
+
+                          
                               // this.checks[0]=true;
                          }
                   })
@@ -225,8 +229,17 @@ export default {
         　　})
        
         
-        　 this.images.splice(index,1)
+        　 this.images.splice(index,1);
           }
+                           var arr=this.images;
+                            
+                               for (let i = 0; i < arr.length; i++) {
+                                 if(arr[i].isDefault=='0167000001'){
+                                    
+                                    this.check[i]=true;
+                                 }
+                                }
+
         },
         delImgs(val){
       
@@ -239,6 +252,7 @@ export default {
                         
                         this.$message.success(r.message);
                         this.del(val);
+                  
                       }else{
                         this.$message.error(r.message);
                       }

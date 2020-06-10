@@ -1,5 +1,6 @@
 <template lang="html">
   <div class="loginbg">
+  
        <div class="login-left"><img src="../assets/img/img_1.png"></div>
        <div class="login-box">
          <div class="logtop"><img src="../assets/img/dtop.png"></div>
@@ -9,7 +10,7 @@
           <i slot="prefix" class="el-input__icon"><img src="../assets/img/logo01.png"></i>
         </el-input>
         </div>
-      <div class="login-item">
+      <div class="login-item"> 
         <el-input
           placeholder="输入密码"
           type="password" v-model="user.password" @keyup.enter.native="keyLogin">
@@ -23,29 +24,7 @@
       <button class="login-btn" @click="login">登录</button>
        
     </div>
-
-     <el-dialog title="选择单位" :visible.sync="addDialogVisible"  width="600px" :close-on-click-modal='false'>
-       <el-form :model="form">
-
-       <el-row class="ah-40">
-         <el-col :span="24">
-           <span class="yy-input-text trt" >选择单位：</span>
-             <el-select v-model="form.dw"  filterable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                 <el-option
-                  v-for="(item,ind) in xzdw"
-                  :key="ind"
-                  :label="item.orgName"
-                  :value="item.orgId">
-                </el-option>
-              </el-select>
-        </el-col>
-        </el-row>
-      </el-form> 
-       <div slot="footer" class="dialog-footer">
-              <el-button type="primary"  size="small" @click="addsave()">登 录</el-button>
-              <el-button @click="addDialogVisible = false" size="small">取 消</el-button>
-        </div>
-     </el-dialog>
+ 
 </div>
 </template>
 <script>
@@ -55,7 +34,6 @@ export default {
       user:{},
       jzmm:false,
       addDialogVisible:false,
-      form:{},
       xzdw:[],
     }
   },
@@ -115,16 +93,16 @@ export default {
                      
                      if(!r.data.isDefault){
                      
-                      //  this.getInfo(r.data.personId);
                         this.$router.push({name: 'AuthoritySwith'});
                      }else{
                          this.$store.commit('getUid',this.user.userName)
                          
                          this.updateInfo(r.data);
+                         this.getJID();
                         if(r.data.first){
                           this.$router.push({name: 'EditPwd'});return;
                          }
-                         this.getJID();
+                         
                          this.$router.push({name: 'Index'});
                      }
 
@@ -154,8 +132,8 @@ export default {
                         this.$store.commit('getZwname',r.zw.mc)
                       }
                     
-                       if(r.funids!=null){
-                            this.$store.commit('getAuth',r.funids)
+                      if(r.funids!=null){
+                          this.$store.commit('getAuth',r.funids)
                       }
                     
                       this.$store.commit('getPagesize',this.Global.fycount)
@@ -196,40 +174,8 @@ export default {
         this.login();
      }
    },
-   getInfo(id){
-         this.addDialogVisible=true;
-         var ff=new FormData();
-          ff.append("userId",id);
-          let p=ff;
-        var url=this.Global.aport4+'/user/getUserOrgs';
-          this.$api.post(url,p,
-          r=>{
-               if(r.code==1){
-                   this.xzdw=r.data;
-               }
 
-          })
-   },
-   addsave(){
-         if(this.form.dw=="" || this.form.dw==undefined){
-              this.$message.error("请选择单位！");return;
-          }
-
-        var ff=new FormData();
-          ff.append("userId",this.$store.state.personid);
-          ff.append("orgId",this.form.dw);
-          let p=ff;
-        var url=this.Global.aport4+'/user/setDefaultOrg';
-          this.$api.post(url,p,
-          r=>{
-               if(r.code==1){
-                 this.updateInfo(r.data);
-                    
-                   this.$router.push({name: 'Index'});
-               }
-
-          })
-   },
+   
   },
 }
 </script>

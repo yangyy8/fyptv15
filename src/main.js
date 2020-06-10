@@ -20,14 +20,21 @@ import DonMessage from '@/./assets/js/message.js'
 import interfaces from '@/./assets/js/interfaces.js'
 import 'default-passive-events'
 import "babel-polyfill"
+import VueDND from 'awe-dnd'
+import VueClipboard  from 'vue-clipboard2'  //复制粘贴功能
+
+Vue.use(VueClipboard)
 Vue.use(VideoPlayer)
 Vue.use(interfaces)
+Vue.use(VueDND)
 Vue.prototype.$message = DonMessage
 Vue.config.productionTip = false
 Vue.prototype.$api = api;
 Vue.prototype.Global = global_;
 Vue.prototype.menu = menu;
 Vue.prototype.pl = pl;
+
+
 
 /* eslint-disable no-new */
 import Router from 'vue-router'

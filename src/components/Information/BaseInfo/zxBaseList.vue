@@ -2,7 +2,7 @@
 <template>
     <div class="pairadd subtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-         <span> 基本信息库 
+         <span> 基本信息 
                <span class="mlr_10">/</span>  <b>联络对象</b>
                  <span class="mlr_10">/</span>  <b>政协委员</b>
              <span class="mlr_10">/</span>  <b>高级查询</b>
@@ -46,7 +46,7 @@
                             </el-col>
                            <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属政协</span>
-                             <el-select v-model="pd.orgId" @change="getNJB(pd.orgId);getWYH()"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                             <el-select v-model="pd.orgId"  remote :remote-method="orgremoteMethod" v-el-select-loadmore="orgloadmore" @visible-change="getOrg()" @change="getNJB(pd.orgId);getWYH()"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                       <el-option
                                         v-for="(item,ind) in ssdwdata"
                                         :key="ind"
@@ -57,7 +57,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">层级</span>
-                            <el-select v-model="pd.levelType" @change="getWYH()"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd.levelType" @change="getWYH()"  :disabled="pd.orgId?true:false"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                      <el-option
                                        v-for="(item,ind) in $store.state.jbb"
                                        :key="ind"
@@ -120,7 +120,8 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">籍贯</span>
-                           <el-select v-model="pd.birthPlaces" multiple @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.birthPlaces" multiple filterable clearable default-first-option placeholder="请选择" 
+                           remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore" @visible-change="getXz()" size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in xzdata"
                                  :key="ind"
@@ -301,7 +302,8 @@
                   
                 </div>
                  <div class="footer">
-                    <el-button type="primary"  style="width:130px;" @click="CurrentPage=1;getList(CurrentPage,pageSize,pd)">查 询</el-button>
+                     <el-button type="primary"  style="width:130px;" v-if='querybnt' @click="CurrentPage=1;getList(CurrentPage,pageSize,pd)">查 询</el-button>
+                     <el-button type="primary"  style="width:130px;" v-else :disabled="true">查询中</el-button>
                     <el-button style="width:130px;" @click="reset()">重  置</el-button>
                 </div>
                 <div class="loadmore" v-if="all" @click="getAll(1)">全部展开 <i class="el-icon-arrow-down"></i></div>
@@ -345,7 +347,7 @@
                             </el-table-column>
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号"  width="100">
                                  <template slot-scope="scope">
                                     <div>
                                     <span>{{(CurrentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -407,6 +409,22 @@ import {ToArray,sortByKey} from '@/assets/js/ToArray.js'
 import UPLOAD from "../../Common/upload"
 export default {
      components:{UPLOAD},
+      directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                   binding.value();
+                }
+              });
+            }
+          }
+  },
     data(){
         return{
             CurrentPage: 1,
@@ -444,6 +462,15 @@ export default {
             jjblist:[],
             jblist:[],
             objxzqh:'',
+            querybnt:true,
+            jznum:50,
+            ssdwload:[],
+            formData: {   //下拉参数
+                 pageIndex: 1,
+                 pageSize: 20
+              },
+            tempload:[],
+            xzList:[],
         }
     },
     watch:{
@@ -456,14 +483,14 @@ export default {
         this.$store.dispatch("getXb");
         // this.$store.dispatch("getJb");
         // this.$store.dispatch("getJjb");
-        this.$store.dispatch("getTb");
+        // this.$store.dispatch("getTb");
         this.$store.dispatch("getDp");
-        this.$store.dispatch("getZmwyh");
+        // this.$store.dispatch("getZmwyh");
         this.$store.dispatch("getZylb");
         this.$store.dispatch("getMz");
         this.$store.dispatch("getXl");
         this.$store.dispatch("getSflr");
-        this.$store.dispatch("getJdqf");
+        // this.$store.dispatch("getJdqf");
         this.$store.dispatch("getBzdr");
         this.$store.dispatch("getJbb");
         this.$store.dispatch("getSbjys");
@@ -503,12 +530,18 @@ export default {
             });
          //权限end
 
-           this.viewtype=val.query.type;this.getFYDW();this.getXHFT();this.getOrg();
+           this.viewtype=val.query.type;
+          // this.getFYDW();
+           //this.getXHFT();
+           //this.getOrg();
            
         },
 
         //专门委员会 
            getWYH(){
+             if(!(this.pd.orgId && this.pd.levelType)){
+               return;
+             }
                let p = {
                    'lb':this.Global.ZX,
                     'sj':this.pd.orgId,
@@ -526,30 +559,63 @@ export default {
                this.$set(this.pd,"specialCommitteeIds","")
              }
            },
-     //获取行政区划
-    getXz(val){
-      this.$api.get(this.Global.aport4+this.Global.jg,null,
-        r =>{
-          if(r.success){
-         
-            this.xzList = ToArray(r.data);
-            this.userFilter();
+      //获取行政区划
+   getXz(val){
+            if(this.xzdata.length==0)   
+            this.$api.get(this.Global.aport4+this.Global.jg,null,
+                r =>{
+                if(r.success){
+                     this.xzList = ToArray(r.data);
+                       if(val){
+                               var arr = this.xzList.filter(item=>{
+                                return item.dm.indexOf(val) + 1
+                              });
+                              this.xzdata=arr;
+                         }else{
+                             this.xzquery();
+                         }
+                 }
+                })
+            },
+      xzquery(){
+              if(this.xzList.length>this.jznum){
+                this.xzdata=this.xzList.slice(0,this.jznum);
+              }else{
+                this.xzdata=this.xzList;
+            }
+         },
+      //籍贯远程搜索
+     xzdwremoteMethod(quer){
+          if (quer !== ''|| this.xzdata.length<=0) {
+            var arr = this.xzList.filter(item=>{
+              return item.mc.indexOf(quer) + 1
+            });
+            this.tempload=arr;
+            if(arr.length>this.jznum){
+               this.xzdata=arr.slice(1,this.jznum);
+            }else{
+              this.xzdata=arr;
+            }
+          
+          }else{
+            this.tempload=[];
+            this.xzquery();
           }
-        })
+        },
+       //籍贯单位加载
+    xzloadmore() {
+        var srr= this.xzList;
+        if(this.tempload.length>0){
+          srr= this.tempload;
+        } 
+        this.formData.pageIndex++;
+        let num = this.formData.pageIndex * this.formData.pageSize;
+           this.xzdata =srr.filter((item, index, arr) => {
+               return index < num;
+         });
+       
     },
-    userFilter(query = '') {
-             let arr = this.xzList.filter((item) => {
-            
-              if(item.mc!=undefined){
-                  return item.mc.includes(query)
-               }
-             })
-            //  if (arr.length > 200) {
-            //    this.xzdata = arr.slice(0, 200)
-            //  } else {
-               this.xzdata= arr
-            //  }
-           },
+   
           handleSelectionChange(val) {
           this.multipleSelection = val;
           if(this.multipleSelection.length>0){
@@ -605,6 +671,7 @@ export default {
         reset(){
             this.pd={};
             this.pd1={is1:false,is2:false,is3:false,is4:false,is5:false};
+            this.CurrentPage=1;
         },
         getAll(n){
             if(n==1){
@@ -657,6 +724,8 @@ export default {
             this.configHeader=sortByKey(this.configHeader,'sort');
         },
         getList(currentPage, showCount, pd){
+          this.tableData=[];
+          this.querybnt=false;
            this.changeList();
             this.getoutin();
         //     //最高人民法院特约人员
@@ -715,8 +784,8 @@ export default {
                       if(r.code==1){
                           this.tableData=r.data.cppcMemberList;
                           this.TotalResult=r.data.pageInfo.total;
-                        //   this.activeNum=r.data.activeNum;
-                        //   this.inactiveNum=r.data.inActiveNum;
+                           this.querybnt=true;
+                        
                       }
                 });
         },
@@ -763,8 +832,7 @@ export default {
                   });
              this.pd.levelType=obj.lvl ;
              this.objxzqh=obj.xzqh;
-             console.log(this.pd.levelType,this.objxzqh);
-             
+            
             let p={
                     'level':this.pd.levelType,
                     'administrativeDivision':this.objxzqh,
@@ -841,16 +909,60 @@ export default {
              }
            },
            getOrg(){
-              let p={
-                    'lb':this.Global.ZX,
-                };
-                 this.$api.post(this.Global.aport1+'/org/getOrgByType',p,
-                   r =>{
-                       if(r.code==1){
-                           this.ssdwdata=r.data;
-                       }
-                   })
+             if(this.ssdwdata.length==0){
+                let p={
+                        'lb':this.Global.ZX,
+                        'pageType':'1'
+                    };
+                this.$api.post(this.Global.aport1+'/org/getOrgByType',p,
+                      r =>{
+                          if(r.code==1){
+                             this.ssdwload=r.data;
+                           this.ssdwquery();
+                      }
+                  })
+              }
            },
+            ssdwquery(){
+              if(this.ssdwload.length>this.jznum){
+                this.ssdwdata=this.ssdwload.slice(0,this.jznum);
+              }else{
+                this.ssdwdata=this.ssdwload;
+            }
+         },
+
+   //所属人大远程搜索
+     orgremoteMethod(quer){
+            if (quer != '') {
+              var arr = this.ssdwload.filter(item=>{
+                return item.mc.indexOf(quer) + 1
+              });
+              this.tempload=arr;
+              if(arr.length>this.jznum){
+                this.ssdwdata=arr.slice(1,this.jznum);
+              }else{
+                this.ssdwdata=arr;
+              }
+            
+            }else{
+              this.tempload=[];
+              this.ssdwquery();
+            }
+          },
+        //所属人大单位加载
+      orgloadmore() {
+          var srr= this.ssdwload;
+          if(this.tempload.length>0){
+            srr= this.tempload;
+          } 
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.ssdwdata =srr.filter((item, index, arr) => {
+                return index < num;
+          });
+        
+      },
+
            getoutin(){
             let p={
              "pd":this.pd,

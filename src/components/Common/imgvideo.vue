@@ -1,7 +1,7 @@
 <template>
     <div class="album albumvideo">
-            <div style="color:red;font-size:18px; font-weight:bold;">无现场影像，请提供活动方案/活动报告/领导批示的图片。</div>
-   
+    <div style="color:red;font-size:18px; font-weight:bold;">无现场影像，请提供活动方案/活动报告/领导批示的图片。</div>
+ 
     <div class="upload">
         
         <div class="pic_img">
@@ -15,12 +15,13 @@
                 :on-success="handleAvatarSuccess"
                 :before-upload="beforeAvatarUpload">
                 <span class="type_title">图片资料：</span>
-              
                 <el-button size="small" type="primary" style="width:180px;">选择图片</el-button>
                 </el-upload>
-               <div v-for="(item,ind) in imglist" :key="ind" class="videospan" style="margin-top: 25px;">
+                <div style="max-height:250px;overflow-y: auto;">
+               <div v-for="(item,ind) in imglist" :key="ind" class="videospan" style="margin-top: 25px;" v-dragging="{ item: item, list: imglist, group: 'item' }">
                   <img v-if="item.filepath" :src="item.filepath" class="avatar" width="180" height="150">
                   <i class="el-icon-error errcheck" @click="imgdel(item.imagedatainfoid,0)"></i>
+              </div>
               </div>
         </div>
        
@@ -46,26 +47,30 @@
                     <span class="type_title">视频资料：</span>
                     <el-button size="small" type="primary" style="width:180px;">选择视频</el-button>
                  </el-upload>
+                    <div style="max-height:250px;overflow-y: auto">
                 <div class="videospan" style="margin-top: 25px;" v-if="videoForm.showVideoPath !='' && !videoFlag" >
                                <el-progress v-if="videoFlag == true"
                                 type="circle"
                                 :percentage="videoUploadPercent"
                                 style="margin-top:7px;"></el-progress>
-                 <div  v-for="(item,ind) in videolist" :key="ind"  class="videospan">
+               
+                 <div  v-for="(items,ind) in videolist" :key="ind"  class="videospan" v-dragging="{ item: items, list: videolist, group: 'items' }">
                     <video
-                           :src="item.filepath" width="180" height="150"
+                           :src="items.filepath" width="180" height="150"
                            class="avatar video-avatar" 
                            controls="controls">
                            您的浏览器不支持视频播放
                     </video>
-                      <i class="el-icon-error errcheck" @click="imgdel(item.imagedatainfoid,1)"></i>
+                      <i class="el-icon-error errcheck" @click="imgdel(items.imagedatainfoid,1)"></i>
                      </div>
+                      </div>
                 </div>
         </div>
     </div>
     <p class="Upload_pictures">
         <span>建议上传不超过200M视频，支持mp4,avi</span>
     </p>
+
       <div slot="footer" style="text-align:center;border-top:1px solid #cccccc; padding-top:10px;">
               <el-button type="success"  size="small" @click="submit">上 传</el-button>           
         </div> 
@@ -100,12 +105,21 @@ export default {
  
     watch:{
       random:function(newVal,oldVal){
-      this.videolist=[];
-      this.imglist=[];
-      this.list=[];
-      this.result=0;
-      
+        this.videolist=[];
+        this.imglist=[];
+        this.list=[];
+        this.result=0;
+        
       },
+    },
+    mounted(){
+        this.$dragging.$on('dragged', (val) => {
+		      console.log(val)//这里我们不需要做任何操作；组件内部会把我们绑定上去的list自动排序;只需要查看结果就可以
+		      //如果需要在这里进行其他操作，可以查看val的内容，包括：拖动的元素，拖动后与之兑换的元素，以及原始数据和拖动组名
+		    })
+		    this.$dragging.$on('dragend', (val) => {
+		        //此处是拖动完成后鼠标松开时触发的事件
+		    })
     },
      methods: {
      //上传前回调
@@ -175,7 +189,8 @@ export default {
              }
 
            if(this.result==0){
-                this.$message.error('只能上传'+this.imgmat+"格式的文件");return;
+                this.$message.error('只能上传'+this.imgmat+"格式的文件");
+                return false;
            }
           
         },
@@ -226,7 +241,7 @@ export default {
              if(this.list.length==0){
                  this.$message.error("至少上传一张，若无现场影像，请提供活动方案/活动报告/领导批示的图片。");
              }else{
-                   console.log(this.list);
+                   
                    this.$emit('DfatherMethod',this.list,this.type); return;
              }
         
@@ -246,5 +261,5 @@ export default {
 .pic_img{margin-top: 25px;}
 .videospan{float: left;}
 .avatar{margin-right: 15px;}
-.errcheck{font-size: 25px;cursor: pointer;margin-top: -165px;margin-left: 170px; height: 150px;display: block;}
+.errcheck{font-size: 25px;cursor: pointer;margin-top: -165px;margin-left: 170px; height: 180px;display: block;}
 </style>

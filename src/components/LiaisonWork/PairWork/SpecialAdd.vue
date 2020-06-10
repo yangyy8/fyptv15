@@ -5,14 +5,14 @@
          <div class="content subtable">
                <div class="ptitle  mb-20">{{cnames}}</div>
                <div class="pborder mb-50">
-                   <el-row class="ah-40" >
+                   <el-row class="ah-40">
                      <el-col :span="12" class="input-item" v-if='addtype=="4" || addtype=="5"'>
-                      <span class="yy-input-text" style="width:22%;"><font class="red">*</font> 时间</span>
+                      <span class="yy-input-text" style="width:22.5%;"><font class="red">*</font> 时间</span>
                       <div class="yy-input-input inputw t-flex  t-date">
                         <el-date-picker :disabled="llbnt"
                            v-model="form.startTime" 
                            type="datetime" size="small" 
-                           placeholder="开始时间" format="yyyy-MM-dd HH:mm">
+                           placeholder="开始时间" format="yyyy-MM-dd HH:mm" @change="changedate(form.startTime)">
                         </el-date-picker>
                         <span class="septum">-</span>
                         <el-date-picker :disabled="llbnt"
@@ -32,18 +32,17 @@
                            type="date" size="small" 
                            placeholder="选择时间" >
                         </el-date-picker>
-                       
                      </div>
                      </el-col>
                       <el-col :span="12" class="input-item" v-else>
-                      <span class="yy-input-text" style="width:22%;"><font class="red">*</font>  
+                      <span class="yy-input-text" style="width:22.5%;"><font class="red">*</font>  
                          时间
                       </span>
                       <div class="yy-input-input inputw t-flex  t-date">
                         <el-date-picker :disabled="llbnt"
-                           v-model="form.startTime" 
+                          v-model="form.startTime" 
                            type="date" size="small" 
-                           placeholder="开始时间" >
+                           placeholder="开始时间" @change="changedate(form.startTime)">
                         </el-date-picker>
                         <span class="septum">-</span>
                         <el-date-picker :disabled="llbnt"
@@ -59,8 +58,8 @@
                            <el-input placeholder="请输入内容" size="small" :disabled="llbnt" clearable v-model="form.location"  class="yy-input-input inputw" ></el-input>
                      </el-col>
                      <el-col :span="24" v-if='addtype==11' class="input-item">
-                           <span class="yy-input-text textw"><font class="red">*</font> 联系形式</span>
-                           <el-select v-model="form.contactDistinction" :disabled="llbnt"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:40%!important" >
+                       <span class="yy-input-text textw"><font class="red">*</font> 联系形式</span>
+                       <el-select v-model="form.contactDistinction" :disabled="llbnt"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:40%!important" >
                                <el-option
                                  v-for="(item,ind) in $store.state.lxss"
                                  :key="ind"
@@ -82,7 +81,7 @@
                             <font class="red">*</font>
                                  开展单位
                               </span>
-                            <el-select v-model="form.developmentUnitId" :disabled="llbnt" @change="getcbbm(form.developmentUnitId,0);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="form.developmentUnitId"  remote :remote-method="kzdwremoteMethod" @focus="getfocus(2)" v-el-select-loadmore="kzloadmore" :disabled="llbnt" @change="getkzbm(form.developmentUnitId);" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in kzdwdata"
                                  :key="ind"
@@ -110,7 +109,7 @@
                             <font class="red">*</font>
                                 接待单位
                               </span>
-                            <el-select v-model="form.receptionUnitId" :disabled="llbnt" @change="getcbbm(form.receptionUnitId,3);getJDR(form.receptionUnitId)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="form.receptionUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  :disabled="llbnt" @change="getcbbm(form.receptionUnitId,3);getJDR(form.receptionUnitId)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -136,7 +135,7 @@
                    <el-row class="ah-40"  v-if="addtype==6 || addtype==5 || addtype==7 || addtype==4">
                          <el-col :span="8" class="input-item">
                           <span class="yy-input-text textn"><font class="red">*</font> 承办单位</span>
-                            <el-select v-model="form.undertakeUnitId" :disabled="llbnt" @change="getcbbm(form.undertakeUnitId,2)"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="form.undertakeUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  :disabled="llbnt" @change="getcbbm(form.undertakeUnitId,2)"  filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -147,7 +146,7 @@
                       </el-col>
                        <el-col :span="8" class="input-item">
                             <span class="yy-input-text textn">承办部门</span>
-                            <el-select v-model="form.undertakeDepartmentId" :disabled="llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="form.undertakeDepartmentId" :disabled="llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form.undertakeUnitId==''||form.undertakeUnitId==undefined?'请先选择承办单位':'无数据'">
                                <el-option
                                  v-for="(item,ind) in fybmdata2"
                                  :key="ind"
@@ -161,7 +160,7 @@
                    <el-row  class="ah-40"  v-if="addtype==2 && !llbnt">
                         <el-col :span="8" class="input-item">
                             <span class="yy-input-text textn"><font class="red">&ensp;</font> 视察单位</span>
-                            <el-select v-model="pd1.inspectOrgId"  @change="chChange(pd1.inspectOrgId,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd1.inspectOrgId" remote :remote-method="scdwremoteMethod" @focus="getfocus(4)" v-el-select-loadmore="scloadmore"   @change="chChange(pd1.inspectOrgId,1)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in scdwdata"
                                  :key="ind"
@@ -218,7 +217,7 @@
                      <el-row  class="ah-40"  v-if="addtype==3 && !llbnt">
                         <el-col :span="8" class="input-item">
                             <span class="yy-input-text textn"><font class="red">&ensp;</font> 调研单位</span>
-                            <el-select v-model="pd2.inspectOrgId" @change="chChange(pd2.inspectOrgId,3)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd2.inspectOrgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  @change="chChange(pd2.inspectOrgId,3)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -273,10 +272,8 @@
                                   </template>
                             </el-table-column>
                            </el-table>
-                         
                          </el-col>
                     </el-row>
-
                     <el-row  class="ah-40"  v-if="addtype==8 && !llbnt">
                         <el-col :span="8" class="input-item">
                             <span class="yy-input-text" style="width:30%" title="首发新闻单位"><font class="red">&ensp;</font> 首发新闻单位</span>
@@ -403,7 +400,15 @@
                     <el-row  class="mt-20" v-if='addtype=="7"'>
                         <el-col :span="12"  class="input-item">
                             <span class="yy-input-text" style="width:20%;"><font class="red">&ensp;</font> 走访人</span>
-                            <el-select v-model="fymber" v-if="!llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
+                            <!-- <el-select v-model="fymber" remote :remote-method="fyrdwremoteMethod" v-el-select-loadmore="fyrloadmore" @visible-change="getFYName($event)" v-if="!llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
+                               <el-option
+                                 v-for="(item,ind) in fydata"
+                                 :key="ind"
+                                 :label="item.fullName"
+                                 :value="item.pbId">
+                                 </el-option>
+                            </el-select> -->
+                             <el-select v-model="fymber" remote :remote-method="fyrdwremoteMethodnew" v-el-select-loadmore="fyrloadmorenew" @focus="getfocus(1)"  @change="getNullVlaue(fymber,2)"   v-if="!llbnt" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" style="width:70%!important" >
                                <el-option
                                  v-for="(item,ind) in fydata"
                                  :key="ind"
@@ -456,14 +461,15 @@
                          </el-col>
                    </el-row>
                   <el-row class="mt-20" >
-                      <el-col :span="15"  class="input-item">
+                      <el-col :span="15"  class="input-item elselect">
                         <span class="yy-input-text" style="min-width:180px" title="代表、委员以及特约人员"><font class="red">&ensp;</font> 代表、委员以及特约人员 </span>
-                        <el-select v-model="lmdbid" v-if="!llbnt"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="lmdbid" remote :remote-method="xmdwremoteMethod" v-el-select-loadmore="xmloadmore" @change="getNullVlaue(lmdbid,1)"  @visible-change="getName($event)" v-if="!llbnt" popper-class="select-popper"  :popper-append-to-body="false" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                           <el-option
                            v-for="(item,ind) in xmdata"
                            :key="ind"
+                           :title="item.fullName"
                            :label="item.fullName"
-                           :value="item.pbId">
+                           :value="item.pbId+'|'+item.personId">
                            </el-option>
                         </el-select>
                         </el-col>
@@ -521,12 +527,20 @@
                               <span class="yy-input-text" style="width:230px;"><font class="red">&ensp;</font> 代表、委员以及特约人员人数</span>  <span style="font-weight:bold;color:red;margin-left:20px;"> {{count1}} </span> 人
                            </el-col>
                     </el-row>
-                   <el-row  class="mt-20" v-if='addtype!="9" && addtype!="7" && addtype!="8"'>
-                        <el-col :span="12">
-                            <span class="yy-input-text" style="width:100px;"><font class="red">&ensp;</font> 
+                      <el-row  class="ah-40 mt-20" v-if='addtype!="9" && addtype!="7" && addtype!="8"'>
+                      <el-col :span="8" class="input-item">
+                            <span class="yy-input-text textn"><font class="red">&ensp;</font> 
                              <span v-if='addtype==11'>联系人</span>  <span v-else>法院领导</span>
                               </span>
-                            <el-select v-model="fyld" v-if="!llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
+                            <!-- <el-select v-model="fyld" remote :remote-method="fyrdwremoteMethod"  v-el-select-loadmore="fyrloadmore"   @visible-change="getFYName($event)" @change="getNullVlaue(fyld,2)" v-if="!llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
+                               <el-option
+                                 v-for="(item,ind) in fydata"
+                                 :key="ind"
+                                 :label="item.fullName"
+                                 :value="item.pbId">
+                                 </el-option>
+                            </el-select> -->
+                            <el-select v-model="fyld" remote :remote-method="fyrdwremoteMethodnew" v-el-select-loadmore="fyrloadmorenew" @focus="getfocus(1)"   @change="getNullVlaue(fyld,2)"   v-if="!llbnt" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input"  >
                                <el-option
                                  v-for="(item,ind) in fydata"
                                  :key="ind"
@@ -535,10 +549,61 @@
                                  </el-option>
                             </el-select>
                       </el-col>
-                        <el-col :span="8" v-if="!llbnt">
-                            <el-button type="success"  size="small" plain @click="ChangeFYNameList(fyld)">加入列表</el-button>
+                       <el-col :span="2" v-if="!llbnt">
+                           &nbsp; <el-button type="success"  size="small" plain @click="ChangeFYNameList(fyld)">加入列表</el-button>
+                           
                         </el-col>
+                        <el-col :span="14" class="red" style="font-size:12px;padding-top:9px; height:20px;">
+                           <span class="ml-20">当您选择的法院领导信息与参加活动的信息不匹配时，可以选择活动时单位，活动时部门，活动时职务。</span>
+                        </el-col>
+                      </el-row>
+                       <el-row  class="ah-40 mt-10" v-if='addtype!="9" && addtype!="7" && addtype!="8"'>
+                      <el-col :span="8"  class="input-item">
+                        <span class="yy-input-text textn">
+                            <font class="red">&ensp;</font>
+                                 活动时单位
+                              </span>
+                           
+                            <el-select v-model="ssxx.orgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"   :disabled="llbnt" @change="getcbbm(ssxx.orgId,4)"  filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in fydwdata"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.orgid+'|'+item.mc">
+                                 </el-option>
+                            </el-select>
+                      </el-col>
+                      <el-col :span="8"  class="input-item">
+                        <span class="yy-input-text textn">
+                            <font class="red">&ensp;</font>
+                                 活动时部门
+                              </span>
+                            <el-select v-model="ssxx.subOrgId" :disabled="llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="ssxx.orgId?'无数据':'请先选择所属单位'">
+                               <el-option
+                                 v-for="(item,ind) in fybmdata4"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.orgid+'|'+item.mc">
+                                 </el-option>
+                            </el-select>
+                      </el-col>
+                      <el-col :span="8"  class="input-item">
+                        <span class="yy-input-text textn">
+                            <font class="red">&ensp;</font>
+                                 活动时职务
+                              </span>
+                            <el-select v-model="ssxx.position" :disabled="llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                 v-for="(item,ind) in $store.state.zw"
+                                 :key="ind"
+                                 :label="item.mc"
+                                 :value="item.dm+'|'+item.mc">
+                                 </el-option>
+                            </el-select>
+                      </el-col>
+                       
                    </el-row>
+                
                    <el-row class="ah-40" v-if='addtype!="9" && addtype!="7" && addtype!="8"'>
                         <el-col :span="24" >
                              <el-table
@@ -556,11 +621,47 @@
                             <el-table-column
                                 prop="orgName"
                                 label="单位">
+                                <template slot-scope="scope">
+                                  <div>
+                                      <span v-if='scope.row.orgId'>{{scope.row.orgMC}}</span>
+                                      <span v-else>{{scope.row.orgName}}</span>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                             <el-table-column
+                                prop="subOrgName"
+                                label="部门">
+                                  <template slot-scope="scope">
+                                  <div>
+                                      <span v-if='scope.row.subOrgId'>{{scope.row.subOrgMC}}</span>
+                                      <span v-else>{{scope.row.subOrgName}}</span>
+                                    </div>
+                                </template>
                             </el-table-column>
                               <el-table-column
                                 prop="subOrgPosition"
                                 label="职务">
+                                <template slot-scope="scope">
+                                  <div>
+                                      <span v-if='scope.row.position'>{{scope.row.positionMC}}</span>
+                                      <span v-else>{{scope.row.subOrgPosition}}</span>
+                                    </div>
+                                </template>
                             </el-table-column>
+                             <!-- <el-table-column
+                                label="更正信息">
+                                <template slot-scope="scope">
+                                  <div style="color:green">
+                                    <span v-if='scope.row.orgId'>{{scope.row.orgMC}}</span>
+                                    <span v-if='scope.row.subOrgId'> 
+                                      <font v-if='scope.row.orgId'> / </font> 
+                                      {{scope.row.subOrgMC}}</span>
+                                    <span v-if='scope.row.position'> 
+                                      <font v-if='scope.row.orgId || scope.row.subOrgId'> / </font> 
+                                      {{scope.row.positionMC}}</span>
+                                  </div>
+                                </template>
+                            </el-table-column> -->
                              <el-table-column
                                 label="操作">
                                  <template slot-scope="scope">
@@ -570,7 +671,6 @@
                                 </template>
                             </el-table-column>
                            </el-table>
-                           
                          </el-col>
                           <el-col :span="8">
                             <span class="yy-input-text" style="width:31%"><font class="red">&ensp;</font>   <span v-if='addtype==11'>联系人</span>  <span v-else>法院领导</span>人数</span>
@@ -591,7 +691,7 @@
                               
                        </el-col>
                        <el-col :span="24" style="margin-left:11%;" v-if='pd5.ck11'>
-                           <div class="yy-input-input" style="width:89%!important;">
+                           <div :class="llbnt?'yy-input-input wxq':'yy-input-input'" style="width:89%!important;">
                             <el-table
                             ref="mlTable"
                             :data="ListDataWX"
@@ -599,7 +699,7 @@
                             @selection-change="wxChange">
                             <el-table-column
                                 type="selection"
-                                width="50">
+                                width="50" :selectable='selectInit'>
                             </el-table-column>
                             <el-table-column
                                 type="index"
@@ -643,13 +743,13 @@
                         <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==4 || addtype==5">
                              <el-checkbox v-model="pd5.ck8" :disabled="llbnt">组织座谈交流</el-checkbox>
                        </el-col>
-                       <el-col :span="24" style="margin-left:10%;" v-if="addtype==4 || addtype==5">
-                             <el-checkbox v-model="pd5.ck6" :disabled="llbnt">是否大要案</el-checkbox>
+                       <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==4 || addtype==5">
+                              <el-checkbox v-model="pd5.ck6" :disabled="llbnt">是否大要案</el-checkbox>
                        </el-col>
-                        <el-col :span="24" style="margin-left:10%;" v-if="addtype==6">
+                        <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==6">
                              <el-checkbox v-model="pd5.ck9" :disabled="llbnt">专门组织召开的代表委员特约人员会议</el-checkbox>
                        </el-col>
-                        <el-col :span="24" style="margin-left:10%;" v-if="addtype==6">
+                        <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==6">
                              <el-checkbox v-model="pd5.ck10" :disabled="llbnt">邀请代表委员特约人员参加的一般性会议</el-checkbox>
                        </el-col>
                        <el-col :span="24" style="margin-left:10.2%;">
@@ -801,8 +901,7 @@
                             <span class="yy-input-text textd txttop" title="代表、委员及特约人员意见建议"><font class="red">&ensp;</font> 代表、委员及特<br/><font class="red">&ensp;</font> 约人员意见建议</span> 
                            <div class="yy-input-input inputw">
                             <el-row class="mt-10">
-                                 <!-- <el-button type="success" size="small" @click="gotoya(0)" >关联</el-button> -->
-                             
+                               
                               <el-col :span="24"  style="text-align:right;"  v-if='!llbnt'> <el-button type="primary" size="small" plain @click="getyj(0)">添加</el-button></el-col>
                              
                               <!-- <el-button type="success" size="small" plain  :disabled="yjbnt" @click="getyj(1)">修改</el-button>
@@ -826,12 +925,14 @@
                               <el-table-column
                                 prop="contents"
                                 label="评价和意见建议"  width="400"
+                                align="left"
                                >
-                               <template slot-scope="scope">
-                                  <el-popover placement="top-start" width="350" trigger="hover" >
+                               <template slot-scope="scope" >
+                                  <el-popover placement="top-start" width="350" trigger="hover" style="text-align:left;" v-if="scope.row.contents">
                                        <div>{{scope.row.contents}}</div>
-                                      <span slot="reference">{{ scope.row.contents.substr(0,20)}}{{scope.row.contents.length>20?'......':''}}</span>
+                                       <div slot="reference"> {{ scope.row.contents.substr(0,20)}}{{scope.row.contents.length>20?'......':''}}</div>
                                   </el-popover>
+                                
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -898,14 +999,11 @@
                        </el-col>
                        <el-col :span="24" v-if="fits && fits.length>0">
                      
-                        <div style="margin-left:11%;"  v-for="(fit,ind) in fits" :key="ind">
+                        <div style="margin-left:11%;"  v-for="(fit,ind) in fits" :key="ind" v-dragging="{ item: fit, list: fits, group: 'fit' }">
                             <div class="block" style="float:left;margin-right:20px;margin-top:20px" v-if='getImgV(fit.filesuffix)'>
                                
                               <el-popover placement="right" title="" trigger="click">
-                                <!-- <el-image
-                                style="width: 180px; height: 150px"
-                                :src="fit.filepath"
-                                fit="fit"></el-image> -->
+                             
                             <img :src="fit.filepath"  style="max-width:700px; max-height:700px;"/>
                             
                             <img :src="fit.filepath" slot="reference" width="180" height="150">
@@ -914,7 +1012,7 @@
 
                               <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-error"></i></a>
                              
-                            <!-- <div style="font-size:11px;text-align:center">{{fit.filename}}.{{fit.filesuffix}}</div>  -->
+                           
                             </div>
                               <div class="block" style="float:left;margin-right:20px;margin-top:20px" v-else>
                                       
@@ -1047,278 +1145,9 @@
   <el-dialog title="上传文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="630px">
    <UPLOAD :url="uurl" :type="0" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
-  <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" :close-on-click-modal='false' width="650px">
+  <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" :close-on-click-modal='false' width="850px">
      <VIDEONEW :url="vvurl" :type="2" :urlErr="urlErr" @DfatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEONEW>
   </el-dialog>
-<el-dialog :title="yatxt" :visible.sync="lwDialogVisible" :close-on-click-modal='false' class="subtable">
-            <el-row class="ah-40">
-             <el-col :span="12">
-                <span class="yy-input-text trt"><font class="red">*</font> 年份：</span>
-               <el-select v-model="pd6.year" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                       <el-option
-                            v-for="(item,ind) in yearlist"
-                            :key="ind"
-                            :label="item.mc"
-                            :value="item.dm">
-                  </el-option>
-                </el-select>
-             </el-col>
-              <el-col :span="12">
-                <span class="yy-input-text trt"> 编号：</span>
-                <el-input placeholder="请输入内容" size="small" clearable v-model="pd6.number"  class="yy-input-input" ></el-input>
-             </el-col>
-              <el-col :span="12">
-                <span class="yy-input-text trt"> 录入法院：</span>
-                 <el-select v-model="pd6.createOrgId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                                     <el-option
-                                   v-for="(item,ind) in fydwdata"
-                                   :key="ind"
-                                   :label="item.mc"
-                                   :value="item.orgid">
-                                 </el-option>
-                </el-select>
-             </el-col>
-              <el-col :span="12">
-               <span class="yy-input-text trt">领衔人员：</span>
-                   <el-select v-model="pd6.leaderPerson" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                                     <el-option
-                                   v-for="(item,ind) in xmdata"
-                                   :key="ind"
-                                   :label="item.fullName"
-                                   :value="item.personId">
-                      </el-option>
-                </el-select>
-             </el-col>
-              <el-col :span="12">
-               <span class="yy-input-text trt">提出组织：</span>
-                   <el-select v-model="pd6.leaderOrg" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                                     <el-option
-                                   v-for="(item,ind) in $store.state.tazz"
-                                   :key="ind"
-                                   :label="item.mc"
-                                   :value="item.dm">
-                      </el-option>
-                </el-select>
-             </el-col>
-            
-              <el-col :span="24">
-               <span class="yy-input-text trt" style="width:13.5%;">标题：</span>
-                <el-input placeholder="请输入内容" size="small" clearable v-model="pd6.title"  class="yy-input-input" style="width:80%!important"></el-input>
-             </el-col>
-          
-               <el-col :span="24" style="text-align:center">
-                 <el-button type="success"  size="small" @click="CurrentPage1=1;pdsearch(1,CurrentPage1,pageSize1,pd6)"> 查 询</el-button>
-                 </el-col>
-             </el-row>
-                       <el-table
-                              :data="pdData1"
-                              ref="multipleTable1"
-                              @row-click="clickRow1"
-                              @selection-change="pdchange1">
-                              <el-table-column
-                                type="selection"
-                                width="50">
-                            </el-table-column>
-                              <!-- <el-table-column
-                                  type="index"
-                                  label="序号" width="50">
-                              </el-table-column> -->
-                              <el-table-column
-                                  prop="number"
-                                  label="编号">
-                              </el-table-column>
-                               <el-table-column
-                                  prop="proposalType"
-                                  label="类型">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="title"
-                                  label="标题">
-                              </el-table-column>
-                             <el-table-column
-                                  prop="leaderPerson"
-                                  label="领衔人员" v-if="pd5.ck4 && addtype==3">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="leaderPerson"
-                                  label="提出人" v-if="pd5.ck3 && (addtype==3 || addtype==2)">
-                              </el-table-column>
-                               <!-- <el-table-column
-                                  label="操作">
-                                  <template slot-scope="scope">
-                                    <div>
-                                      <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="pddel(1,scope.row)"></el-button>
-                                     </div>
-                                  </template>
-                              </el-table-column> -->
-                             </el-table>
-                              <div class="middle-foot">
-                                <div class="page-msg"></div>
-                                <el-pagination
-                                    background
-                                    @current-change="handleCurrentChange1"
-                                    :current-page.sync="CurrentPage1"
-                                    :page-size="pageSize1"
-                                    layout="prev, pager, next"
-                                    :total="TotalResult1">
-                                </el-pagination>
-                            </div>
-        
-         <div slot="footer" class="dialog-footer">
-            <el-button type="primary"  size="small" @click="pdsubmit(1)">关 联</el-button>
-              <el-button @click="lwDialogVisible = false" size="small">取 消</el-button>
-            </div>
-    </el-dialog>
-
-    
-    <el-dialog title="关注案件" :visible.sync="lwDialogVisible2" :close-on-click-modal='false' class="subtable">
-        
-            <el-row class="ah-40">
-              <el-col :span="24">
-               <span class="yy-input-text trt">案件号：</span>
-                <el-input placeholder="请输入内容" size="small" clearable v-model="pd8.casenum"  class="yy-input-input" ></el-input>
-             </el-col>
-              <el-col :span="24">
-               <span class="yy-input-text trt">当事人及案由：</span>
-                <el-input placeholder="请输入内容" size="small" clearable v-model="pd8.partiesandcasereason"  class="yy-input-input" ></el-input>
-             </el-col>
-               <el-col :span="24" style="text-align:center">
-                 <el-button type="success"  size="small" @click="pdsearch(3)"> 查 询</el-button>
-                 </el-col>
-             </el-row>
-                       <el-table
-                              :data="pdData2"
-                              ref="multipleTable2"
-                              @row-click="clickRow2"
-                              @selection-change="pdchange2">
-                              <el-table-column
-                                type="selection"
-                                width="50">
-                            </el-table-column>
-                              <el-table-column
-                                  type="index"
-                                  label="序号" width="50">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="casenum"
-                                  label="案件号">
-                              </el-table-column>
-                             <el-table-column
-                                  prop="partiesandcasereason"
-                                  label="当事人及案由">
-                              </el-table-column>
-                        </el-table>
-        
-         <div slot="footer" class="dialog-footer">
-            <el-button type="primary"  size="small" @click="pdsubmit(2)">关 联</el-button>
-            <el-button @click="lwDialogVisible2 = false" size="small">取 消</el-button>
-            </div>
-    </el-dialog>
-    <el-dialog :title="glname" :visible.sync="dbDialogVisible" :close-on-click-modal='false' class="subtable">
-            <el-row class="ah-40">
-              <el-col :span="12">
-                <span class="yy-input-text trt"><font class="red">*</font> 年份：</span>
-               <el-select v-model="pd10.year" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                                     <el-option
-                                   v-for="(item,ind) in yearlist"
-                                   :key="ind"
-                                   :label="item.mc"
-                                   :value="item.dm">
-                                 </el-option>
-                </el-select>
-             </el-col>
-              <el-col :span="12">
-                <span class="yy-input-text trt"> 编号：</span>
-                <el-input placeholder="请输入内容" size="small" clearable v-model="pd10.number"  class="yy-input-input" ></el-input>
-             </el-col>
-              <el-col :span="12">
-                <span class="yy-input-text trt"> 录入法院：</span>
-                 <el-select v-model="pd10.createOrgId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                                     <el-option
-                                   v-for="(item,ind) in lrdata"
-                                   :key="ind"
-                                   :label="item.mc"
-                                   :value="item.orgid">
-                                 </el-option>
-                </el-select>
-             </el-col>
-              <el-col :span="12">
-               <span class="yy-input-text trt">领衔人员：</span>
-                   <el-select v-model="pd10.leaderPerson" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
-                                     <el-option
-                                   v-for="(item,ind) in xmdata"
-                                   :key="ind"
-                                   :label="item.fullName"
-                                   :value="item.personId">
-                      </el-option>
-                </el-select>
-             </el-col>
-            
-              <el-col :span="24">
-               <span class="yy-input-text trt" style="width:13.5%;">标题：</span>
-                <el-input placeholder="请输入内容" size="small" clearable v-model="pd6.title"  class="yy-input-input" style="width:80%!important"></el-input>
-             </el-col>
-          
-               <el-col :span="24" style="text-align:center">
-                 <el-button type="success"  size="small" @click="CurrentPage2=1;pdsearch(2,CurrentPage2,pageSize2,pd10)"> 查 询</el-button>
-                 </el-col>
-             </el-row>
-                       <el-table
-                              :data="pdData3"
-                              ref="multipleTable3"
-                              @row-click="clickRow3"
-                              @selection-change="pdchange3">
-                              <el-table-column
-                                type="selection"
-                                width="50">
-                            </el-table-column>
-                              <el-table-column
-                                  type="index"
-                                  label="序号" width="50">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="number"
-                                  label="编号">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="title"
-                                  label="标题">
-                              </el-table-column>
-                                   <el-table-column
-                                  prop="leaderPerson"
-                                  label="领衔人员">
-                              </el-table-column>
-                             <el-table-column
-                                  prop="isFeedBack"
-                                  label="是否反馈">
-                              </el-table-column>
-                              <el-table-column
-                                  prop="feedBackTime"
-                                  label="反馈时间">
-                              </el-table-column>
-                              
-                             </el-table>
-                                <div class="middle-foot">
-                             <div class="page-msg"></div>
-                                <el-pagination
-                                    background
-                                    @current-change="handleCurrentChange2"
-                                    :current-page.sync="CurrentPage2"
-                                    :page-size="pageSize2"
-                                    layout="prev, pager, next"
-                                    :total="TotalResult2"
-                                    >
-                                </el-pagination>
-                            </div>
-           
-        
-         <div slot="footer" class="dialog-footer">
-            <el-button type="primary"  size="small" @click="pdsubmit(3)">关 联</el-button>
-              <el-button @click="dbDialogVisible = false" size="small">取 消</el-button>
-            </div>
-    </el-dialog>
-
-  
    <el-dialog title="活动意见建议" :visible.sync="yjsDialogVisible" v-if="yjsDialogVisible" :close-on-click-modal='false' width="950px">
      <SUGGEST  :data="yjdata" :namelist="ListData4" :type="addtype" @yjsfatherMethod="yjsfatherMethod" :random="new Date().getTime()"></SUGGEST>
   </el-dialog>
@@ -1342,6 +1171,23 @@ import {sortByKeyD,sortByKey} from "@/assets/js/ToArray.js"
 import {getServerDate,formatDate,getYear} from '@/assets/js/date.js'
 export default {
     components:{UPLOAD,VIDEO,VIDEONEW,SUGGEST,CASE,SUGGALL},
+    inject:['reload'],
+    directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                  binding.value();
+                }
+              });
+            }
+          }
+  },
     data(){
         return{
           CurrentPage1: 1,
@@ -1441,27 +1287,47 @@ export default {
           wxname:'',
           pdmultwx:[],
           tshow:false,
+          jznum:50,//下载加载多少条
+          kzdwload:[],//开展单位
+          fydwload:[],//法院单位
+          scdwload:[],//视察单位
+          xmload:[],// 代表、委员以及特约人员
+          fyload:[],//法院领导
+          formData: {   //下拉参数
+            pageIndex: 1,
+            pageSize: 20
+          },
+          tempload:[],
+          bs:0,
+          ssxx:{},//所属信息
+          fybmdata4:[],
+          qyear:'',//年
+
         };
     },
-    watch:{
-       $route:function(val){
-           this.getinit(val);
-           
-       }
-    },
+  watch: {
+    $route: {
+      handler: function() {
+      this.getinit(this.$route);
+      },
+      immediate: true
+    }
+  },
+
     mounted()
     {
-        this.$store.dispatch("getXb");
-        this.$store.dispatch("getScfl");
-        this.$store.dispatch("getXwdwfl");
-        this.$store.dispatch("getTazz");
-        this.$store.dispatch("getZfxwjb");
-        this.$store.dispatch("getLxss");
-        this.getinit(this.$route);
-    
+         this.$store.dispatch('getZw');
+        this.$dragging.$on('dragged', (val) => {
+		      //console.log(val)//这里我们不需要做任何操作；组件内部会把我们绑定上去的list自动排序;只需要查看结果就可以
+		      //如果需要在这里进行其他操作，可以查看val的内容，包括：拖动的元素，拖动后与之兑换的元素，以及原始数据和拖动组名
+		    })
+		    this.$dragging.$on('dragend', (val) => {
+		        //此处是拖动完成后鼠标松开时触发的事件
+		    })
+      //this.getinit(this.$route);
     },
      activated(){
-       
+      
     },
     methods:{
 
@@ -1513,17 +1379,58 @@ export default {
            this.pdmultwx=val;
         },
         //代表、委员以及特约人员列表
-         getName(){
-           let p={
+       getName(callback){
+        if(callback && this.xmload.length==0){
+         let p={
              'name':''
            };
            // /baseinfo/personlist
            this.$api.post(this.Global.aport1+'/baseinfo/personlistforactivity',p,
              r =>{
-                  
-                   this.xmdata=r.data;
+                   this.xmload=r.data;
+                   this.xmquery();
+
+            });
+            }
+        },
+        xmquery(){
+          
+           if(this.xmload.length>this.jznum){
+              this.xmdata=this.xmload.slice(0,this.jznum);
+             }else{
+              this.xmdata=this.xmload;
+           }
+        },
+         //代表、委员以及特约人员远程搜索
+        xmdwremoteMethod(quer){
+              if (quer !== ''|| this.xmdata.length<=0) {
+                var arr = this.xmload.filter(item=>{
+                  return item.fullName.indexOf(quer) + 1
+                });
+                this.tempload=arr;
+                if(arr.length>this.jznum){
+                  this.xmdata=arr.slice(0,this.jznum);
+                }else{
+                  this.xmdata=arr;
+                }
+            }else{
+              this.tempload=[];
+              this.xmquery();
+            } 
+            },
+        //代表、委员以及特约人员加载
+        xmloadmore() {
+          var srr= this.xmload;
+          if(this.tempload.length>0){
+            srr= this.tempload;
+          } 
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.xmdata = srr.filter((item, index, arr) => {
+              return index < num;
             });
         },
+
         ChangeNameList(val){
             if(this.lmdbid==undefined || this.lmdbid==""){
               this.$message.error("代表、委员以及特约人员不能为空！");return;
@@ -1531,16 +1438,16 @@ export default {
             if(val=='' || val==null){
               return;
             }
-          
+            var arr=val.split('|');
              var obj = {};
                  obj = this.xmdata.find(item =>{
-                     return item.pbId === val
+                     return item.pbId === arr[0] && item.personId === arr[1]
                 });
             var srr=this.ListData4;
-              console.log(obj,'代表、委员以及特约人员',srr.length);
+             
             var ff=false;
             for (let i = 0; i < srr.length; i++) {
-               if(srr[i].pbId==val)
+               if(srr[i].pbId==arr[0] && srr[i].personId==arr[1])
                {
                    ff=true;
                 // this.$confirm(srr[i].personName+'已经存在?', '提示', {
@@ -1575,49 +1482,163 @@ export default {
             }
               if(!ff){
                this.ListData4.push(obj);
-               console.log("排序功能。。。。",this.ListData4);
-               
+             
+               this.ListData4=sortByKey(this.ListData4,'sort');
                this.count1=this.ListData4.length;
                }
                this.lmdbid="";
-
-
+               this.xmquery();
         },
-        //法院领导
-         getFYName(){
-          //  let p={
-          //    'orgId':this.$store.state.orgid,
-          //    'isLeader':'1'
-          //  };
-          //  this.$api.post(this.Global.aport1+'/courtPerson/queryByOrg',p,
-          //    r =>{
-                  
-          //          this.fydata=r.data;
-          //   });
+        //法院领导新接口
+       getfyld(callback){
+          if(callback && this.fydata.length==0){
+             this.getfykeyWord();
+          }
+       },
+       fylddwremoteMethod(quer){
+        if (quer !== ''|| this.fydata.length<=0) {
+           this.getfykeyWord(quer)
+        }
+       },
 
+       getfykeyWord(name){
+          let p={
+              "primaryId": "",
+              "riskDate": "",
+              "params": {
+                "keyWord": name,
+                "pageSize": this.jznum+'',
+                "pageNumber": "1",
+
+              },
+              "itemIndex": [
+                "API_PERSON_SUCCESSION"
+              ]
+            }
+           this.$api.post('http://192.168.50.111:9406/risk/analysis',p,
+                r =>{
+                    if(r.code==200){
+                       this.fydata=r.data.indexItemsValues.API_PERSON_SUCCESSION.data;
+                     
+                    }
+                });
+           
+
+       },
+      //法院领导新方法
+      fyrdwremoteMethodnew(quer){
+         if (quer!='') {
+            this.fydata=[];
              let p={
-               
+               'personName':quer,
+             };
+            this.$api.post(this.Global.aport1+'/courtPerson/getCourtLeader',p,
+                r =>{
+                    if(r.code==1){
+                      this.fyload=r.data;
+                       if(this.fyload.length>this.jznum){
+                          this.bs=0;
+                          this.fydata=this.fyload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.fydata=this.fyload;
+                        }
+                    }
+                });
+                         
+         }else{
+           this.fydata=[];
+         }
+      },
+       //法院领导加载
+       fyrloadmorenew() {
+          if(this.bs==1){return;}
+          var srr= this.fyload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.fydata = srr.filter((item, index, arr) => {
+              return index < num;
+
+            });
+        },
+
+        //法院领导
+         getFYName(callback){
+          if(callback && this.fydata.length==0){
+             let p={
                'personName':'',
              };
             this.$api.post(this.Global.aport1+'/courtPerson/getCourtLeader',p,
                 r =>{
                     if(r.code==1){
-                      
-                          this.fydata=r.data;
-                      
+                       this.fyload=r.data;
+                       this.fyrquery();
                     }
                 });
+                }
         },
+      fyrquery(){
+           if(this.fyload.length>this.jznum){
+              this.fydata=this.fyload.slice(0,this.jznum);
+             }else{
+              this.fydata=this.fyload;
+           }
+        },
+         //法院领导远程搜索
+       fyrdwremoteMethod(quer){
+              if (quer !== ''|| this.fydata.length<=0) {
+                var arr = this.fyload.filter(item=>{
+                  return item.fullName.indexOf(quer) + 1
+                });
+                this.tempload=arr;
+                if(arr.length>this.jznum){
+                  this.fydata=arr.slice(0,this.jznum);
+                }else{
+                  this.fydata=arr;
+                }
+              }else{
+                this.tempload=[];
+                this.fyrquery();
+              }
+            },
+        //法院领导加载
+        fyrloadmore() {
+          var srr= this.fyload;
+          if(this.tempload.length>0){
+            srr= this.tempload;
+          } 
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.fydata = srr.filter((item, index, arr) => {
+              return index < num;
+
+            });
+        },
+
         ChangeFYNameList(val){
              if(this.fyld==undefined || this.fyld==""){
                this.$message.error("法院领导不能为空！");return;
              }
+           
           var obj = {};
                  obj = this.fydata.find(item =>{
                      return item.pbId ===val   
                 });
-            console.log(obj,'法院领导');
-            
+           
+           
+          if(this.ssxx.orgId){
+            obj.orgId=this.ssxx.orgId.split('|')[0];
+            obj.orgMC=this.ssxx.orgId.split('|')[1];
+          }
+          if(this.ssxx.subOrgId){
+            obj.subOrgId=this.ssxx.subOrgId.split('|')[0];
+            obj.subOrgMC=this.ssxx.subOrgId.split('|')[1];
+          }
+          if(this.ssxx.position){
+            obj.position=this.ssxx.position.split('|')[0];
+            obj.positionMC=this.ssxx.position.split('|')[1];
+          }
+
            var srr=this.ListData5;
             var ff=false;
             for (let i = 0; i < srr.length; i++) {
@@ -1639,11 +1660,13 @@ export default {
                  }); 
                }
             }
-            if(!ff){
+          if(!ff){
            this.ListData5.push(obj);
            this.count2=this.ListData5.length;
            }
+           this.ssxx={};
            this.fyld='';
+           this.fydata=[];
          
         },
          ChangeZfNameList(val){
@@ -1654,7 +1677,7 @@ export default {
                  obj = this.fydata.find(item =>{
                      return item.pbId ===val   
                 });
-          console.log(obj,'走访人');
+         
             var srr=this.ListDatazf;
             var ff=false;
             for (let i = 0; i < srr.length; i++) {
@@ -1681,9 +1704,9 @@ export default {
               this.countzf=this.ListDatazf.length;
            }
 
-           console.log(this.ListDatazf,'this.ListDatazf');
            
            this.fymber='';
+           this.fyrquery();
          
         },
          ChangePSNameList(n){
@@ -1753,6 +1776,8 @@ export default {
             this.cbdwdata=[];
             this.fybmdata1=[];
             this.fybmdata2=[];
+            this.fybmdata3=[];
+            this.fybmdata4=[];
             this.pdData1=[];
             this.pdData2=[];
             this.pdData3=[];
@@ -1768,13 +1793,44 @@ export default {
             this.wxname='';
             this.kzdwdata=[];
             this.ListDatazf=[];
+            this.kzdwload=[];
+            this.fydwload=[];
+            this.scdwload=[];
+            this.xmload=[];
+            this.fyload=[];
+            this.fydata=[];
+            this.tempload=[];
+            this.ssxx={};
+            this.qyear='';
+            this.hdyjdata=[];
+            this.tempdata=[];
+            this.yjtableData=[];
+            document.body.scrollTop = document.documentElement.scrollTop = 0
         },
         getinit(val){
          this.reset();
          this.addtype=val.query.type;
          this.baseid=val.query.baseid;
          this.activityInfoId=val.query.activityInfoId;
-         
+         this.qyear=val.query.year;
+          
+         if(this.qyear){
+          
+           switch (this.addtype) {
+             case '4':
+             case '5':
+               this.$set(this.form,"startTime",this.qyear+"-01-01");
+               this.$set(this.form,"endTime",this.qyear+"-01-01");
+               break;
+             case '11':
+               this.$set(this.form,"contactTime",this.qyear+"-01-01");
+               break;
+             default:
+              this.$set(this.form,"startTime",this.qyear+"-01-01");
+               this.$set(this.form,"endTime",this.qyear+"-01-01");
+               break;
+           }
+         }
           var mid="";
           switch (this.addtype) {
             case '2':
@@ -1807,6 +1863,7 @@ export default {
             default:
               break;
           }
+
           //权限start
                  this.$api.post(this.Global.menuurl,{'menuId':mid},
                      r =>{
@@ -1816,22 +1873,18 @@ export default {
                   });
           //权限end
 
-        
-         this.getCBDW();
-         this.getFYName();
-         this.getFY();
-         this.getLRFY();
-         this.getKZDW();this.getSCDW();
-            if(val.query.state==null){
+        if(val.query.state==null){
              this.state="0";
          }else{
-              this.state=val.query.state;
+             this.state=val.query.state;
          }
          if(this.state=='9'){
              this.llbnt=true;
          }
+        
          switch (this.addtype) {
             case '3':
+                 this.$store.dispatch("getScfl");
                  this.cname="专题调研活动";
                  this.label4="调研总体情况";
                  this.form.activityType="0149000003";//调研
@@ -1858,6 +1911,8 @@ export default {
 
                  break;
             case '8':
+                 this.$store.dispatch("getXwdwfl");
+                 this.$store.dispatch("getZfxwjb");
                  this.cname="新闻宣传活动";
                  this.label3="新闻媒体列表";
                  this.label4="主要报道内容";
@@ -1874,30 +1929,27 @@ export default {
                  this.form.activityType="0149000011";//其他活动 
                  break;
              case '11':
+                 this.$store.dispatch("getLxss");
                  this.cname="日常沟通活动";
                  this.label4="联系内容";
                  this.form.activityType="0149000010";//日常沟通活动 
                  break;
              default:
+                 this.$store.dispatch("getScfl");
                  this.cname="专项视察活动";
                  this.label4="视察总体情况";
                  this.form.activityType="0149000002";//专项视察
                  break;
          }
-
-        // this.cnames=this.cname.replace("录入","");
-        //  this.form.entryUnit=this.$store.state.orgname;
-        //  this.form.entryDepartment=this.$store.state.bmname;
-        //  this.form.entryPerson=this.$store.state.uname;
-        //  this.form.entryTime=getServerDate();
-        
-         this.getName();
+      
          this.getList();
 
         },
         getList(){
+            
             if(this.state=='1' || this.state=='9')
             {
+              
              let p={
                  'activityInfoId':this.activityInfoId,
              };
@@ -1907,23 +1959,35 @@ export default {
                      if(r.code==1){
                       
                          this.form=r.data.activity;
-                         
+                         this.getKZDW(this.form.developmentUnitId);
                         //  if(this.form.undertakeUnitId!=null){
                         //      this.getcbbm(this.form.undertakeUnitId,1,'1');
                         //  }
 
                         //开展单位
                          if(this.form.developmentUnitId!=null){
-                             this.getcbbm(this.form.developmentUnitId,0,'1');
+                           //  this.getcbbm(this.form.developmentUnitId,0,'1');
+                           this.getkzbm(this.form.developmentUnitId,0);
                          }
-                         //接待单位
-                         if(this.form.receptionUnitId!=null){
-                             this.getcbbm(this.form.receptionUnitId,3,'1');
-                         }
-                         //承办单位
-                         if(this.form.undertakeUnitId!=null){
-                             this.getcbbm(this.form.undertakeUnitId,2,'1');
-                         }
+
+                         if(this.addtype=='4' || this.addtype=='5' || this.addtype=='6' || this.addtype=='7')
+                          {
+                            this.getFY(true,this.form.undertakeUnitId);
+                                //承办单位
+                            if(this.form.undertakeUnitId!=null){
+                                this.getcbbm(this.form.undertakeUnitId,2,'1');
+                            }
+                          }
+
+
+
+                          if(this.addtype=='9'){
+                             this.getFY(true,this.form.receptionUnitId);
+                              //接待单位
+                            if(this.form.receptionUnitId!=null){
+                                this.getcbbm(this.form.receptionUnitId,3,'1');
+                            }
+                          }
                          //日常接待的接待人员
                          if(r.data.receptionistList!=null){
                              this.ListData7=r.data.receptionistList;
@@ -1967,7 +2031,7 @@ export default {
                           }
                         if(r.data.imageDataList!=null){
                            this.fits=r.data.imageDataList;
-                           console.log(this.fits,'this.fits');
+                          
                            
                         }
 
@@ -2065,6 +2129,10 @@ export default {
                      }
                       
                 });
+            }else{
+              if(this.addtype!='11'){
+               this.getKZDW();//开展单位
+               }
             }
 
         },
@@ -2114,9 +2182,9 @@ export default {
                 
             }
 
-          console.log('多条数据',this.hdyjdata);
-          console.log('临时数据',this.tempdata);
-          console.log('显示数据',this.dbtableData);
+          // console.log('多条数据',this.hdyjdata);
+          // console.log('临时数据',this.tempdata);
+          // console.log('显示数据',this.dbtableData);
              
        }           
           
@@ -2204,8 +2272,8 @@ export default {
                      this.$message.error("视察内容不能为空!");return;
                  }
                  this.ListData1.push(val);
-               
                  this.pd1={};
+                 this.scdwdata=[];
              }else if(t==2){
                   if(this.pd2.inspectOrgId==undefined || this.pd2.inspectOrgId==''){
                      this.$message.error("调研单位不能为空!");return;
@@ -2214,8 +2282,8 @@ export default {
                      this.$message.error("调研内容不能为空!");return;
                  }
                  this.ListData2.push(val);
-               
-                this.pd2={};
+                 this.pd2={};
+                 this.fyquery();
              }else if(t==3){
                   if(this.pd3.newsMediaName==undefined || this.pd3.newsMediaName==''){
                      this.$message.error("首发新闻单位不能为空!");return;
@@ -2287,7 +2355,7 @@ export default {
                 arr.push(n);
                 for (let i = 0; i < arr.length; i++) {
                         var index = this.ListData4.findIndex(item =>{
-    　　　　　　　　　  　 if(item.pbId==arr[i].pbId){
+    　　　　　　　　　  　 if(item.personId==arr[i].personId){
             　　　　　　　　　　　　return true
             　　　　　　　　　　}
             　　　　　　　　})
@@ -2472,7 +2540,7 @@ export default {
                    this.tempdata.splice(index2,1)
               }
 
-              console.log(this.dbtableData,this.hdyjdata,this.tempdata);
+            
               
             }
         },
@@ -2488,7 +2556,9 @@ export default {
           if(this.addtype!=11){
              if(this.form.startTime==undefined || this.form.startTime=="")
               {
-                  this.$message.error("开始时间不能为空！");return;
+                  this.$message.error("开始时间不能为空！");
+                 
+                  return;
               }
               if(this.form.endTime==undefined || this.form.endTime=="")
               {
@@ -2607,14 +2677,13 @@ export default {
                    flag=new Date(this.form.startTime.replace(reg, '/')) > (new Date(yxd.replace(reg, '/')))
                   }
               }
-
               if(flag){
                        if(this.fits.length==0){
                          this.$message.error("影像资料不能为空！");return;
                     }
               }
-
               if(this.addtype=="2"){ //专题视察
+
               this.llgzform.inspectUnitCondition=this.ListData1;     
               }else if(this.addtype=="3"){ //调研
                this.llgzform.inspectUnitCondition=this.ListData2;  
@@ -2623,7 +2692,7 @@ export default {
                 //  this.llgzform.newsMediaList=this.ListData3;  
                 var arr=[];
                 arr.push(this.pd3);
-                console.log(arr,'arr');
+       
                 
                 this.llgzform.newsMediaList=arr;
               }else if(this.addtype=="9"){ //日常接待
@@ -2729,6 +2798,7 @@ export default {
                this.form.entryPerson=this.$store.state.uname
             //    this.form.entryTime=getServerDate();
                this.llgzform.activity=this.form;
+                             
                this.llgzform.actiWorkReport=this.filedata0;
                this.llgzform.imageDataList=this.fits;
                if(this.ListData9!=[] && this.pd5.ck3){
@@ -2750,48 +2820,24 @@ export default {
                               
                               this.$message.success(r.message);
                          
-                        
                             if(this.baseid!=null){
                                 var arr=this.baseid.split('|');
                               
                                 
                                 this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
-                              }else{
+                              }else  if(this.state=='1' || this.state=='9'){
                                 this.$router.push({name:"PairList"});
+                              }else{
+                                   
+                                  this.$router.push({name:'SpecialAdd',query:{type:this.addtype,year:this.qyear,n:Math.random()}});
                               }
-                        
                          }else{
                              this.$message.error(r.message);
                          }
                 });
 
         },
-        getGL(t){
-           if(t==1){
-                this.yatxt="议案建议或提案";
-                this.pd6={};
-                this.pdData1=[];
-                this.TotalResult1=0;
-                this.lwDialogVisible=true;
-           }
-           else if(t==2){
-               // this.yatxt="代表委员意见建议";
-                // this.pdData1=[];
-                // this.pd6={};
-                //  this.TotalResult1=0;
-                this.glname="代表委员意见建议";
-                this.pdData3=[];
-                this.pd10={};
-                this.TotalResult2=0;
-                this.glbs=1;
-                this.dbDialogVisible=true;
-            }
-            else if(t==3){
-                this.pdData2=[];
-                this.pd8={};
-                this.lwDialogVisible2=true;
-            }
-        },
+  
         //查询
         pdsearch(t,currentPage,showCount,pd){
           
@@ -2852,154 +2898,8 @@ export default {
             
              }
         },
-        gotoya(t){
-           this.pd10={};
-           this.pdData3=[];
-           this.glbs=2;
-           this.dbDialogVisible=true;
-        },
-        pdsubmit(t){
-           if(t==1){
-                if(this.pdmult1.length==0){
-                    this.$message.error("请选择一条数据！");return;
-                }
-                var arr=this.pdmult1;
-                for (let i = 0; i < arr.length; i++) {
-                    
-                    if(this.pd5.ck3 && (this.addtype==3 || this.addtype==2)){
-                     
-                     //start 去重
-                 
-                         this.ListData9.push(arr[i]);
-                 
-                    //end
-                    }
-                    // else if(this.pd5.ck4 && this.addtype==3){
-                    //      this.ListData10.push(arr[i]);
-                    //  }
-                    }
-                if(this.pd5.ck3 && (this.addtype==3 || this.addtype==2)){
-                const rese = new Map();
-                var arre=this.ListData9;
-                this.ListData9=arre.filter((arre) => !rese.has(arre.proposalInfoId) && rese.set(arre.proposalInfoId, 1));
-                }
-                // else if(this.pd5.ck4 && this.addtype==3){
-                //  const ress = new Map();
-                //  var arrs=this.ListData10;
-                //  this.ListData10=arrs.filter((arrs) => !ress.has(arrs.proposalInfoId) && ress.set(arrs.proposalInfoId, 1));
-                // }
-
-                
-                this.lwDialogVisible=false;
-               
-           }else if(t==2){
-                     if(this.pdmult2.length==0){
-                    this.$message.error("请选择一条数据！");return;
-                }
-                var arr=this.pdmult2;
-                for (let i = 0; i < arr.length; i++) {
-                    
-                        //start 去重
-                    // var srr=this.ListData8;
-                    // if(srr.length==0){
-                         this.ListData8.push(arr[i]);
-                    // }else{
-                    //     for (let j = 0; j < srr.length; j++) {
-                    //         if(arr[i].focuscaseid==srr[j].focuscaseid){
-                    //         }
-                    //     }
-                    //     this.ListData8.push(arr[i]); 
-                    //  }
-                    //end
-                    
-                }
-
-             const res = new Map();
-             var arr=this.ListData8;
-             this.ListData8=arr.filter((arr) => !res.has(arr.focuscaseid) && res.set(arr.focuscaseid, 1));
-             this.lwDialogVisible2=false;
-           }
-           else if(t==3){
-                if(this.pdmult3.length==0){
-                    this.$message.error("请选择一条数据！");return;
-                }
-                var arr=this.pdmult3;
-                for (let i = 0; i < arr.length; i++) {
-                    var lrr=this.ListData10;
-                    var drr=this.dbtableData;
-                    var lff=true,lss=true;
-                   if(this.pd5.ck4 && this.addtype==3 && this.glbs==1){
-                       
-                         if(lrr.length>0 || drr.length>0){
-                           for (let ll = 0; ll < lrr.length; ll++) {
-                               
-                             if(arr[i].proposalInfoId==lrr[ll].proposalInfoId)  
-                               {
-                                  lff=false;
-                               }
-                           }
-                         
-                         
-                            for (let ss = 0; ss < drr.length; ss++) {
-                             if(arr[i].proposalInfoId==drr[ss].proposalInfoId)  
-                               {
-                                  lss=false;
-                               }
-                            }
-                          
-                           if(lff && lss){
-                              this.ListData10.push(arr[i]);
-                            }
-                       }else{
-                           this.ListData10.push(arr[i]);
-                        }
-
-                     }else if(this.glbs==2){
-                           if(lrr.length>0 || drr.length>0){
-                           for (let ll = 0; ll < lrr.length; ll++) {
-                               console.log('---',arr[i].proposalInfoId,lrr[ll].proposalInfoId);
-                               
-                             if(arr[i].proposalInfoId==lrr[ll].proposalInfoId)  
-                               {
-                                  lff=false;
-                               }
-                           }
-                         
-                         
-                            for (let ss = 0; ss < drr.length; ss++) {
-                                      console.log('===',arr[i].proposalInfoId,drr[ss].proposalInfoId);
-                             if(arr[i].proposalInfoId==drr[ss].proposalInfoId)  
-                               {
-                                  lss=false;
-                               }
-                            }
-                          
-                           if(lff && lss){
-                              this.dbtableData.push(arr[i]);
-                            }
-                           }else{
-                         this.dbtableData.push(arr[i]);
-                         }
-                    }
-
-               
-                }
-
-
-            //  if(this.pd5.ck4 && this.addtype==3 && this.glbs==1){
-            //      const ress = new Map();
-            //      var arrs=this.ListData10;
-            //      this.ListData10=arrs.filter((arrs) => !ress.has(arrs.proposalInfoId) && ress.set(arrs.proposalInfoId, 1));
-            //     }else if(this.glbs==2){
-            //          const res = new Map();
-            //          var srr=this.dbtableData;
-            //          this.dbtableData=srr.filter((srr) => !res.has(srr.proposalInfoId) && res.set(srr.proposalInfoId, 1));
-            //     }
-                 
-
-            this.dbDialogVisible=false;
-           } 
-        },
+        
+       
         getImgV(n){
            var array=this.$store.state.imgformat.split(',');
           for (let i = 0; i < array.length; i++) {
@@ -3012,7 +2912,10 @@ export default {
           return false;
         },
         chChange(val,t){
-            if(val==''){
+            if(val=='' || val==undefined || val==null){
+               if(t==3){
+                  this.fyquery();
+               }
                 return;
             }
          
@@ -3091,41 +2994,198 @@ export default {
                    }
                   
             });
-            
         },
 
          //法院单位
-        getFY(){
+        getFY(callback,val){
+         if(callback){
             let p={
-                'name':'',
+                'orgid':val,
             };
-          this.$api.get(this.Global.aport1+'/org/getCourtOrg',null,
-                r =>{
-                    if(r.code==1){
-                        this.fydwdata=r.data;
-                    }
-           });
+            this.$api.get(this.Global.aport1+'/org/getOrgName',p,
+                  r =>{
+                      if(r.code==1){
+                         this.fydwdata=r.data;
+                        //  if(val){
+                        //    var arr = this.fydwload.filter(item=>{
+                        //         return item.orgid.indexOf(val) + 1
+                        //       });
+                        //    this.fydwdata=arr;
+                        //  }else{
+                        //      this.fyquery();
+                        //  }
+                      }
+            });
+           }
         },
+        // fyquery(){
+        //      if(this.fydwload.length>this.jznum){
+        //         this.fydwdata=this.fydwload.slice(0,this.jznum);
+        //          }else{
+        //          this.fydwdata=this.fydwload;
+        //       }
+        // },
+         //法院单位远程搜索
+        fydwremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'name':quer,
+            };
+            this.$api.get(this.Global.aport1+'/org/getCourtOrg',p,
+                  r =>{
+                      if(r.code==1){
+                        this.fydwload=r.data;
+                        if(this.fydwload.length>this.jznum){
+                          this.bs=0;
+                          this.fydwdata=this.fydwload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.fydwdata=this.fydwload;
+                        }
+                      }
+                  });
+         }else{
+            this.fydwdata=[];
+         } 
+
+        },
+        //法院单位加载
+        fyloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.fydwload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.fydwdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+
         //视察单位
-          getSCDW(){
-            
-          this.$api.post(this.Global.aport1+'/org/getVisitOrg',{},
+          getSCDW(callback){
+        
+          if(callback && this.scdwload.length==0){
+            this.$api.post(this.Global.aport1+'/org/getVisitOrg',{},
+                  r =>{
+                      if(r.code==1){
+                          this.scdwload=r.data;
+                          this.scquery();
+                           
+                         }
+                    
+            });
+           }
+        },
+        scquery(){
+           if(this.scdwload.length>this.jznum){
+                 this.scdwdata=this.scdwload.slice(0,this.jznum);
+              }else{
+                 this.scdwdata=this.scdwload;
+            }
+        },
+        //视察单位远程搜索
+        scdwremoteMethod(quer){
+          if (quer !='') {
+            let p={
+              'mc':quer
+            };
+             this.$api.post(this.Global.aport1+'/org/getVisitOrg',p,
+                  r =>{
+                      if(r.code==1){
+                          this.scdwload=r.data;
+                           if(this.scdwload.length>this.jznum){
+                              this.bs=0;
+                              this.scdwdata=this.scdwload.slice(0,this.jznum);
+                             }else{
+                              this.bs=1;
+                              this.scdwdata=this.scdwload;
+                            }
+                           
+                         }
+                    
+            });
+           
+         } else{
+            this.scdwdata=[];
+
+         }
+        },
+        //视察单位加载
+    scloadmore() {
+      if(this.bs==1){return;}
+       var srr= this.scdwload;
+       
+      this.formData.pageIndex++;
+       let num = this.formData.pageIndex * this.formData.pageSize;
+        this.scdwdata = srr.filter((item, index, arr) => {
+          return index < num;
+        });
+    },
+        //开展单位
+        getKZDW(val){
+          let p={
+            'orgid':val
+          };
+          this.$api.post(this.Global.aport1+'/org/getOrgName',p,
                 r =>{
                     if(r.code==1){
-                        this.scdwdata=r.data;
-                    }
+                    
+                       this.kzdwdata=r.data;
+                        
+                        //  if(val){
+                        //        var arr = this.kzdwload.filter(item=>{
+                        //         return item.orgid.indexOf(val) + 1
+                        //       });
+                        //       this.kzdwdata=arr;
+                        //  }else{
+                        //      this.kzquery();
+                        //  }
+                        
+                }
            });
         },
-          //开展单位
-        getKZDW(){
-            
-          this.$api.post(this.Global.aport1+'/org/getDevelopOrg',{},
+        // kzquery(){
+        //    if(this.kzdwload.length>this.jznum){
+        //         this.kzdwdata=this.kzdwload.slice(0,this.jznum);
+        //       }else{
+        //         this.kzdwdata=this.kzdwload;
+        //     }
+        // },
+        //开展单位远程搜索
+        kzdwremoteMethod(quer){
+          if (quer != '') {
+           let p={
+              'mc':quer
+           };
+          this.$api.post(this.Global.aport1+'/org/getDevelopOrg',p,
                 r =>{
                     if(r.code==1){
-                        this.kzdwdata=r.data;
+                      this.kzdwdata=r.data;
+                      if(this.kzdwdata.length>this.jznum){
+                        this.bs=0;
+                        this.kzdwdata=this.kzdwdata.slice(0,this.jznum);
+                      }else{
+                        this.bs=1;
+                        this.kzdwdata=this.kzdwdata;
+                      }
                     }
-           });
+                });
+          
+          }else{
+            this.kzdwdata=[];
+          }
         },
+        //开展单位加载
+    kzloadmore() {
+        if(this.bs==1){return;}
+        var srr= this.kzdwload;
+        this.formData.pageIndex++;
+        let num = this.formData.pageIndex * this.formData.pageSize;
+           this.kzdwdata =srr.filter((item, index, arr) => {
+               return index < num;
+         });
+       
+    },
+ 
          //承办单位  如果没有下级部门，那么该处就是承办部门
       getCBDW(){
         let p={
@@ -3144,6 +3204,33 @@ export default {
           //法院部门  承办部门
         getcbbm(orgid,t,m){
         
+          if(orgid=='' || orgid==null || orgid==undefined){
+            if(t==0){
+               this.kzdwdata=this.kzdwload.slice(0,this.jznum);
+               this.$set(this.form,'devDepartmentId','');
+               this.fybmdata=[];
+             }
+             else if(t==2){
+               this.fyquery();
+               this.$set(this.form,'undertakeDepartmentId','');
+               this.fybmdata2=[];
+             }
+             else if(t==3){
+               this.fyquery();
+               this.$set(this.form,'receptionDepartmentId','')
+               this.$set(this.pd7,'receptionistid','')
+               this.fybmdata3=[];
+             }
+             else if(t==4){
+               this.fyquery();
+               this.$set(this.ssxx,'subOrgId','');
+               this.fybmdata4=[];
+             }
+             return;
+          }else if(orgid && t==4)
+          {
+            orgid=orgid.split('|')[0];
+          } 
           let p={
             "orgId":orgid==null?this.$store.state.orgId:orgid
           };
@@ -3153,7 +3240,7 @@ export default {
                          switch (t) {
                             case 0:
                                 if(m==null){
-                                this.form.devDepartmentId="";
+                                 this.$set(this.form,'devDepartmentId','')
                                 }
                                 this.fybmdata=r.data;
                                 break;
@@ -3167,7 +3254,6 @@ export default {
                                     if(m==null){
                                      this.form.undertakeDepartmentId="";
                                      }
-                                     
                                     this.fybmdata2=r.data;
                                 break;
                                  case 3:
@@ -3177,6 +3263,12 @@ export default {
                                      
                                     this.fybmdata3=r.data;
                                 break;
+                                case 4:
+                                    if(m==null){
+                                       this.$set(this.ssxx,'subOrgId','');
+                                     }
+                                    this.fybmdata4=r.data;
+                                break;
                             default:
                                 break;
                         }
@@ -3184,6 +3276,28 @@ export default {
                       
                     }
                 });
+        },
+        getkzbm(orgid,t){
+          
+          if(orgid=='' || orgid==null || orgid==undefined){
+             //this.kzquery();
+             this.kzdwdata=[];
+             this.$set(this.form,'devDepartmentId','');
+             this.fybmdata=[];
+             return;
+          }
+           let p={
+            "orgId":orgid
+          };
+          this.$api.get(this.Global.aport1+'/org/getSubDept',p,
+              r =>{
+                  if(r.code==1){
+                    if(t!=0){
+                      this.$set(this.form,'devDepartmentId','');
+                    }
+                    this.fybmdata=r.data;
+                  }
+               });
         },
         getJDR(orgid,subid)
         {
@@ -3242,6 +3356,15 @@ export default {
                                   object.contents=arr[j].contents;
                                   this.hdyjdata.push(object);
                             }
+                         }else{
+                                 var object={};
+                                  object.participantsInfoId=array[i].leaderPerson;
+                                  object.participantsInfoName=array[i].leaderPersonName;
+                                  object.overallAssessment=array[i].overallAssessment;
+                                  object.feedBackStatus=array[i].feedBackStatus;
+                                  object.feedBackTime=array[i].feedBackTime;
+                                  object.remark=array[i].remark;
+                                  this.hdyjdata.push(object);
                          }
                       
                      }
@@ -3251,9 +3374,9 @@ export default {
                        this.dbtableData=srr.filter((srr) => !res.has(srr.participantsInfoId) && res.set(srr.participantsInfoId, 1))
                 }
 
-              console.log('this.hdyjdata多条数据',this.hdyjdata);
-              console.log('this.tempdata临时数据',this.tempdata);
-              console.log('this.dbtableData显示数据',this.dbtableData);
+              // console.log('this.hdyjdata多条数据',this.hdyjdata);
+              // console.log('this.tempdata临时数据',this.tempdata);
+              // console.log('this.dbtableData显示数据',this.dbtableData);
               
               this.yjsDialogVisible=false;
           }
@@ -3312,9 +3435,48 @@ export default {
         } 
         return '';
       },
-      
-    }
+      getNullVlaue(val,t){
+        // 代表、委员以及特约人员
+        if(t==1){
+            if(!val){
+              this.xmquery();
+            }
+        }else if(t==2){
+        
+            if(!val){
+             // this.fyrquery();
+             this.fydata=[];
             
+            }
+        }
+      },
+      selectInit(row,index){
+        return !this.llbnt;
+      },
+      //时间联动
+      changedate(t){
+        
+        this.$set(this.form,'endTime',t)
+      },
+      getfocus(t){
+        switch (t) {
+          case 1:
+             this.fydata=[];
+            break;
+          case 2:
+             this.kzdwdata=[];
+            break;
+          case 3:
+             this.fydwdata=[];
+            break;
+          case 4:
+             this.scdwdata=[];
+            break;
+          default:
+            break;
+        }
+      }
+    }    
 }
 </script>
 <style scoped>
@@ -3330,4 +3492,5 @@ export default {
 .border{border: 1px solid #E6E6E6; border-radius: 6px;margin-top: 10px;}
 .ts{font-size: 12px;color: red;}
 .block .close{display: block;position: absolute;font-size: 25px;font-weight:bold;cursor: pointer;z-index: 999;margin-top: -185px;margin-left: 170px;}
+
 </style>

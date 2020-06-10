@@ -1,6 +1,6 @@
 <template>
     <div class="pairadd subtable">
-         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息库 <span class="mlr_10">/</span>  <b>基本信息录入</b></span> </div>
+         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息 <span class="mlr_10">/</span>  <b>基本信息录入</b></span> </div>
          <div class="content">
              <el-row type="flex">
                  <el-col :span="18">

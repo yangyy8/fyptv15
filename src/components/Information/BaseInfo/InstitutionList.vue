@@ -1,7 +1,7 @@
 <template>
-    <div class="pairadd subtable">
-         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息库 <span class="mlr_10">/</span> 联络机构 <span class="mlr_10">/</span> <b>{{cname}}查询</b></span> </div>
-         <div class="content">
+    <div class="pairadd ">
+         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息 <span class="mlr_10">/</span> 联络机构 <span class="mlr_10">/</span> <b>{{cname}}查询</b></span> </div>
+         <div class="content subtable">
              <div class="ptitle mb-20">{{cname}}信息</div>
                 <div class="pborder">
                       <el-row class="lh" :gutter="2">
@@ -46,7 +46,7 @@
                             <el-cascader  
                               v-model="pd.sj"
                               :options="jgdata"
-                              :show-all-levels="false"
+                              :show-all-levels="true"
                               :props="{ checkStrictly: true }"
                               clearable filterable size="small" class="yy-input-input">
                             </el-cascader>
@@ -169,7 +169,7 @@
                             </el-table-column>
                               <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号" width="100">
                                  <template slot-scope="scope">
                                     <div>
                                     <span>{{(CurrentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -371,7 +371,7 @@ export default {
             this.addtype=val.query.type;
             this.lx=val.query.lx;
             this.getXQ(val.query.type);
-            this.pd={};
+            this.reset();
             switch (this.addtype) {
                   case '1':
                         this.cname="人大系统";
@@ -490,7 +490,8 @@ export default {
                   'orgId':this.$store.state.orgid,
                   'sfbm':sfbm,
                   'xzqh':'',
-                
+                  'pageType':'1',
+                  
               };
                 this.$api.post(this.Global.aport1+'/org/getOrgTree',p,
                 r =>{
@@ -516,12 +517,14 @@ export default {
         },
         reset(){
             this.pd={};
+            this.CurrentPage=1;
+            console.log('this.type',this.type,this.CurrentPage);
         },
         getadd(t){
           if(this.addtype=='4'){
             this.addDialogVisible=true;
           }else{
-            this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:t}});
+            this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:t,pt:0}});
           }
         },
         add(t){
@@ -533,7 +536,7 @@ export default {
                 }
                 this.addDialogVisible=false;
               
-            this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:t,lx:this.lxtype}});
+            this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:t,lx:this.lxtype,pt:0}});
           }else{
               if(this.mselect.length>1){
                   this.$message.error("只能选择一条数据！");return;

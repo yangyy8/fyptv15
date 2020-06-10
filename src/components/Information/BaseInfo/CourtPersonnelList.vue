@@ -1,7 +1,7 @@
 <template>
     <div class="pairadd subtable">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-         <span> 基本信息库
+         <span> 基本信息
               <span class="mlr_10">/</span>  <b> 法院内部管理</b>
                  <span class="mlr_10">/</span>  <b>法院人员</b>
              <span class="mlr_10">/</span>  <b>{{cname}}</b>
@@ -18,7 +18,7 @@
                       
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属法院</span>
-                           <el-select v-model="pd.orgIds" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.orgIds" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(1)" multiple filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in ssfydata"
                                  
@@ -99,7 +99,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">籍贯</span>
-                           <el-select v-model="pd.birthPlaces" multiple @visible-change="getXz(pd.birthPlace)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.birthPlaces" multiple  remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore"  @visible-change="getXz()"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in xzdata"
                                  :key="ind"
@@ -129,7 +129,9 @@
                     </el-row>
                 </div>
                  <div class="footer">
-                    <el-button type="primary"  style="width:130px;" @click="CurrentPage=1;getList(CurrentPage,pageSize,pd)">查 询</el-button>
+                    <el-button type="primary"  style="width:130px;" v-if='querybnt' @click="CurrentPage=1;getList(CurrentPage,pageSize,pd)">查 询</el-button>
+                    <el-button type="primary"  style="width:130px;" v-else :disabled="true">查询中</el-button>
+                    
                     <el-button style="width:130px;" @click="reset()">重  置</el-button>
                 </div>
                 <div class="loadmore" v-if="all" @click="getAll(1)">全部展开 <i class="el-icon-arrow-down"></i></div>
@@ -168,7 +170,7 @@
                             </el-table-column>
                             <el-table-column
                                 type="index"
-                                label="序号">
+                                label="序号"  width="100">
                                  <template slot-scope="scope">
                                     <div>
                                     <span>{{(CurrentPage - 1) * pageSize + scope.$index + 1}}</span>
@@ -226,6 +228,22 @@ import {ToArray,sortByKey} from '@/assets/js/ToArray.js'
 import UPLOAD from "../../Common/upload"
 export default {
     components:{UPLOAD},
+    directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                  binding.value();
+                }
+              });
+            }
+          }
+   },
     data(){
         return{
             CurrentPage: 1,
@@ -255,6 +273,16 @@ export default {
             vvurlErr:'',
              alldata:['22043238','22043239','22043240','22043241','22043242','22043243','22043244'],//0录入,1查询,2修改,3删除,4导入,5下载全部,6下载当页
              allshow:[],
+             fydwload:[],
+             jznum:50,
+             bs:0,
+             formData: {   //下拉参数
+                pageIndex: 1,
+                pageSize: 20
+            },
+            xzList:[],
+            tempload:[],
+            querybnt:true,
         }
     },
     mounted(){
@@ -298,7 +326,7 @@ export default {
 
 
                 this.addtype=val.query.type;
-                this.getSSFY();
+              //  this.getSSFY();
                 this.getCheckList();
                // this.getList(this.CurrentPage, this.pageSize, this.pd);
                 if(val.query.jgid && val.query.sjid){
@@ -325,6 +353,7 @@ export default {
         },
         reset(){
             this.pd={};
+            this.CurrentPage=1;
         },
         getAll(n){
             if(n==1){
@@ -380,6 +409,8 @@ export default {
         },
         getList(currentPage, showCount, pd){
           this.changeList();
+          this.tableData=[];
+          this.querybnt=false;
           let p={
              "pd":this.pd,
              "pageInfo":{
@@ -393,6 +424,7 @@ export default {
                       if(r.code==1){
                           this.tableData=r.data.courtPersonList;
                           this.TotalResult=r.data.pageInfo.total;
+                          this.querybnt=true;
                       }
                 });
         
@@ -406,6 +438,40 @@ export default {
                           this.ssfydata=r.data;
                       }
                 });
+        },
+        //法院单位远程搜索
+        fydwremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'name':quer,
+            };
+            this.$api.get(this.Global.aport1+'/org/getCourtOrg',p,
+                  r =>{
+                      if(r.code==1){
+                        this.fydwload=r.data;
+                        if(this.fydwload.length>this.jznum){
+                          this.bs=0;
+                          this.ssfydata=this.fydwload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.ssfydata=this.fydwload;
+                        }
+                      }
+                  });
+         }else{
+            this.ssfydata=[];
+         } 
+
+        },
+        //法院单位加载
+        fyloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.fydwload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.ssfydata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
         },
         getSSBM(orgid){
           
@@ -492,16 +558,7 @@ export default {
 
         },
       
-     //获取行政区划
-    getXz(val){
-      this.$api.get(this.Global.aport4+this.Global.jg,null,
-        r =>{
-          if(r.success){
-            this.xzList = ToArray(r.data);
-            this.userFilter();
-          }
-        })
-    },
+   
     userFilter(query = '') {
              let arr = this.xzList.filter((item) => {
             
@@ -521,6 +578,66 @@ export default {
         drfatherMethod(data,t){
             this.drDialogVisible=false;
        },
+       //获取行政区划
+   getXz(val){
+            if(this.xzdata.length==0)   
+            this.$api.get(this.Global.aport4+this.Global.jg,null,
+                r =>{
+                if(r.success){
+                     this.xzList = ToArray(r.data);
+                     this.xzquery();
+                        
+                 }
+                })
+            },
+      xzquery(){
+              if(this.xzList.length>this.jznum){
+                this.xzdata=this.xzList.slice(0,this.jznum);
+              }else{
+                this.xzdata=this.xzList;
+            }
+         },
+      //籍贯远程搜索
+     xzdwremoteMethod(quer){
+          if (quer !== ''|| this.xzdata.length<=0) {
+            var arr = this.xzList.filter(item=>{
+              return item.mc.indexOf(quer) + 1
+            });
+            this.tempload=arr;
+            if(arr.length>this.jznum){
+               this.xzdata=arr.slice(1,this.jznum);
+            }else{
+              this.xzdata=arr;
+            }
+          
+          }else{
+            this.tempload=[];
+            this.xzquery();
+          }
+        },
+       //籍贯单位加载
+    xzloadmore() {
+        var srr= this.xzList;
+        if(this.tempload.length>0){
+          srr= this.tempload;
+        } 
+        this.formData.pageIndex++;
+        let num = this.formData.pageIndex * this.formData.pageSize;
+           this.xzdata =srr.filter((item, index, arr) => {
+               return index < num;
+         });
+       
+    },
+      getfocus(t){
+        switch (t) {
+          case 1:
+             this.ssfydata=[];
+            break;
+         
+          default:
+            break;
+        }
+      },
     },
 }
 </script>

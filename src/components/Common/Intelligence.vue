@@ -133,7 +133,7 @@
                                   width="100">
                               </el-table-column>
                              <el-table-column
-                                label="代表照片">
+                                label="图像">
                                 <template slot-scope="scope">
                                     <div v-if="scope.row.photoUrl">
                                     <el-popover placement="right" title="" trigger="hover">
@@ -144,7 +144,7 @@
                                 </template>
                                 </el-table-column>
                   </el-table>
-              <div slot="footer" style="text-align:center;border-top:1px solid #cccccc; padding-top:10px;">
+           <div slot="footer" style="text-align:center;border-top:1px solid #cccccc; padding-top:10px;">
               <el-button type="success"  size="small" @click="submit">提 交</el-button> 
               <el-button  size="small" @click="submit(0)">取 消</el-button>           
         </div> 

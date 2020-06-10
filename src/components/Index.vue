@@ -25,7 +25,10 @@
             <span class="toprc">
                   <el-dropdown  trigger="click" @command="handleCommand">
                     <span class="cursor homef">  <i class="el-icon-user-solid"></i>  {{name}}
-                      (<span style="font-size:12px;"> {{orgname}}<span v-if='zwname!="null"'> ，{{zwname}}</span></span>)</span>
+                      (<span style="font-size:12px;"> 
+                        <span :title="orgname"> {{orgname.length>10?orgname.substr(0,10)+'...':orgname}}</span>
+                        
+                        <span v-if='zwname!="null"'> , {{zwname}}</span></span>)</span>
                     <el-dropdown-menu slot="dropdown" style="margin-top:-15px;">
                     <el-dropdown-item  command="b">修改账号</el-dropdown-item>
                     <el-dropdown-item command="a">修改密码</el-dropdown-item>
@@ -46,7 +49,7 @@
             <el-row class="height" >
               <el-col :span="show1?((this.show2 || this.show3 || this.show4 || this.show5)?12:24):0" v-if="show1">
                   <div class="baseinfo mr-10" @click="getZX('1100')">
-                     <img style="height: 100%" src="../assets/img/newindex/img10.png" alt="基本信息库">
+                     <img style="height: 100%" src="../assets/img/newindex/img10.png" alt="基本信息">
                   </div>
               </el-col>
               <el-col :span="(this.show2 || this.show3 || this.show4 || this.show5)?(show1?12:24):0" v-if="this.show2 || this.show3 || this.show4 || this.show5">
@@ -260,14 +263,11 @@ export default {
                 r => {
                   if(r.code==1){
 
-                 
-                    
                     if(r.data && r.data.length>0){
                        this.menuData=r.data;
                         if(this.menuData.length>0){
-                          this.show1=false;this.show2=false;this.show3=false;this.show4=false;this.show5=false;
+                          this.show1=false;this.show2=false;this.show3=false;this.show4=false;this.show5=false;this.show6=false
                           var array=this.menuData;
-                          
                           for (let i = 0; i < array.length; i++) {
                               var id=array[i].entity.id;
                                 if(id=="1100"){this.show1=true;}

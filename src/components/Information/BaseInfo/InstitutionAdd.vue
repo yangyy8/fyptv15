@@ -2,7 +2,7 @@
 <template>
     <div class="pairadd ">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-         <span> 基本信息库 
+         <span> 基本信息 
               <span class="mlr_10">/</span> <b>联络机构</b>
         <span class="mlr_10">/</span> <b>{{cname}}</b>
          <span class="mlr_10" v-if='cname1!=null'>/</span><b>{{cname1}}</b></span>
@@ -36,8 +36,8 @@
                             <el-cascader  :disabled="ck"
                             v-model="pd.sj"
                             :options="jgdata"
-                            :show-all-levels="false"
-                            :props="{ checkStrictly: true }" @change="getJB(pd.sj);" 
+                            :show-all-levels="true"
+                            :props="{ checkStrictly: true }" @change="getJB(pd.sj);"  
                             clearable filterable size="small" class="yy-input-input"></el-cascader>
                             </el-col>
                             </el-row>
@@ -185,6 +185,7 @@
                         <el-button type="primary"  style="width:130px;" @click="submit" v-if="status!='2'">保 存</el-button>
                         <el-button style="width:130px;" @click="gonum">关 闭</el-button>
                 </div>
+                  <br/>
   </div>
          <el-dialog :title="lxrdia" :visible.sync="addDialogVisible" :close-on-click-modal='false' width="600px">
              <el-form :model="form" >
@@ -263,11 +264,12 @@
               <el-button type="primary" size="small" @click="addsave()" >保 存</el-button>
               <el-button @click="addDialogVisible = false" size="small">关 闭</el-button>
             </div>
+          
        </el-dialog>
  <el-dialog title="智能搜索" :visible.sync="znDialogVisible" :close-on-click-modal='false'>
      <RGZN  :type="1" :data="zndata"  @ZNfatherMethod="ZNfatherMethod" :random="new Date().getTime()"></RGZN>
    </el-dialog>
-  <br/>
+
        
     </div>
 </template>
@@ -310,26 +312,27 @@ export default {
             num:2,
             cdx:0,
             nowindex:null,
+            pt:1,
         }
     },
    
     mounted(){
     this.$store.dispatch("getZzfl");
-    this.$store.dispatch("getDwlxr");
+    // this.$store.dispatch("getDwlxr");
     this.$store.dispatch("getJbb");
     this.$store.dispatch("getSfbm");
-    this.$store.dispatch("getXzqh");
+    // this.$store.dispatch("getXzqh");
     this.$store.dispatch("getSfxhft");
     this.$store.dispatch("getJgwyh");
     this.$store.dispatch("getFyjb");
      this.getinit(this.$route);
     
     },
-      watch:{
-        $route:function(val){
-           this.getinit(val);
-        },
-    },
+    //   watch:{
+    //     $route:function(val){
+    //        this.getinit(val);
+    //     },
+    // },
     methods:{
         getinit(val){
             this.addtype=val.query.type;
@@ -340,6 +343,7 @@ export default {
             this.lx=val.query.lx;
             this.cdx=val.query.cdx;
             this.num=val.query.num;
+            this.pt=val.query.pt;
             if(val.query.xzqh!=null && val.query.xzqh!=undefined){
                 this.xzqh=val.query.xzqh;
                 if(this.pd.sfbm=='0223000001'){
@@ -497,11 +501,10 @@ export default {
           ZNfatherMethod(data,type){
 
              if(data){
-                 console.log(data.job,data.fixedPhone);
-                 
+              
                  this.$set(this.form,'position',data.job);
                  this.$set(this.form,'outsideLine',data.fixedPhone);
-                 console.log(this.form.outsideLine);
+                
              }
              this.znDialogVisible=false;
             
@@ -605,7 +608,7 @@ export default {
                        if(this.multipleSelection.length>1){
                                this.$message.error("只能选择一条信息！");return;
                        }
-                       console.log(this.multipleSelection[0],this.nowindex);
+                 
                        
                        this.form=Object.assign({},this.multipleSelection[0]);
                        this.lxrdia="编辑联系人";
@@ -684,7 +687,7 @@ export default {
           getList()
           {   
          
-             var ff=true;
+            if(this.status!='0'){
               let p={
                   'orgId':this.jgid,
               };
@@ -693,18 +696,24 @@ export default {
                     
                       if(r.code==1){
                            this.pd=r.data;
+                          
+                            this.xzqh=this.pd.xzqh;
+                            this.lvl=this.pd.lvl;
+                           
                            if(this.pd.sfbm!=undefined && this.pd.sfbm!=null && this.pd.sfbm!=''){
                           
-                             ff=false; this.getLWDW(this.pd.sfbm);
+                             this.getLWDW(this.pd.sfbm);
                            }
                          
                         //    this.getJB(this.pd.sj);
                           
-
                            this.tableData=r.data.contactVOS;
                       }
                 });
-           if(ff){ this.getLWDW('0223000002');}
+                }else{
+                    this.getLWDW('0223000002');
+                }
+      
                 
           },
           submit(){
@@ -766,21 +775,29 @@ export default {
                 });
           },
           gonum(){
-              if(this.num==null || this.num==""){
+           
+              if(this.pt==0){
                     this.$router.push({name:'InstitutionList',query:{type:this.addtype}});
               }else{
-                   this.$router.go(-this.num);
+                  var nn=this.num;
+                //   if(nn){
+                //     this.$router.go(-this.num);
+                //   }else{
+                      this.$router.go(-1);
+                //   }
+                   
               }
           },
                //隶属机构 
           getLWDW(sfbm,t){
              
-             if( (this.pd.sj!=null && this.pd.sj!='') &&
-                (this.pd.lvl!=null && this.pd.lvl!='')  &&
-               (this.pd.xzqh!=null && this.pd.xzqh!='')  &&
-               this.pd.sfbm=='0223000001'){ 
-                   return;
-               }
+            //  if( (this.pd.sj!=null && this.pd.sj!='') &&
+            //      (this.pd.lvl!=null && this.pd.lvl!='')  &&
+            //      (this.pd.xzqh!=null && this.pd.xzqh!='')  &&
+            //       this.pd.sfbm=='0223000001'){ 
+            //        return;
+            //    }
+
                if(t==0){
                      this.$set(this.pd,'sj',"");
                      this.$set(this.pd,'lvl',"");
@@ -788,23 +805,15 @@ export default {
                      this.jgdata=[];
              }
 
-
-
-              var lf='';
-            
-               if(this.jb!=null && this.jb!=undefined && this.jb!=''){
-                  lf='1';
-               }else{
-                   lf='';
-               }
-            
+           
               let p={
                   'lb':this.lb,
                   'orgId':this.$store.state.orgid,
                   'sfbm':sfbm,
                   'xzqh':this.xzqh,
-                  'levelFlag':lf,
+                  'levelFlag':this.jb?'1':'',
                   'lvl':this.lvl,
+                  'pageType':this.pt?this.pt:'1',
               };
                 this.$api.post(this.Global.aport1+'/org/getOrgTree',p,
                 r =>{
@@ -813,6 +822,9 @@ export default {
                           this.jgdata=r.data.vos;
                           if(r.data.defaultId!=''){
                               this.$set(this.pd,'sj',r.data.defaultId);
+                          }else if(this.jgdata.length==1){
+                              
+                              this.$set(this.pd,'sj',r.data.vos[0].value);
                           }
 
                         //   if(this.status!='0'){

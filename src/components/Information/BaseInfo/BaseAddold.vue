@@ -1,6 +1,6 @@
 <template>
     <div class="pairadd " >
-         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息库 
+         <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i><span> 基本信息 
              <span class="mlr_10">/</span>  <b>联络对象</b></span>
               <span class="mlr_10">/</span>  <b>{{cname}}</b>
              <span class="mlr_10" v-if='cname1!=""'>/</span>  <b v-if='cname1!=""'>{{cname1}}{{cname}}</b>

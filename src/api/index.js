@@ -9,7 +9,7 @@ import store from '../assets/store';
 function apiAxios (method, url, params, success, failure,header,responseType) {
     let loadingInstance1=null;
     if(url!="/menu/getSubMenu"  && url!="/menu/getMenu" && url!="/menu/getShortcutMenu" 
-    && url!="/PersonIdentifyInfoController/findPerson"){
+    && url!="/PersonIdentifyInfoController/findPerson" ){
      loadingInstance1 = Loading.service({ fullscreen: true, spinner: 'el-icon-loading',text:'正在加载中',background:'rgba(0,0,0,0.6)',customClass:'loadingClass'});
     }
       if (params) {

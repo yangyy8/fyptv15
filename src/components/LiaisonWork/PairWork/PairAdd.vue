@@ -10,7 +10,15 @@
                   <el-row class="ah-40">
                       <el-col :span="9">
                         <span class="yy-input-text"><font class="red">*</font> 结对人</span>
-                         <el-select v-model="pd.courtOutUserId" :disabled="llbnt"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2);getJDcancel()"  filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <!-- <el-select v-model="pd.courtOutUserId" :disabled="llbnt" remote :remote-method="jdrdwremoteMethod" v-el-select-loadmore="jdrloadmore"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2);getJDcancel(pd.courtOutUserId)"  filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-option
+                          v-for="(item,ind) in cdrdata"
+                          :key="ind"
+                          :label="item.fullName"
+                          :value="item.courtPersonId">
+                         </el-option>
+                        </el-select> -->
+                          <el-select v-model="pd.courtOutUserId" :disabled="llbnt" remote :remote-method="jdrdwremoteMethodnew" v-el-select-loadmore="jdrloadmorenew"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2);getJDcancel(pd.courtOutUserId)"  filterable clearable  default-first-option placeholder="请输入关键字进行搜索"  size="small" class="yy-input-input" >
                          <el-option
                           v-for="(item,ind) in cdrdata"
                           :key="ind"
@@ -28,14 +36,12 @@
                         <el-button type="primary" plain size="small"  @click="getPair()" v-if='pd.courtOutsiderId!="" || pd.courtOutUserId!=""'>
                           {{hdlabel}}
                          </el-button>
-                            
                       </el-col>
-
                   </el-row>
                   <el-row class="ah-40">
                      <el-col :span="9">
                          <span class="yy-input-text"><font class="red">*</font> 代表</span>
-                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.courtOutUserId==''|| pd.courtOutUserId==undefined?'请先选择结对人':'无数据'">
                             <el-option
                             v-for="(item,ind) in lxdbdata"
                             :key="ind"
@@ -45,7 +51,7 @@
                          </el-select>
                       </el-col>
                       <el-col :span="4">
-                         <el-button type="success" size="small" plain @click="getJdlist">加入列表</el-button>
+                         <el-button type="success" size="small" plain @click="getJdlist" v-if='!llbnt'>加入列表</el-button>
                       </el-col>
                       <el-col :span="24">
                           <el-table
@@ -99,7 +105,7 @@
                         <el-date-picker :disabled="llbnt"
                            v-model="form.startTime" format="yyyy-MM-dd"
                            type="date" size="small" value-format="yyyy-MM-dd"
-                           placeholder="开始时间" >
+                           placeholder="开始时间" @change="changedate(form.startTime)">
                         </el-date-picker>
                         <span class="septum">-</span>
                         <el-date-picker :disabled="llbnt"
@@ -139,7 +145,7 @@
                        </el-col>
                        
                         <el-col :span="24" style="margin-left:11%;" v-if='pd5.ck1'>
-                           <div class="yy-input-input" style="width:89%!important;">
+                           <div :class="llbnt?'yy-input-input wxq':'yy-input-input'" style="width:89%!important;">
                             <el-table
                             ref="mlTable"
                             :data="ListDataWX"
@@ -147,7 +153,7 @@
                             @selection-change="wxChange">
                             <el-table-column
                                 type="selection"
-                                width="50">
+                                width="50" :selectable='selectInit'>
                             </el-table-column>
                             <el-table-column
                                 type="index"
@@ -305,9 +311,9 @@
                                 prop="contents"
                                 label="评价和意见建议" width="400">
                                  <template slot-scope="scope">
-                                  <el-popover placement="top-start" width="350" trigger="hover" >
+                                  <el-popover placement="top-start" width="350" trigger="hover" style="text-align:left" v-if="scope.row.contents">
                                        <div>{{scope.row.contents}}</div>
-                                      <span slot="reference">{{ scope.row.contents.substr(0,20)}}{{scope.row.contents.length>20?'......':''}}</span>
+                                      <div slot="reference">{{ scope.row.contents.substr(0,20)}}{{scope.row.contents.length>20?'......':''}}</div>
                                   </el-popover>
                                 </template>
                             </el-table-column>
@@ -332,11 +338,8 @@
                                   </template>
                               </el-table-column>
                            </el-table>
-                            
                             </div>
                         </el-col>
-
-
                         <el-col :span="24" class="input-item mt-10">
                            <span class="yy-input-text" style="width:11%;" title="工作情况报告"><font class="red">&ensp;</font>工作情况报告</span>
                             <div class="yy-input-input" v-if='!llbnt'>
@@ -377,30 +380,23 @@
                        </el-col>
                        <el-col :span="24" v-if="fits && fits.length>0">
                      
-                        <div style="margin-left:11%;"  v-for="(fit,ind) in fits" :key="ind">
+                        <div style="margin-left:11%;"  v-for="(fit,ind) in fits" :key="ind" v-dragging="{ item: fit, list: fits, group: 'fit' }">
                             <div class="block" style="float:left;margin-right:20px;margin-top:20px" v-if='getImgV(fit.filesuffix)'>
                                 
                             <el-popover placement="right" title="" trigger="click">
-                                                           
                               <img :src="fit.filepath"  style="max-width:700px; max-height:700px;"/>
                               <img :src="fit.filepath" slot="reference" width="180" height="150">
-                                                        
                             </el-popover>
-
                               <a class="close" @click="delImg(fit.imagedatainfoid)" v-if='!llbnt'> <i class="el-icon-error"></i></a>
-                             
                             </div>
                               <div class="block" style="float:left;margin-right:20px;margin-top:20px" v-else>
-
                                <el-popover placement="right" title="" trigger="click">
-
                                <video  
                                     :src="fit.filepath" width="550" height="500"
                                     class="avatar video-avatar" 
                                     controls="controls" >
                                     您的浏览器不支持视频播放
                                </video>
-
                                 <video  
                                     :src="fit.filepath" width="180" height="150"
                                     class="avatar video-avatar" 
@@ -519,7 +515,7 @@
   <el-dialog title="上传文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="630px">
    <UPLOAD :url="uurl" :type="2" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
-  <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" :close-on-click-modal='false' width="650px">
+  <el-dialog title="上传影视资料" :visible.sync="YJDialogVisible" :close-on-click-modal='false' width="850px">
        <VIDEONEW :url="vvurl" :type="2" :urlErr="urlErr" @DfatherMethod="DfatherMethod" :random="new Date().getTime()"></VIDEONEW>
        <img class="img-upload" url="/sfmgapi/upload/add" @success="canSucess">
   </el-dialog>
@@ -533,10 +529,9 @@
   <el-dialog title="结合代表关注案件" :visible.sync="caseDialogVisible" :close-on-click-modal='false'>
       <CASE  :data="yjdata" :type="addtype" @casefatherMethod="casefatherMethod" :random="new Date().getTime()"></CASE>
   </el-dialog>
-  <el-dialog title="修改定向结对"  :visible.sync="pairsDialogVisible" v-if='pairsDialogVisible' :close-on-click-modal='false'>
+  <el-dialog :title="hdlabel"  :visible.sync="pairsDialogVisible" v-if='pairsDialogVisible' :close-on-click-modal='false'>
       <PAIR  :data="pairdata" :type="addtype" @pairfatherMethod="pairfatherMethod" :random="new Date().getTime()"></PAIR>
   </el-dialog>
- 
     </div>
 </template>
 <script scoped>
@@ -552,6 +547,22 @@ import SUGGALL from "../../Common/suggest/suggestall"
 import PAIR from "../../Common/suggest/pairinfo"
 export default {
     components:{UPLOAD,VIDEO,SuggestInfo,VIDEONEW,SUGGEST,CASE,SUGGALL,PAIR},
+     directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                  binding.value();
+                }
+              });
+            }
+          }
+  },
     data(){
         return{
           CurrentPage1: 1,
@@ -624,21 +635,38 @@ export default {
           ListDataWX:[],
           xmdata:[],
           wxname:'',
+          formData: {   //下拉参数
+            pageIndex: 1,
+            pageSize: 20
+          },
+          tempload:[],
+          jdrload:[],
+          jznum:100,
+          bs:0,
         };
     },
-    watch:{
-       $route:function(val){
-           this.getinit(val);
-       }
-    },
+  watch: {
+    $route: {
+      handler: function() {
+      this.getinit(this.$route);
+      },
+      immediate: true
+    }
+  },
     mounted()
     {
-        this.$store.dispatch("getXb");
         this.$store.dispatch("getHdfs");
-        this.getinit(this.$route);
+         this.$dragging.$on('dragged', (val) => {
+		      //console.log(val)//这里我们不需要做任何操作；组件内部会把我们绑定上去的list自动排序;只需要查看结果就可以
+		      //如果需要在这里进行其他操作，可以查看val的内容，包括：拖动的元素，拖动后与之兑换的元素，以及原始数据和拖动组名
+		    })
+		    this.$dragging.$on('dragend', (val) => {
+		        //此处是拖动完成后鼠标松开时触发的事件
+		    })
+       // this.getinit(this.$route);
     },
     activated(){
- 
+    
     },
     methods:{
          pageSizeChange1(val) {
@@ -768,10 +796,15 @@ export default {
             this.logoUrl = file.url;
         },
         getinit(val){
-          this.reset();
+         this.reset();
          this.addtype=val.query.type;
          this.baseid=val.query.baseid;
          this.year=val.query.year;
+         if(this.year){
+            this.$set(this.form,"startTime",this.year+"-01-01");
+            this.$set(this.form,"endTime",this.year+"-01-01");
+         }
+
          this.state=val.query.state==null?"0":val.query.state;
          this.activityInfoId=val.query.activityInfoId;
          
@@ -786,23 +819,15 @@ export default {
 
         //  this.getYA();
          this.yearlist=getYear();
-        if(this.state=='0'){
-            this.getLmName('');
-        }
-         this.getFYName('');
-         this.getName();
-         this.getFY();
-         this.getLRFY();
-       
+        // this.getLmName('');
          if(this.state=='9'){
            this.llbnt=true;
          }
-         this.form.entryUnit=this.$store.state.orgname;
-         this.form.entryDepartment=this.$store.state.bmname;
-         this.form.entryPerson=this.$store.state.uname;
+        //  this.form.entryUnit=this.$store.state.orgname;
+        //  this.form.entryDepartment=this.$store.state.bmname;
+        //  this.form.entryPerson=this.$store.state.uname;
         //  this.form.entryTime=getServerDate();
-         this.getJDXXAB();
-        
+         
          this.getList();
 
         },
@@ -816,7 +841,6 @@ export default {
             this.jdform={};
             this.tableData1=[];
             this.tableData2=[];
-            this.yjtableData=[];
             this.ListData1=[];
             this.form1data=[];
             this.filedata0=[];
@@ -837,6 +861,8 @@ export default {
             this.pd5={ck1:false,ck3:false,ck7:false};
             this.suggList1=[];
             this.suggList2=[];
+            this.hdyjdata=[];
+            this.tempdata=[];
             this.yjtableData=[];
         },
          //查询
@@ -889,15 +915,17 @@ export default {
                          this.ListData1=r.data.leadershipIns==null?[]:r.data.leadershipIns;
                          this.filedata0=r.data.actiWorkReport==null?[]:r.data.actiWorkReport
                          this.fits=r.data.imageDataList==null?[]:r.data.imageDataList;
-                        
+                         
                          if(r.data.representativeInfo!=null){
                          this.pd.courtOutsiderId=r.data.representativeInfo.personId
                          this.pd.beginBJSJ=r.data.representativeInfo.pairTime;
                          this.pd.dpbId=r.data.representativeInfo.pbId;
                          }
+                         
                          if(r.data.pairPersonInfo!=null){
                          this.pd.courtOutUserId=r.data.pairPersonInfo.courtPersonId
                          this.pd.cpbId=r.data.pairPersonInfo.pbId;
+                         this.getJDXXAB(this.pd.courtOutUserId);
                          this.getJDXX(this.pd.courtOutUserId,1);
                          }
                          this.yjtableData=r.data.actiRelAdvList==null?[]:r.data.actiRelAdvList;
@@ -953,6 +981,7 @@ export default {
         },
         //代表议案建议
       getoldDataRule(arr){
+             
        if(arr && arr.length>0){
         
           for (let m = 0; m < arr.length; m++) {
@@ -998,9 +1027,9 @@ export default {
                 
             }
 
-          console.log('多条数据',this.hdyjdata);
-          console.log('临时数据',this.tempdata);
-          console.log('显示数据',this.yjtableData);
+          // console.log('多条数据',this.hdyjdata);
+          // console.log('临时数据',this.tempdata);
+          // console.log('显示数据',this.yjtableData);
              
        }           
           
@@ -1010,8 +1039,8 @@ export default {
            this.jdstate=0;
            this.hdlabel="定向结对";
            this.pd={courtOutsiderId:'',courtOutUserId:''};
-           this.getLmName('');
-           this.getJDXXAB('');
+          // this.getLmName('');
+          // this.getJDXXAB('');
         },
         fatherMethod(data,type){
             if(this.filedata0 && this.filedata0.length>0){
@@ -1291,8 +1320,10 @@ export default {
                                
                                 
                                 this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
-                              }else{
+                              }else if(this.state=='1' || this.state=='9'){
                                 this.$router.push({name:"PairList"});
+                              }else{
+                                  this.$router.push({name:'PairAdd',query:{type:this.addtype,year:this.year,n:Math.random()}});
                               }
                          }else{
                              this.$message.error(r.message);
@@ -1390,41 +1421,9 @@ export default {
              this.listdatatemp=arr1.filter((arr1) => !res1.has(arr1.pbId) && res1.set(arr1.pbId, 1));
             
         },
-        savelist(){
-            var array=this.listdatatemp;
-            var nname="";
-             for (let i = 0; i < array.length; i++) {
-                 if(array[i].personId!=this.form1.courtInsiderId && array[i].personId!=null && array[i].pairName!='无')
-                 {
-                   nname += array[i].personName+',';
-                 }
-             }
-            
-             
-            nname=nname.substr(0,nname.length-1);
-          
-            if(nname!='')
-            {
-              this.$confirm(nname+"代表的原结对人与目前结对人不一致，请确认是否提交！", '提示', {
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-                }).then(() => {
-                       this.getsaveinfo();
-                }).catch(() => {
-                      
-                    this.$message.info('已取消');
-
-                });
-            
-            }else{
-                this.getsaveinfo();
-            }
-        },
+      
         getsaveinfo(data){
 
-     
-          
              let  p={
                         // 'courtPersonId':this.form1.courtInsiderId,
                         // 'courtOutsiderList':this.listdata2,
@@ -1501,22 +1500,23 @@ export default {
             });
 
         },
-        getJDcancel(){
-       
+        getJDcancel(val){
+          if(val=='' || val==undefined || val==null){
+            this.jdrquery();
+          }
           this.ListDataJd=[];
-         
           this.ListDataWX=[];
           this.pd5.ck1=false;
           this.wxname='';
+          this.$set(this.pd,'courtOutsiderId','');
+          this.cdrdata=[];
+          this.lxdbdata=[];
         },
         //结对人
         getJDXX(id,t)
         { 
-
-           
             if(this.pd.courtOutsiderId=="" && this.pd.courtOutUserId==""){
                 this.jdreset();
-                
                 return;
             }
 
@@ -1540,8 +1540,6 @@ export default {
                           this.chChange(this.pd.courtOutUserId,2);
                           this.pd.beginBJSJ=this.cdrdata[0].pairTime;
                           this.pairId=this.cdrdata[0].pairId
-                          
-                          
                           this.hdlabel="修改定向结对";                          
                         }else{
                           this.hdlabel="定向结对";
@@ -1575,7 +1573,6 @@ export default {
                        var ff=false;
                           for (let i = 0; i < this.lxdbdata.length; i++) 
                           {
-                            //  console.log(this.lxdbdata,this.lxdbdata[i].personId,this.oldcourtid);
                              if(this.oldcourtid==this.lxdbdata[i].personId){
                                   ff=true;
                              }
@@ -1601,19 +1598,107 @@ export default {
                 });
             }
         },
-        getJDXXAB(name){
-            if(name==undefined || name==null){name='';}
+        getJDXXAB(val){
+            
             let  p={
-             'personName':name,
+             'personName':'',
              };
               this.$api.post(this.Global.aport1+'/courtPerson/getPairInfo',p,
              r =>{
-                   
-                   this.cdrdata=r.data;
+                   if(r.code==1){
+                      this.jdrload=r.data;
+                      if(val){
+                         var arr = this.jdrload.filter(item=>{
+                                return item.courtPersonId.indexOf(val) + 1
+                              });
+                              this.cdrdata=arr;
+                      }else{
+                             this.jdrquery();
+                      }
+                     
+                   }
                   
             });
             
         },
+      jdrquery(){
+           if(this.jdrload.length>this.jznum){
+                this.cdrdata=this.jdrload.slice(0,this.jznum);
+              }else{
+                this.cdrdata=this.jdrload;
+            }
+        },
+        //结对人远程搜索
+        jdrdwremoteMethod(quer){
+        
+          if (quer !== ''|| this.cdrdata.length<=0) {
+            var arr = this.jdrload.filter(item=>{
+              return item.fullName.indexOf(quer) + 1
+            });
+            this.tempload=arr;
+            if(arr.length>this.jznum){
+               this.cdrdata=arr.slice(0,this.jznum);
+            }else{
+              this.cdrdata=arr;
+            }
+          }else{
+            this.tempload=[];
+            this.jdrquery();
+          }
+        },
+        //结对人加载
+     jdrloadmore() {
+        var srr= this.jdrload;
+        if(this.tempload.length>0){
+          srr= this.tempload;
+        } 
+        this.formData.pageIndex++;
+        let num = this.formData.pageIndex * this.formData.pageSize;
+           this.cdrdata=srr.filter((item, index, arr) => {
+               return index < num;
+         });
+      },
+
+        //结对人远程搜索新方法
+      jdrdwremoteMethodnew(quer){
+          if (quer !== '') {
+            this.cdrdata=[];
+             
+             let  p={
+             'personName':quer,
+             };
+              this.$api.post(this.Global.aport1+'/courtPerson/getPairInfo',p,
+             r =>{
+                   if(r.code==1){
+                      this.jdrload=r.data;
+                      if(this.jdrload.length>this.jznum){
+                          this.cdrdata=this.jdrload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.cdrdata=this.jdrload;
+                        }
+                     
+                   }
+                  
+            });
+
+            
+          }else{
+           this.cdrdata=[];
+          }
+            
+        },
+     //结对人加载
+     jdrloadmorenew() {
+        if(this.bs==1){return;}
+        var srr= this.jdrload;
+        this.formData.pageIndex++;
+        let num = this.formData.pageIndex * this.formData.pageSize;
+           this.cdrdata=srr.filter((item, index, arr) => {
+               return index < num;
+         });
+      },
+
         //录入法院
          getLRFY(){
             let  p={
@@ -1636,7 +1721,7 @@ export default {
                
                  var obj = {};
                      obj = this.fyrydata.find(item =>{
-                      //  console.log(item.courtPersonId === val);
+                   
                        
                         return item.courtPersonId === val
                     });
@@ -1734,7 +1819,7 @@ export default {
                this.$message.error('请先选择结对的代表信息！');return;
              }
           }
-          console.log('添加时的值',this.tempdata);
+
           
          this.yjdata=this.tempdata;
          this.yjsDialogVisible=true;
@@ -1773,6 +1858,17 @@ export default {
                                   object.contents=arr[j].contents;
                                   this.hdyjdata.push(object);
                             }
+                         }else{
+                           var object={};
+                                  object.participantsInfoId=array[i].leaderPerson;
+                                  object.participantsInfoName=array[i].leaderPersonName;
+                                  object.overallAssessment=array[i].overallAssessment;
+                           
+                                  object.feedBackStatus=array[i].feedBackStatus;
+                                  object.feedBackTime=array[i].feedBackTime;
+                                  object.remark=array[i].remark;
+                             
+                                  this.hdyjdata.push(object);
                          }
                       
                      }
@@ -1782,9 +1878,9 @@ export default {
                        this.yjtableData=srr.filter((srr) => !res.has(srr.participantsInfoId) && res.set(srr.participantsInfoId, 1))
                 }
 
-              console.log('this.hdyjdata多条数据',this.hdyjdata);
-              console.log('this.tempdata临时数据',this.tempdata);
-              console.log('this.yjtableData显示数据',this.yjtableData);
+              // console.log('this.hdyjdata多条数据',this.hdyjdata);
+              // console.log('this.tempdata临时数据',this.tempdata);
+              // console.log('this.yjtableData显示数据',this.yjtableData);
               this.yjsDialogVisible=false;
           }
         },
@@ -1892,9 +1988,14 @@ export default {
         } 
         return '';
       },
-
-
-
+      selectInit(row,index){
+        return !this.llbnt;
+      },
+      //时间联动
+      changedate(t){
+        
+        this.$set(this.form,'endTime',t)
+      },
 
     }
 
@@ -1906,4 +2007,6 @@ export default {
 .border{border: 1px solid #E6E6E6; border-radius: 6px;margin-top: 10px;}
 .ts{font-size: 12px;color: red;}
 .block .close{display: block;position: absolute;font-size: 25px;font-weight:bold;cursor: pointer;z-index: 999;margin-top: -185px;margin-left: 170px;}
+
 </style>
+

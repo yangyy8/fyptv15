@@ -21,7 +21,7 @@
        <!-- <div class="homenav ba">
          <ul>
            <li class="line active">首页</li>
-           <li class="line"><i class="el-icon-document"></i> 基本信息库</li>
+           <li class="line"><i class="el-icon-document"></i> 基本信息</li>
            <li class="line"><i class="el-icon-cold-drink"></i> 联络工作</li>
            <li class="line"><i class="el-icon-edit-outline"></i> 办理工作</li>
            <li class="line"><i class="el-icon-s-data"></i> 统计信息</li>

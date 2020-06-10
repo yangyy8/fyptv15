@@ -340,7 +340,7 @@
                       <el-col :span="8">
                            <span class="yy-input-text"><font class="red">&ensp;</font> 案件编号</span>
                            <el-input placeholder="请输入内容" size="small" :disabled="editshow" clearable v-model="pd1.casenum"  class="yy-input-input" ></el-input> 
-                            <i class="el-icon-search"></i>
+                            <i class="el-icon-search" v-if='!editshow'></i>
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 案件类型</span>
@@ -352,7 +352,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                       <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 审理阶段</span>
@@ -364,7 +364,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select>
-                         <i class="el-icon-plus cursor" style="color:red"></i>
+                         <i class="el-icon-plus cursor" v-if='!editshow' style="color:red"></i>
                       </el-col>
                       <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 案件状态</span>
@@ -376,7 +376,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select>
-                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                       <el-col :span="8">
                         <span class="yy-input-text"><font class="red">&ensp;</font> 利害关系</span>
@@ -388,7 +388,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                        <el-col :span="8">
                          <span class="yy-input-text"><font class="red">&ensp;</font> 是否有利害关系</span>
@@ -434,7 +434,7 @@
                            :value="item.orgid">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 涉及法院级别</span>
@@ -446,7 +446,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 不服本院</span>
@@ -458,7 +458,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
                       </el-col>
                         <el-col :span="24">
                            <span class="yy-input-text" style="width:11%!important;vertical-align: top;" title="当事人及案由"><font class="red">*</font> 当事人及案由</span>
@@ -470,19 +470,19 @@
                  <!-- 报批信息 -->
                 <div class="ptitle mb-20 mt-20">报批信息</div>
                 <div class="pborder">
-                  <el-row>
-                  <!-- <el-col :span="8">
+                  <el-row class="ah-40">
+                  <el-col :span="8">
                       <span class="yy-input-text"><font class="red">*</font> 信息操作</span>
-                         <el-select v-model="pd1.informationoperation" :disabled="ckshow || spshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                         <el-select v-model="pd1.informationoperation"  :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
-                                v-for="(item,ind) in $store.state.xxcz"
+                                v-for="(item,ind) in $store.state.xxczbq"
                                 :key="ind"
                                 :label="item.mc"
                                 :value="item.dm">
                               </el-option>
                            </el-select>
-                     </el-col> -->
-                      <el-col :span="8">
+                     </el-col>
+                      <el-col :span="8" v-if='pd1.informationoperation=="0199000011"'>
                         <span class="yy-input-text" style="width:35%"><font class="red">*</font> 审批领导</span>
                         <el-select v-model="pd1.checkuserid" @change="chChangelist(pd1.checkuserid,6,6)" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                         <el-option
@@ -493,10 +493,176 @@
                                         </el-option>
                         </el-select>
                       </el-col>
+                       <el-col :span="8" v-if='pd1.informationoperation=="0199000012"'>
+                         <span class="yy-input-text">转办形式</span>
+                         <el-select v-model="bppd.assigntype" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                        <el-option
+                                        v-for="(item,ind) in $store.state.zbxs"
+                                        :key="ind"
+                                        :label="item.mc"
+                                        :value="item.dm">
+                                        </el-option>
+                           </el-select>
+                     </el-col>
+                       <el-col :span="8"  v-if='pd1.informationoperation=="0199000012"'>
+                        <span class="yy-input-text">是否转办告知</span>
+                          <el-select v-model="bppd.isassigninform" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                        v-for="(item,ind) in $store.state.zbgzqf"
+                                        :key="ind"
+                                        :label="item.mc"
+                                        :value="item.dm">
+                                        </el-option>
+                           </el-select>
+                    </el-col>
+                  </el-row>
+                  <el-row class="ah-50"  v-if='pd1.informationoperation=="0199000012"'>
+                      <el-col :span="24">
+                        <span class="yy-input-text" style="width:11%!important;vertical-align: top;" ><font class="red">*</font>  审批意见</span>
+                        <el-input placeholder="请输入内容" :disabled="editshow" type="textarea" :autosize="{ minRows: 3, maxRows: 4}" size="small" clearable v-model="bppd.checkcontents"  class="yy-input-input" style="width:86.8%!important;"></el-input>
+                                
+                     </el-col>
+                     <el-col :span="8">
+                           <span class="yy-input-text"><font class="red">*</font> 审批人</span>
+                           <!-- <el-input placeholder="请输入内容" size="small" clearable v-model="pd4.checkuserid"  class="yy-input-input" ></el-input>  -->
+                          <el-select v-model="bppd.checkuserid" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                v-for="(item,ind) in jbrdata"
+                                :key="ind"
+                                :label="item.fullName"
+                                :value="item.pbId">
+                              </el-option>
+                           </el-select>
+                   
+                     </el-col>
+                     <el-col :span="8">
+                         <span class="yy-input-text"><font class="red">*</font> 审批结果</span>
+                         <el-select v-model="bppd.checkresult" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                               <el-option
+                                v-for="(item,ind) in $store.state.spjg"
+                                :key="ind"
+                                :label="item.mc"
+                                :value="item.dm">
+                              </el-option>
+                           </el-select>
+                     </el-col>
+                      <el-col :span="8">
+                                <span class="yy-input-text"><font class="red">*</font> 审批时间</span>
+                                <el-date-picker :disabled="editshow"
+                                    v-model="bppd.checktime" format="yyyy-MM-dd"
+                                    type="date" size="small" value-format="yyyy-MM-dd"
+                                    placeholder="选择时间" class="yy-input-input" >
+                                </el-date-picker>
+                    </el-col>
+                             <el-col :span="8" v-if='bppd.isassigninform=="0217000001"'>
+                                <span class="yy-input-text">督（转）办号</span>
+                                 <el-select v-model="bppd.assigntypeno" :disabled="editshow" @change="getDBHBP(bppd.assigntypeno,0);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:20%!important;" >
+                                    <el-option
+                                      v-for="(item,ind) in dblbdata"
+                                      :key="ind"
+                                      :label="item.mc"
+                                      :value="item.dm">
+                                    </el-option>
+                                </el-select>
+                                 <el-select v-model="bppd.assignyear" :disabled="editshow" @change="getDBHBP(bppd.assignyear,1);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:20%!important;" >
+                                    <el-option
+                                      v-for="(item,ind) in $store.state.dbnf"
+                                      :key="ind"
+                                      :label="item.mc"
+                                      :value="item.dm">
+                                    </el-option>
+                                </el-select>
+                                {{dbhbp}}
+                            </el-col>
+                            <el-col :span="8" v-if='bppd.isassigninform=="0217000001"'>
+                                <span class="yy-input-text">转办告知文号</span>
+                                <el-input placeholder="自动生成文号" :disabled="true" size="small" clearable v-model="bppd.assigninformno"  class="yy-input-input" ></el-input> 
+                            </el-col>
+                  </el-row>
+                  <el-row class="ah-40">
+                        <el-col :span="24" >
+                                <span class="yy-input-text" style="width:11%!important" title="提请立案流转单">提请立案流转单</span>
+                                <el-button type="primary" :disabled="editshow" plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="getUpload('7')" >上传文件</el-button> <span class="ts"></span>
+                            </el-col>
+                           <el-col :span="24" class="mb-20" v-if="filedata7 && filedata7.length>0">
+                            <el-table
+                              :data="filedata7">
+                              <el-table-column
+                                  type="index"
+                                  label="序号" width="80">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="filename"
+                                  label="文件名称">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="filesuffix"
+                                  label="文件类型">
+                              </el-table-column>
+                                 <el-table-column
+                                prop="relfiletype"
+                                label="文件种类">
+                                <template slot-scope="scope">
+                                  <div>
+                                <span>{{scope.row.relfiletype | filertype}}</span>
+                                </div>
+                                </template>
+                            </el-table-column>
+                              <el-table-column
+                                  label="操作">
+                                  <template slot-scope="scope">
+                                    <div>
+                                       <el-button type="text"  class="a-btn"   title="下载"  icon="el-icon-download" @click="downData(scope.row)"></el-button>
+                                      <el-button type="text"  class="a-btn"  :disabled="editshow" title="删除"  icon="el-icon-delete" @click="del(scope.row,filedata7)"></el-button>
+                                    </div>
+                                  </template>
+                              </el-table-column>
+                             </el-table>
+                             </el-col>
+                             
+                            <el-col :span="24" v-if="ffshow">
+                                 <span class="yy-input-text" style="width:11%!important">转办函</span>
+                                 <el-button type="primary"  :disabled="editshow" plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="getUpload('8')" >上传文件</el-button> <span class="ts"></span>
+                            </el-col>
+                            <el-col :span="24" class="mb-20" v-if="filedata8 && filedata8.length>0">
+                            <el-table
+                              :data="filedata8">
+                              <el-table-column
+                                  type="index"
+                                  label="序号" width="80">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="filename"
+                                  label="文件名称">
+                              </el-table-column>
+                              <el-table-column
+                                  prop="filesuffix"
+                                  label="文件类型">
+                              </el-table-column>
+                              <el-table-column
+                                prop="relfiletype"
+                                label="文件种类">
+                                <template slot-scope="scope">
+                                  <div>
+                                <span>{{scope.row.relfiletype | filertype}}</span>
+                                </div>
+                                </template>
+                            </el-table-column>
+
+                              <el-table-column
+                                  label="操作">
+                                  <template slot-scope="scope">
+                                    <div>
+                                      <el-button type="text"  class="a-btn"   title="下载"  icon="el-icon-download" @click="downData(scope.row)"></el-button>
+                                      <el-button type="text"  class="a-btn" :disabled="editshow"  title="删除"  icon="el-icon-delete" @click="del(scope.row,filedata8)"></el-button>
+                                    </div>
+                                  </template>
+                              </el-table-column>
+                             </el-table>
+                          </el-col>
                   </el-row>
                 </div>
-                
-                  <!-- 审批信息 -->
+                <!-- 审批信息 -->
                 <div class="ptitle mb-20 mt-20" v-if="zshow1">审批信息</div>
                 <div class="pborder" v-if="zshow1">
                   <el-row class="ah-40">
@@ -676,10 +842,10 @@
                                         </el-option>
                                     </el-select>
                                </el-col>
-                                <el-col :span="24" v-if="ffshow && pd2.undertakingsuborgid=='c8f88905383211ea9e3700155dbaef87'">
+                            <el-col :span="24" v-if="ffshow && pd2.undertakingsuborgid=='c8f88905383211ea9e3700155dbaef87'">
                                         <span class="yy-input-text" style="width:11%!important" title="提请立案流转单">提请立案流转单</span>
                                         <el-button type="primary" :disabled="ckshow" plain style="width:160px;font-size:14px;" size="small" icon="el-icon-plus" @click="getUpload('6')" >上传文件</el-button> <span class="ts"></span>
-                                </el-col>
+                            </el-col>
                            <el-col :span="24" class="mb-20" v-if="filedata6 && filedata6.length>0">
                             <el-table
                               :data="filedata6">
@@ -1477,7 +1643,7 @@
        
 </div>
       <el-dialog title="添加字典项" :visible.sync="dicDialogVisible" :close-on-click-modal='false' width="630px">
-        <DIC :type="dtype"  @fatherMethod="DfatherMethod" :random="new Date().getTime()"></DIC>
+        <DIC :type="dtype" :data='dicdata'  @dicfatherMethod="dicfatherMethod" :random="new Date().getTime()"></DIC>
       </el-dialog>
     <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  :close-on-click-modal='false' width="630px">
      <UPLOAD :url="uurl" :type="type" :urlErr="uurlErr"  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
@@ -1487,7 +1653,7 @@
 </template>
 <script>
 import UPLOAD from "../../Common/upload"
-import DIC from "../../Common/dictionaries"
+import DIC from "../../Common/category/dictionarie"
 import {ToArray} from '@/assets/js/ToArray.js'
 import {getYear} from '@/assets/js/date.js'
 export default {
@@ -1538,6 +1704,8 @@ export default {
              filedata4:[],
              filedata5:[],
              filedata6:[],
+             filedata7:[],
+             filedata8:[],
              form1data:[],
              dbh:'',//督办号
              addtype:'0',
@@ -1585,7 +1753,9 @@ export default {
              dblbdata:[],//督办类别
              yearlist:getYear(),
              Fynum:0,
-
+             dicdata:{},
+             bppd:{},
+             dbhbp:'',
 
         }
     },
@@ -1601,6 +1771,7 @@ export default {
           this.$store.dispatch("getZbxs");
           this.$store.dispatch("getBfby");
           this.$store.dispatch("getXxcz");
+          this.$store.dispatch("getXxczbq");
           this.$store.dispatch("getSpjg");
           this.$store.dispatch("getBjjg");
           this.$store.dispatch("getJgydbyj");
@@ -2038,19 +2209,47 @@ export default {
             }
         
            }
-         if(t=='6'){
-            if(this.filedata6 && this.filedata6.length>0){
-             
-             for (let i = 0; i < data.length; i++) {
-               this.filedata6.push(data[i]);
-               
+          if(t=='6'){
+              if(this.filedata6 && this.filedata6.length>0){
+              
+              for (let i = 0; i < data.length; i++) {
+                this.filedata6.push(data[i]);
+                
+                }
+              }else{
+              this.filedata6=data;
               }
-            }else{
-            this.filedata6=data;
+        
             }
-      
-           }
-              this.uploadDialogVisible = false;
+
+            if(t=='7'){
+              if(this.filedata7 && this.filedata7.length>0){
+              
+              for (let i = 0; i < data.length; i++) {
+                this.filedata7.push(data[i]);
+                
+                }
+              }else{
+              this.filedata7=data;
+              }
+        
+            }
+
+            if(t=='8'){
+              if(this.filedata8 && this.filedata8.length>0){
+              
+              for (let i = 0; i < data.length; i++) {
+                this.filedata8.push(data[i]);
+                
+                }
+              }else{
+               this.filedata8=data;
+              }
+        
+            }
+             
+             
+             this.uploadDialogVisible = false;
             },
             getUpload(t){
               this.type=t;
@@ -2465,8 +2664,32 @@ export default {
               }
 
 
-
-
+              //报批信息
+               if(this.pd1.informationoperation==undefined || this.pd1.informationoperation=="")
+               {
+                  this.$message.error("信息操作不能为空！");return;
+               }
+               //领导审核
+                if(this.pd1.informationoperation=='0199000011'){
+                    
+                     if(this.pd1.checkuserid==undefined || this.pd1.checkuserid=="")
+                      {
+                          this.$message.error("审批领导不能为空！");return;
+                      }
+                }else if(this.pd1.informationoperation=='0199000012'){
+                  if(this.bppd.checkcontents==undefined || this.bppd.checkcontents=="")
+                      {
+                          this.$message.error("审批意见不能为空！");return;
+                      }
+                  if(this.bppd.checkuserid==undefined || this.bppd.checkuserid=="")
+                      {
+                          this.$message.error("审批人不能为空！");return;
+                      }
+                  if(this.bppd.checkresult==undefined || this.bppd.checkresult=="")
+                      {
+                          this.$message.error("审批结果不能为空！");return;
+                      } 
+                }
 
                url='/CaseRegisterController/saveCaseRegisterInfo';
                 // this.pd1.letternumber=this.pd0.letternumber;
@@ -2485,6 +2708,19 @@ export default {
                     keyname=keyname.substr(0,keyname.length-1);
                     keycontent=keycontent.substr(0,keycontent.length-1);
               }
+
+
+                 this.bppd.isassign='0218000001';
+                 var arr=[];
+                 for (let i = 0; i < this.filedata7.length; i++) {
+                   arr.push(this.filedata7[i]);
+                 }
+                 for (let i = 0; i < this.filedata8.length; i++) {
+                   arr.push(this.filedata8[i]);
+                 }
+                this.bppd.filelist=arr;
+                 
+
               p={
                   'token':this.$store.state.token,
                   'year':this.year,
@@ -2496,6 +2732,7 @@ export default {
                   'focuscaseinfo':this.pd1,
                   'caseletterandsource':this.form1data,
                   'bufocuscasejointperson':this.tableData0,
+                  'approvalinfo':this.bppd,
                   };        
                break;
              case '1':
@@ -2805,6 +3042,58 @@ export default {
                     }
                 });
         },
+
+        //得到督办号
+        getDBHBP(n,t){
+          if(n=="" || n==null){
+            this.$set(this.bppd,'assignyear','')
+            this.$set(this.bppd,'assigntypeno','')
+            this.$set(this.bppd,'assigninformno','')
+            this.dbhbp='';
+            return;
+          }
+          if(t==0){
+              if(this.bppd.assignyear==undefined || this.bppd.assignyear==''){
+                this.$message.error("请选择督办年份!");return;
+              }
+          }else if(t==1){
+             if(this.bppd.assigntypeno==undefined || this.bppd.assigntypeno==''){
+                this.$message.error("请选择督办类别!");return;
+              }
+          }
+ 
+          let p={
+            "assignyear":this.bppd.assignyear,
+            "assigntype":this.bppd.assigntypeno,
+            "token":this.$store.state.token
+          };
+          var obj = {};
+                      obj = this.dblbdata.find(item =>{
+                          return item.dm === this.bppd.assigntypeno 
+                      });
+
+          this.bppd.assigntypename = obj.mc
+
+           var obj1 = {};
+                      obj1 = this.$store.state.dbnf.find(item =>{
+                          return item.dm === this.bppd.assignyear 
+                      });
+             this.bppd.assignyearname = obj1.mc;
+
+            
+             this.$api.post(this.Global.aport1+'/CaseAssignController/queryAssignSort',p,
+                r =>{
+                    if(r.code==1){
+                      if(r.data!=undefined && r.data!='') {
+                          this.dbhbp="第 "+r.data+" 号";
+                          this.bppd.assignsort=r.data;
+                      
+                          this.bppd.assignno=this.bppd.assigntypename+"( "+this.bppd.assignyearname+" ) 第"+r.data+"号";;
+                          this.bppd.assigninformno=this.bppd.assigntypename.replace("函","")+"( "+this.bppd.assignyearname+" ) 第"+r.data+"号";
+                        }
+                    }
+                });
+        },
         //承办部门
         getcbbm(){
           let p={
@@ -3005,8 +3294,11 @@ export default {
         getdic(n){
                  this.dicDialogVisible=true;
           },
-        DfatherMethod(t){
-             this.dicDialogVisible=false;
+        dicfatherMethod(t){
+          if(t=='99'){
+          
+          }
+         this.dicDialogVisible=false;
         },
         chChangelist(val,t,n){
           if(val=='' || val==null){
@@ -3027,7 +3319,7 @@ export default {
           }
           else if(n==2){
             var obj = {};
-                      obj = this.$store.state.dblb.find(item =>{
+                      obj = this.dblbdata.find(item =>{
                           return item.dm === val 
                       });
                       this.pd2.assigntypename = obj.mc
@@ -3065,6 +3357,19 @@ export default {
                 this.pd1.checkorgid = obj.orgId
                 this.pd1.checksuborgid = obj.subOrgId
              }
+          }else  if(n==7){
+            var obj = {};
+                      obj = this.dblbdata.find(item =>{
+                          return item.dm === val 
+                      });
+                      this.bppd.assigntypename = obj.mc
+          }
+          else if(n==8){
+               var obj = {};
+                  obj = this.$store.state.dbnf.find(item =>{
+                      return item.dm === val 
+                   });
+             this.bppd.assignyearname = obj.mc
           }
         },
         //关注案件在办结界面选择办结时间是自动计算是否期限内办结和超期时间
@@ -3119,6 +3424,7 @@ export default {
             this.$set(this.pd1,'isinterestrelations','0')
           }
         },
+      
     },
     filters:{
         filertype(t){

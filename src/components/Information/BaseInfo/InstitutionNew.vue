@@ -2,7 +2,7 @@
     <div class="personnel">
       <div class="homebread">
           <i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-          <span> 基本信息库 
+          <span> 基本信息 
           <span class="mlr_10">/</span><span>{{cname1}}</span>
           <span class="mlr_10" v-if="cname2 != ''">/</span><span v-if="cname2 != ''"><b>{{cname2}}</b></span>
           <span class="mlr_10" v-if="mzname != ''">/</span><span v-if="mzname != ''"><b>{{mzname}}</b></span>
@@ -313,7 +313,7 @@ export default {
          
      },
       goBase(){  
-       this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:this.title,jb:this.jb,xzqh:this.code,lx:this.lx}});
+       this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:this.title,jb:this.jb,xzqh:this.code,lx:this.lx,pt:1}});
       },
       goseach(){
           this.$router.push({name:'InstitutionList',query:{type:this.addtype,lx:this.lx}})

@@ -1,22 +1,22 @@
 <template>
     <div>
-         <el-form :model="form" >
+      
                 <el-row class="ah-40">
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 名称：</span>
-                        <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form.DicName"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" size="small"  clearable v-model="form.DicName"  class="yy-input-input" ></el-input>
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 简称：</span>
-                        <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form.ShortName"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" size="small" clearable v-model="form.ShortName"  class="yy-input-input" ></el-input>
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 曾用名：</span>
-                        <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form.UsedName"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" size="small"  clearable v-model="form.UsedName"  class="yy-input-input" ></el-input>
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 上级编码：</span>
-                        <el-select v-model="form.DicParentCode" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="form.DicParentCode"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in sjbmlist"
                                  :key="ind"
@@ -27,24 +27,25 @@
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 排序：</span>
-                        <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form.DicSort"  class="yy-input-input" ></el-input>
+                        <el-input placeholder="请输入内容" size="small" clearable v-model="form.DicSort"  class="yy-input-input" ></el-input>
                     </el-col>
                       
                 </el-row>
-            <div slot="footer" class="dialog-footer">
-              <el-button type="primary"  size="small" @click="addsave()" v-if="tb!=2">保 存</el-button>
+            <div slot="footer" class="dialog-footer" style="text-align:center;margin-top:20px">
+              <el-button type="primary"  size="small" @click="addsave()">保 存</el-button>
               <el-button @click="addsave(0)" size="small">取 消</el-button>
             </div>
     </div>
 </template>
 <script>
 export default {
-     name:'DICTION',
+     name:'DIC',
      props:['data','type','random'],
     data(){
         return{
             form:{},
             sjbmlist:[],
+          
         }
     },
    mounted()
@@ -75,7 +76,7 @@ export default {
             if(t==0){
               this.$emit('dicfatherMethod','99'); 
             }else{
-
+                this.$emit('dicfatherMethod','99'); 
             }
         }
 

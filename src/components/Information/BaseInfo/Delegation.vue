@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="personnel">
           <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-            <span> 基本信息库
+            <span> 基本信息
             <span class="mlr_10" v-if="cname1 != ''">/</span><span v-if="cname1 != ''"><i class="iflast">{{cname1}}</i></span>
             <span class="mlr_10" v-if="cname2 != ''">/</span><span v-if="cname2 != ''"><i class="iflast">{{cname2}}</i></span>
             <span class="mlr_10" v-if="cname3 != ''">/</span><span v-if="cname3 != ''"><i class="iflast" :style="getStyle()">{{cname3}}</i></span>
@@ -149,9 +149,7 @@ export default {
          }else if(val.query.info!=undefined && val.query.info!=''){
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
-             console.log(this.info,'===');
-             
-           
+        
             this.count=0;
             this.addtype=this.info.type;
             this.group=this.info.key;

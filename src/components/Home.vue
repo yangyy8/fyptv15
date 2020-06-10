@@ -7,7 +7,7 @@
             <img style="margin-top:16px;" src="../assets/img/index/banner.png"/>
           </el-col>
           <el-col :span="15">
-            <div class="homenav" style="background: #fff">
+            <div class="homenav" style="background: #ffffff">
               <el-menu
                 router
                 mode="horizontal"
@@ -27,8 +27,8 @@
                   <i class="el-icon-user-solid"></i>
                   {{name}}
                   (<span style="font-size:12px;">
-                    {{orgname}},
-                    <span v-if='zwname!="null"'>{{zwname}}</span>
+                  <span :title="orgname"> {{orgname.length>10?orgname.substr(0,10)+'...':orgname}}</span>
+                  <span v-if='zwname!="null"'> , {{zwname}}</span>
                   </span>)
                 </span>
                 <el-dropdown-menu slot="dropdown" style="margin-top:-15px;">
@@ -96,6 +96,7 @@ export default {
   components: {
     NavMenu: NavMenu
   },
+
   data() {
     return {
       activeIndex: "indexs",
@@ -123,6 +124,7 @@ export default {
     //权限end
     this.getMenu();
   },
+
   methods: {
     handleCommand(command) {
       if (command == "a") {
@@ -199,15 +201,15 @@ export default {
       });
     },
     handleSelect(key, name) {
-      console.log(key, name);
-      if (this.$store.state.repeat == key) {
-        this.$router.push({
-          path: this.$route.fullPath,
-          query: { plan: Date.now().toString() }
-        });
-      } else {
-        this.$store.commit("getRepeat", key);
-      }
+      // console.log(key, name);
+      // if (this.$store.state.repeat == key) {
+      //   this.$router.push({
+      //     path: this.$route.fullPath,
+      //     query: { plan: Date.now().toString() }
+      //   });
+      // } else {
+      //   this.$store.commit("getRepeat", key);
+      // }
     }
   }
 };
@@ -235,8 +237,6 @@ export default {
   margin-right: 8px;
 }
 
-.indexnew2 .zcd{ padding:14px 0px 26px 0px; border-right: 10px solid #EDEDED;  height: 80px; cursor: pointer; text-align: center; color: #ffffff; font-size: 20px;float: left;}
-.indexnew2 .zcd:hover{background: #2D76B8;border-right: 10px solid #EDEDED;  text-align: center; color: #ffffff; font-size: 20px;float: left;}
 </style>
 <style>
 /* 水平样式 */

@@ -240,5 +240,10 @@
 .bglc .cblue{color: #7C95DC;}
 .bglc .backcolor{background-color:#FDF7EE;}
 .bglc .borderb{border-bottom: 1px solid #cccccc;}
+.select-popper .el-select-dropdown__item{
+  width: 500px;
+}
+
+.wxq .el-table__header-wrapper .el-checkbox{display: none;}
 
 

@@ -24,6 +24,7 @@ const jb=zddz+"dic_osbu_sessiontype";//届别
 const jjb=zddz+"dic_osbu_circlestype";//界别
 const cb=zddz+"dic_osbu_timestype";//次别
 const xxcz=zddz+"dic_osbu_informationoperation";//信息操作
+const xxczbq=zddz+"dic_osbu_caseinformationoperation";//报批信息操作
 const spjg=zddz+"dic_osbu_checkresult";//审批结果
 const jgydbyj=zddz+"dic_osbu_representativesatisfaction";//结果与代表意见
 const gtxs=zddz+"dic_osbu_communicatetype";//沟通形式
@@ -97,6 +98,7 @@ const zjqf=zddz+'dic_osbu_inbeijingdistinguish';//在京区分
 const qxnbj=zddz+"dic_osbu_intimecompleteddistinguish";//期限内办结区分
 const tyjdytjdw=zddz+"dic_ioex_supervisorrecommendedunit";//特约监督员推荐单位
 const tyzxytjdw=zddz+"dic_ioex_consultantrecommendedunit";//特邀咨询员推荐单位
+const wjlb=zddz+"dic_ioex_workfiletype";//工作文件类别
 const sydw="/org/getAllOrg";//所有单位
 const fydw="/org/getCourtOrg";//法院单位
 const rddw="/org/getCourtOrg";//人大单位
@@ -157,5 +159,5 @@ export default
     cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,menuurl,
     REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL,jpyy,tysf,tyjburl,
     MZDP1,MZDP2,MZDP3,MZDP4,MZDP5,MZDP6,MZDP7,MZDP8,sflr,jdqf,jburl,tburl,jjburl,tylburl,bxqf,zfxwjb,
-    lxss,cwhwy,sbjys,zjqf,dyzt,
+    lxss,cwhwy,sbjys,zjqf,dyzt,xxczbq,wjlb,
 }

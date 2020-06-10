@@ -3,7 +3,7 @@
                     <el-row class="ah-40">
                     <el-col :span="12">
                         <span class="yy-input-text trt">法院人员：</span>
-                          <el-select v-model="form1.courtInsiderId" :disabled="type=='4'" @change="getYjdxx(form1.courtInsiderId)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                          <el-select v-model="form1.courtInsiderId" :disabled="type=='4'" remote :remote-method="fyryremoteMethod" v-el-select-loadmore="fyryloadmore"  @focus="getfocus"    @change="getYjdxx(form1.courtInsiderId)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in pairfydata"
                                 :key="ind"
@@ -12,9 +12,9 @@
                                </el-option>
                         </el-select>
                     </el-col>
-                    <el-col :span="12">
+                    <!-- <el-col :span="12">
                         <span> {{remark}}</span>
-                    </el-col>
+                    </el-col> -->
                     </el-row>
                       <el-row class="ah-40">
                           
@@ -151,6 +151,22 @@
 export default {
     name:'PAIR',
     props:['url','data','type','random'],
+     directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                  binding.value();
+                }
+              });
+            }
+          }
+  },
     data(){
         return{
             form1:{},
@@ -161,6 +177,15 @@ export default {
             listdatatemp:[],
             pairTime:'',
             remark:'',
+            formData: {   //下拉参数
+              pageIndex: 1,
+              pageSize: 20
+            },
+            tempload:[],
+            jdrload:[],
+            jznum:5,
+            bs:0,
+
            
 
         }
@@ -180,7 +205,7 @@ export default {
         getinit(){
            this.listdatadb=[];this.listpair=[];
            this.remark="";this.pairTime=""
-            this.getPairFy('','0');
+            this.getPairFy(this.data.courtOutsiderId,'0');
             this.$set(this.form1,'jointperson',this.data.courtOutsiderIdName);
         },
        savelist(t){
@@ -191,7 +216,8 @@ export default {
             var array=this.listdatatemp;
             var nname="";
              for (let i = 0; i < array.length; i++) {
-                 if(array[i].personId!=this.form1.courtInsiderId && array[i].personId!=null && array[i].pairName!='无')
+             
+                 if(array[i].personId!=this.form1.courtInsiderId && array[i].personId!=null && array[i].pairName!=undefined && array[i].pairName!=null && array[i].pairName!='')
                  {
                    nname += array[i].personName+',';
                  }
@@ -227,14 +253,23 @@ export default {
           this.$emit('pairfatherMethod',this.type,data); 
        },
           //法院人员
-        getPairFy(name,t){
+        getPairFy(val,t){
             let  p={
-             'personName':name,
+             'personName':'',
             };
               this.$api.post(this.Global.aport1+'/courtPerson/getPairInfo',p,
              r =>{
+                   
+                  if(r.code==1){
+                    this.jdrload=r.data;
 
-                   this.pairfydata=r.data;
+                     if(val){
+                         var arr = this.jdrload.filter(item=>{
+                                return item.courtPersonId.indexOf(val) + 1
+                              });
+                              this.pairfydata=arr;
+                      }
+
                    if(t==0){
                       this.$set(this.form1,'courtInsiderId',this.data.courtOutsiderId);
                         if(this.form1.courtInsiderId!=null && this.form1.courtInsiderId!='')
@@ -242,38 +277,80 @@ export default {
                             this.getYjdxx(this.form1.courtInsiderId);
                         }
                    }
+                  }
 
             });
 
         },
+          //法院人员远程搜索新方法
+      fyryremoteMethod(quer){
+          if (quer !== '') {
+            this.cdrdata=[];
+             
+             let  p={
+             'personName':quer,
+             };
+              this.$api.post(this.Global.aport1+'/courtPerson/getPairInfo',p,
+             r =>{
+                   if(r.code==1){
+                      this.jdrload=r.data;
+                      if(this.jdrload.length>this.jznum){
+                          this.pairfydata=this.jdrload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.pairfydata=this.jdrload;
+                        }
+                     
+                   }
+                  
+            });
+
+            
+          }else{
+           this.cdrdata=[];
+          }
+            
+        },
+     //法院人员加载
+     fyryloadmore() {
+        if(this.bs==1){return;}
+        var srr= this.jdrload;
+        this.formData.pageIndex++;
+        let num = this.formData.pageIndex * this.formData.pageSize;
+           this.pairfydata=srr.filter((item, index, arr) => {
+               return index < num;
+         });
+      },
+
           //已结对信息
         getYjdxx(val){
             
            if(val!=''){
             
-                 var obj = {};
-                     obj = this.pairfydata.find(item =>{
+                //  var obj = {};
+                //      obj = this.pairfydata.find(item =>{
                       
-                        return item.courtPersonId === val
-                    });
-                     this.remark='';
-                     if(obj!=undefined && obj!=null && obj!=''){
-                     this.remark="详情："+obj.fullName+" , "+obj.sex;
+                //         return item.courtPersonId === val
+                //     });
+                //      this.remark='';
+                //      if(obj!=undefined && obj!=null && obj!=''){
+                //      this.remark="详情："+obj.fullName+" , "+obj.sex;
                   
-                      if(obj.birthday!=null){
-                         this.remark+=" , "+obj.birthday;
-                     }
-                     if(obj.degree!=null){
-                         this.remark+=" , "+obj.degree;
-                     }
-                      if(obj.partisan!=null){
-                         this.remark+=" , "+obj.partisan;
-                     }
-                      if(obj.address!=null){
-                         this.remark+=" , "+obj.address;
-                     }
-                    }
-                    console.log(this.remark,'remark');
+                //       if(obj.birthday!=null){
+                //          this.remark+=" , "+obj.birthday;
+                //      }
+                //      if(obj.degree!=null){
+                //          this.remark+=" , "+obj.degree;
+                //      }
+                //       if(obj.partisan!=null){
+                //          this.remark+=" , "+obj.partisan;
+                //      }
+                //       if(obj.address!=null){
+                //          this.remark+=" , "+obj.address;
+                //      }
+                //     }
+                   
+                   
                     
 
             this.listpair=[];
@@ -287,6 +364,9 @@ export default {
                     this.listpair=r.data;
                   }
             });
+            }else{
+              this.pairfydata=[];
+              this.listpair=[];
             }
         },
          //代表姓名
@@ -377,7 +457,10 @@ export default {
             　　　　　　　　})
             　　　　　 this.listdatatemp.splice(index1,1)
                  }
-        }
+        },
+        getfocus(){
+          this.pairfydata=[];
+        },
        
 
    },

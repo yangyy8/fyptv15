@@ -1,7 +1,7 @@
 <template lang="html">
     <div class="personnel">
           <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
-          <span> 基本信息库 <span class="mlr_10">/</span> 各级法院 
+          <span> 基本信息 <span class="mlr_10">/</span> 各级法院 
            <span class="mlr_10">/</span><b>{{codemc}}{{cname}}</b></span> 
            </div>
           <div class="content">

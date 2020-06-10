@@ -11,7 +11,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="6">
                             <span class="yy-input-text">所属法院</span>
-                           <el-select v-model="pd.orgId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.orgId"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fylist"
                                  :key="ind"

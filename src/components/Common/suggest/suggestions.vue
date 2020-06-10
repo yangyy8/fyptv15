@@ -19,7 +19,7 @@
              </el-col>
              <el-col :span="24" class="mt-10">
               <span class="yy-input-text trt topt">意见建议：</span>
-              <el-input placeholder="请输入内容" type="textarea" v-model="rowdata.contents"  :disabled="sbnt" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable  class="yy-input-input inputw" ></el-input>
+              <el-input placeholder="请输入内容" type="textarea" v-model.trim="rowdata.contents"  :disabled="sbnt" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable  class="yy-input-input inputw" ></el-input>
               </el-col>
              <el-col :span="24" class="mt-10"  style="text-align: center;">
                       <el-button type="success" size="small" plain @click="getAdd()">加入列表</el-button>
@@ -34,8 +34,14 @@
                             </el-table-column>
                              <el-table-column
                                 prop="contents"
-                                label="活动意见建议"
-                                :show-overflow-tooltip="true">
+                                label="活动意见建议">
+                                 <template slot-scope="scope">
+                                  <el-popover placement="top-start" width="500" trigger="hover" style="text-align:left" v-if="scope.row.contents">
+                                       <div>{{scope.row.contents}}</div>
+                                      <div slot="reference">{{ scope.row.contents.substr(0,40)}}{{scope.row.contents.length>40?'......':''}}</div>
+                                  </el-popover>
+                                </template>
+
                             </el-table-column>
                               <el-table-column
                                   label="操作" width="120">
@@ -129,72 +135,73 @@ export default {
             if(t==0){
                     this.$emit('yjsfatherMethod','99'); 
             }else{
-               
-               if(this.yjlistdata && this.yjlistdata.length==0){
-                   this.$message.error("请输入意见建议");return;
-               }
-
-               this.tempdata=[];
-                if(this.yjdata && this.yjdata.length>0){
-//                     var ff=false;
-//                 var index = this.yjdata.findIndex(item =>{
-// 　　　　　　　　　  if(item.leaderPerson==this.leaderPerson){
-//                           ff=true;
-//         　　　　　　　　　　return ff;
-//         　　　　　　　　　}
-//         　　　　　　})
-//                  if(ff){this.yjdata.splice(index,1)}
-
-              
-               
-                  for (let ii = 0;ii<this.yjdata.length;ii++){
-                          let item = this.yjdata[ii];
-                          if (item.leaderPerson==this.rowdata.leaderPerson){
-                          this.yjdata.splice(ii,1);
-                          ii--
-                          }
-                      } 
-                  this.tempdata=this.yjdata;
-            
-                 
-                 }
-
-                  var obj={};
-                  obj = this.namelist.find(item =>{
-                        return item.personId === this.rowdata.leaderPerson
-                    });
-                
-                  var oobj={};
-                  oobj.leaderPerson=this.rowdata.leaderPerson;
-                  oobj.leaderPersonName=obj.personName;
-                  oobj.overallAssessment=this.spd.overallAssessment;
-                  oobj.remark=this.spd.remark;
-                  oobj.feedBackStatus='';
-                  oobj.feedBackTime='';
-                  oobj.yjlistdata=this.yjlistdata;
-                  
-                  this.tempdata.push(oobj);
-                   
-
-                 this.$emit('yjsfatherMethod',this.type,this.tempdata);
-            }
-
-        },
-       
-         getReset(val){
+                 if(this.rowdata.leaderPerson=='' || this.rowdata.leaderPerson==null || this.rowdata.leaderPerson==undefined){
+                        this.$message.error('请选择领衔人员');return;
+                  }
              
-            //  列表中的意见建议尚未保存，切换人员会丢失尚未保存的意见建议，请确认是否切换？
+               
+               if(this.rowdata.contents!=undefined && this.rowdata.contents!='' && this.rowdata.contents!=null){
+                this.$confirm('当前有意见建议未加入列表，是否确认保存？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                    
+                         this.submitsave();
 
+                }).catch(() => {
+                      this.$message.info("已取消操作");return;
+               
+                 }); 
+               }else{
+                   this.submitsave();
+               }
+            }
+        },
+        submitsave(){
+                           if(this.yjlistdata && this.yjlistdata.length==0){
+                                    if(this.spd.overallAssessment=='' || this.spd.overallAssessment==null || this.spd.overallAssessment==undefined){
+                                        if(this.spd.remark=='' || this.spd.remark==null || this.spd.remark==undefined){
+                                                    this.$message.error('意见建议、总体评价、备注至少填写一项!');return;
+                                        }
+                                }
+                                
+                            }
+                            this.tempdata=[];
+                            if(this.yjdata && this.yjdata.length>0){
+                            for (let ii = 0;ii<this.yjdata.length;ii++){
+                                    let item = this.yjdata[ii];
+                                    if (item.leaderPerson==this.rowdata.leaderPerson){
+                                    this.yjdata.splice(ii,1);
+                                    ii--
+                                    }
+                                } 
+                               this.tempdata=this.yjdata;
+                            }
+                           
+                            var obj={};
+                            obj = this.namelist.find(item =>{
+                                    return item.personId === this.rowdata.leaderPerson
+                                });
+                            
+                            var oobj={};
+                            oobj.leaderPerson=this.rowdata.leaderPerson;
+                            oobj.leaderPersonName=obj.personName;
+                            oobj.overallAssessment=this.spd.overallAssessment;
+                            oobj.remark=this.spd.remark;
+                            oobj.feedBackStatus='';
+                            oobj.feedBackTime='';
+                            oobj.yjlistdata=this.yjlistdata;
+                            this.tempdata.push(oobj);
+                            this.$emit('yjsfatherMethod',this.type,this.tempdata);
+        },
+         getReset(val){
+            //  列表中的意见建议尚未保存，切换人员会丢失尚未保存的意见建议，请确认是否切换？
             if(this.pbid==''){
                 this.pbid=val;
             }
             
-        //   if(this.yjdata.length==0){
-            
-        //     if(this.yjlistdata && this.yjlistdata.length>0){
-        //       this.getTS(val);
-        //     }
-        //   }else{  
+        
                
                 var obj={};
                 obj = this.yjdata.find(item =>{
@@ -213,7 +220,7 @@ export default {
 
                this.init=1;
 
-        //   }
+       
 
          },
          getTS(val,obj){
@@ -256,7 +263,7 @@ export default {
                 this.$message.error('请选择领衔人员');return;
             }
             if(this.rowdata.contents=='' || this.rowdata.contents==null || this.rowdata.contents==undefined){
-                this.$message.error('请输入意见建议');return;
+                this.$message.error("请输入意见建议");return;
             }
             if(this.selected==null){
                     var obj={};

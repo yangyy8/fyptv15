@@ -15,6 +15,9 @@ textarea{resize: none!important;}
 .mb-20{margin-bottom: 20px;}
 .mb-50{margin-bottom: 50px;}
 .mt-50{margin-top: 50px;}
+.ml-50{margin-left: 100px;}
+.ml-40{margin-left: 40px;}
+.ml-30{margin-left: 30px;}
 .ml-20{margin-left: 20px;}
 .ml-10{margin-left: 10px;}
 .pl-10{padding-left: 10px;}
@@ -24,6 +27,7 @@ textarea{resize: none!important;}
 .mr-10{margin-right: 10px;}
 .lh{line-height: 40px;}
 .lh-25{line-height:25px;}
+.ah-30{line-height: 30px;}
 .ah-40{line-height: 40px;}
 .ah-45{line-height: 45px;}
 .ah-50{line-height: 50px;}
@@ -69,11 +73,12 @@ textarea{resize: none!important;}
 .homenav ul li:hover{background-color: #2B5F98;}
 .homenav .active{background-color: #2B5F98;}
 .homenav .line{border-right: 1px solid #4D678A;}
+
 .homemain{background-color: #EDEDED; text-align: left;}
 .homebread{height: 40px;padding-top: 50px; font-size: 12px;}
 .homebread span{margin-left: 10px;}
 .content{background-color: #ffffff;min-height: 500px;padding: 25px 30px 0px 30px;margin-bottom: 20px;}
-.context{line-height: 45px;}
+.context{line-height: 40px;}
 .el-input.is-disabled .el-input__inner{
   color:#333333!important;
 }
@@ -137,7 +142,7 @@ textarea{resize: none!important;}
 .txtsl{overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
 .el-dialog__header{text-align: left; background-color: #262632; border-bottom:1px solid #eeeeee;border-top-left-radius: 5px;border-top-right-radius: 5px;}
 .el-dialog__title{color: #ffffff!important; border-radius: 10px;}
-.el-dialog__body{padding: 20px 20px!important;}
+.el-dialog__body{padding: 20px 10px!important;}
 .el-dialog{border-radius: 5px;}
 .el-dialog__body .el-input__inner{border-radius:5px!important;border:1px solid #cccccc;}
 .diaform{background:#F8F9FE; padding:10px 0px; border-bottom:1px solid #eeeeee}
@@ -162,7 +167,7 @@ textarea{resize: none!important;}
   width: 47%!important;
 }
 .el-input--small .el-input__icon{
-  line-height: 40px;
+  line-height: 40px!important;
 }
 .septum{
   display: inline-block;

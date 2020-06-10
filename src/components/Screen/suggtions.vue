@@ -247,7 +247,7 @@
                       <li v-for="(t,ind) in noticetypeList" :key='ind'>
                         <div class="fleft ml-20 color f-14 right" style="width:28%">{{t.name}}：</div>    
                         <div class="fleft">
-                            <img src="../../assets/img/screen/jd-1.png" class="mr-5" v-for="t in t.value%20+1" :key="t">
+                            <img src="../../assets/img/screen/jd-1.png" class="mr-5" v-for="t in t.value%20" :key="t">
                         </div>
                         <div class="fleft color f-14 ml-10">{{t.value}}</div>
                         <div class="clear"></div>

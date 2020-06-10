@@ -8,11 +8,48 @@
                 <el-radio v-model="showMode" label="0237000099">不展示</el-radio>
                 <el-radio v-model="showMode" label="0237000001">头部展示</el-radio>
                 <el-radio v-model="showMode" label="0237000002">底部展示</el-radio>
-                <!-- <el-radio v-model="showMode" label="0237000003" @change="getList">内容中展示</el-radio> -->
+                <el-radio v-model="showMode" label="0237000003" @change="getList">内容中展示</el-radio>
                 </div>
              </el-col>
             
-
+            <el-col :span="24" v-if='showMode=="0237000003"'  style="max-height:160px; overflow-y: auto">
+             
+                 <div v-for="(fit,ind) in fits" :key="ind">
+                            <div class="block" style="float:left;margin-right:20px;margin-top:10px" v-if='getImgV(fit.fileSuffix)'>
+                                
+                            <el-popover placement="right" title="" trigger="click">
+                              <img :src="fit.filePath"  style="max-width:700px; max-height:700px;"/>
+                              <img :src="fit.filePath" slot="reference" width="80" height="80">
+                            </el-popover><br>
+                                <el-button size="mini" 
+                                v-clipboard:copy="fit.filePath" 
+                                v-clipboard:success="copy" 
+                                v-clipboard:error="onError">
+                                复制</el-button>
+                            </div>
+                              <div class="block" style="float:left;margin-right:20px;margin-top:10px" v-else>
+                               <el-popover placement="right" title="" trigger="click">
+                               <video  
+                                    :src="fit.filePath" width="550" height="500"
+                                    class="avatar video-avatar" 
+                                    controls="controls" >
+                                    您的浏览器不支持视频播放
+                               </video>
+                                <video  
+                                    :src="fit.filePath" width="80" height="80"
+                                    class="avatar video-avatar" 
+                                    controls="controls" slot="reference">
+                                    您的浏览器不支持视频播放
+                               </video>
+                              </el-popover><br>
+                                      <el-button size="mini"
+                                      v-clipboard:copy="getsp(fit.filePath)" 
+                                      v-clipboard:success="copy" 
+                                      v-clipboard:error="onError">复制</el-button>
+                            </div>
+                          
+                        </div>
+            </el-col>
              <el-col :span="24" class="tlt">
                  <span style="font-size:16px;">公开内容</span>
                  </el-col>
@@ -36,14 +73,19 @@
         </div> 
     </div>
      <div v-else>
-                    <el-tabs type="card">
+              <el-tabs type="card">
                     <el-tab-pane label="掌上联络室">
                         <div class="phone">
                             <div class="phonecont">
                               <div class="top">联络活动</div> 
                               <div style="height:500px;overflow-y: auto;">
-                              <div class="article" v-if='showMode=="0237000002"'>{{publicContents}}</div>
-                                <el-row  class="imgs" v-if='showMode=="0237000001" || showMode=="0237000002"'>
+                              <div class="article" v-if='showMode=="0237000003"'>
+                                  <div v-html="editorContent"  style="margin:10px 20px"></div>
+                              </div>
+                              <div class="article" v-if='showMode=="0237000002"'>
+                                  <div v-html="publicContentstr" style="text-indent:2em;margin:10px 20px"></div>
+                              </div>
+                        <el-row  class="imgs" v-if='showMode=="0237000001" || showMode=="0237000002"'>
                        <el-col :span="24" v-if="fits && fits.length>0" style="text-align:center">
                      
                         <div v-for="(fit,ind) in fits" :key="ind">
@@ -76,7 +118,9 @@
                         </div>
              </el-col>
                                 </el-row>
-                                <div class="article" v-if='showMode=="0237000001" || showMode=="0237000099"'>{{publicContents}}</div>
+                                <div class="article" v-if='showMode=="0237000001" || showMode=="0237000099"'>
+                                       <div v-html="publicContentstr" style="text-indent:2em;margin:10px 20px"></div>
+                                </div>
                            </div>
                              </div>
                         </div>
@@ -84,7 +128,12 @@
                     <el-tab-pane label="外网平台">
                           <div class="phonecontw">
                                <div style="height:500px;overflow-y: auto;">
-                              <div class="article" v-if='showMode=="0237000002"'>{{publicContents}}</div>
+                               <div class="article" v-if='showMode=="0237000003"'>
+                                  <div v-html="editorContent"></div>
+                              </div>
+                              <div class="article" v-if='showMode=="0237000002"'>
+                                    <div v-html="publicContentstr" style="text-indent:2em;margin:10px 20px"></div>
+                              </div>
                                 <el-row  class="imgs" v-if='showMode=="0237000001" || showMode=="0237000002"'>
                                   <el-col :span="24" v-if="fits && fits.length>0">
                      
@@ -118,7 +167,9 @@
                         </div>
              </el-col>
                                 </el-row>
-                                <div class="article" v-if='showMode=="0237000001" || showMode=="0237000099"'>{{publicContents}}</div>
+                                <div class="article" v-if='showMode=="0237000001" || showMode=="0237000099"'>
+                                      <div v-html="publicContentstr" style="text-indent:2em;margin:10px 20px"></div>
+                                </div>
                              </div>
                               </div>
                     </el-tab-pane>
@@ -132,7 +183,9 @@
     </div>
 </template>
 <script>
+
 import E from 'wangeditor'
+
 export default {
     name:'editor',
     props:['url','data','type','random'],
@@ -144,8 +197,10 @@ export default {
               content:'',
               txtcontent:'',
               publicContents:'',
+              publicContentstr:'',
               isyl:true,
               fits:[],
+              height:'350px',
               
           }
     },
@@ -158,18 +213,27 @@ export default {
       random:function(newVal,oldVal){
           this.showMode="";
           this.publicContents='';
+          this.publicContentstr='';
           this.content="";
+          this.editorContent="";
           this.getinit();
       },
     },
 
     methods:{
+        copy(e) {
+         this.$message.success("已复制到剪贴板！");
+        },
+        onError(e) {
+         this.$message.error("复制不起作用啦！");
+        },
         getinit()
         { 
             this.isyl=true;
            
              if(this.data.length==1){
                this.publicContents=this.data[0].contents;
+               this.publicContentstr=this.publicContents.replace(/\n/g,'<br />');
                this.fits=this.data[0].imageList;
                console.log(this.data,this.data[0].imageList,'fits');
                
@@ -188,17 +252,21 @@ export default {
             
                   
          },
-          getList(){
+          getList(t){
                 var editor = new E('#editorElem')
                     editor.customConfig.onchange = (html) => {
                     this.editorContent = html
                     }
-                    editor.create()
+                    editor.create();
+                 if(t==1){
+                       editor.txt.html(this.editorContent);
+                 }else{
                     if(this.data.length==1){
                         editor.txt.html(this.data[0].contents);
                      }else{
                         editor.txt.html("");
                     }
+                }
           },
          
         submit(t){
@@ -238,11 +306,17 @@ export default {
             if(this.showMode==''){
                this.$message.error("影像资料展示模式不能为空！");return;
              }
+        
+             
             this.isyl=false;
         },
         canlce(){
-            this.getList();
             this.isyl=true;
+            setTimeout(()=>{
+                this.getList(1);
+            },100)
+          
+            
         },
          getImgV(n){
            if(n=='' || n==null){return;}
@@ -256,6 +330,10 @@ export default {
           }
           return false;
         },
+        getsp(val){
+            return '<iframe src='+val+'></iframe>';
+        }
+     
     },
 }
 </script>
@@ -266,7 +344,7 @@ export default {
 .openmain .phonecont{text-align: left;padding: 95px 28px 100px 28px;}
 .openmain .phonecont .top{background: #eeeeee;line-height: 50px; font-size: 16px; padding-left: 10px;}
 .openmain  .imgs{text-align: center;margin: 5px 10px;}
-.openmain  .article{padding: 10px 20px;line-height: 25px;text-indent:30px}
+.openmain  .article{ line-height: 25px; padding: 10px 0px;}
 .openmain .block{line-height: 30px; text-align: center;}
 .openmain .phonecontw{text-align: left;}
 </style>
