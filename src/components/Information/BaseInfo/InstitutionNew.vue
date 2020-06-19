@@ -119,7 +119,7 @@ export default {
            //权限start
            var mid=getmenu(this.addtype,this.jb,this.lx);
            this.alldata=getdata(this.addtype,this.jb,this.lx);
-           console.log(mid,'===', this.alldata,'--',this.lx);
+           
            this.$api.post(this.Global.menuurl,{'menuId':mid},
                      r =>{
                      

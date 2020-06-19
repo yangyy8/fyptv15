@@ -147,7 +147,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">学历</span>
-                           <el-select v-model="pd.education" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.educations" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in $store.state.xl"
                                  :key="ind"
@@ -470,6 +470,9 @@ export default {
                                 this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
                          
                             }   
+                             this.getCheckList();
+                             this.getjb();
+                             this.gettylb();
                           }else if(r.code==0){
                             this.$router.push({path:'/limitmsg'});
                           }
@@ -477,11 +480,10 @@ export default {
          //权限end
 
            this.viewtype=val.query.type;
-            this.getCheckList();
+           
            // this.getXHFT();
           //  this.getOrg();
-            this.getjb();
-            this.gettylb();
+          
         },
         gettylb(){
                   let p={
@@ -693,8 +695,9 @@ export default {
                       if(r.code==1){
                           this.tableData=r.data.specialPersonList;
                           this.TotalResult=r.data.pageInfo.total;
-                          this.querybnt=true;
+                        
                       }
+                     this.querybnt=true;
                 });
         
         },

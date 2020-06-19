@@ -23,8 +23,8 @@
                         <el-col :span="24">
                             <el-checkbox v-model="rdchecked" @change="getrdclick(0)">人大代表</el-checkbox>
                             <span class="ml-40 ah12" v-if='rdshow[0]'>
-                                <el-checkbox v-model="rd.cj" class="antxt" @change="getrdclick(1)">层级</el-checkbox>
-                                <el-select v-model="rd.levelType" :disabled="!rdshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="rd.cj" class="antxt" @change="getrdclick(1,1)">层级</el-checkbox>
+                                <el-select v-model="rd.levelType" :disabled="!rd.cj" @change="getrdclick(1)"  placeholder="请选择" filterable clearable  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.jbb"
                                     :key="ind"
@@ -34,22 +34,23 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='rdshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="rd.sjrd" @change="getrdclick(2)">四级人大</el-checkbox>
-                                <el-select v-model="rd.orgid" :disabled="!rdshow[2]"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="rd.sjrd" @change="getrdclick(2,1)">四级人大</el-checkbox>
+                                <el-select v-model="rd.orgid" :disabled="!rd.sjrd" @change="getrdclick(2);getNull(rd.orgid,1);getJB(rd.orgid,1);getTB(rd.orgid)" remote :remote-method="rdorgremoteMethod" v-el-select-loadmore="rdorgloadmore" filterable clearable   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in rdorglist"
                                     :key="ind"
                                     :label="item.mc"
-                                    :value="item.dm">
+                                    :value="item.orgid">
                                     </el-option>
                                 </el-select>
                                <el-checkbox  v-model="rd.xjrd">含下级人大</el-checkbox>
                             </span>
+
                             <span class="ah12" v-if='rdshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="rd.jb" @change="getrdclick(3)">届别</el-checkbox>
-                             <el-select v-model="rd.periodType"  :disabled="!rdshow[3]" placeholder="请选择"  size="mini" class="aninput">
+                             <el-checkbox class="ml-20 antxt" v-model="rd.jb" @change="getrdclick(3,1)">届别</el-checkbox>
+                             <el-select v-model="rd.periodType"  :disabled="!rd.jb" placeholder="请选择" @change="getrdclick(3)" filterable clearable :no-data-text="rd.orgid?'无数据':'请先选择四级人大'"   size="mini" class="aninput">
                                 <el-option
-                                 v-for="(item,ind) in $store.state.jbb"
+                                 v-for="(item,ind) in rdjblist"
                                   :key="ind"
                                   :label="item.mc"
                                   :value="item.dm">
@@ -58,9 +59,9 @@
                             </span>
                             <span class="ah12" v-if='rdshow[3]'>
                                 <el-checkbox class="ml-20 antxt" v-model="rd.tb" @change="getrdclick(4)">团别</el-checkbox>
-                                <el-select v-model="rd.groupType" :disabled="!rdshow[4]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-select v-model="rd.groupType" :disabled="!rdshow[4]"  placeholder="请选择" filterable clearable :no-data-text="rd.orgid?'无数据':'请先选择四级人大'"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in tblist"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -72,8 +73,8 @@
                          <el-col :span="24">
                              <el-checkbox v-model="zxchecked" @change="getzxclick(0)">政协委员</el-checkbox>
                              <span class="ml-40 ah12" v-if='zxshow[0]'>
-                                <el-checkbox v-model="zx.cj" class="antxt" @change="getzxclick(1)">层级</el-checkbox>
-                                <el-select v-model="zx.levelType" :disabled="!zxshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="zx.cj" class="antxt" @change="getzxclick(1,1)" >层级</el-checkbox>
+                                <el-select v-model="zx.levelType" :disabled="!zx.cj"  @change="getzxclick(1)"  placeholder="请选择" filterable clearable  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.jbb"
                                     :key="ind"
@@ -83,22 +84,22 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='zxshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="zx.sjzx" @change="getzxclick(2)">四级政协</el-checkbox>
-                                <el-select v-model="zx.orgid" :disabled="!zxshow[2]"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="zx.sjzx" @change="getzxclick(2,1)">四级政协</el-checkbox>
+                                <el-select v-model="zx.orgid" :disabled="!zx.sjzx" filterable clearable   @change="getzxclick(2);getNull(zx.orgid,2);getJB(zx.orgid,2);" remote :remote-method="zxorgremoteMethod" v-el-select-loadmore="zxorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in zxorglist"
                                     :key="ind"
                                     :label="item.mc"
-                                    :value="item.dm">
+                                    :value="item.orgid">
                                     </el-option>
                                 </el-select>
                                <el-checkbox  v-model="zx.xjzx">含下级政协</el-checkbox>
                             </span>
                             <span class="ah12" v-if='zxshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="zx.jb" @change="getzxclick(3)">届别</el-checkbox>
-                             <el-select v-model="zx.periodType"  :disabled="!zxshow[3]" placeholder="请选择"  size="mini" class="aninput">
+                             <el-checkbox class="ml-20 antxt" v-model="zx.jb" @change="getzxclick(3,1)">届别</el-checkbox>
+                             <el-select v-model="zx.periodType"  :disabled="!zx.jb" filterable clearable @change="getzxclick(3);getJJB(zx.orgid,zx.periodType)" placeholder="请选择" :no-data-text="zx.orgid?'无数据':'请先选择四级政协'" size="mini" class="aninput">
                                 <el-option
-                                 v-for="(item,ind) in $store.state.jbb"
+                                 v-for="(item,ind) in zxjblist"
                                   :key="ind"
                                   :label="item.mc"
                                   :value="item.dm">
@@ -107,9 +108,9 @@
                             </span>
                             <span class="ah12" v-if='zxshow[3]'>
                                 <el-checkbox class="ml-20 antxt" v-model="zx.jjb" @change="getzxclick(4)">界别</el-checkbox>
-                                <el-select v-model="zx.circlesType" :disabled="!zxshow[4]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-select v-model="zx.circlesType" :disabled="!zxshow[4]" filterable clearable  placeholder="请选择"  size="mini" :no-data-text="zx.orgid?'无数据':'请先选择届别'" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in jjblist"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -120,10 +121,10 @@
                          <el-col :span="24">
                             <el-checkbox v-model="tychecked" @change="gettyclick(0)">特约人员</el-checkbox>
                             <span class="ml-40 ah12" v-if='tyshow[0]'>
-                                <el-checkbox v-model="ty.cj" class="antxt" @change="gettyclick(1)">法院等级</el-checkbox>
-                                <el-select v-model="ty.levelType" :disabled="!tyshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="ty.cj" class="antxt"  @change="gettyclick(1,1)">法院等级</el-checkbox>
+                                <el-select v-model="ty.levelType" :disabled="!ty.cj" @change="gettyclick(1)" filterable clearable   placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in $store.state.fyjb"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -131,39 +132,40 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='tyshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="ty.sjfy" @change="gettyclick(2)">四级法院</el-checkbox>
-                                <el-select v-model="ty.orgid" :disabled="!tyshow[2]"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="ty.sjfy" @change="gettyclick(2,1)">四级法院</el-checkbox>
+                                <el-select v-model="ty.orgid" :disabled="!ty.sjfy" filterable clearable   @change="gettyclick(2);getNull(ty.orgid,3);getTYLBList(ty.orgid);" remote :remote-method="tyorgremoteMethod" v-el-select-loadmore="tyorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in tyorglist"
                                     :key="ind"
                                     :label="item.mc"
-                                    :value="item.dm">
+                                    :value="item.orgid">
                                     </el-option>
                                 </el-select>
                                <el-checkbox  v-model="ty.xjfy">含下级法院</el-checkbox>
                             </span>
+                           
                             <span class="ah12" v-if='tyshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="ty.jb" @change="gettyclick(3)">届别</el-checkbox>
-                             <el-select v-model="ty.periodType"  :disabled="!tyshow[3]" placeholder="请选择"  size="mini" class="aninput">
-                                <el-option
-                                 v-for="(item,ind) in $store.state.jbb"
-                                  :key="ind"
-                                  :label="item.mc"
-                                  :value="item.dm">
-                                </el-option>
-                             </el-select>
-                            </span>
-                            <span class="ah12" v-if='tyshow[3]'>
-                                <el-checkbox class="ml-20 antxt" v-model="ty.tylb" @change="gettyclick(4)">特约类别</el-checkbox>
-                                <el-select v-model="ty.groupType" :disabled="!tyshow[4]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="ty.tylb" @change="gettyclick(3,1)">特约类别</el-checkbox>
+                                <el-select v-model="ty.specialType" :disabled="!ty.tylb" filterable clearable @change="gettyclick(3);getTYJB(ty.orgid,ty.specialType)"  placeholder="请选择" :no-data-text="ty.orgid?'无数据':'请先选择四级法院'"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in tylblist"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
                                     </el-option>
                                 </el-select>
                              </span>
+                              <span class="ah12" v-if='tyshow[3]'>
+                             <el-checkbox class="ml-20 antxt" v-model="ty.jb" @change="gettyclick(4)">届别</el-checkbox>
+                             <el-select v-model="ty.periodType"  :disabled="!tyshow[4]" filterable clearable  placeholder="请选择"  :no-data-text="ty.specialType?'无数据':'请先选择特约类别'" size="mini" class="aninput">
+                                <el-option
+                                 v-for="(item,ind) in tyjblist"
+                                  :key="ind"
+                                  :label="item.mc"
+                                  :value="item.dm">
+                                </el-option>
+                             </el-select>
+                            </span>
                         </el-col>
                     </el-row>
                 </div>
@@ -184,20 +186,20 @@
                      <el-row class="ah-30">
                         <el-col :span="24">
                             <el-checkbox v-model="sjchecked" @change="getsjclick(0)">活动时间</el-checkbox>
-                            <span class="ml-40 ah12" v-if='sjshow[0]'>
-                                <el-checkbox v-model="sj.ksrq" class="antxt" @change="getsjclick(1)">开始日期</el-checkbox>
+                            <span class="ml-40 ah12" v-if='sjshow0'>
+                                <el-checkbox v-model="sj.ksrq" class="antxt" @change="getsjclick(1,1)">开始日期</el-checkbox>
                                  <el-date-picker 
                                      v-model="sj.begindate" format="yyyy-MM-dd"
                                     type="date" size="mini" value-format="yyyy-MM-dd"
-                                    placeholder="开始日期" class="aninput" :disabled="!sjshow[1]">
+                                    placeholder="开始日期" class="aninput" :disabled="!sj.ksrq"  @change="getsjclick(1)">
                                  </el-date-picker> 
                             </span>
-                             <span class="ah12" v-if='sjshow[1]'>
+                             <span class="ah12" v-if='sjshow1'>
                                 <el-checkbox v-model="sj.jsrq" class="ml-20 antxt" @change="getsjclick(2)">结束日期</el-checkbox>
                                  <el-date-picker 
                                      v-model="sj.enddate" format="yyyy-MM-dd"
                                     type="date" size="mini" value-format="yyyy-MM-dd"
-                                    placeholder="结束日期" class="aninput" :disabled="!sjshow[2]">
+                                    placeholder="结束日期" class="aninput" :disabled="!sj.jsrq">
                                  </el-date-picker> 
                             </span>
                         </el-col>
@@ -220,10 +222,10 @@
                         <el-col :span="24">
                                <el-checkbox v-model="kzdwchecked" @change="getkzdwclick(0)">开展单位</el-checkbox>
                             <span class="ml-40 ah12" v-if='kzdwshow[0]'>
-                                <el-checkbox v-model="kzdw.fyjb" class="antxt" @change="getkzdwclick(1)">法院级别</el-checkbox>
-                                <el-select v-model="kzdw.levelType" :disabled="!kzdwshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="kzdw.fyjb" class="antxt" @change="getkzdwclick(1,1)">法院级别</el-checkbox>
+                                <el-select v-model="kzdw.levelType" :disabled="!kzdw.fyjb" placeholder="请选择" @change="getkzdwclick(1)"  filterable clearable  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in $store.state.fyjb"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -231,31 +233,31 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='kzdwshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="kzdw.fydw" @change="getkzdwclick(2)">法院单位</el-checkbox>
-                                <el-select v-model="kzdw.orgid" :disabled="!kzdwshow[2]"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="kzdw.fydw" @change="getkzdwclick(2,1)">法院单位</el-checkbox>
+                                <el-select v-model="kzdw.developmentUnitId" :disabled="!kzdw.fydw" filterable clearable   @change="getkzdwclick(2);getNull(kzdw.developmentUnitId,4);getkzbm(kzdw.developmentUnitId)" remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore"   placeholder="请输入关键字搜索"   size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in kzdwdata"
                                     :key="ind"
                                     :label="item.mc"
-                                    :value="item.dm">
+                                    :value="item.orgid">
                                     </el-option>
                                 </el-select>
                                <el-checkbox  v-model="kzdw.xjfy">含下级法院</el-checkbox>
                             </span>
                             <span class="ah12" v-if='kzdwshow[2]'>
                              <el-checkbox class="ml-20 antxt" v-model="kzdw.kzbm" @change="getkzdwclick(3)">开展部门</el-checkbox>
-                             <el-select v-model="kzdw.suborgid"  :disabled="!kzdwshow[3]" placeholder="请选择"  size="mini" class="aninput">
+                             <el-select v-model="kzdw.devDepartmentId"  :disabled="!kzdwshow[3]" filterable clearable placeholder="请选择" :no-data-text="kzdw.developmentUnitId?'无数据':'请先选择开展单位'"  size="mini" class="aninput">
                                 <el-option
-                                 v-for="(item,ind) in $store.state.jbb"
+                                 v-for="(item,ind) in kzbmdata"
                                   :key="ind"
                                   :label="item.mc"
-                                  :value="item.dm">
+                                  :value="item.orgid">
                                 </el-option>
                              </el-select>
                             </span>
-                            <span class="ah12" v-if='kzdwshow[3]'>
+                            <!-- <span class="ah12" v-if='kzdwshow[3]'>
                                 <el-checkbox class="ml-20 antxt" v-model="kzdw.yld" @change="getkzdwclick(4)">院领导</el-checkbox>
-                                <el-select v-model="kzdw.groupType" :disabled="!kzdwshow[4]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-select v-model="kzdw.pairPersonId" :disabled="!kzdwshow[4]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.jbb"
                                     :key="ind"
@@ -263,15 +265,15 @@
                                     :value="item.dm">
                                     </el-option>
                                 </el-select>
-                             </span>
+                             </span> -->
                         </el-col>
                          <el-col :span="24">
                             <el-checkbox v-model="bldwchecked" @change="getbldwclick(0)">办理单位</el-checkbox>
                             <span class="ml-40 ah12" v-if='bldwshow[0]'>
-                                <el-checkbox v-model="bldw.fyjb" class="antxt" @change="getbldwclick(1)">法院级别</el-checkbox>
-                                <el-select v-model="bldw.levelType" :disabled="!bldwshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="bldw.fyjb" class="antxt" @change="getbldwclick(1,1)">法院级别</el-checkbox>
+                                <el-select v-model="bldw.levelType" :disabled="!bldw.fyjb" filterable clearable @change="getbldwclick(1)"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in $store.state.fyjb"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -279,25 +281,25 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='bldwshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="bldw.fydw" @change="getbldwclick(2)">法院单位</el-checkbox>
-                                <el-select v-model="bldw.orgid" :disabled="!bldwshow[2]"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="bldw.fydw" @change="getbldwclick(2,1)">法院单位</el-checkbox>
+                                <el-select v-model="bldw.undertakeUnitId" :disabled="!bldw.fydw" filterable clearable @change="getbldwclick(2);getNull(bldw.undertakeUnitId,5);getblbm(bldw.undertakeUnitId)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in fydwdata"
                                     :key="ind"
                                     :label="item.mc"
-                                    :value="item.dm">
+                                    :value="item.orgid">
                                     </el-option>
                                 </el-select>
                                <el-checkbox  v-model="bldw.xjfy">含下级法院</el-checkbox>
                             </span>
                             <span class="ah12" v-if='bldwshow[2]'>
                              <el-checkbox class="ml-20 antxt" v-model="bldw.blbm" @change="getbldwclick(3)">办理部门</el-checkbox>
-                             <el-select v-model="bldw.suborgid"  :disabled="!bldwshow[3]" placeholder="请选择"  size="mini" class="aninput">
+                             <el-select v-model="bldw.undertakeDepartmentId"  :disabled="!bldwshow[3]" filterable clearable placeholder="请选择" :no-data-text="bldw.undertakeUnitId?'无数据':'请先选择办理单位'"  size="mini" class="aninput">
                                 <el-option
-                                 v-for="(item,ind) in $store.state.jbb"
+                                 v-for="(item,ind) in blbmdata"
                                   :key="ind"
                                   :label="item.mc"
-                                  :value="item.dm">
+                                  :value="item.orgid">
                                 </el-option>
                              </el-select>
                             </span>
@@ -322,21 +324,22 @@
                         <el-col :span="24">
                              <el-checkbox v-model="hdddchecked" @change="gethdddclick(0)">活动地点</el-checkbox>
                             <span class="ml-40 ah12" v-if='hdddshow[0]'>
-                                <el-checkbox v-model="hddd.sheng" class="antxt" @change="gethdddclick(1)">省</el-checkbox>
-                                <el-select v-model="hddd.levelType" :disabled="!hdddshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="hddd.sheng" class="antxt" @change="gethdddclick(1,1)">省</el-checkbox>
+                                <el-select v-model="hddd.province" :disabled="!hddd.sheng" @change="gethdddclick(1,0,hddd.province);getLevel(2,hddd.province,1)" filterable clearable placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in shenglist"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
                                     </el-option>
                                 </el-select>
+                                
                             </span>
                             <span class="ah12" v-if='hdddshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="hddd.shi" @change="gethdddclick(2)">市</el-checkbox>
-                                <el-select v-model="hddd.orgid" :disabled="!hdddshow[2]"   placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="hddd.shi" @change="gethdddclick(2,1)">市</el-checkbox>
+                                <el-select v-model="hddd.city" :disabled="!hddd.shi" @change="gethdddclick(2,0,hddd.city);getLevel(3,hddd.city,2)" filterable clearable   placeholder="请选择" :no-data-text="hddd.province?'无数据':'请先选择省'"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in shilist"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -345,9 +348,9 @@
                             </span>
                             <span class="ah12" v-if='hdddshow[2]'>
                              <el-checkbox class="ml-20 antxt" v-model="hddd.qx" @change="gethdddclick(3)">区县</el-checkbox>
-                             <el-select v-model="hddd.suborgid"  :disabled="!hdddshow[3]" placeholder="请选择"  size="mini" class="aninput">
+                             <el-select v-model="hddd.county"  :disabled="!hdddshow[3]" placeholder="请选择"  :no-data-text="hddd.city?'无数据':'请先选择市'"   filterable clearable  size="mini" class="aninput">
                                 <el-option
-                                 v-for="(item,ind) in $store.state.jbb"
+                                 v-for="(item,ind) in  xianlist"
                                   :key="ind"
                                   :label="item.mc"
                                   :value="item.dm">
@@ -375,9 +378,9 @@
                              <el-checkbox v-model="llhdchecked" @change="getllhdclick(0)">联络活动</el-checkbox>
                             <span class="ml-40 ah12" v-if='llhdshow[0]'>
                                 <el-checkbox v-model="llhd.hdfl" class="antxt" @change="getllhdclick(1)">活动分类</el-checkbox>
-                                <el-select v-model="llhd.levelType" :disabled="!llhdshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-select v-model="llhd.activityType" :disabled="!llhdshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in $store.state.hdlx"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -405,9 +408,9 @@
                              <el-checkbox v-model="gzajchecked" @change="getgzajclick(0)">关注案件</el-checkbox>
                             <span class="ml-40 ah12" v-if='gzajshow[0]'>
                                 <el-checkbox v-model="gzaj.ajlx" class="antxt" @change="getgzajclick(1)">案件类型</el-checkbox>
-                                <el-select v-model="gzaj.levelType" :disabled="!gzajshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-select v-model="gzaj.caseclass" :disabled="!gzajshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in $store.state.ajlx"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -419,9 +422,9 @@
                              <el-checkbox v-model="yajychecked" @change="getyajyclick(0)">议案建议</el-checkbox>
                             <span class="ml-40 ah12" v-if='yajyshow[0]'>
                                 <el-checkbox v-model="yajy.yalx" class="antxt" @change="getyajyclick(1)">议案类型</el-checkbox>
-                                <el-select v-model="yajy.levelType" :disabled="!yajyshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-select v-model="yajy.proposalType" :disabled="!yajyshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.jbb"
+                                    v-for="(item,ind) in $store.state.yalx"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -529,14 +532,11 @@
                                   <el-radio v-model="hradio" label="dx11" @change="getscdx(11)">初步建议</el-radio>
                                 </div>
                                  <div class="anright" v-if='hrshow11 && pp.show9'>
-                                    
                                      <el-radio v-model="hhdw.yqadio" label="dx12" @change="getscdx(12)">预期类型</el-radio>
                                       <span class="ml-20" v-if='hrshow12'>
                                            <el-radio v-model="hhzx.ajlxradio" v-for="(t,ind) in yqlxinfo" :key="ind" :label="t.value">{{t.name}}</el-radio>
                                       </span>
-                                     
                                 </div>
-                                
                             </el-col>
                         </el-row>
                      </div>
@@ -588,7 +588,7 @@
                 <el-col :span="24" class="mt-20 mb-20" style="text-align:center"> 
                          <el-button  type="success" style="width:300px;height:50px;font-size:22px">统计分析查询</el-button>
                 </el-col>
-               <el-col :span="24"  class="tjtable">
+               <el-col :span="24">
                    <div class="anctitle mt-20">{{title}}</div>
                      <my-table :col="tabletitle"
                         :data="tabledata">
@@ -602,8 +602,25 @@
 </template>
 <script>
 import MyTable from '../Common/tablecol/MyTable'
+import {ToArray} from '@/assets/js/ToArray.js'
 export default {
       components: {MyTable},
+       directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                   binding.value();
+                }
+              });
+            }
+          }
+  },
     data(){
         return{
            ashow0:false,
@@ -624,8 +641,8 @@ export default {
 
            sjchecked:'',
            sj:{},
-           sjshow:[],
-
+           sjshow0:false,
+           sjshow1:false,
            kzdwchecked:'',
            bldwchecked:'',
            kzdw:{},
@@ -662,19 +679,34 @@ export default {
            ],
 
            hradio:'',
-           hrshow0:false,
-           hrshow1:false,
-           hrshow2:false,
-           hrshow3:false,
-           hrshow4:false,
-           hrshow5:false,
-           hrshow6:false,
-           hrshow7:false,
-           hrshow8:false,
-           hrshow9:false,
-           hrshow10:false,
-           hrshow11:false,
-           hrshow12:false,
+           
+        //    hrshow0:false,
+        //    hrshow1:false,
+        //    hrshow2:false,
+        //    hrshow3:false,
+        //    hrshow4:false,
+        //    hrshow5:false,
+        //    hrshow6:false,
+        //    hrshow7:false,
+        //    hrshow8:false,
+        //    hrshow9:false,
+        //    hrshow10:false,
+        //    hrshow11:false,
+        //    hrshow12:false,
+
+        hrshow0:true,
+           hrshow1:true,
+           hrshow2:true,
+           hrshow3:true,
+           hrshow4:true,
+           hrshow5:true,
+           hrshow6:true,
+           hrshow7:true,
+           hrshow8:true,
+           hrshow9:true,
+           hrshow10:true,
+           hrshow11:true,
+           hrshow12:true,
            
            hhdw:{},
            hhzx:{},
@@ -752,15 +784,20 @@ export default {
            zlshow1:false,
            zlshow2:false,
            zlshow3:false,
+          
            zlinfo1:[],
            zlinfo2:[],
            zlinfo3:[],
            zlinfo4:[],
 
-           pp:{show1:false,show2:false,show3:false,show4:false,
-           show5:false,show6:false,show7:false,show8:false,
-           show9:false,show10:false,show11:false,show12:false,
-           show13:false},
+        //    pp:{show1:false,show2:false,show3:false,show4:false,
+        //    show5:false,show6:false,show7:false,show8:false,
+        //    show9:false,show10:false,show11:false,show12:false,
+        //    show13:false},
+        pp:{show1:true,show2:true,show3:true,show4:true,
+           show5:true,show6:true,show7:true,show8:true,
+           show9:true,show10:true,show11:true,show12:true,
+           show13:true},
 
            title:'【联络对象】各【层级】【人大代表】的【政治面貌】的统计分析',
            tabledata:[
@@ -817,10 +854,40 @@ export default {
             ]
             }
            ],
+
+           shenglist:[],
+           shilist:[],
+           xianlist:[],
+
+           rdorgload:[],
+           rdorglist:[],
+           zxorgload:[],
+           zxorglist:[],
+           tyorgload:[],
+           tyorglist:[],
+           jznum:50,//加载数据
+           formData: {   //下拉参数
+                 pageIndex: 1,
+                 pageSize: 20
+            },
+           bs:0,
+           rdjblist:[],
+           zxjblist:[],
+           tblist:[],
+           xzqh:[],
+           tylblist:[],
+           kzdwload:[],
+           kzdwdata:[],
+           kzbmdata:[],
+           fydwdata:[],
+           fydwload:[],
+           blbmdata:[],
         }
     },
     mounted(){
       this.$store.dispatch('getJbb');
+      this.$store.dispatch('getFyjb');
+     
     },
     methods:{
       
@@ -849,7 +916,247 @@ export default {
           }
 
        },
-       getrdclick(t){
+
+         //人大单位远程搜索
+      rdorgremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'mc':quer,
+                "lvl":this.rd.levelType,
+                'lb':this.Global.RD,
+            };
+            this.$api.post(this.Global.aport1+'/org/queryAll',p,
+                  r =>{
+                      if(r.code==1){
+                        this.rdorgload=r.data;
+                        if(this.rdorgload.length>this.jznum){
+                          this.bs=0;
+                          this.rdorglist=this.rdorgload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.rdorglist=this.rdorgload;
+                        }
+                      }
+                  });
+         }else{
+            this.rdorglist=[];
+       
+         } 
+
+        },
+        //单位加载
+       rdorgloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.rdorgload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.rdorglist = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+        //届别
+       getJB(val,t){
+           var lb='';
+           var obj={};
+            switch (t) {
+                    case 1:
+                       lb=this.Global.REPRESENTATIVE;
+                       obj = this.rdorglist.find(item =>{
+                            return item.orgid === val
+                            });
+                        break;
+                    case 2:
+                       lb=this.Global.CPPCMEMBER;
+                       obj = this.zxorglist.find(item =>{
+                            return item.orgid === val
+                            });
+                       break;
+                    default:
+                       break;
+                    }
+                
+                if(obj){
+                
+                let p={
+                    'level':obj.lvl,
+                    'administrativeDivision':obj.xzqh,
+                    'identityType':lb,
+                    };
+                  
+                   this.$api.post(this.Global.jburl,p,
+                       r =>{
+                           if(t==1){
+                                  this.rdjblist=ToArray(r.data);
+                           }else if(t==2){
+                                  this.zxjblist=ToArray(r.data);
+                           }
+                      
+                       });
+                    
+                }
+
+       },
+       //团别
+       getTB(val){
+              var obj={};
+                 obj = this.rdorglist.find(item =>{
+                  return item.orgid === val
+                });
+                if(obj){
+                let p={
+                    'level':obj.lvl,
+                    'administrativeDivision':obj.xzqh,
+                  };
+                  this.$api.post(this.Global.aport1+this.Global.tburl,p,
+                  r =>{
+                          if(r.code==1){
+                            this.tblist=ToArray(r.data);
+                                          
+                          }
+                   });
+                }
+       },
+        //政协单位远程搜索
+      zxorgremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'mc':quer,
+                "lvl":this.zx.levelType,
+                'lb':this.Global.ZX,
+            };
+            this.$api.post(this.Global.aport1+'/org/queryAll',p,
+                  r =>{
+                      if(r.code==1){
+                        this.zxorgload=r.data;
+                        if(this.zxorgload.length>this.jznum){
+                          this.bs=0;
+                          this.zxorglist=this.zxorgload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.zxorglist=this.zxorgload;
+                        }
+                      }
+                  });
+         }else{
+            this.zxorglist=[];
+       
+         } 
+
+        },
+        //单位加载
+       zxorgloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.zxorgload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.zxorglist = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+        //界别
+        getJJB(val,jb){
+            
+            this.$set(this.zx,'circlesType','');
+            if(jb=='' || jb==null || jb==undefined)
+            { this.jjblist=[]; }
+            
+            var obj={};
+                 obj = this.zxorglist.find(item =>{
+                  return item.orgid === val
+                });
+            if(obj){
+                let p={
+                   'level':obj.lvl,
+                    'administrativeDivision':obj.xzqh,
+                    'sessionType':jb
+                };
+                this.$api.post(this.Global.jjburl,p,
+                    r =>{
+                    this.jjblist=ToArray(r.data);
+                   });
+            }
+        },
+       //特约单位远程搜索
+      tyorgremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'mc':quer,
+                "lvl":this.ty.levelType,
+                'lb':this.Global.FY,
+            };
+            this.$api.post(this.Global.aport1+'/org/queryAll',p,
+                  r =>{
+                      if(r.code==1){
+                        this.tyorgload=r.data;
+                        if(this.tyorgload.length>this.jznum){
+                          this.bs=0;
+                          this.tyorglist=this.tyorgload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.tyorglist=this.tyorgload;
+                        }
+                      }
+                  });
+         }else{
+            this.tyorglist=[];
+       
+         } 
+
+        },
+        //单位加载
+       tyorgloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.tyorgload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.tyorglist = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+      //特约类别
+      getTYLBList(val){
+               var obj={};
+                 obj = this.tyorglist.find(item =>{
+                  return item.orgid === val
+                });
+                if(obj){
+                    let p={
+                        'level':obj.lvl,
+                        'administrativeDivision':obj.xzqh,
+                    };
+                    this.$api.post(this.Global.tylburl,p,
+                            r =>{
+                                this.tylblist=ToArray(r.data);
+                              
+                    });
+                }
+            },
+        //特约届别
+         getTYJB(val,stype){
+
+               this.$set(this.ty,'periodType','')
+               if(stype=="" || stype==null || stype==undefined){
+                  this.tyjblist=[]; 
+               }
+               var obj={};
+                 obj = this.tyorglist.find(item =>{
+                  return item.orgid === val
+                });
+                if(obj){
+                    let pp={
+                            'level':obj.lvl,
+                            'administrativeDivision':obj.xzqh,
+                            'specialType':stype,
+                        };
+                    
+                    this.$api.post(this.Global.tyjburl,pp,
+                       r =>{
+                            this.tyjblist=ToArray(r.data)
+                    });
+                }
+            },
+
+       getrdclick(t,m){
            switch (t) {
               case 0:
                    this.rdshow[0]=!this.rdshow[0];
@@ -862,9 +1169,24 @@ export default {
                    this.$set(this.rd, 'xjrd', false);
                    this.$set(this.rd, 'jb', false);
                    this.$set(this.rd, 'tb', false);
+
+                   this.$set(this.rd, 'levelType', '');    
+                   this.$set(this.rd, 'orgid', ''); 
+                   this.$set(this.rd, 'periodType', ''); 
+                   this.$set(this.rd, 'groupType', ''); 
+                   this.rdorglist=[];
+                   this.jblist=[];
+                   this.tblist=[];
                    break;
+                 
               case 1:
-                   this.rdshow[1]=!this.rdshow[1];
+                   if(m==1){
+                       this.$set(this.rd, 'levelType', '');
+                       this.rdshow[1]=false;
+                   }else{
+                        this.rdshow[1]=!this.rdshow[1];
+                   }
+                   
                    this.rdshow[2]=false;
                    this.rdshow[3]=false;
                    this.rdshow[4]=false;
@@ -872,27 +1194,56 @@ export default {
                    this.$set(this.rd, 'xjrd', false);
                    this.$set(this.rd, 'jb', false);
                    this.$set(this.rd, 'tb', false);
+                 
+                   this.$set(this.rd, 'orgid', ''); 
+                   this.$set(this.rd, 'periodType', ''); 
+                   this.$set(this.rd, 'groupType', ''); 
+                   this.rdorglist=[];
+                   this.rdjblist=[];
+                   this.tblist=[];
+
                    break;
               case 2:
-                   this.rdshow[2]=!this.rdshow[2];
+                   if(m==1){
+                      this.$set(this.rd, 'orgid', '');
+                      this.rdorglist=[];
+                      this.rdshow[2]=false;
+                   }else{
+                      this.rdshow[2]=!this.rdshow[2];
+                   }
+                   
                    this.rdshow[3]=false;
                    this.rdshow[4]=false;
                    this.$set(this.rd, 'jb', false);
                    this.$set(this.rd, 'tb', false);
+
+                   this.$set(this.rd, 'periodType', ''); 
+                   this.$set(this.rd, 'groupType', ''); 
+                   this.rdjblist=[];
+                   this.tblist=[];
                    break;
               case 3:
-                   this.rdshow[3]=!this.rdshow[3];
+                  if(m==1){
+                     this.$set(this.rd, 'periodType', '');
+                     this.rdshow[3]=false;
+                  }else{
+                    this.rdshow[3]=!this.rdshow[3];
+                  }
+                  
                    this.rdshow[4]=false;
                    this.$set(this.rd, 'tb', false);
+                
+                   this.$set(this.rd, 'groupType', ''); 
                    break;
               case 4:
                    this.rdshow[4]=!this.rdshow[4];
+                   this.$set(this.rd, 'groupType', ''); 
                    break;
                default:
                    break;
            }
        },
-       getzxclick(t){
+       getzxclick(t,m){
            switch (t) {
               case 0:
                    this.zxshow[0]=!this.zxshow[0];
@@ -905,9 +1256,23 @@ export default {
                    this.$set(this.zx, 'xjzx', false);
                    this.$set(this.zx, 'jb', false);
                    this.$set(this.zx, 'tb', false);
+
+                   this.$set(this.zx, 'levelType', ''); 
+                   this.$set(this.zx, 'orgid', ''); 
+                   this.$set(this.zx, 'periodType', ''); 
+                   this.$set(this.zx, 'circlesType', ''); 
+                   this.zxorglist=[];
+                   this.zxjblist=[];
+                   this.jjblist=[];
                    break;
               case 1:
-                   this.zxshow[1]=!this.zxshow[1];
+                  if(m==1){
+                       this.$set(this.zx, 'levelType', '');
+                       this.zxshow[1]=false;
+                  }else{
+                       this.zxshow[1]=!this.zxshow[1];
+                  }
+                   
                    this.zxshow[2]=false;
                    this.zxshow[3]=false;
                    this.zxshow[4]=false;
@@ -915,27 +1280,56 @@ export default {
                    this.$set(this.zx, 'xjzx', false);
                    this.$set(this.zx, 'jb', false);
                    this.$set(this.zx, 'jjb', false);
+                   
+                   this.$set(this.zx, 'orgid', ''); 
+                   this.$set(this.zx, 'periodType', ''); 
+                   this.$set(this.zx, 'circlesType', ''); 
+                   this.zxorglist=[];
+                   this.zxjblist=[];
+                   this.jjblist=[];
                    break;
               case 2:
-                   this.zxshow[2]=!this.zxshow[2];
+                    if(m==1){
+                        this.$set(this.zx, 'orgid', ''); 
+                        this.zxorglist=[];
+                        this.zxshow[2]=false;
+                    }else{
+                        this.zxshow[2]=!this.zxshow[2];
+                    }
                    this.zxshow[3]=false;
                    this.zxshow[4]=false;
                    this.$set(this.zx, 'jb', false);
                    this.$set(this.zx, 'jjb', false);
+                   
+                   this.$set(this.zx, 'periodType', ''); 
+                   this.$set(this.zx, 'circlesType', ''); 
+                   
+                   this.zxjblist=[];
+                   this.jjblist=[];
                    break;
               case 3:
-                   this.zxshow[3]=!this.zxshow[3];
+                   if(m==1){
+                      this.$set(this.zx, 'periodType', '');
+                      this.zxshow[3]=false;
+                   }else{
+                    this.zxshow[3]=!this.zxshow[3];
+                   }
+                   
                    this.zxshow[4]=false;
                    this.$set(this.zx, 'jjb', false);
+                  
+                   this.$set(this.zx, 'circlesType', ''); 
+                   this.jjblist=[];
                    break;
               case 4:
                    this.zxshow[4]=!this.zxshow[4];
+                    this.$set(this.zx, 'circlesType', ''); 
                    break;
                default:
                    break;
            }
        },
-       gettyclick(t){
+       gettyclick(t,m){
            switch (t) {
               case 0:
                    this.tyshow[0]=!this.tyshow[0];
@@ -948,9 +1342,22 @@ export default {
                    this.$set(this.ty, 'xjfy', false);
                    this.$set(this.ty, 'jb', false);
                    this.$set(this.ty, 'tylb', false);
+
+                   this.$set(this.ty, 'levelType', ''); 
+                   this.$set(this.ty, 'orgid', ''); 
+                   this.$set(this.ty, 'specialType', ''); 
+                   this.$set(this.ty, 'periodType', ''); 
+                   this.tyorglist=[];
+                   this.tyjblist=[];
+                   this.tylblist=[];
                    break;
               case 1:
-                   this.tyshow[1]=!this.tyshow[1];
+                  if(m==1){
+                    this.$set(this.ty, 'levelType', '');
+                    this.tyshow[1]=false;
+                  }else{
+                    this.tyshow[1]=!this.tyshow[1];
+                  }
                    this.tyshow[2]=false;
                    this.tyshow[3]=false;
                    this.tyshow[4]=false;
@@ -958,50 +1365,93 @@ export default {
                    this.$set(this.ty, 'xjfy', false);
                    this.$set(this.ty, 'jb', false);
                    this.$set(this.ty, 'tylb', false);
+
+                   this.$set(this.ty, 'orgid', ''); 
+                   this.$set(this.ty, 'specialType', ''); 
+                   this.$set(this.ty, 'periodType', ''); 
+                   this.tyorglist=[];
+                   this.tyjblist=[];
+                   this.tylblist=[];
                    break;
               case 2:
-                   this.tyshow[2]=!this.tyshow[2];
+                  if(m==1){
+                      this.$set(this.ty, 'orgid', ''); 
+                      this.tyorglist=[];
+                      this.tyshow[2]=false;
+                  }else{
+                      this.tyshow[2]=!this.tyshow[2];
+                  }
+
                    this.tyshow[3]=false;
                    this.tyshow[4]=false;
                    this.$set(this.ty, 'jb', false);
                    this.$set(this.ty, 'tylb', false);
+                 
+                   this.$set(this.ty, 'specialType', ''); 
+                   this.$set(this.ty, 'periodType', ''); 
+                  
+                   
+                   this.tylblist=[];
+                   this.tyjblist=[];
                    break;
               case 3:
-                   this.tyshow[3]=!this.tyshow[3];
+                  if(m==1){
+                       this.$set(this.ty, 'specialType', ''); 
+                       this.tyshow[3]=false;
+                  }else{
+                       this.tyshow[3]=!this.tyshow[3];
+                  }
+                   
                    this.tyshow[4]=false;
-                   this.$set(this.ty, 'tylb', false);
+                   this.$set(this.ty, 'jb', false);
+                 
+                   this.$set(this.ty, 'periodType', '');
+                   this.tyjblist=[];
+                   
                    break;
               case 4:
                    this.tyshow[4]=!this.tyshow[4];
+                   this.$set(this.ty, 'periodType', '');
                    break;
                default:
                    break;
            }
        },
        //时间范围
-       getsjclick(t){
+       getsjclick(t,m){
          switch (t) {
              case 0:
-                 this.sjshow[0]=!this.sjshow[0];
-                 this.sjshow[1]=false;
-                 this.sjshow[2]=false;
+                 this.sjshow0=!this.sjshow0;
+                 this.sjshow1=false;
                  this.$set(this.sj, 'ksrq', false);
                  this.$set(this.sj, 'jsrq', false);
+
+                 this.$set(this.sj, 'begindate', '');
+                 this.$set(this.sj, 'enddate', '');
                  break;
              case 1:
-                 this.sjshow[1]=!this.sjshow[1];
-                 this.sjshow[2]=false;
-                 this.$set(this.sj, 'jsrq', false);
+               
+                
+                 if(m==1){
+                   this.$set(this.sj, 'begindate', '');
+                   this.sjshow1=false;
+                    
+                 }else{
+                      this.sjshow1=!this.sjshow1;
+                 }
+               
+               
+                 this.$set(this.sj, 'enddate', '');
                  break;
              case 2:
-                 this.sjshow[2]=!this.sjshow[2];
+                 this.$set(this.sj, 'enddate', '');
                  break;
              default:
                  break;
          }
        },
        //开展单位
-        getkzdwclick(t){
+        getkzdwclick(t,m){
            switch (t) {
               case 0:
                    this.kzdwshow[0]=!this.kzdwshow[0];
@@ -1014,9 +1464,20 @@ export default {
                    this.$set(this.kzdw, 'xjfy', false);
                    this.$set(this.kzdw, 'kzbm', false);
                    this.$set(this.kzdw, 'yld', false);
+                   this.$set(this.kzdw,'levelType','')
+                   this.$set(this.kzdw,'developmentUnitId','')
+                   this.$set(this.kzdw,'devDepartmentId','')
+                   this.kzdwdata=[];
+                   this.kzbmdata=[];
                    break;
               case 1:
-                   this.kzdwshow[1]=!this.kzdwshow[1];
+                  if(m==1){
+                        this.$set(this.kzdw,'levelType','')
+                        this.kzdwshow[1]=false;
+                  }else{
+                        this.kzdwshow[1]=!this.kzdwshow[1];
+                  }
+                   
                    this.kzdwshow[2]=false;
                    this.kzdwshow[3]=false;
                    this.kzdwshow[4]=false;
@@ -1024,18 +1485,36 @@ export default {
                    this.$set(this.kzdw, 'xjfy', false);
                    this.$set(this.kzdw, 'kzbm', false);
                    this.$set(this.kzdw, 'yld', false);
+                   
+                   this.$set(this.kzdw,'developmentUnitId','')
+                   this.$set(this.kzdw,'devDepartmentId','')
+                   this.kzdwdata=[];
+                   this.kzbmdata=[];
                    break;
               case 2:
-                   this.kzdwshow[2]=!this.kzdwshow[2];
+                  if(m==1){
+                     this.$set(this.kzdw,'developmentUnitId','')
+                     this.kzdwdata=[];
+                     this.kzdwshow[2]=false;
+                  }else{
+                      this.kzdwshow[2]=!this.kzdwshow[2];
+                  }
+                   
                    this.kzdwshow[3]=false;
                    this.kzdwshow[4]=false;
                    this.$set(this.kzdw, 'kzbm', false);
                    this.$set(this.kzdw, 'yld', false);
+                 
+                   this.$set(this.kzdw,'devDepartmentId','')
+                   
+                   this.kzbmdata=[];
                    break;
               case 3:
                    this.kzdwshow[3]=!this.kzdwshow[3];
                    this.kzdwshow[4]=false;
                    this.$set(this.kzdw, 'yld', false);
+                   this.$set(this.kzdw,'devDepartmentId','')
+                 
                    break;
               case 4:
                    this.kzdwshow[4]=!this.kzdwshow[4];
@@ -1045,7 +1524,7 @@ export default {
            }
        },
        //办理单位
-        getbldwclick(t){
+        getbldwclick(t,m){
            switch (t) {
               case 0:
                    this.bldwshow[0]=!this.bldwshow[0];
@@ -1056,30 +1535,198 @@ export default {
                    this.$set(this.bldw, 'fydw', false);
                    this.$set(this.bldw, 'xjfy', false);
                    this.$set(this.bldw, 'blbm', false);
+                   this.$set(this.bldw,'levelType','')
+                   this.$set(this.bldw,'undertakeUnitId','')
+                   this.$set(this.bldw,'undertakeDepartmentId','')
+                   this.fydwdata=[];
+                   this.blbmdata=[];
                    break;
               case 1:
-                   this.bldwshow[1]=!this.bldwshow[1];
+                   if(m==1){
+                       this.$set(this.bldw,'levelType','')
+                       this.bldwshow[1]=false;
+                   }else{
+                       this.bldwshow[1]=!this.bldwshow[1];
+                   }
+                   
                    this.bldwshow[2]=false;
                    this.bldwshow[3]=false;
                    this.$set(this.bldw, 'fydw', false);
                    this.$set(this.bldw, 'xjfy', false);
                    this.$set(this.bldw, 'blbm', false);
+            
+                   this.$set(this.bldw,'undertakeUnitId','')
+                   this.$set(this.bldw,'undertakeDepartmentId','')
+                   this.fydwdata=[];
+                   this.blbmdata=[];
                    break;
               case 2:
-                   this.bldwshow[2]=!this.bldwshow[2];
+                   if(m==1){
+                      this.$set(this.bldw,'undertakeUnitId','')
+                      this.bldwshow[2]=false;
+                   }else{
+                     this.bldwshow[2]=!this.bldwshow[2];
+                   }
+                   
                    this.bldwshow[3]=false;
                    this.$set(this.bldw, 'blbm', false);
+                  
+                   this.$set(this.bldw,'undertakeDepartmentId','')
+                   this.blbmdata=[];
                    break;
               case 3:
                    this.bldwshow[3]=!this.bldwshow[3];
+                    this.$set(this.bldw,'undertakeDepartmentId','')
                    break;
              
                default:
                    break;
            }
        },
+           //开展单位远程搜索
+        kzdwremoteMethod(quer){
+          if (quer != '') {
+           let p={
+              'mc':quer
+           };
+          this.$api.post(this.Global.aport1+'/org/getDevelopOrg',p,
+                r =>{
+                    if(r.code==1){
+                      this.kzdwdata=r.data;
+                      if(this.kzdwdata.length>this.jznum){
+                        this.bs=0;
+                        this.kzdwdata=this.kzdwdata.slice(0,this.jznum);
+                      }else{
+                        this.bs=1;
+                        this.kzdwdata=this.kzdwdata;
+                      }
+                    }
+                });
+          
+          }else{
+            this.kzdwdata=[];
+          }
+        },
+            //开展单位加载
+        kzloadmore() {
+            if(this.bs==1){return;}
+            var srr= this.kzdwload;
+            this.formData.pageIndex++;
+            let num = this.formData.pageIndex * this.formData.pageSize;
+            this.kzdwdata =srr.filter((item, index, arr) => {
+                return index < num;
+            });
+        
+        },
+        //开展部门
+        getkzbm(orgid){
+          
+          this.$set(this.kzdw,'devDepartmentId','');
+          if(orgid=='' || orgid==null || orgid==undefined){
+             this.kzbmdata=[];
+             return;
+          }
+           let p={
+            "orgId":orgid
+          };
+          this.$api.get(this.Global.aport1+'/org/getSubDept',p,
+              r =>{
+                  if(r.code==1){
+                   
+                    this.kzbmdata=r.data;
+                  }
+               });
+        },
+         //法院单位远程搜索
+        fydwremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'name':quer,
+            };
+            this.$api.get(this.Global.aport1+'/org/getCourtOrg',p,
+                  r =>{
+                      if(r.code==1){
+                        this.fydwload=r.data;
+                        if(this.fydwload.length>this.jznum){
+                          this.bs=0;
+                          this.fydwdata=this.fydwload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.fydwdata=this.fydwload;
+                        }
+                      }
+                  });
+         }else{
+            this.fydwdata=[];
+         } 
+
+        },
+        //法院单位加载
+        fyloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.fydwload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.fydwdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+        //办理部门
+       getblbm(orgid){
+         this.$set(this.bldw,'undertakeDepartmentId','');
+          if(orgid=='' || orgid==null || orgid==undefined){
+             this.kzbmdata=[];
+             return;
+          }
+           let p={
+            "orgId":orgid
+          };
+          this.$api.get(this.Global.aport1+'/org/getSubDept',p,
+              r =>{
+                  if(r.code==1){
+                   
+                    this.blbmdata=r.data;
+                  }
+               });
+       },
+
+         //得到行政区划
+        getLevel(l,v,t){
+                
+               
+                    if(t==1){
+
+                        this.$set(this.hddd,'city','');
+                        this.$set(this.hddd,'county','');
+                        this.shilist=[];
+                        this.xianlist=[];
+                    }else if(t==2){
+                        this.$set(this.hddd,'county','');
+                        this.xianlist=[];
+                    }
+                
+                    let p={
+                        'code':v,
+                        'level':l
+                    };
+                    this.$api.get(this.Global.aport4+'/service/getxzqh',p,
+                    r =>{
+                            if(r.code==1){
+                                 if(t==1){
+                                        this.shilist=r.data;
+                                 }else if(t==2){
+                                       this.xianlist=r.data;
+                                 }else{
+                                        this.shenglist=r.data;
+                                 }
+                               
+                                  
+                            }
+                    });
+        },
+        
         //活动地点
-        gethdddclick(t){
+        gethdddclick(t,m,val){
            switch (t) {
               case 0:
                    this.hdddshow[0]=!this.hdddshow[0];
@@ -1089,22 +1736,57 @@ export default {
                    this.$set(this.hddd, 'sheng', false);
                    this.$set(this.hddd, 'shi', false);
                    this.$set(this.hddd, 'qx', false);
-                 
+                   this.$set(this.hddd,'province','');
+                   this.$set(this.hddd,'city','');
+                   this.$set(this.hddd,'county','');
+                   this.shenglist=[];
+                   this.shilist=[];
+                   this.xianlist=[];
+
                    break;
               case 1:
-                   this.hdddshow[1]=!this.hdddshow[1];
+                   this.hdddshow[1]=false;
+                  if(m==1){
+                    this.$set(this.hddd,'province','');
+                  }else{
+                    if(val){
+                       this.hdddshow[1]=true;
+                    }  
+                    
+                  }
+                   
                    this.hdddshow[2]=false;
                    this.hdddshow[3]=false;
-                    this.$set(this.hddd, 'shi', false);
+                   this.$set(this.hddd, 'shi', false);
                    this.$set(this.hddd, 'qx', false);
+                   this.getLevel('1');
+                   this.$set(this.hddd,'city','');
+                   this.$set(this.hddd,'county','');
+                   this.shilist=[];
+                   this.xianlist=[];
+                   
                    break;
               case 2:
-                   this.hdddshow[2]=!this.hdddshow[2];
+                  this.hdddshow[2]=false;
+                  if(m==1){
+                        this.$set(this.hddd,'city','');
+                     
+                  }else{
+                    if(val){
+                       this.hdddshow[2]=true;
+                    } 
+                    
+                  }
+                  
                    this.hdddshow[3]=false;
-                   this.$set(this.hddd, 'blbm', false);
+                   this.$set(this.hddd, 'qx', false);
+                   
+                   this.$set(this.hddd,'county','');
+                   this.xianlist=[];
                    break;
               case 3:
                    this.hdddshow[3]=!this.hdddshow[3];
+                   this.$set(this.hddd,'county','');
                    break;
              
                default:
@@ -1118,10 +1800,12 @@ export default {
                    this.llhdshow[0]=!this.llhdshow[0];
                    this.llhdshow[1]=false;
                    this.$set(this.llhd, 'hdfl', false);
-                 
+                   this.$store.dispatch('getHdlx');
+                   this.$set(this.llhd, 'activityType', '');
                    break;
               case 1:
                    this.llhdshow[1]=!this.llhdshow[1];
+                   this.$set(this.llhd, 'activityType', '');
                    break;
              
                default:
@@ -1135,10 +1819,12 @@ export default {
                    this.gzajshow[0]=!this.gzajshow[0];
                    this.gzajshow[1]=false;
                    this.$set(this.gzaj, 'ajlx', false);
-                 
+                   this.$store.dispatch('getAjlx');
+                   this.$set(this.gzaj, 'caseclass', '');
                    break;
               case 1:
                    this.gzajshow[1]=!this.gzajshow[1];
+                   this.$set(this.gzaj, 'caseclass', '');
                    break;
              
                default:
@@ -1152,10 +1838,12 @@ export default {
                    this.yajyshow[0]=!this.yajyshow[0];
                    this.yajyshow[1]=false;
                    this.$set(this.yajy, 'yalx', false);
-                 
+                   this.$store.dispatch('getYalx');
+                   this.$set(this.yajy, 'proposalType', '');
                    break;
               case 1:
                    this.yajyshow[1]=!this.yajyshow[1];
+                   this.$set(this.yajy, 'proposalType', '');
                    break;
              
                default:
@@ -1555,6 +2243,46 @@ export default {
                  break;
          }
          this.hhdwreset();
+       },
+       getNull(val,t){
+        
+          if(val==null || val==undefined || val==''){
+              switch (t) {
+                  case 1:
+                      this.rdorglist=[];
+                      this.rdjblist=[];
+                      this.tblist=[];
+                      this.$set(this.rd,'periodType','');
+                      this.$set(this.rd,'groupType','');
+                      break;
+                   case 2:
+                      this.rdorglist=[];
+                      this.zxjblist=[];
+                      this.jjblist=[];
+                      this.$set(this.zx,'periodType','');
+                      this.$set(this.zx,'circlesType','');
+                      break;
+                   case 3:
+                    this.tyorglist=[];
+                    this.tyjblist=[];
+                    this.tylblist=[];
+                    this.$set(this.ty,'periodType','');
+                    this.$set(this.ty,'specialType','');
+                    break;
+                 case 4:
+                    this.kzdwdata=[];
+                    this.kzbmdata=[];
+                    this.$set(this.kzdw,'devDepartmentId','');
+                    break;
+               case 5:
+                    this.fydwdata=[];
+                    this.blbmdata=[];
+                    this.$set(this.bldw,'undertakeDepartmentId','');
+                    break;
+                  default:
+                    break;
+              }
+          }
        },
 
 

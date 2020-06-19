@@ -7,7 +7,7 @@
             <img style="margin-top:16px;" src="../assets/img/index/banner.png"/>
           </el-col>
           <el-col :span="15">
-            <div class="homenav" style="background: #ffffff">
+            <div :class="dhnum>6?'homenav':'homenav1'" style="background: #ffffff">
               <el-menu
                 router
                 mode="horizontal"
@@ -108,7 +108,8 @@ export default {
       form: {},
       xzdw: [],
       alldata: ["20003901", "20003902", "20003903", "20003904"],
-      allshow: []
+      allshow: [],
+      dhnum:0,
     };
   },
   mounted() {
@@ -161,8 +162,12 @@ export default {
     },
     getMenu() {
       this.$api.get(this.Global.aport1 + "/menu/getMenu", null, r => {
-        this.menuData = r.data;
+         this.menuData = r.data;
+         this.dhnum=this.menuData.length;
+        
+         
       });
+
     },
 
     loginout() {

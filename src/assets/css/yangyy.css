@@ -146,6 +146,8 @@
 .tjtable .el-table  th {background: #64A8BD!important;font-size: 14px!important;
   line-height: 30px; color: #333333;font-weight: bold;border: 1px solid #FFFFFF; }
 .tjtable .el-table td{background: #D4E8EF;border: 1px solid #FFFFFF; height: 45px;}
+.tjtable .el-table th.is-leaf{border: 1x solid #FFFFFF!important;}
+.tjtable .el-table--border, .el-table--group{border: none}
 
 .tjqtable .el-table thead.is-group th {background: #64A8BD!important;font-size: 14px!important;
   line-height: 30px; color: #333333;font-weight: bold;border: 1px solid #FFFFFF; }
@@ -155,7 +157,7 @@
 .tjqtable .el-table thead.is-group tr:last-of-type th:first-of-type {
   border-top: none;
 }
-.tjqtable .el-table--border, .el-table--group{border: none;}
+.tjqtable .el-table--border, .el-table--group{border: none}
 
 .tjqtable .el-table thead.is-group tr:first-of-type th:first-of-type:before {
   content: '';

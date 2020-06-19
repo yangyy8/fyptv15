@@ -11,9 +11,9 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="6">
                             <span class="yy-input-text">所属法院</span>
-                           <el-select v-model="pd.orgId"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.orgIds" multiple   placeholder="请选择"  filterable clearable default-first-option  size="small" class="yy-input-input" >
                                <el-option
-                                 v-for="(item,ind) in fylist"
+                                 v-for="(item,ind) in fydwdata"
                                  :key="ind"
                                  :label="item.mc"
                                  :value="item.orgid">
@@ -102,9 +102,9 @@
                     </el-col>
                     <el-col :span="24">
                         <span class="yy-input-text trt"><font class="red">*</font> 所属法院：</span>
-                        <el-select v-model="form.orgId" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="form.orgIds" :disabled="ckshow" multiple    placeholder="请选择" filterable clearable default-first-option size="small" class="yy-input-input" >
                                <el-option
-                                 v-for="(item,ind) in fylist"
+                                 v-for="(item,ind) in fydwdata"
                                  :key="ind"
                                  :label="item.mc"
                                  :value="item.orgid">
@@ -160,6 +160,22 @@
  </template>
 <script>
 export default {
+    directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                   binding.value();
+                }
+              });
+            }
+          }
+  },
     data(){
         return{
             CurrentPage: 1,
@@ -192,6 +208,15 @@ export default {
             ckshow:false,
             alldata:['22063507','22063508','22063509','22063510'],
             allshow:[],
+            fydwdata:[],
+            fydwload:[],
+            jznum:50,//加载数据
+             formData: {   //下拉参数
+                 pageIndex: 1,
+                  pageSize: 20
+             },
+            bs:0,
+
         }
     },
     mounted(){
@@ -333,9 +358,43 @@ export default {
                 r =>{
                   
                       if(r.code==1){
-                          this.fylist=r.data;
+                          this.fydwdata=r.data;
                       }
                 });
+        },
+        //法院单位远程搜索
+        fydwremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'name':quer,
+            };
+            this.$api.get(this.Global.aport1+'/org/getCourtOrg',p,
+                  r =>{
+                      if(r.code==1){
+                        this.fydwload=r.data;
+                        if(this.fydwload.length>this.jznum){
+                          this.bs=0;
+                          this.fydwdata=this.fydwload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.fydwdata=this.fydwload;
+                        }
+                      }
+                  });
+         }else{
+            this.fydwdata=[];
+         } 
+
+        },
+        //法院单位加载
+        fyloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.fydwload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.fydwdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
         },
         getList(currentPage, showCount, pd){
       
@@ -360,6 +419,7 @@ export default {
         add(t){
           this.tb=t;
           this.ckshow=false;
+          
           switch (t) {
               case 0:
                   this.form={};
@@ -381,6 +441,7 @@ export default {
           }
 
           if(t!=0){
+             
                if(this.mselect.length>1){
                     this.$message.error('只能选择一条数据！');return;
                 }
@@ -406,6 +467,7 @@ export default {
                 });
           }else{
             this.getMenu();
+        
            // this.getHMGN();
           }
        
@@ -423,7 +485,10 @@ export default {
             this.$message.error('角色名称不能为空！');
              return;
         }
-        if(this.form.orgId=='' || this.form.orgId==undefined){
+        // if(this.form.orgId=='' || this.form.orgId==undefined){
+        //      this.$message.error('所属法院不能为空！');return;
+        // }
+        if(this.form.orgIds && this.form.orgIds.length==0){
              this.$message.error('所属法院不能为空！');return;
         }
             if (checkList.length == 0) {

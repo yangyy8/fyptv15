@@ -9,7 +9,7 @@
               <div class="pborder mb-50">
                   <el-row class="ah-40">
                       <el-col :span="9">
-                        <span class="yy-input-text"><font class="red">*</font> 结对人</span>
+                        <span class="yy-input-text"><font class="red">*</font> 结对法院领导</span>
                          <!-- <el-select v-model="pd.courtOutUserId" :disabled="llbnt" remote :remote-method="jdrdwremoteMethod" v-el-select-loadmore="jdrloadmore"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2);getJDcancel(pd.courtOutUserId)"  filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                          <el-option
                           v-for="(item,ind) in cdrdata"
@@ -41,7 +41,7 @@
                   <el-row class="ah-40">
                      <el-col :span="9">
                          <span class="yy-input-text"><font class="red">*</font> 代表</span>
-                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.courtOutUserId==''|| pd.courtOutUserId==undefined?'请先选择结对人':'无数据'">
+                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.courtOutUserId==''|| pd.courtOutUserId==undefined?'请先选择结对法院领导':'无数据'">
                             <el-option
                             v-for="(item,ind) in lxdbdata"
                             :key="ind"
@@ -82,10 +82,10 @@
                                 label="结对时间">
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text"  :disabled="llbnt" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(2,scope.row)"></el-button>
+                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(2,scope.row)"></el-button>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -223,10 +223,10 @@
                                 label="提出人">
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text" :disabled="llbnt" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delsuggAdd(1,scope.row)"></el-button>
+                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delsuggAdd(1,scope.row)"></el-button>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -272,10 +272,10 @@
                                   width="250">
                               </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delsuggAdd(2,scope.row)"></el-button>
+                                    <el-button type="text"   class="a-btn"  title="删除"  icon="el-icon-delete" @click="delsuggAdd(2,scope.row)"></el-button>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -330,10 +330,10 @@
                                 label="反馈时间">
                             </el-table-column>
                              <el-table-column
-                                  label="操作">
+                                  label="操作"  v-if='!llbnt'>
                                   <template slot-scope="scope">
                                     <div>
-                                      <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="pddel(1,scope.row)"></el-button>
+                                      <el-button type="text"   class="a-btn"  title="删除"  icon="el-icon-delete" @click="pddel(1,scope.row)"></el-button>
                                      </div>
                                   </template>
                               </el-table-column>
@@ -366,7 +366,7 @@
                                   <template slot-scope="scope">
                                     <div>
                                       <el-button type="text"  class="a-btn"  title="下载"  icon="el-icon-download" @click="downData(scope.row)"></el-button>
-                                      <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delfile(scope.row,filedata0)"></el-button>
+                                      <el-button type="text"  v-if='!llbnt'  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delfile(scope.row,filedata0)"></el-button>
                                     </div>
                                   </template>
                               </el-table-column>
@@ -476,10 +476,10 @@
                                 label="批示内容">
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text"  :disabled="llbnt" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(1,scope.row)"></el-button>
+                                    <el-button type="text"   class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(1,scope.row)"></el-button>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -505,7 +505,8 @@
                     </el-row>
                 </div>
             <div class="footer">
-            <el-button type="primary"  style="width:130px;" v-if='!llbnt' @click="submit">保 存</el-button>
+            <el-button type="primary"  style="width:130px;" v-if='!llbnt && querybnt' @click="submit">保 存</el-button>
+            <el-button type="primary"  style="width:130px;" v-else-if='!llbnt' :disabled="true">保存中</el-button>
             <el-button style="width:130px;" @click="goto()">关 闭</el-button>
             </div>
             <br/>
@@ -643,6 +644,7 @@ export default {
           jdrload:[],
           jznum:100,
           bs:0,
+          querybnt:true,
         };
     },
   watch: {
@@ -864,6 +866,7 @@ export default {
             this.hdyjdata=[];
             this.tempdata=[];
             this.yjtableData=[];
+            this.querybnt=true;
         },
          //查询
         pdsearch(currentPage,showCount,pd6){
@@ -904,6 +907,7 @@ export default {
             if(this.state=='1' || this.state=='9')
             {
              this.ifLuRu=true;
+             this.querybnt=false;
              let p={
                  'activityInfoId':this.activityInfoId,
              };
@@ -974,6 +978,7 @@ export default {
                         this.getoldDataRule(harr);
 
                      }
+                     this.querybnt=true;
 
                 });
             }
@@ -1184,7 +1189,7 @@ export default {
          submit(){
                 //条件判断
                  if(this.pd.courtOutUserId==undefined || this.pd.courtOutUserId==""){
-                    this.$message.error("结对人不能为空！");return;
+                    this.$message.error("结对法院领导不能为空！");return;
                 }
                 // if(this.pd.courtOutsiderId==undefined || this.pd.courtOutsiderId==""){
                 //     this.$message.error("代表姓名不能为空！");return;
@@ -1684,7 +1689,7 @@ export default {
 
             
           }else{
-           this.cdrdata=[];
+            this.cdrdata=[];
           }
             
         },
@@ -1946,7 +1951,7 @@ export default {
            },
           getJdlist(){
              if(this.pd.courtOutUserId=='' || this.pd.courtOutUserId==null || this.pd.courtOutUserId==undefined){
-                this.$message.error("结对人不能为空!");return;
+                this.$message.error("结对法院领导不能为空!");return;
               }
               if(this.pd.courtOutsiderId=='' || this.pd.courtOutsiderId==null || this.pd.courtOutsiderId==undefined){
                 this.$message.error("代表不能为空!");return;
@@ -1964,8 +1969,6 @@ export default {
                  this.$set(this.pd5,'ck1',false);
                  this.ListDataWX=[];
              
-                
-       
        
        },
        getwx(){

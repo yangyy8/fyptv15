@@ -55,7 +55,7 @@
                     </el-row>
                     <el-row class="lh" v-if="open">
                           <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">结对人</span>
+                            <span class="yy-input-text">结对法院领导</span>
                            
                         <el-select v-model="pd.courtInsiderIdArr" @focus="getfocus(1)" remote :remote-method="jdrdwremoteMethodnew" v-el-select-loadmore="jdrloadmorenew" multiple clearable  filterable  default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                          <el-option
@@ -69,7 +69,7 @@
                         
                         <el-col :sm="24" :md="12" :lg="16" class="input-item">
                         <span class="yy-input-text"  style="width:18.5%!important" title='代表、委员以及特约人员'>代表、委员以及特约人员</span>
-                        <el-select v-model="pd.courtOutsiderIdArr" remote :remote-method="xmdwremoteMethod" v-el-select-loadmore="xmloadmore"  @visible-change="getName($event)"  popper-class="select-popper"  :popper-append-to-body="false" multiple clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:75%!important" >
+                        <el-select v-model="pd.courtOutsiderIdArr"  @focus="getfocus(5)" remote :remote-method="xmdwremoteMethod" v-el-select-loadmore="xmloadmore"  popper-class="select-popper"  :popper-append-to-body="false" multiple clearable  filterable  default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" style="width:75%!important" >
                          <el-option
                           v-for="(item,ind) in xmdata"
                           :key="ind"
@@ -79,7 +79,7 @@
                         </el-select>
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                            <span class="yy-input-text">法院领导</span>
+                            <span class="yy-input-text">法院院领导</span>
                          <!-- <el-select v-model="pd.courtPersonIdArr"  remote :remote-method="fyrdwremoteMethod" v-el-select-loadmore="fyrloadmore" @visible-change="getFYName($event)" multiple clearable  filterable  default-first-option placeholder="请选择"  size="small" class="yy-input-input">
                          <el-option
                           v-for="(item,ind) in fydata"
@@ -110,7 +110,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">开展部门</span>
-                           <el-select v-model="pd.devDepartmentId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.devDepartmentId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.developmentUnitId?'无数据':'请先选择开展单位'">
                                <el-option
                                  v-for="(item,ind) in fybmdata"
                                  :key="ind"
@@ -157,7 +157,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">录入部门</span>
-                           <el-select v-model="pd.entryDepartmentId"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.entryDepartmentId"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.entryUnitId?'无数据':'请先选择录入单位'">
                                <el-option
                                  v-for="(item,ind) in fybmdata1"
                                  :key="ind"
@@ -186,7 +186,8 @@
 
                 </div>
                  <div class="footer">
-                    <el-button type="primary"  style="width:130px;" @click="CurrentPage=1;getList(CurrentPage,pageSize,pd)">查 询</el-button>
+                    <el-button type="primary"  style="width:130px;" v-if='querybnt' @click="CurrentPage=1;getList(CurrentPage,pageSize,pd)">查 询</el-button>
+                    <el-button type="primary"  style="width:130px;" v-else :disabled="true">查询中</el-button>
                     <el-button style="width:130px;" @click="reset()">重  置</el-button>
                 </div>
                 <div class="loadmore" v-if="all" @click="getAll(1)">全部展开 <i class="el-icon-arrow-down"></i></div>
@@ -324,7 +325,7 @@
        </el-dialog>
 
  <el-dialog title="导入文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="640px">
-   <UPLOAD :url="uurl" :type="99" :urlErr="urlErr" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
+   <UPLOAD :url="uurl" :type="99" :urlErr="urlErr" :drlx="1" @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
   </el-dialog>
   <el-dialog title="公开" :visible.sync="openDialogVisible" :close-on-click-modal='false'  width="660px">
    <OPEN :url="openurl" :type="0" :data="opendata" @GKfatherMethod="GKfatherMethod" :random="new Date().getTime()"></OPEN>
@@ -585,10 +586,7 @@ export default {
                             }else{
                                 this.cc=true;
                             }
-                       
                        }
-
-
                 });
         },
         changeList(){
@@ -611,6 +609,8 @@ export default {
         },
         getList(currentPage, showCount, pd){
           this.sname='联络工作'
+          this.tableData=[];
+          this.querybnt=false;
           //this.getCheckList();
           //this.changeList();
           //this.getJDXXAB();
@@ -627,11 +627,13 @@ export default {
                       if(r.code==1){
                           this.tableData=r.data.activityInfoVOList;
                           this.TotalResult=r.data.pageInfo.total;
+                      
                       }else{
                           this.tableData=[];
                           this.TotalResult=0;
                           //this.$message.error(r.message);
                       }
+                      this.querybnt=true;
                        // this.sname=this.snames;
                 });
 
@@ -657,9 +659,7 @@ export default {
                             this.$api.post(this.Global.aport2+'/ActivityInfoController/deleteActivityInfo',p,
                             r =>{
                                 if(r.code==1){
-                                   
-                                   this.$message.success("删除成功！");
-
+                                  this.$message.success("删除成功！");
                                   this.getList(this.CurrentPage, this.pageSize, this.pd); 
                                 }else{
                                    this.$message.success(r.message);
@@ -956,25 +956,38 @@ export default {
               this.xmdata=this.xmload;
            }
         },
-         //代表、委员以及特约人员远程搜索
+          //代表、委员以及特约人员远程搜索
         xmdwremoteMethod(quer){
-              if (quer !== ''|| this.xmdata.length<=0) {
-                var arr = this.xmload.filter(item=>{
-                  return item.fullName.indexOf(quer) + 1
-                });
-              
-                if(arr.length>this.jznum){
-                  this.xmdata=arr.slice(0,this.jznum);
+              if (quer !== '') {
+               let p={
+                   'personName':quer
+                 };
+            
+               this.$api.post(this.Global.aport1+'/baseinfo/personlistforactivity',p,
+             r =>{
+                   this.xmload=r.data;
+                 if(this.xmload.length>this.jznum){
+                   this.bs=0;
+                  this.xmdata=this.xmload.slice(0,this.jznum);
                 }else{
-                  this.xmdata=arr;
+                  this.bs=1;
+                  this.xmdata=this.xmload;
                 }
+
+            });
+               
+                
+            }else{
+              this.xmdata=[];
             } 
-            },
+        },
         //代表、委员以及特约人员加载
         xmloadmore() {
+           if(this.bs==1){return;}
+          var srr= this.xmload;
           this.formData.pageIndex++;
           let num = this.formData.pageIndex * this.formData.pageSize;
-            this.xmdata = this.xmload.filter((item, index, arr) => {
+            this.xmdata = srr.filter((item, index, arr) => {
               return index < num;
             });
         },
@@ -1189,6 +1202,8 @@ export default {
                   break;
                 case 4:
                   this.kzdwdata=[];
+                case 5:
+                  this.xmdata=[];
                 default:
                   break;
               }

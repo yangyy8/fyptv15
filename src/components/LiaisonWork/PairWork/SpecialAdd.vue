@@ -202,10 +202,10 @@
                                 label="视察内容">
                             </el-table-column>
                               <el-table-column
-                                  label="操作">
+                                  label="操作" v-if='!llbnt'>
                                   <template slot-scope="scope">
                                     <div>
-                                      <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(1,scope.row)"></el-button>
+                                      <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(1,scope.row)"></el-button>
                                      </div>
                                   </template>
                             </el-table-column>
@@ -217,7 +217,7 @@
                      <el-row  class="ah-40"  v-if="addtype==3 && !llbnt">
                         <el-col :span="8" class="input-item">
                             <span class="yy-input-text textn"><font class="red">&ensp;</font> 调研单位</span>
-                            <el-select v-model="pd2.inspectOrgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  @change="chChange(pd2.inspectOrgId,3)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd2.inspectOrgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  @change="chChange(pd2.inspectOrgId,3)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -264,10 +264,10 @@
                                 label="调研内容">
                             </el-table-column>
                               <el-table-column
-                                  label="操作">
+                                  label="操作" v-if='!llbnt'>
                                   <template slot-scope="scope">
                                     <div>
-                                      <el-button type="text"  :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(2,scope.row)"></el-button>
+                                      <el-button type="text"    class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(2,scope.row)"></el-button>
                                      </div>
                                   </template>
                             </el-table-column>
@@ -383,10 +383,10 @@
                                 label="职务">
                             </el-table-column>
                               <el-table-column
-                                  label="操作">
+                                  label="操作" v-if='!llbnt'>
                                   <template slot-scope="scope">
                                     <div>
-                                      <el-button type="text"  :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(7,scope.row)"></el-button>
+                                      <el-button type="text"    class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(7,scope.row)"></el-button>
                                      </div>
                                   </template>
                             </el-table-column>
@@ -446,10 +446,10 @@
                                 </template>
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                     <div>
-                                    <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(13,scope.row)"></el-button>
+                                    <el-button type="text" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(13,scope.row)"></el-button>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -463,7 +463,7 @@
                   <el-row class="mt-20" >
                       <el-col :span="15"  class="input-item elselect">
                         <span class="yy-input-text" style="min-width:180px" title="代表、委员以及特约人员"><font class="red">&ensp;</font> 代表、委员以及特约人员 </span>
-                        <el-select v-model="lmdbid" remote :remote-method="xmdwremoteMethod" v-el-select-loadmore="xmloadmore" @change="getNullVlaue(lmdbid,1)"  @visible-change="getName($event)" v-if="!llbnt" popper-class="select-popper"  :popper-append-to-body="false" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="lmdbid" remote :remote-method="xmdwremoteMethod" v-el-select-loadmore="xmloadmore" @focus="getfocus(5)"    v-if="!llbnt" popper-class="select-popper"  :popper-append-to-body="false" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                           <el-option
                            v-for="(item,ind) in xmdata"
                            :key="ind"
@@ -514,23 +514,23 @@
                                 </template>
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text"  :disabled="llbnt" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(4,scope.row)"></el-button>
+                                    <el-button type="text"   class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(4,scope.row)"></el-button>
                                    </div>
                                 </template>
                             </el-table-column>
                            </el-table>
                             </el-col>
                             <el-col :span="24" class="mt-20">
-                              <span class="yy-input-text" style="width:230px;"><font class="red">&ensp;</font> 代表、委员以及特约人员人数</span>  <span style="font-weight:bold;color:red;margin-left:20px;"> {{count1}} </span> 人
+                              <span class="yy-input-text" style="width:240px;"><font class="red">&ensp;</font> 代表、委员以及特约人员人数</span>  <span style="font-weight:bold;color:red;margin-left:20px;"> {{count1}} </span> 人
                            </el-col>
                     </el-row>
                       <el-row  class="ah-40 mt-20" v-if='addtype!="9" && addtype!="7" && addtype!="8"'>
                       <el-col :span="8" class="input-item">
                             <span class="yy-input-text textn"><font class="red">&ensp;</font> 
-                             <span v-if='addtype==11'>联系人</span>  <span v-else>法院领导</span>
+                             <span v-if='addtype==11'>联系人</span>  <span v-else>法院院领导</span>
                               </span>
                             <!-- <el-select v-model="fyld" remote :remote-method="fyrdwremoteMethod"  v-el-select-loadmore="fyrloadmore"   @visible-change="getFYName($event)" @change="getNullVlaue(fyld,2)" v-if="!llbnt" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
                                <el-option
@@ -554,7 +554,7 @@
                            
                         </el-col>
                         <el-col :span="14" class="red" style="font-size:12px;padding-top:9px; height:20px;">
-                           <span class="ml-20">当您选择的法院领导信息与参加活动的信息不匹配时，可以选择活动时单位，活动时部门，活动时职务。</span>
+                           <span class="ml-20">当您选择的<span v-if='addtype==11'>联系人</span><span v-else>法院院领导</span>信息与参加活动的信息不匹配时，可以选择活动时单位，活动时部门，活动时职务。</span>
                         </el-col>
                       </el-row>
                        <el-row  class="ah-40 mt-10" v-if='addtype!="9" && addtype!="7" && addtype!="8"'>
@@ -663,34 +663,40 @@
                                 </template>
                             </el-table-column> -->
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(5,scope.row)"></el-button>
+                                    <el-button type="text"   class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(5,scope.row)"></el-button>
                                    </div>
                                 </template>
                             </el-table-column>
                            </el-table>
                          </el-col>
                           <el-col :span="8">
-                            <span class="yy-input-text" style="width:31%"><font class="red">&ensp;</font>   <span v-if='addtype==11'>联系人</span>  <span v-else>法院领导</span>人数</span>
+                            <span class="yy-input-text" style="width:31%"><font class="red">&ensp;</font>   <span v-if='addtype==11'>联系人</span>  <span v-else>法院院领导</span>人数</span>
                               <span style="color:red;font-weight:bold">{{count2}} </span>人
                          </el-col>
                    </el-row>
                    <el-row class="ah-40 mt-20">
-                       <el-col :span="24">
-                           <span class="yy-input-text texts"><font class="red">*</font>  {{label4}}</span>
-                           <el-input :placeholder="addtype!='8'?'请输入内容':'如果有链接，可以在其中增加链接地址'" type="textarea" :disabled="llbnt" :autosize="{ minRows: 10, maxRows: 10}" size="small" clearable v-model="form.contents"  class="yy-input-input inputw" ></el-input>
+                       <el-col :span="24" class="input-item1">
+                           <span class="yy-input-text texts"><font class="red">*</font>  
+                           {{label4}}</span>
+                            <div class="yy-input-input inputw">
+                           <div v-if='llbnt' v-html="form.contents" class="nrcss">
+                             
+                           </div>
+                           <vue-ueditor-wrap v-else v-model="form.contents" :config="myConfig" style="width:100%!important;line-height:20px;"></vue-ueditor-wrap>
+                           </div>
                        </el-col>
-                       <el-col :span="24" style="margin-left:10.2%;">
+                       <el-col :span="24" style="margin-left:10.3%;">
                              <el-checkbox v-model="pd5.ck1" :disabled="llbnt">人民法院各部门组织开展的特约人员活动</el-checkbox>
                        </el-col>
-                        <el-col :span="24" style="margin-left:10.2%;">
+                        <el-col :span="24" style="margin-left:10.3%;">
                              <el-checkbox v-model="pd5.ck11" @change="getwx()" :disabled="llbnt">建立微信群</el-checkbox>  
                              <el-input placeholder="请输入微信群名称" size="small" :disabled="llbnt" v-if='pd5.ck11' clearable v-model="wxname" style="width:20%;margin-left:10px;" ></el-input>
                               
                        </el-col>
-                       <el-col :span="24" style="margin-left:11%;" v-if='pd5.ck11'>
+                       <el-col :span="24" style="margin-left:10.5%;" v-if='pd5.ck11'>
                            <div :class="llbnt?'yy-input-input wxq':'yy-input-input'" style="width:89%!important;">
                             <el-table
                             ref="mlTable"
@@ -733,30 +739,30 @@
                            </el-table>
                            </div>
                        </el-col>
-                       <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==2">
+                       <el-col :span="24" style="margin-left:10.3%;" v-if="addtype==2">
                              <el-checkbox v-model="pd5.ck2" :disabled="llbnt">集中专项视察</el-checkbox>
                        </el-col>
                           <!-- <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==7">
                              <el-checkbox v-model="pd5.ck5" :disabled="llbnt">院领导参与标识</el-checkbox>
                        </el-col> -->
                       
-                        <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==4 || addtype==5">
+                        <el-col :span="24" style="margin-left:10.3%;" v-if="addtype==4 || addtype==5">
                              <el-checkbox v-model="pd5.ck8" :disabled="llbnt">组织座谈交流</el-checkbox>
                        </el-col>
-                       <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==4 || addtype==5">
+                       <el-col :span="24" style="margin-left:10.3%;" v-if="addtype==4 || addtype==5">
                               <el-checkbox v-model="pd5.ck6" :disabled="llbnt">是否大要案</el-checkbox>
                        </el-col>
-                        <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==6">
+                        <el-col :span="24" style="margin-left:10.3%;" v-if="addtype==6">
                              <el-checkbox v-model="pd5.ck9" :disabled="llbnt">专门组织召开的代表委员特约人员会议</el-checkbox>
                        </el-col>
-                        <el-col :span="24" style="margin-left:10.2%;" v-if="addtype==6">
+                        <el-col :span="24" style="margin-left:10.3%;" v-if="addtype==6">
                              <el-checkbox v-model="pd5.ck10" :disabled="llbnt">邀请代表委员特约人员参加的一般性会议</el-checkbox>
                        </el-col>
-                       <el-col :span="24" style="margin-left:10.2%;">
+                       <el-col :span="24" style="margin-left:10.3%;">
                              <el-checkbox v-model="pd5.ck3" :disabled="llbnt" @change="getCheck(1)">结合议案建议或政协提案办理</el-checkbox>  
                                <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck3  && !llbnt" @click="getGLXX(1)">关联</el-button>
                        </el-col>
-                       <el-col :span="24"  v-if="pd5.ck3" style="margin-left:10.2%;">
+                       <el-col :span="24"  v-if="pd5.ck3" style="margin-left:10.5%;">
                         <el-row class="ah-40">
                         <el-col :span="24" class="input-item">
                       
@@ -785,10 +791,10 @@
                                 label="提出人">
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text" :disabled="llbnt" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(9,scope.row)"></el-button>
+                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(9,scope.row)"></el-button>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -803,11 +809,11 @@
                        </el-col> -->
                     
                    
-                       <el-col :span="24" style="margin-left:10.2%;">
+                       <el-col :span="24" style="margin-left:10.3%;">
                              <el-checkbox v-model="pd5.ck7" :disabled="llbnt">结合代表、委员及特约人员关注案件</el-checkbox>
                              <el-button type="success" style="margin-left:20px;" size="mini" v-if="pd5.ck7 && !llbnt" @click="getGLXX(2)">关联关注案件</el-button>
                        </el-col>
-                       <el-col :span="24"   v-if="pd5.ck7" class="input-item" style="margin-left:10.2%;">
+                       <el-col :span="24"   v-if="pd5.ck7" class="input-item" style="margin-left:10.5%;">
                         
                        <!-- <span class="yy-input-text txttop" style="width:10.2%;">关注的案件</span> -->
                        <div class="yy-input-input" style="width:89%!important;">
@@ -841,10 +847,10 @@
                                   width="250">
                               </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(11,scope.row)"></el-button>
+                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(11,scope.row)"></el-button>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -898,7 +904,7 @@
 
                    <el-row class="ah-40" >
                         <el-col :span="24" class="input-item">
-                            <span class="yy-input-text textd txttop" title="代表、委员及特约人员意见建议"><font class="red">&ensp;</font> 代表、委员及特<br/><font class="red">&ensp;</font> 约人员意见建议</span> 
+                            <span class="yy-input-text textdt txttop" title="代表、委员及特约人员意见建议"> 代表、委员及特约人员意见建议</span> 
                            <div class="yy-input-input inputw">
                             <el-row class="mt-10">
                                
@@ -924,11 +930,11 @@
                             </el-table-column>
                               <el-table-column
                                 prop="contents"
-                                label="评价和意见建议"  width="400"
+                                label="评价和意见建议"  width="300"
                                 align="left"
                                >
                                <template slot-scope="scope" >
-                                  <el-popover placement="top-start" width="350" trigger="hover" style="text-align:left;" v-if="scope.row.contents">
+                                  <el-popover placement="top-start" width="300" trigger="hover" style="text-align:left;" v-if="scope.row.contents">
                                        <div>{{scope.row.contents}}</div>
                                        <div slot="reference"> {{ scope.row.contents.substr(0,20)}}{{scope.row.contents.length>20?'......':''}}</div>
                                   </el-popover>
@@ -948,10 +954,10 @@
                                 label="反馈时间">
                             </el-table-column>
                               <el-table-column
-                                  label="操作">
+                                  label="操作" v-if='!llbnt'>
                                   <template slot-scope="scope">
                                     <div>
-                                      <el-button type="text" :disabled="llbnt"   class="a-btn"  title="删除"  icon="el-icon-delete" @click="pddel(3,scope.row)"></el-button>
+                                      <el-button type="text"   class="a-btn"  title="删除"  icon="el-icon-delete" @click="pddel(3,scope.row)"></el-button>
                                      </div>
                                   </template>
                               </el-table-column>
@@ -981,11 +987,11 @@
                                   label="文件类型">
                               </el-table-column>
                               <el-table-column
-                                  label="操作">
+                                  label="操作" >
                                   <template slot-scope="scope">
                                     <div>
                                       <el-button type="text"  class="a-btn"  title="下载"  icon="el-icon-download" @click="downData(scope.row)"></el-button>
-                                      <el-button type="text" :disabled="llbnt"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delfile(scope.row,filedata0)"></el-button>
+                                      <el-button type="text" v-if='!llbnt'  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delfile(scope.row,filedata0)"></el-button>
                                     </div>
                                   </template>
                               </el-table-column>
@@ -1062,7 +1068,7 @@
                             placeholder="选择时间" >
                         </el-date-picker>
                         </el-col>
-                        <el-col :span="24">
+                        <el-col :span="24" class="input-item">
                            <span class="yy-input-text texts">批示内容</span>
                            <el-input placeholder="请输入内容" type="textarea" :autosize="{ minRows: 3, maxRows: 4}" size="small" clearable v-model="pd4.instructionContents"  class="yy-input-input" style="width:70%!important;margin-right:20px;"></el-input>
                             <el-button type="success" size="small" plain @click="ChangePSNameList(pd4)">加入列表</el-button>
@@ -1104,10 +1110,10 @@
                                 label="批示内容">
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!llbnt'>
                                  <template slot-scope="scope">
                                    <div>
-                                    <el-button type="text"  :disabled="llbnt" class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(6,scope.row)"></el-button>
+                                    <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="delAdd(6,scope.row)"></el-button>
                                     </div>
                                 </template>
                             </el-table-column>
@@ -1169,8 +1175,9 @@ import CASE from "../../Common/suggest/caseinfoall"
 import SUGGALL from "../../Common/suggest/suggestall"
 import {sortByKeyD,sortByKey} from "@/assets/js/ToArray.js"
 import {getServerDate,formatDate,getYear} from '@/assets/js/date.js'
+import VueUeditorWrap from 'vue-ueditor-wrap'
 export default {
-    components:{UPLOAD,VIDEO,VIDEONEW,SUGGEST,CASE,SUGGALL},
+    components:{UPLOAD,VIDEO,VIDEONEW,SUGGEST,CASE,SUGGALL,VueUeditorWrap},
     inject:['reload'],
     directives: {
           'el-select-loadmore': {
@@ -1302,6 +1309,7 @@ export default {
           ssxx:{},//所属信息
           fybmdata4:[],
           qyear:'',//年
+          myConfig:{},
 
         };
     },
@@ -1316,7 +1324,40 @@ export default {
 
     mounted()
     {
-         this.$store.dispatch('getZw');
+        this.$store.dispatch('getZw');
+         this.myConfig={
+           toolbars: [
+                    [
+                      'undo', //撤销
+                      'bold', //加粗
+                      'indent', //首行缩进
+                      'italic', //斜体
+                      'underline', //下划线
+                      'strikethrough', //删除线
+                      'subscript', //下标
+                      'fontborder', //字符边框
+                      'superscript', //上标
+                      'formatmatch', //格式刷
+                      'fontfamily', //字体
+                      'fontsize', //字号
+                      'justifyleft', //居左对齐
+                      'justifycenter', //居中对齐
+                      'justifyright', //居右对齐
+                      'justifyjustify', //两端对齐
+                      'insertorderedlist', //有序列表
+                      'insertunorderedlist', //无序列表
+                      'lineheight',//行间距
+                    ]
+                ],
+           zIndex:0,
+           elementPathEnabled : false,
+           autoHeightEnabled: false,
+           initialFrameHeight: 240,
+           initialFrameWidth: '100%',
+           serverUrl: '/FileUploadController/uploadImageData',
+           UEDITOR_HOME_URL: this.Global.ueditordz
+        }
+        
         this.$dragging.$on('dragged', (val) => {
 		      //console.log(val)//这里我们不需要做任何操作；组件内部会把我们绑定上去的list自动排序;只需要查看结果就可以
 		      //如果需要在这里进行其他操作，可以查看val的内容，包括：拖动的元素，拖动后与之兑换的元素，以及原始数据和拖动组名
@@ -1403,27 +1444,33 @@ export default {
         },
          //代表、委员以及特约人员远程搜索
         xmdwremoteMethod(quer){
-              if (quer !== ''|| this.xmdata.length<=0) {
-                var arr = this.xmload.filter(item=>{
-                  return item.fullName.indexOf(quer) + 1
-                });
-                this.tempload=arr;
-                if(arr.length>this.jznum){
-                  this.xmdata=arr.slice(0,this.jznum);
+              if (quer !== '') {
+               let p={
+                   'personName':quer
+                 };
+            
+               this.$api.post(this.Global.aport1+'/baseinfo/personlistforactivity',p,
+             r =>{
+                   this.xmload=r.data;
+                 if(this.xmload.length>this.jznum){
+                   this.bs=0;
+                  this.xmdata=this.xmload.slice(0,this.jznum);
                 }else{
-                  this.xmdata=arr;
+                  this.bs=1;
+                  this.xmdata=this.xmload;
                 }
+
+            });
+               
+                
             }else{
-              this.tempload=[];
-              this.xmquery();
+              this.xmdata=[];
             } 
-            },
+        },
         //代表、委员以及特约人员加载
         xmloadmore() {
+           if(this.bs==1){return;}
           var srr= this.xmload;
-          if(this.tempload.length>0){
-            srr= this.tempload;
-          } 
           this.formData.pageIndex++;
           let num = this.formData.pageIndex * this.formData.pageSize;
             this.xmdata = srr.filter((item, index, arr) => {
@@ -1432,6 +1479,7 @@ export default {
         },
 
         ChangeNameList(val){
+             
             if(this.lmdbid==undefined || this.lmdbid==""){
               this.$message.error("代表、委员以及特约人员不能为空！");return;
             }
@@ -1483,7 +1531,7 @@ export default {
               if(!ff){
                this.ListData4.push(obj);
              
-               this.ListData4=sortByKey(this.ListData4,'sort');
+              // this.ListData4=sortByKey(this.ListData4,'sort');
                this.count1=this.ListData4.length;
                }
                this.lmdbid="";
@@ -2609,7 +2657,6 @@ export default {
               if(this.addtype==9){
                 if(this.form.receptionUnitId==undefined || this.form.receptionUnitId=="")
                   {
-                 
                       this.$message.error("接待单位不能为空！");return;
                   }
               }
@@ -2635,6 +2682,14 @@ export default {
             if(this.form.contents==undefined || this.form.contents==""){
                   
                this.$message.error(this.label4+"不能为空！");return;
+              }
+
+              if(this.addtype=='6'){
+                 if(this.pd5.ck9 && this.pd5.ck10){
+                   this.$message.error("专门组织召开的代表委员特约人员会议和邀请代表委员特约人员参加的一般性会议必须二选一！");return;
+                 }else if(!this.pd5.ck9 && !this.pd5.ck10){
+                    this.$message.error("专门组织召开的代表委员特约人员会议和邀请代表委员特约人员参加的一般性会议必须二选一！");return;
+                 }
               }
               
               if(this.addtype=='5'){
@@ -3002,7 +3057,7 @@ export default {
             let p={
                 'orgid':val,
             };
-            this.$api.get(this.Global.aport1+'/org/getOrgName',p,
+            this.$api.post(this.Global.aport1+'/org/getOrgName',p,
                   r =>{
                       if(r.code==1){
                          this.fydwdata=r.data;
@@ -3439,7 +3494,7 @@ export default {
         // 代表、委员以及特约人员
         if(t==1){
             if(!val){
-              this.xmquery();
+              this.xmdata=[];
             }
         }else if(t==2){
         
@@ -3472,6 +3527,9 @@ export default {
           case 4:
              this.scdwdata=[];
             break;
+          case 5:
+             this.xmdata=[];
+            break;
           default:
             break;
         }
@@ -3482,9 +3540,10 @@ export default {
 <style scoped>
 .textp{width: 40%!important;}
 .textn{width: 30%!important;}
-.texts{width: 10%!important; vertical-align: top;}
+.texts{width: 10.3%!important; vertical-align: top;}
 .textw{width: 10%!important;}
 .textd{width: 10.5%!important;}
+.textdt{width: 9.2%!important; padding:0px 10px;}
 .inputw{width: 89%!important;}
 .inputs{width: 67%!important;}
 .inputp{width: 50%!important;}
@@ -3492,5 +3551,6 @@ export default {
 .border{border: 1px solid #E6E6E6; border-radius: 6px;margin-top: 10px;}
 .ts{font-size: 12px;color: red;}
 .block .close{display: block;position: absolute;font-size: 25px;font-weight:bold;cursor: pointer;z-index: 999;margin-top: -185px;margin-left: 170px;}
+.input-item1{display: flex;}
 
 </style>

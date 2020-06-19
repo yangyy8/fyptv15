@@ -1,7 +1,15 @@
 <template lang="html">
 <div>
      <el-row class="mb-6">
-     <el-col v-if='type=="1000"' :span="24" class="txtl mb-20">
+      <el-col :span="24" class="mb-20"  v-if='drlx'>
+        
+         <div>
+           请先下载 
+           <a :href="adurl">模板</a>
+           再进行导入操作。
+         </div>
+      </el-col>
+     <el-col v-if='type=="1000" && !periodType' :span="24" class="txtl mb-20">
        <span>届别：</span>
            <el-select v-model="periodTypes" filterable clearable default-first-option placeholder="请选择"  size="small" >
                          <el-option
@@ -9,7 +17,7 @@
                            :key="ind"
                            :label="item.mc"
                            :value="item.dm">
-                           </el-option>
+            </el-option>
          </el-select>
      </el-col>
       <el-col v-if='this.proposalType!=null' :span="24" class="txtl mb-20">
@@ -54,7 +62,7 @@
 import {getYear} from '@/assets/js/date.js'
 export default {
     name:'UPLOAD',
-    props:['url','type','urlErr','periodType','proposalType','specialType','random'],
+    props:['url','type','drlx','urlErr','periodType','proposalType','specialType','random'],
     data(){
         return{
         actions:this.Global.uploads+this.url,
@@ -67,11 +75,23 @@ export default {
         msg:'',
         year:'',
         yearlist:getYear(),
+        adurl:'',
         }
     },
 
     mounted(){
        this.$store.dispatch("getJb");
+       if(this.drlx){
+       switch (this.drlx) {
+         case 1:
+           this.adurl=this.Global.wbdz+'/static/importfile/活动模板.xls';
+           break;
+         default:
+           break;
+       }
+  
+       
+        }
     },
     watch:{
       random:function(newVal,oldVal){
@@ -139,7 +159,8 @@ export default {
              
               if(this.error==1){return;}
                  this.msg='';
-               if(this.type=='1000'){
+               if(this.type=='1000' && !this.periodType){
+
                  if(this.periodTypes=="" || this.periodTypes==null){
                   
                    this.$message.error('请先选择届别！');
@@ -211,8 +232,13 @@ export default {
                 this.fileData.append("periodType",this.periodType);
                 this.fileData.append('specialType',this.specialType);
               }else if(this.type=='1000'){
-                this.fileData.append("periodType",this.periodTypes);
+                if(this.periodType){
+                    this.fileData.append("periodType",this.periodType);
+                }else{
+                   this.fileData.append("periodType",this.periodTypes);
+                }
               }
+
               if(this.proposalType!=null){
                
                 this.fileData.append("year",this.year);

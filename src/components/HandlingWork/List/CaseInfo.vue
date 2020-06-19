@@ -8,7 +8,7 @@
                 <el-row class="ah-40">
                          <el-col :span="10">
                         <span class="yy-input-text" style="width:31%"><font class="red">*</font> 来文人姓名</span>
-                        <el-select v-model="pd1.leaderpbid" :disabled="editshow" @change="ChangeNameListNew(pd1.leaderpbid,0)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd1.leaderpbid" remote :remote-method="xmremoteMethod" v-el-select-loadmore="xmloadmore" @focus="getfocus(1)"  placeholder="请输入关键字搜索" :disabled="editshow" @change="ChangeNameListNew(pd1.leaderpbid,0)" filterable clearable default-first-option  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in xmdata"
                            :key="ind"
@@ -80,7 +80,7 @@
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text" style="width:35%"><font class="red">*</font> 经办人</span>
-                        <el-select v-model="dataList[i].undertakinguserid" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="dataList[i].undertakinguserid" :disabled="editshow"  @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" filterable clearable default-first-option  size="small" class="yy-input-input" >
                                         <el-option
                                           v-for="(item,ind) in jbrdata"
                                           :key="ind"
@@ -128,18 +128,18 @@
              </el-col>
               <el-col :span="12" v-if="lwshow">
                <span class="yy-input-text txtc"> 来源法院人员</span>
-              <el-select v-model="formList[i].sourcecourtpersonpbid" @change="chChangelist(formList[i].sourcecourtpersonpbid,i,4)"  filterable clearable default-first-option placeholder="先选择来文来源类型"  size="small" class="yy-input-input" >
+              <el-select v-model="formList[i].sourcecourtpersonpbid" remote :remote-method="fyrremoteMethod" v-el-select-loadmore="fyrloadmore" :placeholder="formList[i].lettersourcetype?'请输入关键字搜索':'请先选择来文来源类型'" @change="chChangelist(formList[i].sourcecourtpersonpbid,i,4)"  filterable clearable default-first-option size="small" class="yy-input-input" >
                     <el-option
-                                v-for="(item,ind) in fyrdata"
-                                :key="ind"
-                                :label="item.fullName"
-                                :value="item.pbId">
+                        v-for="(item,ind) in fyrdata"
+                        :key="ind"
+                        :label="item.fullName"
+                        :value="item.pbId">
                     </el-option>
                </el-select>
              </el-col>
               <el-col :span="12" v-else>
                <span class="yy-input-text txtc">来源组织</span>
-              <el-select v-model="formList[i].lettersourceorgid"  @change="chChangelist(formList[i].lettersourceorgid,i,5)" filterable clearable default-first-option placeholder="先选择来文来源类型"  size="small" class="yy-input-input" >
+              <el-select v-model="formList[i].lettersourceorgid" remote :remote-method="lyzzremoteMethod" v-el-select-loadmore="lyzzloadmore"  :placeholder="formList[i].lettersourcetype?'请输入关键字搜索':'请先选择来文来源类型'"  @change="chChangelist(formList[i].lettersourceorgid,i,5)" filterable clearable default-first-option   size="small" class="yy-input-input" >
                    <el-option
                                 v-for="(item,ind) in lyzzdata"
                                 :key="ind"
@@ -194,10 +194,10 @@
                                   label="领导批示">
                               </el-table-column>
                                <el-table-column
-                                  label="操作">
+                                  label="操作" v-if='!editshow'>
                                   <template slot-scope="scope">
                                     <div>
-                                      <el-button type="text"  :disabled="editshow" class="a-btn"  title="删除"  icon="el-icon-delete" @click="lwdel(scope.row,dataList[i].lwdata)"></el-button>
+                                      <el-button type="text"  class="a-btn"  title="删除"  icon="el-icon-delete" @click="lwdel(scope.row,dataList[i].lwdata)"></el-button>
                                      </div>
                                   </template>
                               </el-table-column>
@@ -205,9 +205,9 @@
                     <el-row class="ah-50">
                         <el-col :span="12">
                         <span class="yy-input-text" style="min-width:200px" title="联名代表、委员、特约人员">联名代表、委员、特约人员 </span>
-                        <el-select v-model="formListN[i].lmdbid" v-if='!editshow' filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:50%!important" >
+                        <el-select v-model="formListN[i].lmdbid" v-if='!editshow' remote :remote-method="lmrremoteMethod" v-el-select-loadmore="lmrloadmore"  placeholder="请输入关键字搜索" filterable clearable default-first-option  size="small" class="yy-input-input" style="width:50%!important" >
                           <el-option
-                           v-for="(item,ind) in xmdata"
+                           v-for="(item,ind) in lmrdata"
                            :key="ind"
                            :label="item.fullName"
                            :value="item.pbId+'|'+item.personId">
@@ -271,7 +271,7 @@
                                 label="身份">
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" v-if='!editshow'>
                                  <template slot-scope="scope">
                                    <div>
                                     <el-button type="text"  class="a-btn"  :disabled="editshow" title="删除"  icon="el-icon-delete" @click="delName(scope.row,dataList[i].lmdata,i)"></el-button>
@@ -316,7 +316,7 @@
                                 </template>
                             </el-table-column>
                              <el-table-column
-                                label="操作">
+                                label="操作" >
                                  <template slot-scope="scope">
                                    <div>
                                       <el-button type="text"   class="a-btn"  title="下载"  icon="el-icon-download" @click="downData(scope.row)"></el-button>
@@ -352,7 +352,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic(Global.ajlx)"></i>
                       </el-col>
                       <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 审理阶段</span>
@@ -376,7 +376,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select>
-                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic(Global.ajzt)"></i>
                       </el-col>
                       <el-col :span="8">
                         <span class="yy-input-text"><font class="red">&ensp;</font> 利害关系</span>
@@ -388,7 +388,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic(Global.lhgx)"></i>
                       </el-col>
                        <el-col :span="8">
                          <span class="yy-input-text"><font class="red">&ensp;</font> 是否有利害关系</span>
@@ -426,15 +426,15 @@
                      
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 问题针对法院</span>
-                        <el-select v-model="pd1.focuscourt" :disabled="editshow" @change="getFYJB(pd1.focuscourt,1)"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd1.focuscourt" @focus="getfocus(3)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"  placeholder="请输入关键字搜索" :disabled="editshow"   @change="getFYJB(pd1.focuscourt,1)"  filterable clearable default-first-option  size="small" class="yy-input-input" >
                          <el-option
-                           v-for="(item,ind) in wtfy"
+                           v-for="(item,ind) in fydwdata"
                            :key="ind"
                            :label="item.mc"
                            :value="item.orgid">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
+                     
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 涉及法院级别</span>
@@ -446,7 +446,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
+                      <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic(Global.fyjb)"></i>
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 不服本院</span>
@@ -458,7 +458,7 @@
                            :value="item.dm">
                            </el-option>
                         </el-select> 
-                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic('ajlx')"></i>
+                        <i class="el-icon-plus cursor" v-if='!editshow' style="color:red" @click="getdic(Global.bfby)"></i>
                       </el-col>
                         <el-col :span="24">
                            <span class="yy-input-text" style="width:11%!important;vertical-align: top;" title="当事人及案由"><font class="red">*</font> 当事人及案由</span>
@@ -484,7 +484,7 @@
                      </el-col>
                       <el-col :span="8" v-if='pd1.informationoperation=="0199000011"'>
                         <span class="yy-input-text" style="width:35%"><font class="red">*</font> 审批领导</span>
-                        <el-select v-model="pd1.checkuserid" @change="chChangelist(pd1.checkuserid,6,6)" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd1.checkuserid" @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" @change="chChangelist(pd1.checkuserid,6,6)" :disabled="editshow" filterable clearable default-first-option size="small" class="yy-input-input" >
                                         <el-option
                                           v-for="(item,ind) in jbrdata"
                                           :key="ind"
@@ -506,7 +506,7 @@
                      </el-col>
                        <el-col :span="8"  v-if='pd1.informationoperation=="0199000012"'>
                         <span class="yy-input-text">是否转办告知</span>
-                          <el-select v-model="bppd.isassigninform" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                          <el-select v-model="bppd.isassigninform" :disabled="editshow" @change="ISassign(bppd.isassigninform)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                         v-for="(item,ind) in $store.state.zbgzqf"
                                         :key="ind"
@@ -525,7 +525,7 @@
                      <el-col :span="8">
                            <span class="yy-input-text"><font class="red">*</font> 审批人</span>
                            <!-- <el-input placeholder="请输入内容" size="small" clearable v-model="pd4.checkuserid"  class="yy-input-input" ></el-input>  -->
-                          <el-select v-model="bppd.checkuserid" :disabled="editshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                          <el-select v-model="bppd.checkuserid" @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" :disabled="editshow" filterable clearable default-first-option   size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in jbrdata"
                                 :key="ind"
@@ -554,7 +554,7 @@
                                     placeholder="选择时间" class="yy-input-input" >
                                 </el-date-picker>
                     </el-col>
-                             <el-col :span="8" v-if='bppd.isassigninform=="0217000001"'>
+                             <el-col :span="8" v-if='gzshow'>
                                 <span class="yy-input-text">督（转）办号</span>
                                  <el-select v-model="bppd.assigntypeno" :disabled="editshow" @change="getDBHBP(bppd.assigntypeno,0);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:20%!important;" >
                                     <el-option
@@ -574,7 +574,7 @@
                                 </el-select>
                                 {{dbhbp}}
                             </el-col>
-                            <el-col :span="8" v-if='bppd.isassigninform=="0217000001"'>
+                            <el-col :span="8" v-if='gzshow'>
                                 <span class="yy-input-text">转办告知文号</span>
                                 <el-input placeholder="自动生成文号" :disabled="true" size="small" clearable v-model="bppd.assigninformno"  class="yy-input-input" ></el-input> 
                             </el-col>
@@ -691,7 +691,7 @@
                        <el-col :span="8">
                         <span class="yy-input-text">是否转办告知</span>
                         
-                          <el-select v-model="pd4.isassigninform" :disabled="ckshow || spshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                          <el-select v-model="pd4.isassigninform"  :disabled="ckshow || spshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                         v-for="(item,ind) in $store.state.zbgzqf"
                                         :key="ind"
@@ -977,7 +977,7 @@
                     <el-row class="ah-40">
                        <el-col :span="8">
                            <span class="yy-input-text"><font class="red">*</font> 承办单位</span>
-                                <el-select v-model="pd5.undertakingorgid" :disabled="ckshow" @change="getBM(pd5.undertakingorgid,1)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                <el-select v-model="pd5.undertakingorgid" remote :remote-method="cbdwremoteMethod" v-el-select-loadmore="cbdwloadmore"  placeholder="请输入关键字搜索" :disabled="ckshow" @change="getBM(pd5.undertakingorgid,1)" filterable clearable default-first-option size="small" class="yy-input-input" >
                                     <el-option
                                         v-for="(item,ind) in cbdw"
                                         :key="ind"
@@ -1431,7 +1431,7 @@
              </el-col>
               <el-col :span="12">
                <span class="yy-input-text trt">经办人：</span>
-              <el-select v-model="form1.undertakinguserid" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+              <el-select v-model="form1.undertakinguserid" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" filterable clearable default-first-option  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in jbrdata"
                                 :key="ind"
@@ -1488,13 +1488,12 @@
                <span class="yy-input-text trt">来源法院人员：</span>
               <el-select v-model="form1.sourcecourtpersonpbid" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                     <el-option
-                                v-for="(item,ind) in jbrdata"
-                                :key="ind"
-                                :label="item.fullName"
-                                :value="item.pbId">
-                      </el-option>
-                    
-               </el-select>
+                         v-for="(item,ind) in jbrdata"
+                         :key="ind"
+                         :label="item.fullName"
+                         :value="item.pbId">
+                   </el-option>
+              </el-select>
              </el-col>
               <el-col :span="12" v-else>
                <span class="yy-input-text trt">来源组织：</span>
@@ -1642,7 +1641,7 @@
        </el-dialog>
        
 </div>
-      <el-dialog title="添加字典项" :visible.sync="dicDialogVisible" :close-on-click-modal='false' width="630px">
+      <el-dialog title="添加字典项" :visible.sync="dicDialogVisible" v-if='dicDialogVisible' :close-on-click-modal='false' width="630px">
         <DIC :type="dtype" :data='dicdata'  @dicfatherMethod="dicfatherMethod" :random="new Date().getTime()"></DIC>
       </el-dialog>
     <el-dialog title="上传文件" :visible.sync="uploadDialogVisible"  :close-on-click-modal='false' width="630px">
@@ -1658,6 +1657,22 @@ import {ToArray} from '@/assets/js/ToArray.js'
 import {getYear} from '@/assets/js/date.js'
 export default {
   components:{UPLOAD,DIC},
+   directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                   binding.value();
+                }
+              });
+            }
+          }
+  },
     data(){
         return{
              casename:'关注案件信息',
@@ -1723,7 +1738,7 @@ export default {
              cbdw:[],//承办单位
              jbcbdw:[],//交办下的承办单位
              cbry:[],
-             wtfy:[],//问题针对法院
+             fydwdata:[],//问题针对法院
              lwshow:true,
              bjsj2:"",
              ffshow:true,
@@ -1756,6 +1771,20 @@ export default {
              dicdata:{},
              bppd:{},
              dbhbp:'',
+             jznum:50,//加载数据
+             formData: {   //下拉参数
+                 pageIndex: 1,
+                 pageSize: 20
+              },
+             xmload:[],
+             jdrload:[],
+             fydwload:[],
+             cbdwload:[],
+             fyrload:[],
+             gzshow:false,
+             bs:0,
+             lmrdata:[],
+             lmrload:[],
 
         }
     },
@@ -1813,22 +1842,7 @@ export default {
          this.ctitle=val.query.ctitle;
          this.state=val.query.status==null?'0':val.query.status;
          this.baseid=val.query.baseid;
-           if(this.$store.state.jid!=null){
-                 this.$set(this.pd1,"session",this.$store.state.jid);
-            }
-             if(this.$store.state.cid!=null){
-                 this.$set(this.pd1,"times",this.$store.state.cid);
-            }
-           
-            if(this.$store.state.pbid!=null){
-                  this.$set(this.dataList[0],"undertakinguserid",this.$store.state.pbid);
-            }
-
-          // if(this.year!=null){
-          //     this.$set(this.pd2,"assignyear",this.year);
-          //  }
-
-        
+          
 
          if(this.state=="9"){
             this.ckshow=true;
@@ -1836,22 +1850,21 @@ export default {
          if(this.state!="0"){
             this.editshow=true;
          }
-     
          this.datanum=0;
-         this.getName();
-         this.getcbbm();
-         this.getcbdw();
-         this.getDBLB();
+        // this.getName();
+        // this.getcbbm();
+         //this.getcbdw();
+       
         //  this.getBJtime();
-         this.getJBR();
+          
         //  this.getFKR();
-         this.getFY();
+        // this.getFY();
         // this.getLWDW();
         
          this.getList();
 
          if(this.year=="" || this.year==null){
-             this.year=new Date().getFullYear();
+             this.year=new Date().getFullYear()+"";
 
           }
         
@@ -1921,24 +1934,106 @@ export default {
         getLWLY(t){
         
               if(t=="0158000001"){
-                this.getJBR(null,0);
+                // this.getJBR(null,0);
                  this.lwshow=true;
               }else{
-                 this.getLYZZ();
+                // this.getLYZZ();
                  this.lwshow=false;
               }
         },
-        getName(){
+        getName(val,t){
+      
+          
            let p={
-             'name':'',
+             'personName':'',
              'leveType':'0150000001',
            };
            this.$api.post(this.Global.aport1+'/baseinfo/personlist',p,
              r =>{
-                  
-                   this.xmdata=r.data;
+                  if(t==0){
+                       var arr = r.data.filter(item=>{
+                                return item.personId.indexOf(val) + 1
+                       });
+                   
+                      this.xmdata=arr;
+                      console.log(this.xmdata);
+                      
+                      this.$set(this.pd1,'leaderpbid',val)
+                   }
             });
         },
+            //来文人远程搜索
+      xmremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'personName':quer,
+            };
+            this.$api.post(this.Global.aport1+'/baseinfo/personlist',p,
+                  r =>{
+                      if(r.code==1){
+                        this.xmload=r.data;
+                        if(this.xmload.length>this.jznum){
+                          this.bs=0;
+                          this.xmdata=this.xmload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.xmdata=this.xmload;
+                        }
+                      }
+                  });
+         }else{
+            this.xmdata=[];
+       
+         } 
+
+        },
+        //来文人单位加载
+       xmloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.xmload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.xmdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+
+         //联名代表、委员、特约人员远程搜索
+      lmrremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'personName':quer,
+            };
+            this.$api.post(this.Global.aport1+'/baseinfo/personlist',p,
+                  r =>{
+                      if(r.code==1){
+                        this.lmrload=r.data;
+                        if(this.lmrload.length>this.jznum){
+                          this.bs=0;
+                          this.lmrdata=this.lmrload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.lmrdata=this.lmrload;
+                        }
+                      }
+                  });
+         }else{
+            this.lmrdata=[];
+       
+         } 
+
+        },
+        //联名代表、委员、特约人员单位加载
+       lmrloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.lmrload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.lmrdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+        
         getNum(i){
            this.dataList[i].Number=1;
         },
@@ -1950,9 +2045,11 @@ export default {
                       obj = this.xmdata.find(item =>{
                           return item.personId === val 
                       });
-              this.pd1.representativeId=obj.representativeId;
-              this.pd1.cppcMemberId=obj.cppcMemberId;
-              this.pd1.specialPersonId=obj.specialPersonId;
+              if(obj){
+                this.pd1.representativeId=obj.representativeId;
+                this.pd1.cppcMemberId=obj.cppcMemberId;
+                this.pd1.specialPersonId=obj.specialPersonId;
+              }
           let p={
              'personId':val,
              'personType':obj.identityType
@@ -2022,7 +2119,7 @@ export default {
           }
           var arr=this.formListN[i].lmdbid.split('|');
           var obj = {};
-                 obj = this.xmdata.find(item =>{
+                 obj = this.lmrdata.find(item =>{
                      return item.pbId === arr[0] && item.personId === arr[1]
              });
             var srr=this.dataList[i].lmdata;
@@ -2336,10 +2433,11 @@ export default {
                      if(r.data.personinfovolist!=null){
                            this.tableData0=r.data.personinfovolist;
                        }
-                      if(r.data.focuscaseinfo.session!=null){
-                       
+                      if(r.data.focuscaseinfo!=null){
+                        
                         this.pd1=r.data.focuscaseinfo;
-                        console.log(this.pd1.focuscourt,'pd1.focuscaseid');
+                        this.getFY(this.pd1.focuscourt);
+                        this.getName(this.pd1.leaderpbid,0);
                        
                             
                             //问题针对法院带入承办单位
@@ -2356,6 +2454,9 @@ export default {
                         // this.pd1.lettercontents=letter.lettercontents;
                          this.dataList=r.data.listMap;
                          for (let i = 0; i < this.dataList.length; i++) {
+                           if(this.dataList[i].undertakinguserid){
+                             this.getJBR(this.dataList[i].undertakinguserid);
+                           }
                             this.formList.push({lettertime:'',lettertimes:'',
                             lettersourcetype:'',sourcecourtpersonpbid:'',sourcecourtpersonname:'',lettersourceorgid:'',lettersourcename:'',leadershipinstruction:''});
                             this.formListN.push({lmdbid:''});
@@ -2517,6 +2618,19 @@ export default {
                            
                         });
                    
+              }else{
+               
+                  if(this.$store.state.jid!=null){
+                      this.$set(this.pd1,"session",this.$store.state.jid);
+                  }
+                  if(this.$store.state.cid!=null){
+                      this.$set(this.pd1,"times",this.$store.state.cid);
+                  }
+                
+                  if(this.$store.state.pbid!=null){
+                    this.getJBR(this.$store.state.pbid,1);//经办人
+                  }
+
               }
              
               
@@ -3157,6 +3271,45 @@ export default {
                     }
                 });
         },
+         //承办单位远程搜索
+      cbdwremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                "orgid":this.$store.state.orgid,
+                'name':quer,
+            };
+            this.$api.post(this.Global.aport1+'/org/getUndertakeUnits',p,
+                  r =>{
+                      if(r.code==1){
+                        this.cbdwload=r.data;
+                        if(this.cbdwload.length>this.jznum){
+                          this.bs=0;
+                          this.cbdw=this.cbdwload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.cbdw=this.cbdwload;
+                        }
+                      }
+                  });
+         }else{
+            this.cbdw=[];
+       
+         } 
+
+        },
+        //承办单位加载
+       cbdwloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.cbdwload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.cbdw = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+        
+
+
         getFYJB(val,t){
         
           
@@ -3180,7 +3333,7 @@ export default {
               break;
              case 1:
               var obj = {};
-                      obj = this.wtfy.find(item =>{
+                      obj = this.fydwdata.find(item =>{
                           return item.orgid === val 
                       });
                    
@@ -3193,17 +3346,61 @@ export default {
              
         },
         //问题针对法院 法院单位
-        getFY(){
+        getFY(val){
           let p={
             'name':''
           };
           this.$api.get(this.Global.aport1+'/org/getCourtOrg',p,
                 r =>{
                     if(r.code==1){
-                        this.wtfy=r.data;
+                         var arr = r.data.filter(item=>{
+                                return item.orgid.indexOf(val) + 1
+                              });
+                       
+                        this.fydwdata=arr;
+                        this.$set(this.pd1,'focuscourt',val)
                     }
                 });
         },
+
+             //法院单位远程搜索
+      fydwremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'name':quer,
+            };
+            this.$api.get(this.Global.aport1+'/org/getCourtOrg',p,
+                  r =>{
+                      if(r.code==1){
+                          this.fydwload=r.data;
+                        if(this.fydwload.length>this.jznum){
+                          this.bs=0;
+                          this.fydwdata=this.fydwload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.fydwdata=this.fydwload;
+                        }
+                      }
+                  });
+         }else{
+            this.fydwdata=[];
+       
+         } 
+
+        },
+        //法院单位加载
+       fyloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.fydwload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.fydwdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+
+
+
         //获取承办人  经办人 d单位  b部门 
         getCBR(t,d,b,m){
              let p={
@@ -3232,22 +3429,105 @@ export default {
               
          },
          //经办人
-         getJBR(orgid,t){
+         getJBR(val,t){
               let p={
-               'orgId':orgid==null?this.$store.state.orgid:orgid,
+               'orgId':this.$store.state.orgid,
                'subOrgId':'',
              };
             this.$api.post(this.Global.aport1+'/courtPerson/queryByOrg',p,
                 r =>{
                     if(r.code==1){
-                          if(t==0){
-                            this.fyrdata=r.data;
-                          }else{
-                            this.jbrdata=r.data;
-                          }
+                   
+                            this.jdrload=r.data;
+                             var arr = this.jdrload.filter(item=>{
+                                return item.pbId.indexOf(val) + 1
+                              });
+                            this.jbrdata=arr;
+                            this.$set(this.dataList[0],"undertakinguserid",val);
+                           
+
+                          
                     }
                 });
          },
+       
+          //经办人远程搜索
+      jdrremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'orgId':this.$store.state.orgid,
+                'personName':quer,
+            };
+            this.$api.post(this.Global.aport1+'/courtPerson/queryByOrg',p,
+                  r =>{
+                      if(r.code==1){
+                        this.jdrload=r.data;
+                        if(this.jdrload.length>this.jznum){
+                          this.bs=0;
+                          this.jbrdata=this.jdrload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.jbrdata=this.jdrload;
+                        }
+                      }
+                  });
+         }else{
+            this.jbrdata=[];
+       
+         } 
+
+        },
+        //经办人加载
+       jbrloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.jdrload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.jbrdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+
+                  //经办人远程搜索
+      fyrremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'orgId':this.$store.state.orgid,
+                'personName':quer,
+            };
+            this.$api.post(this.Global.aport1+'/courtPerson/queryByOrg',p,
+                  r =>{
+                      if(r.code==1){
+                        this.fyrload=r.data;
+                        if(this.fyrload.length>this.jznum){
+                          this.bs=0;
+                          this.fyrdata=this.fyrload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.fyrdata=this.fyrload;
+                        }
+                      }
+                  });
+         }else{
+            this.fyrdata=[];
+       
+         } 
+
+        },
+        //经办人加载
+       fyrloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.fyrload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.fyrdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+
+
+
+
           getFKR(orgid,subid){
               let p={
                'orgId':orgid==null?this.$store.state.orgid:orgid,
@@ -3276,7 +3556,45 @@ export default {
                       
                     }
                 });
-         },
+          },
+          
+           //来源组织远程搜索
+      lyzzremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'mc':quer,
+            };
+            this.$api.post(this.Global.aport1+'/org/getSourceOrg',p,
+                  r =>{
+                      if(r.code==1){
+                        this.lyzzload=r.data;
+                        if(this.lyzzload.length>this.jznum){
+                          this.bs=0;
+                          this.lyzzdata=this.lyzzload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.lyzzdata=this.lyzzload;
+                        }
+                      }
+                  });
+         }else{
+            this.lyzzdata=[];
+       
+         } 
+
+        },
+        //来源组织加载
+       lyzzloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.lyzzload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.lyzzdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+
+
            //来文单位 
           getLWDW(){
               let p={
@@ -3292,11 +3610,13 @@ export default {
                 });
          },
         getdic(n){
+         
+                 this.dicdata.tablename=n;
                  this.dicDialogVisible=true;
           },
         dicfatherMethod(t){
-          if(t=='99'){
-          
+          if(t=='1'){
+              
           }
          this.dicDialogVisible=false;
         },
@@ -3395,6 +3715,7 @@ export default {
                     }
                 });
         },
+
         getDBLB(){
            this.$api.post(this.Global.aport1+'CaseAssignController/queryAssigndictionary',null,
                 r =>{
@@ -3424,6 +3745,34 @@ export default {
             this.$set(this.pd1,'isinterestrelations','0')
           }
         },
+        ISassign(t){
+                  
+          if(t=='0217000001'){
+              this.getDBLB();
+              if(this.$store.state.dbnf && this.$store.state.dbnf.length>0){
+                  
+                    this.$set(this.bppd,"assignyear",this.$store.state.dbnf[0].dm);
+              }
+              this.gzshow=true
+          }else{
+            this.gzshow=false;
+          }
+        },
+        getfocus(t){
+          switch (t) {
+           case 1:
+              this.xmdata=[];
+              break;
+           case 2:
+              this.jbrdata=[];
+              break;
+           case 3:
+              this.fydwdata=[];
+              break;
+            default:
+              break;
+          }
+        }
       
     },
     filters:{

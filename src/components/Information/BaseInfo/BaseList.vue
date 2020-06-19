@@ -1,6 +1,6 @@
 <!-- 人大代表高级查询 -->
 <template>
-    <div class="pairadd subtable">
+    <div class="pairadd ">
          <div class="homebread"><i class="iconfont el-icon-yy-mianbaoxie" style="color:#3872A2"></i>
          <span> 基本信息 
             <span class="mlr_10">/</span>  <b>联络对象</b>
@@ -8,7 +8,7 @@
             <span class="mlr_10">/</span>  <b>高级查询</b>
            </span>
             </div>
-         <div class="content">
+         <div class="content subtable">
                 <div class="ptitle mb-20">{{cinfo}}</div>
                 <div class="pborder">
                     <el-row class="lh">
@@ -380,7 +380,7 @@
                               <el-button type="primary" size="small"  :disabled="bnt" @click="getCK('1','修改')" v-if='allshow[2]'>修改</el-button>
                               <el-button type="primary" size="small"  :disabled="bnt" @click="dellist()" v-if='allshow[3]'>删除</el-button>
                               <el-button type="primary" size="small" @click="getDR" v-if='allshow[4]'>导入</el-button>
-                              <el-button type="primary" size="small"  :disabled="bnt" @click="getSH" v-if='allshow[5]'>审核</el-button>
+                              <!-- <el-button type="primary" size="small"  :disabled="bnt" @click="getSH" v-if='allshow[5]'>审核</el-button> -->
                               <!-- <el-button type="primary"  size="small" @click="download" v-if='allshow[6]'>下载全部</el-button> -->
                               <!-- <el-button type="primary"  size="small" @click="download" v-if='allshow[7]'>下载当页</el-button> -->
                              &nbsp;
@@ -596,7 +596,9 @@ export default {
                             for (let i = 0; i < this.alldata.length; i++) {
                                 this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
                          
-                            }   
+                            }  
+                           this.getCheckList();
+                            
                           }else if(r.code==0){
                             this.$router.push({path:'/limitmsg'});
                           }
@@ -607,7 +609,7 @@ export default {
            this.viewtype=val.query.type;
            //this.getXHFT();
           // this.getOrg();
-           this.getCheckList();
+         
           // this.getList(this.CurrentPage, this.pageSize, this.pd);
           
         },
@@ -806,10 +808,9 @@ export default {
                       if(r.code==1){
                           this.tableData=r.data.representativeList;
                           this.TotalResult=r.data.pageInfo.total;
-                          this.querybnt=true;
-                        
-                         
+                     
                       }
+                           this.querybnt=true;
                 });
         
         },

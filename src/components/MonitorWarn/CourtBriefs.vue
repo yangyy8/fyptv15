@@ -273,7 +273,7 @@
                 </el-option>
               </el-select>
        </el-col>
-        <el-col :sm="24" :md="24" :lg="24" v-if='bd'>
+        <el-col :sm="24" :md="24" :lg="24">
             <span class="yy-input-text trt"  style="width:13.5%!important;">标题：</span>
              <el-input placeholder="请输入内容" size="small" :disabled="ckshow" clearable v-model="form.title"  class="yy-input-input" style="width:80.5%!important;"></el-input>
         </el-col>

@@ -497,7 +497,7 @@ export default {
         this.$store.dispatch("getCwhwy");
         this.$store.dispatch("getZjqf");
         this.getinit(this.$route);
-        this.getCheckList();
+        
         //this.getList(this.CurrentPage, this.pageSize, this.pd);
     
     },
@@ -524,6 +524,7 @@ export default {
                                 this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
                          
                             }   
+                            this.getCheckList();
                           }else if(r.code==0){
                             this.$router.push({path:'/limitmsg'});
                           }
@@ -784,9 +785,8 @@ export default {
                       if(r.code==1){
                           this.tableData=r.data.cppcMemberList;
                           this.TotalResult=r.data.pageInfo.total;
-                           this.querybnt=true;
-                        
                       }
+                      this.querybnt=true;
                 });
         },
           download(){

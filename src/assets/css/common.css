@@ -74,6 +74,12 @@ textarea{resize: none!important;}
 .homenav .active{background-color: #2B5F98;}
 .homenav .line{border-right: 1px solid #4D678A;}
 
+.homenav1{height: 50px;line-height: 45px; background-color: #1F426C;}
+.homenav1 ul li{float: left;width: 16%;color: #ffffff;text-align: center; cursor: pointer; font-size: 18px; font-weight: 500; font-family: Arial, Helvetica, sans-serif;}
+.homenav1 ul li:hover{background-color: #2B5F98;}
+.homenav1 .active{background-color: #2B5F98;}
+.homenav1 .line{border-right: 1px solid #4D678A;}
+
 .homemain{background-color: #EDEDED; text-align: left;}
 .homebread{height: 40px;padding-top: 50px; font-size: 12px;}
 .homebread span{margin-left: 10px;}
@@ -142,7 +148,7 @@ textarea{resize: none!important;}
 .txtsl{overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
 .el-dialog__header{text-align: left; background-color: #262632; border-bottom:1px solid #eeeeee;border-top-left-radius: 5px;border-top-right-radius: 5px;}
 .el-dialog__title{color: #ffffff!important; border-radius: 10px;}
-.el-dialog__body{padding: 20px 10px!important;}
+.el-dialog__body{padding: 20px 20px!important;}
 .el-dialog{border-radius: 5px;}
 .el-dialog__body .el-input__inner{border-radius:5px!important;border:1px solid #cccccc;}
 .diaform{background:#F8F9FE; padding:10px 0px; border-bottom:1px solid #eeeeee}
@@ -310,3 +316,17 @@ textarea{resize: none!important;}
   color: #303133 !important;line-height: 25px;
 }
 .footcancel{text-align:center; margin-top:10px; padding-top:10px;}
+.depopContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+}
+.depopContainer .main{
+  text-align:center; 
+  padding-top:25% ;
+}
+.nrcss{max-height:250px;border:1px #cccccc solid; overflow-y:auto; border-radius: 5px; padding: 0px 20px; text-align:left;}

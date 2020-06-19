@@ -8,7 +8,7 @@
                 <el-radio v-model="showMode" label="0237000099">不展示</el-radio>
                 <el-radio v-model="showMode" label="0237000001">头部展示</el-radio>
                 <el-radio v-model="showMode" label="0237000002">底部展示</el-radio>
-                <el-radio v-model="showMode" label="0237000003" @change="getList">内容中展示</el-radio>
+                <el-radio v-model="showMode" label="0237000003" >内容中展示</el-radio>
                 </div>
              </el-col>
             
@@ -53,17 +53,18 @@
              <el-col :span="24" class="tlt">
                  <span style="font-size:16px;">公开内容</span>
                  </el-col>
-             <el-col :span="24" v-if='showMode=="0237000003"'>
+             <el-col :span="24">
+               
                 <div id="editorElem" style="text-align:left; margin-bottom:10px; "></div>
              </el-col>
-             <el-col :span="24" v-else>
+             <!-- <el-col :span="24">
                 <el-input
                     type="textarea"
                     :autosize="{ minRows: 8, maxRows: 8}"
                     placeholder=""
                     v-model="publicContents" :disabled="showMode=='0237000099'">
                     </el-input>
-             </el-col>
+             </el-col> -->
           
         </el-row>
          <div slot="footer" style="text-align:center;border-top:1px solid #cccccc; margin-top:10px; padding-top:10px;">
@@ -79,12 +80,10 @@
                             <div class="phonecont">
                               <div class="top">联络活动</div> 
                               <div style="height:500px;overflow-y: auto;">
-                              <div class="article" v-if='showMode=="0237000003"'>
+                              <div class="article" v-if='showMode=="0237000002"'>
                                   <div v-html="editorContent"  style="margin:10px 20px"></div>
                               </div>
-                              <div class="article" v-if='showMode=="0237000002"'>
-                                  <div v-html="publicContentstr" style="text-indent:2em;margin:10px 20px"></div>
-                              </div>
+                             
                         <el-row  class="imgs" v-if='showMode=="0237000001" || showMode=="0237000002"'>
                        <el-col :span="24" v-if="fits && fits.length>0" style="text-align:center">
                      
@@ -118,9 +117,10 @@
                         </div>
              </el-col>
                                 </el-row>
-                                <div class="article" v-if='showMode=="0237000001" || showMode=="0237000099"'>
-                                       <div v-html="publicContentstr" style="text-indent:2em;margin:10px 20px"></div>
-                                </div>
+                               
+                                 <div class="article"  v-if='showMode=="0237000001" || showMode=="0237000003"'>
+                                  <div v-html="editorContent"  style="margin:10px 20px"></div>
+                              </div>
                            </div>
                              </div>
                         </div>
@@ -128,12 +128,10 @@
                     <el-tab-pane label="外网平台">
                           <div class="phonecontw">
                                <div style="height:500px;overflow-y: auto;">
-                               <div class="article" v-if='showMode=="0237000003"'>
-                                  <div v-html="editorContent"></div>
+                               <div class="article" v-if='showMode=="0237000002"'>
+                                  <div v-html="editorContent"  style="margin:10px 20px"></div>
                               </div>
-                              <div class="article" v-if='showMode=="0237000002"'>
-                                    <div v-html="publicContentstr" style="text-indent:2em;margin:10px 20px"></div>
-                              </div>
+                             
                                 <el-row  class="imgs" v-if='showMode=="0237000001" || showMode=="0237000002"'>
                                   <el-col :span="24" v-if="fits && fits.length>0">
                      
@@ -167,8 +165,8 @@
                         </div>
              </el-col>
                                 </el-row>
-                                <div class="article" v-if='showMode=="0237000001" || showMode=="0237000099"'>
-                                      <div v-html="publicContentstr" style="text-indent:2em;margin:10px 20px"></div>
+                                <div class="article" v-if='showMode=="0237000001" || showMode=="0237000003"'>
+                                     <div v-html="editorContent"  style="margin:10px 20px"></div>
                                 </div>
                              </div>
                               </div>
@@ -196,8 +194,6 @@ export default {
               editorContent: '',
               content:'',
               txtcontent:'',
-              publicContents:'',
-              publicContentstr:'',
               isyl:true,
               fits:[],
               height:'350px',
@@ -212,8 +208,6 @@ export default {
     watch:{
       random:function(newVal,oldVal){
           this.showMode="";
-          this.publicContents='';
-          this.publicContentstr='';
           this.content="";
           this.editorContent="";
           this.getinit();
@@ -232,10 +226,9 @@ export default {
             this.isyl=true;
            
              if(this.data.length==1){
-               this.publicContents=this.data[0].contents;
-               this.publicContentstr=this.publicContents.replace(/\n/g,'<br />');
+         
                this.fits=this.data[0].imageList;
-               console.log(this.data,this.data[0].imageList,'fits');
+          
                
              }
               let p={
@@ -249,7 +242,8 @@ export default {
                     }
                     
              });
-            
+             this.getList();
+                  
                   
          },
           getList(t){
@@ -263,6 +257,7 @@ export default {
                  }else{
                     if(this.data.length==1){
                         editor.txt.html(this.data[0].contents);
+                        this.editorContent=this.data[0].contents;
                      }else{
                         editor.txt.html("");
                     }
@@ -275,14 +270,14 @@ export default {
                     if(this.showMode==''){
                         this.$message.error("影像资料展示模式不能为空！");return;
                     }
-                    if(this.showMode!='0237000099' && this.publicContents==''){
+                    if(this.showMode!='0237000099' && this.editorContent==''){
                          this.$message.error("公开内容不能为空！");return;
                     }
 
                     let p={
                         'contentPublicList':this.data,
                         'showMode':this.showMode,
-                        'publicContents':this.publicContents,
+                        'publicContents':this.editorContent,
                         'pushStatus':'0136000002',
                         'isPush':'0135000001',
                     }
@@ -307,7 +302,6 @@ export default {
                this.$message.error("影像资料展示模式不能为空！");return;
              }
         
-             
             this.isyl=false;
         },
         canlce(){

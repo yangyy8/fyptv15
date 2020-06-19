@@ -141,7 +141,7 @@ export default {
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
               
-              console.log(this.info,'this.infos');
+           
               
                this.addtype=this.info.type;
                this.jb=this.info.jb;
@@ -166,8 +166,7 @@ export default {
               
                this.addtype=val.query.type;
                this.jb=val.query.jb;
-            //    this.jjbmc=this.$store.state.jmc;
-            //    this.jjb=this.$store.state.jid;
+           
                this.back=false;
                this.getTitle();
            }
@@ -181,7 +180,6 @@ export default {
                           if(r.code==1 && r.data!=null){
                             for (let i = 0; i < this.alldata.length; i++) {
                                this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
-                               console.log(this.alldata,'--',this.alldata[i],'===',r.data);
                                
                             }   
                            this.getInfo();
@@ -412,8 +410,7 @@ export default {
     },
     //特约人员
       getline(){
-          console.log(this.lbpd,'this.lbpd');
-          
+         
            this.$router.push({name:'SpecialPersonDeatil',query:{lb:this.lbpd.dm,lbmc:this.lbpd.mc,mc:this.cname3,jb:this.jb,jblv:this.lvltype,code:this.code,codemc:this.mc,jkey:this.lbpd.tyjb,jmc:this.lbpd.tyjbmc}});
        },
     

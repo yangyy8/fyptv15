@@ -1,5 +1,5 @@
 <template>
-  <div class="my-table">
+  <div class="my-table  tjtable">
     <el-table :data="data">
       <my-column v-for="(item,index) in col" :key="index" :col="item"></my-column>
     </el-table>

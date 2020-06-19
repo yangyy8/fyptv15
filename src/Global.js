@@ -4,9 +4,14 @@ const aport3="";//刘逸文
 const aporttj=window.IPConfig.TJ+'/risk/analysis';//统计分析
 const uploads=window.IPConfig.IP;
 const aport4=window.IPConfig.Login;//用户管理
+const ueditordz='./static/UEditor/';//外部地址
+const wbdz='/dist';//外部地址
 const fycount=3;//分页
 const imgformat="jpg,jpeg,png";//图片格式
 const docformat="doc,docx,xls,xlsx";//文件格式
+const tpm=10;//图片的上传M
+const spm=50;//视频的上传M
+
 const zddz="/service/getRedisDataByDm?tablename=";
 const tb="/service/getGroupType";//团别
 const qtb=zddz+"dic_osbu_grouptype";//团别
@@ -137,6 +142,7 @@ const COURTPERSON = "0173000004";
 const RD="0227000001";//人大
 const ZX="0227000002";//政协
 const FY="0227000003";//法院
+
 const TZB="0227000004";//统战部
 const MZDP="0227000005";//八大民族党派
 const MZDP1="0227000006";//中国国民党革命委员会
@@ -151,7 +157,7 @@ const GSL="0227000014";//工商联
 const TL="0227000015";//台联
 export default
 {
-    aport1,aport2,aport3,uploads,aport4,xb,lwqj,ajlx,sljd,lhgx,fyjb,bfby,zbxs,bjjg,jb,cb,aporttj,
+    aport1,aport2,aport3,uploads,aport4,wbdz,ueditordz,xb,lwqj,ajlx,sljd,lhgx,fyjb,bfby,zbxs,bjjg,jb,cb,aporttj,
     ajzt,xxcz,spjg,jgydbyj,gtxs,gtxg,dfxs,dfxz,cbxs,lwlylb,xzqh,tyry,tb,jjb,dp,jbb,
     mz,xl,zylb,zmwyh,bzdr,hdlx,hdfs,tylb,zzfl,dwlxr,jg,sfbm,taywzl,yalx,cblb,cbxz,taxs,
     dflx,zdywfl,tgxs,gkqf,zdqf,scfl,xwdwfl,xwdwjb,xw,sydw,fydw,rddw,zxdw,tazz,zdaj,imgformat,
@@ -159,5 +165,5 @@ export default
     cfaj,zbqf,zbgzqf,dblb,dbnf,zzxgwjlx,zw,sfxhft,yajyfl,yaywzl,syyjfl,scjyfl,fycount,menuurl,
     REPRESENTATIVE,CPPCMEMBER,SPECIALPERSON,COURTPERSON,RD,ZX,FY,TZB,MZDP,GSL,TL,jpyy,tysf,tyjburl,
     MZDP1,MZDP2,MZDP3,MZDP4,MZDP5,MZDP6,MZDP7,MZDP8,sflr,jdqf,jburl,tburl,jjburl,tylburl,bxqf,zfxwjb,
-    lxss,cwhwy,sbjys,zjqf,dyzt,xxczbq,wjlb,
+    lxss,cwhwy,sbjys,zjqf,dyzt,xxczbq,wjlb,tpm,spm,
 }

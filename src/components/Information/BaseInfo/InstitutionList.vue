@@ -139,11 +139,11 @@
                         </el-col>
                     </el-row>
                     <div class="footer">
-                    <el-button type="primary"  style="width:130px;" @click="CurrentPage=1;getList(CurrentPage,pageSize,pd)">查 询</el-button>
+                    <el-button type="primary"  style="width:130px;" v-if="querybnt" @click="CurrentPage=1;getList(CurrentPage,pageSize,pd)">查 询</el-button>
+                     <el-button type="primary"  style="width:130px;" :disabled="true" v-else>查询中</el-button>
                     <el-button style="width:130px;" @click="reset()">重  置</el-button>
                      </div>
                 </div>
-
                 <div class="pborder mt-20">
                          <el-row>
                             <el-col :span="16">
@@ -155,7 +155,8 @@
                                &nbsp;
                               </el-col>
                               <el-col :span="8" class="trt">
-                               {{cname}}总数 <b class="sumfont" >{{this.TotalResult}}</b> 件
+                               {{cname}}总数 <b class="sumfont" >{{this.TotalResult}}</b> 
+                               <span v-if='addtype==7'>家</span><span v-else>个</span>
                               </el-col>
                          </el-row>
                      <el-table
@@ -296,6 +297,7 @@ export default {
             vvurlErr:'',
             lx:'',
             lxtype:'',
+            querybnt:'',
 
         }
     },
@@ -464,6 +466,8 @@ export default {
            }else if(this.addtype=="4"){
              this.pd.lbs=this.pd.lbss;
            }
+           this.querybnt=false;
+           this.tableData=[];
            let p={
                'token':this.$store.state.token,
                'pd':this.pd,
@@ -479,7 +483,9 @@ export default {
                       if(r.code==1){
                          this.tableData=r.data.orgInfoVOList;
                          this.TotalResult=r.data.pageInfo.total;
+                        
                       }
+                      this.querybnt=true;
                 });
         
         },

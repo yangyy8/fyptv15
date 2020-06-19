@@ -8,7 +8,7 @@
               </el-col>
         
               <el-col :span="15">
-                        <div class="homenav" style="background: #fff;">
+                        <div :class="dhnum>6?'homenav':'homenav1'" style="background: #fff;">
                         <el-menu
                             router
                             mode="horizontal"
@@ -178,6 +178,8 @@ export default {
            xzdw:[],
            alldata:['20003901','20003902','20003903','20003904'],
            allshow:[],
+           dhnum:0,
+           xzdwload:[],
           
         }
     },
@@ -199,7 +201,7 @@ export default {
      
       
       this.getMenu();
-      
+      this.setDw();
       this.getfooter();
 
     },
@@ -216,7 +218,7 @@ export default {
          }
          else if(command=='d'){
           // this.$router.push({name:'AuthoritySwith'});
-          this.setDw();
+          this.xzdw=this.xzdwload;
           this.addDialogVisible=true;
          }
       },
@@ -227,7 +229,7 @@ export default {
              this.$api.post(this.Global.aport4+'/user/getUserOrgs',p,
             r=>{
                       if(r.code==1){
-                         this.xzdw=r.data;
+                         this.xzdwload=r.data;
                       }
             });
         },
@@ -277,7 +279,9 @@ export default {
                                 else if(id=="1400"){this.show5=true;}
                                 else if(id=="1700"){this.show6=true;}
                           }
-                        }
+                    this.dhnum=array.length;
+         
+                      }
                    }else{
               
                    this.menuData=[];

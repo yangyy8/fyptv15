@@ -2108,7 +2108,7 @@ export default {
         var url="";
         let p={};
         this.pd.proposalInfoId=this.proposalInfoId;
-        this.pd.year=this.year;
+        this.pd.year=this.pd.year?this.pd.year:this.year;
            switch (this.zt) {
              case 'jb':
                url="/proposalAssign/saveAssignInfo";//交办

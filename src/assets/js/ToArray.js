@@ -39,5 +39,9 @@ export function ToData(data) {
     return returnValue;
 };
 
+export function getTableName(val)
+{
+   return val.replace('/service/getRedisDataByDm?tablename=','');
+};
 
 

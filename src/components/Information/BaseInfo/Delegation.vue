@@ -9,7 +9,7 @@
           </div>
           <div class="content">
         <el-row>
-            <el-col :span="4">
+            <el-col :span="addtype=='1'?5:4">
                <div  class="left">
                     <el-row class="ah-40" style="text-align: center;" >
                            <el-col :span="24"  v-if="addtype=='1'">
@@ -20,12 +20,12 @@
                                 </el-row>
                                 <el-row  v-else> -->
                                   <el-row>
-                                    <el-col :sm="24" :md="24" :lg="12"  v-for="(t,indm) in leveldata" :key="indm + '-only'">
-                                         <span class="area" @click="gopro(t.dm,'tb',t.mc)" v-if="t.dm!='0190900000'">{{t.mc}}</span>
+                                    <el-col :sm="24" :md="24" :lg="t.mc.length>8?24:12"  v-for="(t,indm) in leveldata" :key="indm + '-only'">
+                                         <span class="area" @click="gopro(t.dm,'tb',t.mc)">{{t.mc}}</span>
                                     </el-col>
-                                  <el-col :sm="24" :md="24" :lg="24"  v-for="(ts,inde) in leveldata" :key='inde'>
+                                  <!-- <el-col :sm="24" :md="24" :lg="24"  v-for="(ts,inde) in leveldata" :key='inde'>
                                          <span class="area" v-if="ts.dm=='0190900000'"  @click="gopro('0190900000','tb','解放军和武警部队')">解放军和武警部队</span>
-                                  </el-col>
+                                  </el-col> -->
                                 </el-row>
                            </el-col>
                              <el-col :span="24" v-for="(t,inds) in jjblist" :key="inds" v-if="addtype=='2'">
@@ -35,7 +35,7 @@
 
                </div>
             </el-col>
-             <el-col :span="14">
+             <el-col :span="addtype=='1'?13:14">
                <el-row >
                    <el-col :span="14">
                      <div class="title"><span style="margin-right: 10px;">{{jmc==null?'':jmc}} {{mc}}</span><span v-if="ifZx!=''">代表团</span>名单</div>
@@ -78,13 +78,19 @@
           <br/>
         </div>
   <el-dialog title="导入文件" :visible.sync="uploadDialogVisible" :close-on-click-modal='false'  width="630px">
-      <UPLOAD :url="uurl" :type="99"  :urlErr="uurlErr" :periodType='jkey'  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
+      <UPLOAD :url="uurl" :type="1000"  :urlErr="uurlErr" :periodType='jkey'  @fatherMethod="fatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
+
+   <div class="depopContainer" v-if='loadshow'>
+      <div class="main"><i class="el-icon-loading" style="font-size:20px;"></i><br/><span style="font-size:12px;">正在加载中...</span></div>
+   </div>
     </div>
 </template>
 <style>
   .iflast{font-style: normal}
+
 </style>
+
 <script>
 import UPLOAD from "../../Common/upload"
 import {getlljgdbtmenu,getlljgdbtdata} from '@/assets/js/aleainfo.js'
@@ -127,6 +133,7 @@ export default {
           allshow:[],
           num:1,
           leveltype:'',
+          loadshow:false,
        }
     },
     mounted(){
@@ -312,8 +319,11 @@ export default {
         },
         getList(tt,vv,kk,jb1)
         {
+             this.loadshow=true;
+            
             var url="/baseinfo/listbytype";
             let p={};
+            this.RYData=[];
             switch (tt) {
                 case '1':
                     this.mname="代表";
@@ -410,6 +420,8 @@ export default {
                   this.RYData=r.data;
                   this.count=r.data.length;
                   this.labellist=r.data.tags;
+                  this.loadshow=false;
+                 
             });
         },
         gopro(d,t,mc){

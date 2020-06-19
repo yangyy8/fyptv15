@@ -27,7 +27,7 @@
        
     </div>
      <p class="Upload_pictures">
-           <span>建议上传640x400，大小不超过2M图片，支持{{imgmat}}</span>
+           <span>建议上传640x400，大小不超过{{this.Global.tpm}}M图片，支持{{imgmat}}</span>
         </p>
    
     <div class="upload">
@@ -68,12 +68,11 @@
         </div>
     </div>
     <p class="Upload_pictures">
-        <span>建议上传不超过200M视频，支持mp4,avi</span>
+        <span>建议上传不超过{{this.Global.spm}}M视频，支持mp4,avi</span>
     </p>
-
       <div slot="footer" style="text-align:center;border-top:1px solid #cccccc; padding-top:10px;">
-              <el-button type="success"  size="small" @click="submit">上 传</el-button>           
-        </div> 
+         <el-button type="success"  size="small" @click="submit">上 传</el-button>           
+      </div> 
 </div>
 </template>
 <script>
@@ -124,13 +123,13 @@ export default {
      methods: {
      //上传前回调
             beforeUploadVideo(file) {
-                var fileSize = file.size / 1024 / 1024 < 200;
+                var fileSize = file.size / 1024 / 1024 < this.Global.spm;
                 if (['video/mp4', 'video/ogg', 'video/flv', 'video/avi', 'video/wmv', 'video/rmvb', 'video/mov'].indexOf(file.type) == -1) {
                     this.$message.error("请上传正确的视频格式");
                     return false;
                 }
                 if (!fileSize) {
-                    this.$message.error("视频大小不能超过200MB");
+                    this.$message.error("视频大小不能超过"+this.Global.spm+"M");
                     return false;
                 }
                 this.isShowUploadVideo = false;
@@ -196,9 +195,9 @@ export default {
         },
         handleAvatarSuccess(res, file){
               
-         if (file.size > 2 * 1024 * 1024) {
+         if (file.size > this.Global.tpm * 1024 * 1024) {
                    this.error=1;
-                   this.$message.error(file.name+" 不能超过2M");
+                   this.$message.error(file.name+" 不能超过"+this.Global.tpm+"M");
                    return;  //必须返回false
          }
             

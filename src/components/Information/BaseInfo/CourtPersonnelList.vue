@@ -318,6 +318,12 @@ export default {
                                 this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
                          
                             }   
+                            this.getCheckList();
+                             if(val.query.jgid && val.query.sjid){
+                                  this.pd.orgId=val.query.sjid;
+                                  this.getSSBM(val.query.sjid);
+                                  this.pd.subOrgId=val.query.jgid;
+                              }
                           }else if(r.code==0){
                             this.$router.push({path:'/limitmsg'});
                           }
@@ -327,13 +333,8 @@ export default {
 
                 this.addtype=val.query.type;
               //  this.getSSFY();
-                this.getCheckList();
                // this.getList(this.CurrentPage, this.pageSize, this.pd);
-                if(val.query.jgid && val.query.sjid){
-                    this.pd.orgId=val.query.sjid;
-                    this.getSSBM(val.query.sjid);
-                    this.pd.subOrgId=val.query.jgid;
-                }
+               
           },
          handleSelectionChange(val) {
           this.multipleSelection = val;

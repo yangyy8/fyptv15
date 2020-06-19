@@ -99,7 +99,8 @@ export default {
          }else if(val.query.info!=undefined && val.query.info!=''){
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
-             
+           
+            
               
                this.addtype=this.info.type;
                this.jb=this.info.jb;

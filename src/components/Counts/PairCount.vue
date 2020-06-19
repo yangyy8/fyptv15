@@ -47,27 +47,12 @@
                             </el-select>
                             </div>
                         </el-col>
-                        <!-- <el-col :sm="24" :md="12" :lg="8" class="input-item">
-                      <span class="yy-input-text" style="width:18%!important;">时间</span>
-                      <div class="yy-input-input  t-flex  t-date" >
-                        <el-date-picker
-                           v-model="pd.startTime" format="yyyy-MM-dd"
-                           type="date" size="small" value-format="yyyy-MM-dd"
-                           placeholder="开始时间" >
-                        </el-date-picker>
-                        <span class="septum">-</span>
-                        <el-date-picker
-                            v-model="pd.endTime" format="yyyy-MM-dd"
-                            type="date" size="small" value-format="yyyy-MM-dd"
-                            placeholder="结束时间" >
-                        </el-date-picker>
-                     </div>
-                     </el-col> -->
+                    
                         <el-col :sm="24" :md="12" :lg="12">
-                            <span class="yy-input-text" style="width:18%!important;">组织单位</span>
-                           <el-select v-model="pd.orgUnitId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            <span class="yy-input-text" style="width:18%!important;">开展单位</span>
+                           <el-select v-model="pd.orgUnitId"  remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore" @change="getNull(pd.orgUnitId,1)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
-                                 v-for="(item,ind) in $store.state.sydw"
+                                 v-for="(item,ind) in kzdwdata"
                                  :key="ind"
                                  :label="item.mc"
                                  :value="item.orgid">
@@ -77,7 +62,7 @@
                      
                          <el-col :sm="24" :md="12" :lg="12">
                             <span class="yy-input-text" style="width:18%">录入单位</span>
-                           <el-select v-model="pd.entryUnitId" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.entryUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @change="getNull(pd.entryUnitId,2)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -166,6 +151,22 @@
 <script>
 import {format} from '@/assets/js/date.js'
 export default {
+     directives: {
+          'el-select-loadmore': {
+            bind(el, binding) {
+              const SELECTWRAP_DOM = el.querySelector(
+                '.el-select-dropdown .el-select-dropdown__wrap'
+              );
+              SELECTWRAP_DOM.addEventListener('scroll', function() {
+                const condition =
+                  this.scrollHeight - this.scrollTop <= this.clientHeight;
+                if (condition) {
+                  binding.value();
+                }
+              });
+            }
+          }
+  },
     data(){
         return{
             tableData:[],
@@ -174,11 +175,20 @@ export default {
             yeardata:[],
             monthdata:[],
             spanArr:[],
+            kzdwdata:[],
+            kzdwload:[],
+            formData: {   //下拉参数
+                pageIndex: 1,
+                pageSize: 20
+            },
+           jznum:50,//下载加载多少条
+           bs:0,
+           fydwload:[],
         }
     },
     mounted(){
         // this.spanArr=[]; 
-        this.$store.dispatch("getSydw");
+       
         this.getyear();
         this.getmonth();
         this.getFY();
@@ -341,6 +351,90 @@ export default {
             document.body.appendChild(link)
             link.click()
         },
+        //开展单位远程搜索
+        kzdwremoteMethod(quer){
+          if (quer != '') {
+           let p={
+              'mc':quer
+           };
+          this.$api.post(this.Global.aport1+'/org/getDevelopOrg',p,
+                r =>{
+                    if(r.code==1){
+                      this.kzdwdata=r.data;
+                      if(this.kzdwdata.length>this.jznum){
+                        this.bs=0;
+                        this.kzdwdata=this.kzdwdata.slice(0,this.jznum);
+                      }else{
+                        this.bs=1;
+                        this.kzdwdata=this.kzdwdata;
+                      }
+                    }
+                });
+          
+          }else{
+            this.kzdwdata=[];
+          }
+        },
+        //开展单位加载
+    kzloadmore() {
+        if(this.bs==1){return;}
+        var srr= this.kzdwload;
+        this.formData.pageIndex++;
+        let num = this.formData.pageIndex * this.formData.pageSize;
+           this.kzdwdata =srr.filter((item, index, arr) => {
+               return index < num;
+         });
+       
+    },
+      //法院单位远程搜索
+        fydwremoteMethod(quer){
+          if (quer != '') {
+             let p={
+                'name':quer,
+            };
+            this.$api.get(this.Global.aport1+'/org/getCourtOrg',p,
+                  r =>{
+                      if(r.code==1){
+                        this.fydwload=r.data;
+                        if(this.fydwload.length>this.jznum){
+                          this.bs=0;
+                          this.fydwdata=this.fydwload.slice(0,this.jznum);
+                        }else{
+                          this.bs=1;
+                          this.fydwdata=this.fydwload;
+                        }
+                      }
+                  });
+         }else{
+            this.fydwdata=[];
+         } 
+
+        },
+        //法院单位加载
+        fyloadmore() {
+          if(this.bs==1){return;}
+           var srr= this.fydwload;
+          this.formData.pageIndex++;
+          let num = this.formData.pageIndex * this.formData.pageSize;
+            this.fydwdata = srr.filter((item, index, arr) => {
+              return index < num;
+            });
+        },
+
+    getNull(val,t){
+        if(val==null || val=='' || val==undefined){
+            switch (t) {
+                case 1:
+                    this.kzdwdata=[];
+                    break;
+                case 2:
+                    this.fydwdata=[];
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
     },
 }
 </script>
