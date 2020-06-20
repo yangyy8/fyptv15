@@ -47,22 +47,23 @@ export default {
   },
   methods:{
     initJzmm(){
-      if(sessionStorage.getItem('jzmm')==1){
+      if(localStorage.getItem('jzmm')==1){
         this.jzmm=true;
         this.user={
-          userName:sessionStorage.getItem('userName'),
-          password:sessionStorage.getItem('password')
+          userName:localStorage.getItem('userName'),
+          password:localStorage.getItem('password')
         }
    
       }
     },
     isJzmm(){
       if(this.jzmm){
-        sessionStorage.setItem('jzmm',1);
-        sessionStorage.setItem('userName',this.user.userName);
-        sessionStorage.setItem('password',this.user.password);
+        localStorage.setItem('jzmm',1);
+        localStorage.setItem('userName',this.user.userName);
+        localStorage.setItem('password',this.user.password);
       }else {
-        sessionStorage.clear();
+        localStorage.removeItem('userName');
+        localStorage.removeItem('password');
       }
     },
     login(){
