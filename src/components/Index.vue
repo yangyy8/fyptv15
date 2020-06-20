@@ -14,7 +14,7 @@
                             mode="horizontal"
                             background-color="#1F426C"
                             text-color="#ffffff"
-                            active-text-color="#1F426C"
+                            active-text-color="#ffffff"
                             :default-active="activeIndex"
                         >
                         <NavMenu :navMenus="menuData"></NavMenu>
@@ -22,7 +22,7 @@
                         </div>
               </el-col>
             <el-col :span="5" style="text-align: center;min-width:310px;margin-left:10px;">
-            <span class="toprc">
+            <span class="toprc" style="color:#fff">
                   <el-dropdown  trigger="click" @command="handleCommand" style="color:#fff">
                     <span class="cursor homef">  <i class="el-icon-user-solid"></i>  {{name}}
                       (<span style="font-size:12px;"> 
@@ -512,8 +512,8 @@ export default {
     /* background-color: #2C6099!important; */
 }
 .indexn .el-menu--horizontal>div>.el-menu-item:hover  {
-    color: #1F426C!important;
-  background-color:#fff!important;
+    /* color: #1F426C!important;
+  background-color:#fff!important; */
 }
 .indexn .el-menu-item.is-active{
      border-bottom: 3px solid #4ca7ff!important;
@@ -534,8 +534,8 @@ export default {
     color: #FFFFFF;
 }
 .indexn .el-menu--horizontal>div>.el-submenu .el-submenu__title:hover {
-    color: #1F426C!important;
-     background-color: #FFFFFF!important;
+    /* color: #1F426C!important;
+     background-color: #FFFFFF!important; */
 }
 .indexn .el-menu--horizontal>div>.el-submenu:hover {
     background-color: #1F426C!important;

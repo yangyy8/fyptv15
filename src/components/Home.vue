@@ -7,22 +7,23 @@
             <img style="margin-top:16px;" src="../assets/img/index/banner.png"/>
           </el-col>
           <el-col :span="15">
-            <div :class="dhnum>6?'homenav':'homenav1'" style="background: #ffffff">
+            <div :class="dhnum>6?'homenav':'homenav1'">
               <el-menu
-                router
-                mode="horizontal"
-                background-color="#ffffff"
-                text-color="#000000"
-                active-text-color="#000000"
-                :default-active="activeIndex"
+              router
+                            mode="horizontal"
+                            background-color="#1F426C"
+                            text-color="#ffffff"
+                            active-text-color="#ffffff"
+                            :default-active="activeIndex"
+                
               >
                 <NavMenu :navMenus="menuData"></NavMenu>
               </el-menu>
             </div>
           </el-col>
           <el-col :span="5" style="text-align: center; min-width:310px;">
-            <span class="toprc">
-              <el-dropdown trigger="click" @command="handleCommand">
+            <span class="toprc" style="color:#fff">
+              <el-dropdown trigger="click" @command="handleCommand" style="color:#fff">
                 <span class="cursor homef">
                   <i class="el-icon-user-solid"></i>
                   {{name}}
@@ -234,7 +235,7 @@ export default {
 .top {
   height: 80px;
   line-height: 80px;
-  background-color: #fff;
+  background-color: #1F426C;
   border-bottom: 1px solid #cccccc;
 }
 
@@ -265,10 +266,10 @@ export default {
   color: #000000;
   /* background-color: #2C6099!important; */
 }
-.indexnew2 .el-menu--horizontal > div > .el-menu-item:hover {
+/* .indexnew2 .el-menu--horizontal > div > .el-menu-item:hover {
   color: #1f426c !important;
   background-color: #fff !important;
-}
+} */
 .indexnew2 .el-menu-item.is-active {
   border-color: #fff !important;
   border-bottom: 4px solid #4ca7ff !important;
@@ -305,21 +306,22 @@ export default {
   height: 80px;
   line-height: 80px;
   /* border-right: 1px solid #2C6099; */
-  color: #ffffff;
+  color: #ffffff!important;
 }
 .indexnew2 .el-menu--horizontal > div > .el-submenu .el-submenu__title:hover {
-  color: #1f426c !important;
-  background-color: #ffffff !important;
+  /* color: #1f426c !important; */
+  /* background-color: #ffffff !important; */
 }
 .indexnew2 .el-menu--horizontal > div > .el-submenu:hover {
   background-color: #1f426c !important;
   color: #ffffff !important;
 }
 .indexnew2 .el-submenu__title {
+  color: #ffffff !important;
   padding: 0px!important;
 }
 .indexnew2 .el-submenu__title i {
-  color: #1f426c;
+  color: #6aa7e8;
 }
 .el-menu-item i {
   color: #6aa7e8;
