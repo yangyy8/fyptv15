@@ -80,6 +80,7 @@ export default {
            }else if(val.query.info!=undefined && val.query.info!=''){
              try{
                this.info=JSON.parse(Base64.decode(val.query.info));
+          
               
               
                this.addtype=this.info.type;
@@ -87,6 +88,8 @@ export default {
                this.lvl=this.info.lvl;
                this.title=this.info.title;
                this.orgid=this.info.orgid;
+
+
              
                }catch(e){
                    this.$router.push({name:'limitmsg',query:{type:1}});
@@ -203,10 +206,10 @@ export default {
                         'cname1':'法院内部管理',
                         'cname2':this.cname1,
                         'cname3':this.cname2,
-                        'cname4':this.title,
+                        'cname4':mc,
                         'mzname':this.mzname,
                         'type':this.addtype,
-                        'mc':this.title,
+                        'mc':mc,
                         'jb':this.jb,
                         'orgid':orgid,
                         'orgmc':mc,
@@ -246,7 +249,7 @@ export default {
     },
      goBase(){
        if(this.addtype==4){
-            this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,jmc:this.jjbmc,jkey:this.jjb,orgdm:this.orgid,pt:'0'}})
+            this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,jmc:this.jjbmc,jkey:this.jjb,pt:'0'}})
        }else if(this.addtype==7){
            this.$router.push({name:'InstitutionAdd',query:{type:this.addtype,status:'0',title:this.title,jb:this.jb,xzqh:this.code,lx:this.lx,pt:1}});
        }

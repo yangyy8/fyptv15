@@ -43,7 +43,7 @@
                 </el-row>
                 <el-row :gutter="2" class="ah-50 pborder mt-10 mb-20" v-else-if='addtype=="4" && show'>
                      <el-col :sm="24" :md="12" :lg="6" v-for="(t,ind) in fydata" :key="ind">
-                        <span class="address"  @click="gotoFy(t.orgid,t.sjOrgId,t.mc)">{{t.mc}}</span>
+                        <span class="address"  @click="gotoFy(t.orgid,t.sj,t.mc)">{{t.mc}}</span>
                      </el-col>
                 </el-row>
              </el-col>
@@ -132,8 +132,10 @@ export default {
        
         getinit(val){
          
-         this.reset();
-   
+     
+        
+         //权限end
+        this.reset();
         if((val.query.type==undefined || val.query.type=='')
             && (val.query.info==undefined || val.query.info=='')){
               this.$router.push({name:'limitmsg'});
@@ -141,8 +143,7 @@ export default {
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
               
-           
-              
+                         
                this.addtype=this.info.type;
                this.jb=this.info.jb;
                this.cname1=this.info.cname1;
@@ -171,24 +172,24 @@ export default {
                this.getTitle();
            }
 
-          var mid=getlljgtbmenu(this.addtype,this.jb);
-          this.alldata=getlljgtbdata(this.addtype,this.jb);
-            
-            //权限start
+            var mid=getlljgtbmenu(this.addtype,this.jb);
+             this.alldata=getlljgtbdata(this.addtype,this.jb);
+              //权限start
             this.$api.post(this.Global.menuurl,{'menuId':mid},
                      r =>{
                           if(r.code==1 && r.data!=null){
                             for (let i = 0; i < this.alldata.length; i++) {
-                               this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
-                               
+                              this.allshow[i]=this.global_auth(r.data,this.alldata[i]);
+                            
+                                
                             }   
-                           this.getInfo();
+                             this.getInfo();
                           }else if(r.code==0){
                             this.$router.push({path:'/limitmsg'});
                           }
             });
-         //权限end
-          
+     
+               
         },
         getjbinfo(){
 
@@ -215,6 +216,7 @@ export default {
                     };
                     this.$api.post(this.Global.jburl,p,
                             r =>{
+                                if(r.code==1 && r.data && r.data.length>0){
                                 this.jblist=ToArray(r.data,'1');
                                 if(this.jjbmc==null || this.jjbmc==""){
                                     this.jjbmc=this.jblist[0].mc;
@@ -236,6 +238,7 @@ export default {
                                                         
                                             });
                                     }
+                            }
                       });
             }else if(this.addtype=='3'){
                    let p={
@@ -293,7 +296,12 @@ export default {
                this.mc='';
                this.ltitle='';
                this.cinfo='';     
-               this.back=true;this.leveldatatb=[];this.fydata=[];this.orgmc='';this.orgid='';this.sorgid='';
+               this.back=true;
+               this.leveldatatb=[];
+               this.fydata=[];
+               this.orgmc='';
+               this.orgid='';
+               this.sorgid='';
       },
       getInfo(){
            if(this.addtype=='1' || this.addtype=='2'){
@@ -334,12 +342,15 @@ export default {
                         break;
                 }
 
-                if(this.addtype=='4'){
-                    this.getFY();
-                }
+                
               
               }
-              this.getjbinfo();
+              if(this.addtype!='4'){
+                 this.getjbinfo();
+              }else if(this.addtype=='4'){
+                   this.getFY();
+              }
+           
       },
       getTitle(){
           switch (this.addtype) {
@@ -415,7 +426,7 @@ export default {
        },
     
       gotoFy(orgid,sjOrgId,mc){
-        
+ 
         let pp={
                 'orgId':orgid,
             };
@@ -459,10 +470,15 @@ export default {
             this.$api.get(this.Global.aport1+'/org/getSubDept',p,
             r=>{
                 if(r.code==1){
-                    if(r.data && r.data.length>0){
+                   
                       
                          this.fydata=r.data;
-                    }
+                           if(r.data.length>0){
+                                this.show=true;
+                            }else{
+                                this.show=false;
+                       }
+                    
                 }
             })
         },
@@ -490,10 +506,8 @@ export default {
      //法院机构
      getFY(){
          
-         
           if(this.orgid!='' && this.orgmc!='' && this.sorgid!='' && this.orgid!=undefined && this.orgmc!=undefined && this.sorgid!=undefined){
-          
-            
+    
            this.getListBM(this.sorgid,this.orgid,this.orgmc);
          }else{
             let p={
@@ -515,7 +529,7 @@ export default {
         }
         },
       goBase(){
-           this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,jmc:this.jjbmc,jkey:this.jjb}})
+           this.$router.push({name:'BaseAdd',query:{type:this.addtype,jb:this.jb,xzqh:this.code,xzqhmc:this.codemc,jmc:this.jjbmc,jkey:this.jjb,orgdm:this.orgid}})
         },
      goseach(){
            switch (this.addtype) {
