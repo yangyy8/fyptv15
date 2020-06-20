@@ -3,7 +3,7 @@
                     <el-row class="ah-40">
                     <el-col :span="12">
                         <span class="yy-input-text trt">结对法院领导：</span>
-                          <el-select v-model="form1.courtInsiderId" :disabled="type=='4'" remote :remote-method="fyryremoteMethod" v-el-select-loadmore="fyryloadmore"  @focus="getfocus"    @change="getYjdxx(form1.courtInsiderId)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                          <el-select v-model="form1.courtInsiderId" :disabled="type=='4'" remote :remote-method="fyryremoteMethod" v-el-select-loadmore="fyryloadmore"  @focus="getfocus"    @change="getYjdxx(form1.courtInsiderId)" filterable clearable allow-create default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in pairfydata"
                                 :key="ind"

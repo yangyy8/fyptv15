@@ -49,7 +49,7 @@
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                           <span class="yy-input-text">批示领导</span>
                           <el-select v-model="pd.instructLeaderId" remote :remote-method="fyrdwremoteMethod" 
-                          v-el-select-loadmore="fyrloadmore" @visible-change="getFYName($event)"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
+                          v-el-select-loadmore="fyrloadmore" @visible-change="getFYName($event)"  filterable allow-create clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
                             <el-option
                               v-for="(item,ind) in fyrdata"
                               :key="ind"

@@ -35,7 +35,7 @@
                             </span>
                             <span class="ah12" v-if='rdshow[1]'>
                                 <el-checkbox class="ml-20 antxt" v-model="rd.sjrd" @change="getrdclick(2,1)">四级人大</el-checkbox>
-                                <el-select v-model="rd.orgid" :disabled="!rd.sjrd" @change="getrdclick(2,0,rd.orgid);getNull(rd.orgid,1);getJB(rd.orgid,1);getTB(rd.orgid)" remote :remote-method="rdorgremoteMethod" v-el-select-loadmore="rdorgloadmore" filterable clearable   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-select v-model="rd.orgid" :disabled="!rd.sjrd" @change="getrdclick(2,0,rd.orgid);getNull(rd.orgid,1);getJB(rd.orgid,1);getTB(rd.orgid)" remote :remote-method="rdorgremoteMethod" v-el-select-loadmore="rdorgloadmore" filterable clearable allow-create  placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in rdorglist"
                                     :key="ind"
@@ -85,7 +85,7 @@
                             </span>
                             <span class="ah12" v-if='zxshow[1]'>
                                 <el-checkbox class="ml-20 antxt" v-model="zx.sjzx" @change="getzxclick(2,1)">四级政协</el-checkbox>
-                                <el-select v-model="zx.orgid" :disabled="!zx.sjzx" filterable clearable   @change="getzxclick(2,0,zx.orgid);getNull(zx.orgid,2);getJB(zx.orgid,2);" remote :remote-method="zxorgremoteMethod" v-el-select-loadmore="zxorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-select v-model="zx.orgid" :disabled="!zx.sjzx" filterable clearable allow-create  @change="getzxclick(2,0,zx.orgid);getNull(zx.orgid,2);getJB(zx.orgid,2);" remote :remote-method="zxorgremoteMethod" v-el-select-loadmore="zxorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in zxorglist"
                                     :key="ind"
@@ -133,7 +133,7 @@
                             </span>
                             <span class="ah12" v-if='tyshow[1]'>
                                 <el-checkbox class="ml-20 antxt" v-model="ty.sjfy" @change="gettyclick(2,1)">四级法院</el-checkbox>
-                                <el-select v-model="ty.orgid" :disabled="!ty.sjfy" filterable clearable   @change="gettyclick(2,0,ty.orgid);getNull(ty.orgid,3);getTYLBList(ty.orgid);" remote :remote-method="tyorgremoteMethod" v-el-select-loadmore="tyorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-select v-model="ty.orgid" :disabled="!ty.sjfy" filterable clearable allow-create  @change="gettyclick(2,0,ty.orgid);getNull(ty.orgid,3);getTYLBList(ty.orgid);" remote :remote-method="tyorgremoteMethod" v-el-select-loadmore="tyorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in tyorglist"
                                     :key="ind"
@@ -234,7 +234,7 @@
                             </span>
                             <span class="ah12" v-if='kzdwshow[1]'>
                                 <el-checkbox class="ml-20 antxt" v-model="kzdw.fydw" @change="getkzdwclick(2,1)">法院单位</el-checkbox>
-                                <el-select v-model="kzdw.developmentUnitId" :disabled="!kzdw.fydw" filterable clearable   @change="getkzdwclick(2,0,kzdw.developmentUnitId);getNull(kzdw.developmentUnitId,4);getkzbm(kzdw.developmentUnitId)" remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore"   placeholder="请输入关键字搜索"   size="mini" class="aninput">
+                                <el-select v-model="kzdw.developmentUnitId" :disabled="!kzdw.fydw" filterable clearable allow-create  @change="getkzdwclick(2,0,kzdw.developmentUnitId);getNull(kzdw.developmentUnitId,4);getkzbm(kzdw.developmentUnitId)" remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore"   placeholder="请输入关键字搜索"   size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in kzdwdata"
                                     :key="ind"
@@ -282,7 +282,7 @@
                             </span>
                             <span class="ah12" v-if='bldwshow[1]'>
                                 <el-checkbox class="ml-20 antxt" v-model="bldw.fydw" @change="getbldwclick(2,1)">法院单位</el-checkbox>
-                                <el-select v-model="bldw.undertakeUnitId" :disabled="!bldw.fydw" filterable clearable @change="getbldwclick(2,0,bldw.undertakeUnitId);getNull(bldw.undertakeUnitId,5);getblbm(bldw.undertakeUnitId)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-select v-model="bldw.undertakeUnitId" :disabled="!bldw.fydw" filterable clearable allow-create @change="getbldwclick(2,0,bldw.undertakeUnitId);getNull(bldw.undertakeUnitId,5);getblbm(bldw.undertakeUnitId)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in fydwdata"
                                     :key="ind"

@@ -50,7 +50,7 @@
                     
                         <el-col :sm="24" :md="12" :lg="12">
                             <span class="yy-input-text" style="width:18%!important;">开展单位</span>
-                           <el-select v-model="pd.orgUnitId"  remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore" @change="getNull(pd.orgUnitId,1)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.orgUnitId"  remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore" @change="getNull(pd.orgUnitId,1)" filterable clearable allow-create default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in kzdwdata"
                                  :key="ind"
@@ -62,7 +62,7 @@
                      
                          <el-col :sm="24" :md="12" :lg="12">
                             <span class="yy-input-text" style="width:18%">录入单位</span>
-                           <el-select v-model="pd.entryUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @change="getNull(pd.entryUnitId,2)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.entryUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @change="getNull(pd.entryUnitId,2)" filterable clearable allow-create default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"

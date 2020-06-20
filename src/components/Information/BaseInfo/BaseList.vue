@@ -45,7 +45,7 @@
                             </el-col>
                              <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属人大</span>
-                             <el-select v-model="pd.orgId"  remote :remote-method="orgremoteMethod" v-el-select-loadmore="orgloadmore" @visible-change="getOrg()"   @change="getWork(pd.orgId,'1');getNJB();getTB(pd.orgId);getWYH()" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                             <el-select v-model="pd.orgId"  remote :remote-method="orgremoteMethod" v-el-select-loadmore="orgloadmore" @visible-change="getOrg()"   @change="getWork(pd.orgId,'1');getNJB();getTB(pd.orgId);getWYH()" filterable allow-create clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                       <el-option
                                         v-for="(item,ind) in ssdwdata"
                                         :key="ind"
@@ -132,7 +132,7 @@
                             <span class="yy-input-text">籍贯</span>
                            <el-select v-model="pd.birthPlaces" multiple 
                             remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore" @visible-change="getXz()"
-                            filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                            filterable clearable allow-create default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in xzdata"
                                  :key="ind"

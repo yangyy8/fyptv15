@@ -81,7 +81,7 @@
                             <font class="red">*</font>
                                  开展单位
                               </span>
-                            <el-select v-model="form.developmentUnitId"  remote :remote-method="kzdwremoteMethod" @focus="getfocus(2)" v-el-select-loadmore="kzloadmore" :disabled="llbnt" @change="getkzbm(form.developmentUnitId);" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                            <el-select v-model="form.developmentUnitId"  remote :remote-method="kzdwremoteMethod" @focus="getfocus(2)" v-el-select-loadmore="kzloadmore" :disabled="llbnt" @change="getkzbm(form.developmentUnitId);" filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in kzdwdata"
                                  :key="ind"
@@ -109,7 +109,7 @@
                             <font class="red">*</font>
                                 接待单位
                               </span>
-                            <el-select v-model="form.receptionUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  :disabled="llbnt" @change="getcbbm(form.receptionUnitId,3);getJDR(form.receptionUnitId)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                            <el-select v-model="form.receptionUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  :disabled="llbnt" @change="getcbbm(form.receptionUnitId,3);getJDR(form.receptionUnitId)" filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -135,7 +135,7 @@
                    <el-row class="ah-40"  v-if="addtype==6 || addtype==5 || addtype==7 || addtype==4">
                          <el-col :span="8" class="input-item">
                           <span class="yy-input-text textn"><font class="red">*</font> 承办单位</span>
-                            <el-select v-model="form.undertakeUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  :disabled="llbnt" @change="getcbbm(form.undertakeUnitId,2)"  filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                            <el-select v-model="form.undertakeUnitId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  :disabled="llbnt" @change="getcbbm(form.undertakeUnitId,2)"  filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -160,7 +160,7 @@
                    <el-row  class="ah-40"  v-if="addtype==2 && !llbnt">
                         <el-col :span="8" class="input-item">
                             <span class="yy-input-text textn"><font class="red">&ensp;</font> 视察单位</span>
-                            <el-select v-model="pd1.inspectOrgId" remote :remote-method="scdwremoteMethod" @focus="getfocus(4)" v-el-select-loadmore="scloadmore"   @change="chChange(pd1.inspectOrgId,1)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd1.inspectOrgId" remote :remote-method="scdwremoteMethod" @focus="getfocus(4)" v-el-select-loadmore="scloadmore"   @change="chChange(pd1.inspectOrgId,1)" filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in scdwdata"
                                  :key="ind"
@@ -217,7 +217,7 @@
                      <el-row  class="ah-40"  v-if="addtype==3 && !llbnt">
                         <el-col :span="8" class="input-item">
                             <span class="yy-input-text textn"><font class="red">&ensp;</font> 调研单位</span>
-                            <el-select v-model="pd2.inspectOrgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  @change="chChange(pd2.inspectOrgId,3)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd2.inspectOrgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"  @change="chChange(pd2.inspectOrgId,3)" filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"
@@ -348,7 +348,7 @@
                        
                         <el-col :span="8"  class="input-item">
                             <span class="yy-input-text textn"><font class="red">&ensp;</font> 接待人</span>
-                            <el-select v-model="pd7.receptionistid" v-if="!llbnt"  @change="chChange(pd7.receptionistid,6)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form.receptionUnitId==''||form.receptionUnitId==undefined?'请先选择接待单位':'无数据'">
+                            <el-select v-model="pd7.receptionistid" v-if="!llbnt"  @change="chChange(pd7.receptionistid,6)" filterable clearable allow-create default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form.receptionUnitId==''||form.receptionUnitId==undefined?'请先选择接待单位':'无数据'">
                                <el-option
                                  v-for="(item,ind) in jdrdata"
                                  :key="ind"
@@ -408,7 +408,7 @@
                                  :value="item.pbId">
                                  </el-option>
                             </el-select> -->
-                             <el-select v-model="fymber" remote :remote-method="fyrdwremoteMethodnew" v-el-select-loadmore="fyrloadmorenew" @focus="getfocus(1)"  @change="getNullVlaue(fymber,2)"   v-if="!llbnt" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" style="width:70%!important" >
+                             <el-select v-model="fymber" remote :remote-method="fyrdwremoteMethodnew" v-el-select-loadmore="fyrloadmorenew" @focus="getfocus(1)"  @change="getNullVlaue(fymber,2)"   v-if="!llbnt" filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" style="width:70%!important" >
                                <el-option
                                  v-for="(item,ind) in fydata"
                                  :key="ind"
@@ -463,7 +463,7 @@
                   <el-row class="mt-20" >
                       <el-col :span="15"  class="input-item elselect">
                         <span class="yy-input-text" style="min-width:180px" title="代表、委员以及特约人员"><font class="red">&ensp;</font> 代表、委员以及特约人员 </span>
-                        <el-select v-model="lmdbid" remote :remote-method="xmdwremoteMethod" v-el-select-loadmore="xmloadmore" @focus="getfocus(5)"    v-if="!llbnt" popper-class="select-popper"  :popper-append-to-body="false" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                        <el-select v-model="lmdbid" remote :remote-method="xmdwremoteMethod" v-el-select-loadmore="xmloadmore" @focus="getfocus(5)"    v-if="!llbnt" popper-class="select-popper"  :popper-append-to-body="false" allow-create filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                           <el-option
                            v-for="(item,ind) in xmdata"
                            :key="ind"
@@ -540,7 +540,7 @@
                                  :value="item.pbId">
                                  </el-option>
                             </el-select> -->
-                            <el-select v-model="fyld" remote :remote-method="fyrdwremoteMethodnew" v-el-select-loadmore="fyrloadmorenew" @focus="getfocus(1)"   @change="getNullVlaue(fyld,2)"   v-if="!llbnt" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input"  >
+                            <el-select v-model="fyld" remote :remote-method="fyrdwremoteMethodnew" v-el-select-loadmore="fyrloadmorenew" @focus="getfocus(1)"   @change="getNullVlaue(fyld,2)"   v-if="!llbnt" filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input"  >
                                <el-option
                                  v-for="(item,ind) in fydata"
                                  :key="ind"
@@ -564,7 +564,7 @@
                                  活动时单位
                               </span>
                            
-                            <el-select v-model="ssxx.orgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"   :disabled="llbnt" @change="getcbbm(ssxx.orgId,4)"  filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                            <el-select v-model="ssxx.orgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"   :disabled="llbnt" @change="getcbbm(ssxx.orgId,4)" allow-create filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"

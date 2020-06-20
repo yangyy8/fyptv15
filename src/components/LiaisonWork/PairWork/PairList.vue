@@ -57,7 +57,7 @@
                           <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">结对法院领导</span>
                            
-                        <el-select v-model="pd.courtInsiderIdArr" @focus="getfocus(1)" remote :remote-method="jdrdwremoteMethodnew" v-el-select-loadmore="jdrloadmorenew" multiple clearable  filterable  default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                        <el-select v-model="pd.courtInsiderIdArr" @focus="getfocus(1)" remote :remote-method="jdrdwremoteMethodnew" v-el-select-loadmore="jdrloadmorenew" multiple clearable allow-create filterable  default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                          <el-option
                           v-for="(item,ind) in cdrdata"
                           :key="ind"
@@ -99,7 +99,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">开展单位</span>
-                           <el-select v-model="pd.developmentUnitId" @focus="getfocus(4,pd.developmentUnitId)" remote :remote-method="kzdwremoteMethodnew" v-el-select-loadmore="kzloadmorenew" @change="getcbbm(pd.developmentUnitId,0)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.developmentUnitId" @focus="getfocus(4,pd.developmentUnitId)" remote :remote-method="kzdwremoteMethodnew" v-el-select-loadmore="kzloadmorenew" @change="getcbbm(pd.developmentUnitId,0)" filterable clearable allow-create default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in kzdwdata"
                                  :key="ind"
@@ -146,7 +146,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">录入单位</span>
-                           <el-select v-model="pd.entryUnitId" @focus="getfocus(3,pd.entryUnitId)" remote :remote-method="fydwremoteMethodnew" v-el-select-loadmore="fyloadmorenew"  @change="getcbbm(pd.entryUnitId,1)" filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.entryUnitId" @focus="getfocus(3,pd.entryUnitId)" remote :remote-method="fydwremoteMethodnew" v-el-select-loadmore="fyloadmorenew"  @change="getcbbm(pd.entryUnitId,1)" filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
                                  :key="ind"

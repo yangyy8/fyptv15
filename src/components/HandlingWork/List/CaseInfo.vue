@@ -8,7 +8,7 @@
                 <el-row class="ah-40">
                          <el-col :span="10">
                         <span class="yy-input-text" style="width:31%"><font class="red">*</font> 来文人姓名</span>
-                        <el-select v-model="pd1.leaderpbid" remote :remote-method="xmremoteMethod" v-el-select-loadmore="xmloadmore" @focus="getfocus(1)"  placeholder="请输入关键字搜索" :disabled="editshow" @change="ChangeNameListNew(pd1.leaderpbid,0)" filterable clearable default-first-option  size="small" class="yy-input-input" >
+                        <el-select v-model="pd1.leaderpbid" remote :remote-method="xmremoteMethod" v-el-select-loadmore="xmloadmore" @focus="getfocus(1)"  placeholder="请输入关键字搜索" :disabled="editshow" @change="ChangeNameListNew(pd1.leaderpbid,0)" filterable clearable allow-create default-first-option  size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in xmdata"
                            :key="ind"
@@ -80,7 +80,7 @@
                       </el-col>
                        <el-col :span="8">
                         <span class="yy-input-text" style="width:35%"><font class="red">*</font> 经办人</span>
-                        <el-select v-model="dataList[i].undertakinguserid" :disabled="editshow"  @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" filterable clearable default-first-option  size="small" class="yy-input-input" >
+                        <el-select v-model="dataList[i].undertakinguserid" :disabled="editshow"  @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" filterable clearable allow-create default-first-option  size="small" class="yy-input-input" >
                                         <el-option
                                           v-for="(item,ind) in jbrdata"
                                           :key="ind"
@@ -128,7 +128,7 @@
              </el-col>
               <el-col :span="12" v-if="lwshow">
                <span class="yy-input-text txtc"> 来源法院人员</span>
-              <el-select v-model="formList[i].sourcecourtpersonpbid" remote :remote-method="fyrremoteMethod" v-el-select-loadmore="fyrloadmore" :placeholder="formList[i].lettersourcetype?'请输入关键字搜索':'请先选择来文来源类型'" @change="chChangelist(formList[i].sourcecourtpersonpbid,i,4)"  filterable clearable default-first-option size="small" class="yy-input-input" >
+              <el-select v-model="formList[i].sourcecourtpersonpbid" remote :remote-method="fyrremoteMethod" v-el-select-loadmore="fyrloadmore" :placeholder="formList[i].lettersourcetype?'请输入关键字搜索':'请先选择来文来源类型'" @change="chChangelist(formList[i].sourcecourtpersonpbid,i,4)"  filterable clearable allow-create default-first-option size="small" class="yy-input-input" >
                     <el-option
                         v-for="(item,ind) in fyrdata"
                         :key="ind"
@@ -139,7 +139,7 @@
              </el-col>
               <el-col :span="12" v-else>
                <span class="yy-input-text txtc">来源组织</span>
-              <el-select v-model="formList[i].lettersourceorgid" remote :remote-method="lyzzremoteMethod" v-el-select-loadmore="lyzzloadmore"  :placeholder="formList[i].lettersourcetype?'请输入关键字搜索':'请先选择来文来源类型'"  @change="chChangelist(formList[i].lettersourceorgid,i,5)" filterable clearable default-first-option   size="small" class="yy-input-input" >
+              <el-select v-model="formList[i].lettersourceorgid" remote :remote-method="lyzzremoteMethod" v-el-select-loadmore="lyzzloadmore"  :placeholder="formList[i].lettersourcetype?'请输入关键字搜索':'请先选择来文来源类型'"  @change="chChangelist(formList[i].lettersourceorgid,i,5)" filterable clearable default-first-option allow-create  size="small" class="yy-input-input" >
                    <el-option
                                 v-for="(item,ind) in lyzzdata"
                                 :key="ind"
@@ -205,7 +205,7 @@
                     <el-row class="ah-50">
                         <el-col :span="12">
                         <span class="yy-input-text" style="min-width:200px" title="联名代表、委员、特约人员">联名代表、委员、特约人员 </span>
-                        <el-select v-model="formListN[i].lmdbid" v-if='!editshow' remote :remote-method="lmrremoteMethod" v-el-select-loadmore="lmrloadmore"  placeholder="请输入关键字搜索" filterable clearable default-first-option  size="small" class="yy-input-input" style="width:50%!important" >
+                        <el-select v-model="formListN[i].lmdbid" v-if='!editshow' remote :remote-method="lmrremoteMethod" v-el-select-loadmore="lmrloadmore"  placeholder="请输入关键字搜索" filterable clearable default-first-option allow-create size="small" class="yy-input-input" style="width:50%!important" >
                           <el-option
                            v-for="(item,ind) in lmrdata"
                            :key="ind"
@@ -426,7 +426,7 @@
                      
                        <el-col :span="8">
                         <span class="yy-input-text"><font class="red">*</font> 问题针对法院</span>
-                        <el-select v-model="pd1.focuscourt" @focus="getfocus(3)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"  placeholder="请输入关键字搜索" :disabled="editshow"   @change="getFYJB(pd1.focuscourt,1)"  filterable clearable default-first-option  size="small" class="yy-input-input" >
+                        <el-select v-model="pd1.focuscourt" @focus="getfocus(3)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"  placeholder="请输入关键字搜索" :disabled="editshow"   @change="getFYJB(pd1.focuscourt,1)"  filterable clearable default-first-option allow-create size="small" class="yy-input-input" >
                          <el-option
                            v-for="(item,ind) in fydwdata"
                            :key="ind"
@@ -484,7 +484,7 @@
                      </el-col>
                       <el-col :span="8" v-if='pd1.informationoperation=="0199000011"'>
                         <span class="yy-input-text" style="width:35%"><font class="red">*</font> 审批领导</span>
-                        <el-select v-model="pd1.checkuserid" @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" @change="chChangelist(pd1.checkuserid,6,6)" :disabled="editshow" filterable clearable default-first-option size="small" class="yy-input-input" >
+                        <el-select v-model="pd1.checkuserid" @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" @change="chChangelist(pd1.checkuserid,6,6)" :disabled="editshow" filterable clearable allow-create default-first-option size="small" class="yy-input-input" >
                                         <el-option
                                           v-for="(item,ind) in jbrdata"
                                           :key="ind"
@@ -525,7 +525,7 @@
                      <el-col :span="8">
                            <span class="yy-input-text"><font class="red">*</font> 审批人</span>
                            <!-- <el-input placeholder="请输入内容" size="small" clearable v-model="pd4.checkuserid"  class="yy-input-input" ></el-input>  -->
-                          <el-select v-model="bppd.checkuserid" @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" :disabled="editshow" filterable clearable default-first-option   size="small" class="yy-input-input" >
+                          <el-select v-model="bppd.checkuserid" @focus="getfocus(2)" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" :disabled="editshow" filterable clearable default-first-option allow-create  size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in jbrdata"
                                 :key="ind"
@@ -977,7 +977,7 @@
                     <el-row class="ah-40">
                        <el-col :span="8">
                            <span class="yy-input-text"><font class="red">*</font> 承办单位</span>
-                                <el-select v-model="pd5.undertakingorgid" remote :remote-method="cbdwremoteMethod" v-el-select-loadmore="cbdwloadmore"  placeholder="请输入关键字搜索" :disabled="ckshow" @change="getBM(pd5.undertakingorgid,1)" filterable clearable default-first-option size="small" class="yy-input-input" >
+                                <el-select v-model="pd5.undertakingorgid" remote :remote-method="cbdwremoteMethod" v-el-select-loadmore="cbdwloadmore"  placeholder="请输入关键字搜索" :disabled="ckshow" @change="getBM(pd5.undertakingorgid,1)" filterable clearable default-first-option allow-create size="small" class="yy-input-input" >
                                     <el-option
                                         v-for="(item,ind) in cbdw"
                                         :key="ind"
@@ -1431,7 +1431,7 @@
              </el-col>
               <el-col :span="12">
                <span class="yy-input-text trt">经办人：</span>
-              <el-select v-model="form1.undertakinguserid" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" filterable clearable default-first-option  size="small" class="yy-input-input" >
+              <el-select v-model="form1.undertakinguserid" remote :remote-method="jdrremoteMethod" v-el-select-loadmore="jbrloadmore"  placeholder="请输入关键字搜索" filterable clearable default-first-option allow-create size="small" class="yy-input-input" >
                                <el-option
                                 v-for="(item,ind) in jbrdata"
                                 :key="ind"

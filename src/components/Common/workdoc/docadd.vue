@@ -53,7 +53,7 @@
             <el-col :sm="24" :md="12" :lg="12"  class="input-item">
                <span class="yy-input-text" style="width:100px;"><font class="red">*</font> 审批人：</span>
                  <el-select v-model="form.instructLeaderId" remote :remote-method="fyrdwremoteMethod" 
-                          v-el-select-loadmore="fyrloadmore" @visible-change="getFYName($event)" @change="getCanle(form.instructLeaderId)"   filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
+                          v-el-select-loadmore="fyrloadmore" @visible-change="getFYName($event)" @change="getCanle(form.instructLeaderId)"   filterable clearable allow-create default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
                             <el-option
                               v-for="(item,ind) in fyrdata"
                               :key="ind"

@@ -22,7 +22,7 @@
                         </div>
               </el-col>
             <el-col :span="5" style="text-align: center;min-width:310px;margin-left:10px;">
-            <span class="toprc">
+            <span class="toprc" style="color:#fff">
                   <el-dropdown  trigger="click" @command="handleCommand" style="color:#fff">
                     <span class="cursor homef">  <i class="el-icon-user-solid"></i>  {{name}}
                       (<span style="font-size:12px;"> 

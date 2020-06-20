@@ -18,7 +18,7 @@
                           :value="item.courtPersonId">
                          </el-option>
                         </el-select> -->
-                          <el-select v-model="pd.courtOutUserId" :disabled="llbnt" remote :remote-method="jdrdwremoteMethodnew" v-el-select-loadmore="jdrloadmorenew"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2);getJDcancel(pd.courtOutUserId)"  filterable clearable  default-first-option placeholder="请输入关键字进行搜索"  size="small" class="yy-input-input" >
+                          <el-select v-model="pd.courtOutUserId" :disabled="llbnt" remote :remote-method="jdrdwremoteMethodnew" v-el-select-loadmore="jdrloadmorenew"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2);getJDcancel(pd.courtOutUserId)"  filterable clearable allow-create default-first-option placeholder="请输入关键字进行搜索"  size="small" class="yy-input-input" >
                          <el-option
                           v-for="(item,ind) in cdrdata"
                           :key="ind"
@@ -41,7 +41,7 @@
                   <el-row class="ah-40">
                      <el-col :span="9">
                          <span class="yy-input-text"><font class="red">*</font> 代表</span>
-                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.courtOutUserId==''|| pd.courtOutUserId==undefined?'请先选择结对法院领导':'无数据'">
+                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable allow-create default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.courtOutUserId==''|| pd.courtOutUserId==undefined?'请先选择结对法院领导':'无数据'">
                             <el-option
                             v-for="(item,ind) in lxdbdata"
                             :key="ind"
