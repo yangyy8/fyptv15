@@ -340,6 +340,16 @@
                            </el-table>
                             </div>
                         </el-col>
+                          <el-col :span="24" class="input-item1 mt-20" v-if='ztpjshow'>
+                           <span class="yy-input-text" style="width:11%;"><font class="red">&ensp;</font>  
+                              总体评价</span>
+                            <div class="yy-input-input" style="width:88%!important;">
+                           <div v-if='llbnt' v-html="form.overallAssessment" class="nrcss">
+                             
+                           </div>
+                           <vue-ueditor-wrap v-else v-model="form.overallAssessment" :config="myConfig" style="width:100%!important;line-height:20px;"></vue-ueditor-wrap>
+                           </div>
+                       </el-col>
                         <el-col :span="24" class="input-item mt-10">
                            <span class="yy-input-text" style="width:11%;" title="工作情况报告"><font class="red">&ensp;</font>工作情况报告</span>
                             <div class="yy-input-input" v-if='!llbnt'>
@@ -506,7 +516,8 @@
                 </div>
             <div class="footer">
             <el-button type="primary"  style="width:130px;" v-if='!llbnt && querybnt' @click="submit">保 存</el-button>
-            <el-button type="primary"  style="width:130px;" v-else-if='!llbnt' :disabled="true">保存中</el-button>
+            <el-button type="success"  style="width:150px;" v-if='!llbnt && querybnt && state==0' @click="submit(1)">保存并继续录入</el-button>
+            <el-button type="primary"  style="width:130px;" v-if='llbnt && querybnt' :disabled="true">保存中</el-button>
             <el-button style="width:130px;" @click="goto()">关 闭</el-button>
             </div>
             <br/>
@@ -546,8 +557,9 @@ import SUGGEST from "../../Common/suggest/suggestions"
 import CASE from "../../Common/suggest/caseinfoall"
 import SUGGALL from "../../Common/suggest/suggestall"
 import PAIR from "../../Common/suggest/pairinfo"
+import VueUeditorWrap from 'vue-ueditor-wrap'
 export default {
-    components:{UPLOAD,VIDEO,SuggestInfo,VIDEONEW,SUGGEST,CASE,SUGGALL,PAIR},
+    components:{UPLOAD,VIDEO,SuggestInfo,VIDEONEW,SUGGEST,CASE,SUGGALL,PAIR,VueUeditorWrap},
      directives: {
           'el-select-loadmore': {
             bind(el, binding) {
@@ -645,6 +657,8 @@ export default {
           jznum:100,
           bs:0,
           querybnt:true,
+           myConfig:{},
+           ztpjshow:false,
         };
     },
   watch: {
@@ -658,6 +672,38 @@ export default {
     mounted()
     {
         this.$store.dispatch("getHdfs");
+         this.myConfig={
+           toolbars: [
+                    [
+                      'undo', //撤销
+                      'bold', //加粗
+                      'indent', //首行缩进
+                      'italic', //斜体
+                      'underline', //下划线
+                      'strikethrough', //删除线
+                      'subscript', //下标
+                      'fontborder', //字符边框
+                      'superscript', //上标
+                      'formatmatch', //格式刷
+                      'fontfamily', //字体
+                      'fontsize', //字号
+                      'justifyleft', //居左对齐
+                      'justifycenter', //居中对齐
+                      'justifyright', //居右对齐
+                      'justifyjustify', //两端对齐
+                      'insertorderedlist', //有序列表
+                      'insertunorderedlist', //无序列表
+                      'lineheight',//行间距
+                    ]
+                ],
+           zIndex:0,
+           elementPathEnabled : false,
+           autoHeightEnabled: false,
+           initialFrameHeight: 240,
+           initialFrameWidth: '100%',
+           serverUrl: '/FileUploadController/uploadImageData',
+           UEDITOR_HOME_URL: this.Global.ueditordz
+        }
          this.$dragging.$on('dragged', (val) => {
 		      //console.log(val)//这里我们不需要做任何操作；组件内部会把我们绑定上去的list自动排序;只需要查看结果就可以
 		      //如果需要在这里进行其他操作，可以查看val的内容，包括：拖动的元素，拖动后与之兑换的元素，以及原始数据和拖动组名
@@ -805,6 +851,11 @@ export default {
          if(this.year){
             this.$set(this.form,"startTime",this.year+"-01-01");
             this.$set(this.form,"endTime",this.year+"-01-01");
+            if(parseInt(this.year)<2020){
+               this.ztpjshow=true;
+            }else{
+               this.ztpjshow=false; 
+            }
          }
 
          this.state=val.query.state==null?"0":val.query.state;
@@ -1186,7 +1237,7 @@ export default {
            this.dbDialogVisible=true;
             // this.$router.push({name:'SuggestInfo',query:{type:'4',year:this.year,lr:0}});
         },
-         submit(){
+         submit(t){
                 //条件判断
                  if(this.pd.courtOutUserId==undefined || this.pd.courtOutUserId==""){
                     this.$message.error("结对法院领导不能为空！");return;
@@ -1323,12 +1374,11 @@ export default {
                               if(this.baseid!=null){
                                 var arr=this.baseid.split('|');
                                
-                                
                                 this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
-                              }else if(this.state=='1' || this.state=='9'){
-                                this.$router.push({name:"PairList"});
-                              }else{
+                              }else if(t==1){
                                   this.$router.push({name:'PairAdd',query:{type:this.addtype,year:this.year,n:Math.random()}});
+                              }else{
+                                  this.$router.push({name:"PairList"});
                               }
                          }else{
                              this.$message.error(r.message);
@@ -1996,7 +2046,12 @@ export default {
       },
       //时间联动
       changedate(t){
-        
+         var year=formatDate(new Date(t),'yyyy-MM-dd').substr(0,4);
+            if(parseInt(year)<2020){
+                this.ztpjshow=true;
+            }else{
+                this.ztpjshow=false;
+            }
         this.$set(this.form,'endTime',t)
       },
 
@@ -2010,6 +2065,6 @@ export default {
 .border{border: 1px solid #E6E6E6; border-radius: 6px;margin-top: 10px;}
 .ts{font-size: 12px;color: red;}
 .block .close{display: block;position: absolute;font-size: 25px;font-weight:bold;cursor: pointer;z-index: 999;margin-top: -185px;margin-left: 170px;}
-
+.input-item1{display: flex;}
 </style>
 

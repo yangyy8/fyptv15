@@ -134,7 +134,7 @@
                                      </el-col>
                                        <el-col :span="12" v-if="ntype=='3' && lbshow" class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 特约职务</span>
-                                          <el-select v-model="form1.specialType" @change="getTJ(form1.specialType);getTYJB();" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
+                                          <el-select v-model="form1.specialType" @change="getTJ(form1.specialType);getTYJB();getTJDW()" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in tylblist"
                                                 :key="ind"
@@ -145,7 +145,7 @@
                                      </el-col>
                                        <el-col :span="12" v-if="ntype!='4' && !(ntype=='3'&&form1.periodType&&lb)" class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 届别</span>
-                                        <el-select v-model="form1.periodType" @change="getjblist(1,form1.periodType);getJJB()" :disabled="ckshow || (jkey!='' && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择'+labelorg+'和特约职务':'请先选择'+labelorg+'和层级'):'无数据'">
+                                        <el-select v-model="form1.periodType" @change="getjblist(1,form1.periodType);getJJB();getTJDW()" :disabled="ckshow || (jkey!='' && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择'+labelorg+'和特约职务':'请先选择'+labelorg+'和层级'):'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in jblist"
                                                 :key="ind"
@@ -186,23 +186,23 @@
                                     <el-col :span="12" v-if="ntype=='3'" class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 推荐单位</span>
                                         <div class="yy-input-inputleft">
-                                          <el-select v-model="form1.recommendedUnitsIDs" v-if='tjshow' multiple :multiple-limit="limit" :disabled="ckshow" filterable clearable default-first-option placeholder="请选择"  size="small" style="width:100%">
+                                          <el-select v-model="form1.recommendedUnitsIDs" v-if='tjshow' multiple :multiple-limit="limit" :disabled="ckshow" :no-data-text="form1.specialType?'无数据':'请先选择特约职务'" filterable clearable default-first-option placeholder="请选择"  size="small" style="width:100%">
                                             <el-option
-                                                v-for="(item,ind) in $store.state.tyjdytjdw"
+                                                v-for="(item,ind) in tjdwlist"
                                                 :key="ind"
                                                 :label="item.mc"
                                                 :value="item.dm">
                                             </el-option>
                                          </el-select>
 
-                                         <el-select v-model="form1.recommendedUnitsIDs" v-else :disabled="ckshow" multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择"  size="small" style="width:100%" >
+                                         <!-- <el-select v-model="form1.recommendedUnitsIDs" v-else :disabled="ckshow" multiple :multiple-limit="limit" filterable clearable default-first-option placeholder="请选择"  size="small" style="width:100%" >
                                             <el-option
                                                 v-for="(item,ind) in $store.state.tyzxytjdw"
                                                 :key="ind"
                                                 :label="item.mc"
                                                 :value="item.dm">
                                             </el-option>
-                                         </el-select>
+                                         </el-select> -->
                                           <div style="font-size:12px; color:red;line-height:20px;">最多只能选择2个
                                             推荐单位
                                          </div>
@@ -1394,6 +1394,7 @@ export default {
              querybnt:true,
              diatxt:'',
              bs:0,
+             tjdwlist:[],
 
 
         };
@@ -1742,8 +1743,8 @@ export default {
                         this.$store.dispatch('getTysf');
                         // this.$store.dispatch('getXzqh');
                         this.$store.dispatch('getJpyy');
-                        this.$store.dispatch('getTyjdytjdw');
-                        this.$store.dispatch('getTyzxytjdw');
+                        // this.$store.dispatch('getTyjdytjdw');
+                        // this.$store.dispatch('getTyzxytjdw');
                         this.cname="人民法院特约人员";
                         if(this.lbmc!='')
                         {
@@ -3364,6 +3365,7 @@ export default {
 
                                  if(this.addtype!='4'){
                                    this.getXHFT(this.form1.orgId,this.state);//巡回法庭
+                                   this.getTJDW();
                                  }
                                  else if(this.addtype=='4'){
                                        var obj={};
@@ -3420,6 +3422,25 @@ export default {
             }
          },
 
+    //推荐单位
+    getTJDW(){
+        if(this.addtype=='3')
+          {
+                  let  p={
+                         'specialType':this.form1.specialType,
+                         'sessionType':this.form1.periodType,
+                         'orgid':this.form1.orgId,
+                    };
+              
+                 this.$api.post(this.Global.aport1+'/RecommendedUnit',p,
+                   r =>{
+                       if(r.code==1){
+                          
+                           this.tjdwlist=r.data;
+                       }
+                   });
+        }
+    },
      //所属单位远程搜索
      ssdwremoteMethod(quer){
           if (quer !== ''|| this.ssdwdata.length<=0) {

@@ -44,7 +44,7 @@
                         </el-col>
                       <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属单位</span>
-                             <el-select v-model="pd.orgIds"  remote :remote-method="orgremoteMethod" v-el-select-loadmore="orgloadmore" @visible-change="getOrg()" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                             <el-select v-model="pd.orgIds"  remote :remote-method="orgremoteMethod" v-el-select-loadmore="orgloadmore" @change="getTJDW" @visible-change="getOrg()" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                       <el-option
                                         v-for="(item,ind) in ssdwdata"
                                         :key="ind"
@@ -67,7 +67,7 @@
                        
                           <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">特约职务</span>
-                           <el-select v-model="pd.specialTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.specialTypes" multiple @change="getTJDW" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in tylblist"
                                  :key="ind"
@@ -78,7 +78,7 @@
                         </el-col>
                           <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">届别</span>
-                           <el-select v-model="pd.periodTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.periodTypes" multiple @change="getTJDW" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in jblist"
                                  :key="ind"
@@ -159,9 +159,9 @@
                   
                             <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">推荐单位</span>
-                           <el-select v-model="pd.recommendedUnitsIDs" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.recommendedUnitsIDs" multiple :disabled="tjshow"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
-                                 v-for="(item,ind) in $store.state.sydw"
+                                 v-for="(item,ind) in tjdwlist"
                                  :key="ind"
                                  :label="item.mc"
                                  :value="item.orgid">
@@ -424,6 +424,8 @@ export default {
               },
             tempload:[],
             xzList:[],
+            tjdwlist:[],
+            tjshow:true,
         }
     },
     watch:{
@@ -856,6 +858,35 @@ export default {
           });
         
       },
+     //推荐单位
+    getTJDW(){
+      var orgid=this.pd.orgIds;
+      var stype=this.pd.specialTypes;
+        var ptype=this.pd.periodTypes;
+      if((orgid && orgid.length>1)
+         || (stype && stype.length>1)
+         || (ptype && ptype.length>1)
+         ){
+          this.tjshow=true;
+      }else{
+           this.tjshow=false;
+      }
+       if(stype[0] && ptype[0] && orgid[0]){
+                  let  p={
+                         'specialType':stype[0],
+                         'sessionType':ptype[0],
+                         'orgid':orgid[0],
+                    };
+              
+                 this.$api.post(this.Global.aport1+'/RecommendedUnit',p,
+                   r =>{
+                       if(r.code==1){
+                          
+                           this.tjdwlist=r.data;
+                       }
+                   });
+        }
+    },
           
     },
 }

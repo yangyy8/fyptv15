@@ -12,7 +12,7 @@
                         <el-date-picker :disabled="llbnt"
                            v-model="form.startTime" 
                            type="datetime" size="small" 
-                           placeholder="开始时间" format="yyyy-MM-dd HH:mm" @change="changedate(form.startTime)">
+                           placeholder="开始时间" format="yyyy-MM-dd HH:mm" @change="changedate(form.startTime,1)">
                         </el-date-picker>
                         <span class="septum">-</span>
                         <el-date-picker :disabled="llbnt"
@@ -30,7 +30,7 @@
                         <el-date-picker :disabled="llbnt"
                            v-model="form.contactTime" style="width:100%!important;"
                            type="date" size="small" 
-                           placeholder="选择时间" >
+                           placeholder="选择时间" @change="changedate(form.contactTime)">
                         </el-date-picker>
                      </div>
                      </el-col>
@@ -42,7 +42,7 @@
                         <el-date-picker :disabled="llbnt"
                           v-model="form.startTime" 
                            type="date" size="small" 
-                           placeholder="开始时间" @change="changedate(form.startTime)">
+                           placeholder="开始时间" @change="changedate(form.startTime,1)">
                         </el-date-picker>
                         <span class="septum">-</span>
                         <el-date-picker :disabled="llbnt"
@@ -964,6 +964,16 @@
                           
                             </div>
                         </el-col>
+                         <el-col :span="24" class="input-item1 mt-20" v-if='ztpjshow'>
+                           <span class="yy-input-text texts"><font class="red">&ensp;</font>  
+                              总体评价</span>
+                            <div class="yy-input-input inputw">
+                           <div v-if='llbnt' v-html="form.overallAssessment" class="nrcss">
+                             
+                           </div>
+                           <vue-ueditor-wrap v-else v-model="form.overallAssessment" :config="myConfig" style="width:100%!important;line-height:20px;"></vue-ueditor-wrap>
+                           </div>
+                       </el-col>
                         <el-col :span="24" class="input-item mt-20">
                            <span class="yy-input-text textd txttop" title="工作情况报告"><font class="red">&ensp;</font> 工作情况报告</span>
                             <div class="yy-input-input inputw" v-if='!llbnt'>
@@ -1142,7 +1152,10 @@
                 </div>
 
             <div class="footer">
-            <el-button type="primary"  style="width:130px;"  v-if="!llbnt"   @click="submit">保 存</el-button>
+            <el-button type="primary"  style="width:130px;"  v-if="!llbnt &&  querybnt"   @click="submit">保 存</el-button>
+            <el-button type="success"  style="width:150px;"  v-if="!llbnt &&  querybnt && state==0"   @click="submit(1)">保存并继续录入</el-button>
+            <el-button type="primary"  style="width:130px;"  v-if='llbnt && querybnt' :disabled="true">保存中</el-button>
+
             <el-button style="width:130px;" @click="goto()">关 闭</el-button>
             </div>
             <br/>
@@ -1309,6 +1322,8 @@ export default {
           fybmdata4:[],
           qyear:'',//年
           myConfig:{},
+          querybnt:true,
+          ztpjshow:false,
 
         };
     },
@@ -1852,6 +1867,7 @@ export default {
             this.hdyjdata=[];
             this.tempdata=[];
             this.yjtableData=[];
+            this.querybnt=true;
             document.body.scrollTop = document.documentElement.scrollTop = 0
         },
         getinit(val){
@@ -1876,6 +1892,11 @@ export default {
               this.$set(this.form,"startTime",this.qyear+"-01-01");
                this.$set(this.form,"endTime",this.qyear+"-01-01");
                break;
+           }
+           if(parseInt(this.qyear)<2020){
+                this.ztpjshow=true;
+           }else{
+               this.ztpjshow=false; 
            }
          }
           var mid="";
@@ -1996,7 +2017,7 @@ export default {
             
             if(this.state=='1' || this.state=='9')
             {
-              
+               this.querybnt=false;
              let p={
                  'activityInfoId':this.activityInfoId,
              };
@@ -2185,11 +2206,13 @@ export default {
                      }else{
                          this.$message.error(r.message);
                      }
+
+                      this.querybnt=true;
                       
                 });
             }else{
               if(this.addtype!='11'){
-               this.getKZDW();//开展单位
+                this.getKZDW();//开展单位
                }
             }
 
@@ -2610,7 +2633,7 @@ export default {
               this.caseDialogVisible=true;
             }
         },
-        submit(){
+        submit(t){
           if(this.addtype!=11){
              if(this.form.startTime==undefined || this.form.startTime=="")
               {
@@ -2899,11 +2922,10 @@ export default {
                               
                                 
                                 this.$router.push({name:'BaseAdd',query:{type:arr[0],status:arr[1],pbid:arr[2],reid:arr[3],wtitle:arr[4]==''?'11':arr[4]}});
-                              }else  if(this.state=='1' || this.state=='9'){
-                                this.$router.push({name:"PairList"});
-                              }else{
-                                   
+                              }else if(t==1){
                                   this.$router.push({name:'SpecialAdd',query:{type:this.addtype,year:this.qyear,n:Math.random()}});
+                              }else{
+                                 this.$router.push({name:"PairList"});
                               }
                          }else{
                              this.$message.error(r.message);
@@ -3528,9 +3550,22 @@ export default {
         return !this.llbnt;
       },
       //时间联动
-      changedate(t){
+      changedate(t,m){
+
+        if(t){
+          
+            var year=formatDate(new Date(t),'yyyy-MM-dd').substr(0,4);
+            if(parseInt(year)<2020){
+               this.ztpjshow=true;
+            }else{
+                this.ztpjshow=false; 
+            }
         
-        this.$set(this.form,'endTime',t)
+            if(m){
+              this.$set(this.form,'endTime',t)
+            }
+         }
+      
       },
       getfocus(t){
         switch (t) {

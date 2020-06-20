@@ -222,10 +222,10 @@
                         <el-col :span="24">
                                <el-checkbox v-model="kzdwchecked" @change="getkzdwclick(0)">开展单位</el-checkbox>
                             <span class="ml-40 ah12" v-if='kzdwshow[0]'>
-                                <el-checkbox v-model="kzdw.fyjb" class="antxt" @change="getkzdwclick(1,1)">法院级别</el-checkbox>
+                                <el-checkbox v-model="kzdw.fyjb" class="antxt" @change="getkzdwclick(1,1)">层级</el-checkbox>
                                 <el-select v-model="kzdw.levelType" :disabled="!kzdw.fyjb" placeholder="请选择" @change="getkzdwclick(1,0,kzdw.levelType)"  filterable clearable  size="mini" class="aninput">
                                     <el-option
-                                    v-for="(item,ind) in $store.state.fyjb"
+                                    v-for="(item,ind) in $store.state.jbb"
                                     :key="ind"
                                     :label="item.mc"
                                     :value="item.dm">
@@ -233,7 +233,7 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='kzdwshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="kzdw.fydw" @change="getkzdwclick(2,1)">法院单位</el-checkbox>
+                                <el-checkbox class="ml-20 antxt" v-model="kzdw.fydw" @change="getkzdwclick(2,1)">开展单位</el-checkbox>
                                 <el-select v-model="kzdw.developmentUnitId" :disabled="!kzdw.fydw" filterable clearable   @change="getkzdwclick(2,0,kzdw.developmentUnitId);getNull(kzdw.developmentUnitId,4);getkzbm(kzdw.developmentUnitId)" remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore"   placeholder="请输入关键字搜索"   size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in kzdwdata"
@@ -1602,7 +1602,8 @@ export default {
         kzdwremoteMethod(quer){
           if (quer != '') {
            let p={
-              'mc':quer
+              'mc':quer,
+               'orglvl':this.kzdw.levelType
            };
           this.$api.post(this.Global.aport1+'/org/getDevelopOrg',p,
                 r =>{
