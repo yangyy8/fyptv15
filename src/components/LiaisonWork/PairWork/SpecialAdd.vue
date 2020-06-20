@@ -563,7 +563,6 @@
                             <font class="red">&ensp;</font>
                                  活动时单位
                               </span>
-                           
                             <el-select v-model="ssxx.orgId" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(3)"   :disabled="llbnt" @change="getcbbm(ssxx.orgId,4)"  filterable clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in fydwdata"
@@ -2140,6 +2139,17 @@ export default {
                         }else{
                             this.pd5.ck5=false;
                         }
+
+                        if(r.data.activity.meetingDistinction=="0281000001"){
+                            this.pd5.ck9=true;
+                        }else{
+                           this.pd5.ck9=false;
+                        }
+                        if(r.data.activity.meetingDistinction=="0281000002"){
+                            this.pd5.ck10=true;
+                        }else{
+                           this.pd5.ck10=false;
+                        }
                          //代表、委员或监督员、咨询员关注案件
                         if(r.data.activity.isFocusCase=="0125000001"){
                             if(r.data.actiRelCaseList!=null){
@@ -2782,6 +2792,15 @@ export default {
                }else{
                  this.form.organizeDiscussionExchange="0260000002";
                }
+             if(this.addtype=='6'){
+                 if(this.pd5.ck9){
+                   this.form.meetingDistinction="0281000001";
+                 }
+                 if(this.pd5.ck10){
+                  this.form.meetingDistinction="0281000002";
+                 }
+              }
+
                //集中专项视察
                if(this.pd5.ck2){
                 this.form.isSpecialInspection="0151000001";
