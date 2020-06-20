@@ -10,11 +10,11 @@
               <el-col :span="16">
                         <div class="homenav" style="background: #fff">
                         <el-menu
-                            router
+                           router
                             mode="horizontal"
-                            background-color="#ffffff"
-                            text-color="#000000"
-                            active-text-color="#000000"
+                            background-color="#1F426C"
+                            text-color="#ffffff"
+                            active-text-color="#1F426C"
                             :default-active="activeIndex"
                         >
                         <NavMenu :navMenus="menuData"></NavMenu>

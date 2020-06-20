@@ -10,12 +10,12 @@
               <!-- <el-col :span="2">  <img src="../assets/img/index.png"></el-col> -->
               <el-col :span="17">
                         <el-menu 
-                            mode="horizontal"
-                            background-color="#ffffff"
-                            text-color="#333333"
-                            active-text-color="#333333"
-                            :default-active="activeIndex"
                             router
+                            mode="horizontal"
+                            background-color="#1F426C"
+                            text-color="#ffffff"
+                            active-text-color="#1F426C"
+                            :default-active="activeIndex"
                             >
                             <NavMenu :navMenus="menuData"></NavMenu>
                             </el-menu>

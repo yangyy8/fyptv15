@@ -8,13 +8,13 @@
               </el-col>
         
               <el-col :span="15">
-                        <div :class="dhnum>6?'homenav':'homenav1'" style="background: #fff;">
+                        <div :class="dhnum>6?'homenav':'homenav1'" style="background: #1F426C;">
                         <el-menu
                             router
                             mode="horizontal"
-                            background-color="#ffffff"
-                            text-color="#000000"
-                            active-text-color="#000000"
+                            background-color="#1F426C"
+                            text-color="#ffffff"
+                            active-text-color="#1F426C"
                             :default-active="activeIndex"
                         >
                         <NavMenu :navMenus="menuData"></NavMenu>
@@ -23,7 +23,7 @@
               </el-col>
             <el-col :span="5" style="text-align: center;min-width:310px;margin-left:10px;">
             <span class="toprc">
-                  <el-dropdown  trigger="click" @command="handleCommand">
+                  <el-dropdown  trigger="click" @command="handleCommand" style="color:#fff">
                     <span class="cursor homef">  <i class="el-icon-user-solid"></i>  {{name}}
                       (<span style="font-size:12px;"> 
                         <span :title="orgname"> {{orgname.length>10?orgname.substr(0,10)+'...':orgname}}</span>
@@ -448,7 +448,7 @@ export default {
 
 <style scoped>
 .indexn{overflow: hidden;text-align: left;}
-.top{height: 80px; line-height: 80px;background-color: #fff;}
+.top{height: 80px; line-height: 80px;background-color: #1F426C;}
 .toplines{height: 19px;background:url('../assets/img/lline.png') repeat-x;}
 .center{position: absolute;z-index: 999; width: 1220px;left: calc(50% - 610px);margin-left: 0;top:calc(50% - 240px);margin-top: 0}
 .gfooter{height: 114px; bottom: 0; position: fixed;z-index: 999; width: 100%;background: #1F426C}
@@ -545,7 +545,8 @@ export default {
    padding: 0px!important;
 }
 .indexn .el-submenu__title i {
-    color: #1F426C;
+    /* color: #1F426C; */
+    color: #6aa7e8;
 }
 .el-menu-item i{
   color: #6aa7e8;
