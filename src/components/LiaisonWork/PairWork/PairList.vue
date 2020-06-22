@@ -315,6 +315,7 @@
           <el-col :sm="24" :md="12" :lg="8" class="input-item">
             <span class="yy-input-text">录入部门</span>
             <el-select
+              :disabled="suborg"
               v-model="pd.entryDepartmentId"
               filterable
               clearable
