@@ -2131,12 +2131,16 @@ export default {
       }
 
       var obj = {};
-      obj = this.fydata.find(item => {
-        return item.pbId === val;
-      });
-
+      if(this.fydata.length>0){
+        obj = this.fydata.find(item => {
+          return item.pbId === val;
+        });
+      }else{
+        obj.personName=this.fyld
+      }
+      console.log(obj)
       if (this.ssxx.orgId) {
-        console.log(this.ssxx.orgId, this.ssxx.orgId.split("|")[0]);
+        console.log(obj, this.ssxx.orgId, this.ssxx.orgId.split("|")[0]);
         obj.orgId = this.ssxx.orgId.split("|")[0];
         obj.orgMC = this.ssxx.orgId.split("|")[1];
       }
@@ -2190,13 +2194,18 @@ export default {
       }
 
       var obj = {};
-      obj = this.fydata.find(item => {
-        return item.pbId === val;
-      });
-       if (this.position1) {
-        obj.position = this.position1.split("|")[0];
-        obj.positionMC = this.position1.split("|")[1];
+      if(this.fydata.length >0){
+        obj = this.fydata.find(item => {
+          return item.pbId === val;
+        });
+      }else{
+        obj.personName=this.fymber;
       }
+       if (this.position1) {
+        // obj.position = this.position1.split("|")[0];
+        obj.subOrgPosition = this.position1.split("|")[1];
+      }
+      console.log(obj)
       var srr = this.ListDatazf;
       var ff = false;
       for (let i = 0; i < srr.length; i++) {
