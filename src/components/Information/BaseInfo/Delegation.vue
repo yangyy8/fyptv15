@@ -260,7 +260,8 @@ export default {
          getTB(l,v){
               let p={
                     'level':l,
-                    'administrativeDivision':v
+                    'administrativeDivision':v,
+                    'sessionType':this.jkey
                   };
                   this.$api.post(this.Global.aport1+this.Global.tburl,p,
                   r =>{

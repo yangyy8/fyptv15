@@ -48,7 +48,7 @@
 
                             <span class="ah12" v-if='rdshow[2]'>
                              <el-checkbox class="ml-20 antxt" v-model="cx.ry.rd.jb" @change="getrdclick(3,1)">届别</el-checkbox>
-                             <el-select v-model="rd.periodType"  :disabled="!cx.ry.rd.jb" placeholder="请选择" @change="getrdclick(3,0,cx.ry.rd.periodType);getTB(cx.ry.rd.orgid,cx.ry.rd.periodType)" filterable clearable :no-data-text="cx.ry.rd.orgid?'无数据':'请先选择四级人大'"   size="mini" class="aninput">
+                             <el-select v-model="cx.ry.rd.periodType"  :disabled="!cx.ry.rd.jb" placeholder="请选择" @change="getrdclick(3,0,cx.ry.rd.periodType);getTB(cx.ry.rd.orgid,cx.ry.rd.periodType)" filterable clearable :no-data-text="cx.ry.rd.orgid?'无数据':'请先选择四级人大'"   size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in rdjblist"
                                   :key="ind"
@@ -478,9 +478,6 @@
                                         </span>
                                       </div>
                                  </div>
-                               
-                                 
-
                             </el-col>
                              <el-col :span="24"  v-if='pp.show2'>
                                   <div class="anleft">
@@ -1910,19 +1907,42 @@ export default {
                 this.hrshow1=!this.hrshow1
                 this.hrshow2=false;
                 this.hrshow3=false;
-                this.hhzx={}
+                this.hhzx={};
+                   let p={
+                      'itemType':'0301000012'
+                    };
+                    this.$api.post(this.Global.aport2+'/AllSearchController/getConfigItem',p,
+                        r =>{
+                            this.rdinfo=r.data;
+                    });
+                 
                 break;
             case 2:
                 this.hrshow1=false;
                 this.hrshow2=!this.hrshow2
                 this.hrshow3=false;
-                 this.hhzx={}
+                this.hhzx={}
+                let p2={
+                      'itemType':'0301000013'
+                    };
+                    this.$api.post(this.Global.aport2+'/AllSearchController/getConfigItem',p2,
+                        r =>{
+                            this.zxinfo=r.data;
+                    });
+                 
                 break;
             case 3:
                 this.hrshow1=false;
                 this.hrshow2=false;
                 this.hrshow3=!this.hrshow3
                 this.hhzx={}
+                  let p3={
+                      'itemType':'0301000014'
+                    };
+                    this.$api.post(this.Global.aport2+'/AllSearchController/getConfigItem',p3,
+                        r =>{
+                            this.zxinfo=r.data;
+                    });
                 break;
             case 4:
                 this.hrshow0=false
@@ -1954,6 +1974,15 @@ export default {
                 this.pp.show11=true;
                 this.pp.show12=false;
                 this.pp.show13=false;
+
+                let p5={
+                      'itemType':'0301000015'
+                    };
+                    this.$api.post(this.Global.aport2+'/AllSearchController/getConfigItem',p5,
+                        r =>{
+                            this.dwinfo1=r.data;
+                    });
+
                 break;
             case 6:
                 this.hrshow5=false
@@ -1968,6 +1997,7 @@ export default {
                 this.pp.show11=false;
                 this.pp.show12=true;
                 this.pp.show13=false;
+                
                 break;
             case 7:
                 this.hrshow5=false;
@@ -2093,9 +2123,9 @@ export default {
 
                  if(this.zlinfo1.length==0){
                       let p={
-                  'type':'0246000001'
+                      'itemType':'0301000021'
                     };
-                    this.$api.post(this.Global.aport2+'/CaseHomeController/getCaseListInfo',p,
+                    this.$api.post(this.Global.aport2+'/AllSearchController/getConfigItem',p,
                         r =>{
                             this.zlinfo1=r.data;
                     });
@@ -2112,9 +2142,9 @@ export default {
                  this.zlradio4='';
                   if(this.zlinfo2.length==0){
                       let p={
-                         'type':'0246000010'
+                         'itemType':'0301000022'
                        };
-                    this.$api.post(this.Global.aport2+'/CaseHomeController/getCaseListInfo',p,
+                    this.$api.post(this.Global.aport2+'/AllSearchController/getConfigItem',p,
                         r =>{
                             this.zlinfo2=r.data;
                     });

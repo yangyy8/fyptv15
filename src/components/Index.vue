@@ -30,7 +30,7 @@
                         
                         <span v-if='zwname!="null"'> , {{zwname}}</span></span>)</span>
                     <el-dropdown-menu slot="dropdown" style="margin-top:-15px;">
-                    <el-dropdown-item  command="b">修改账号</el-dropdown-item>
+                    <!-- <el-dropdown-item  command="b">修改账号</el-dropdown-item> -->
                     <el-dropdown-item command="a">修改密码</el-dropdown-item>
                     <el-dropdown-item command="c">快捷菜单</el-dropdown-item>
                     <el-dropdown-item command="d">权限切换</el-dropdown-item>

@@ -145,7 +145,7 @@
                                      </el-col>
                                        <el-col :span="12" v-if="ntype!='4' && !(ntype=='3'&&form1.periodType&&lb)" class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 届别</span>
-                                        <el-select v-model="form1.periodType" @change="getjblist(1,form1.periodType);getJJB();getTJDW()" :disabled="ckshow || (jkey!='' && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择'+labelorg+'和特约职务':'请先选择'+labelorg+'和层级'):'无数据'">
+                                        <el-select v-model="form1.periodType" @change="getjblist(1,form1.periodType);getJJB();getTJDW();getTB()" :disabled="ckshow || (jkey!='' && jkey!=null)" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.levelType==''||form1.levelType==undefined?(ntype=='3'?'请先选择'+labelorg+'和特约职务':'请先选择'+labelorg+'和层级'):'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in jblist"
                                                 :key="ind"
@@ -156,7 +156,7 @@
                                      </el-col>
                                       <el-col :span="12" v-if="ntype=='1'" class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xh.png"> 团别</span>
-                                        <el-select v-model="form1.groupType" :disabled="ckshow || (jb!=null && form1.groupType!=null && code!=null)" @change="getJDXX(form1.orgId,0,form1.groupType);getBJDTB(form1.groupType);getXHFT(form1.orgId,0);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
+                                        <el-select v-model="form1.groupType" :disabled="ckshow || (jb!=null && form1.groupType!=null && code!=null)" @change="getJDXX(form1.orgId,0,form1.groupType);getBJDTB(form1.groupType);getXHFT(form1.orgId,0);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId && form1.periodType?'无数据':'请先选择'+labelorg+'和届别'">
                                             <el-option
                                                 v-for="(item,ind) in tbdata"
                                                 :key="ind"
@@ -1705,7 +1705,7 @@ export default {
                             this.lvl="0150000004";
                         }
                        this.$set(this.form1,'levelType',this.lvl);
-                        this.getTB(this.xzqh,this.lvl);
+                       this.getTB(this.xzqh,this.lvl,this.jkey);
                         
                         break;
                     case '2':
@@ -2084,7 +2084,7 @@ export default {
                        
            },
             //团别
-           getTB(code,jb)
+           getTB(code,jb,key)
            {       
               
             //    if(code==null || code==undefined){
@@ -2099,11 +2099,12 @@ export default {
             //         if(r.code==1){
             //             this.tbdata=r.data;
             //         }
-            //     }); 
+            //     }); this.getTB(this.xzqh,this.form1.levelType,this.form1.periodType);
             if(this.addtype==1){
              let p={
-                    'level':jb,
-                    'administrativeDivision':code,
+                    'level':jb?jb:this.form1.levelType ,
+                    'administrativeDivision':code?code:this.xzqh,
+                    'sessionType':key?key:this.form1.periodType,
                   };
                   this.$api.post(this.Global.aport1+this.Global.tburl,p,
                   r =>{
@@ -3395,7 +3396,7 @@ export default {
                                    
                                  }
                                  if(this.addtype=='1'){
-                                   this.getTB(this.xzqh,this.form1.levelType);
+                                   this.getTB(this.xzqh,this.form1.levelType,this.form1.periodType);
                                    this.getJDXX(this.form1.orgId);//结对信息
                                    
                                  }

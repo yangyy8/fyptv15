@@ -213,15 +213,16 @@
                 :value="item.orgid"
               ></el-option>
             </el-select>
+         
           </el-col>
-          <el-col :sm="24" :md="12" :lg="8" class="input-item">
+          <!-- <el-col :sm="24" :md="12" :lg="8" class="input-item">
             <span class="yy-input-text">是否包括下级单位</span>
             <div class="yy-input-input">
 
-            <el-radio v-model="pd.isEntrSubOrg" label="1">是</el-radio>
-            <el-radio v-model="pd.isEntrSubOrg" label="0">否</el-radio>
+            <el-radio v-model="pd.isEntrySubOrg" label="1">是</el-radio>
+            <el-radio v-model="pd.isEntrySubOrg" label="0">否</el-radio>
             </div>
-          </el-col>
+          </el-col> -->
           <el-col :sm="24" :md="12" :lg="8" class="input-item">
             <span class="yy-input-text">开展部门</span>
             <el-select
@@ -300,7 +301,7 @@
               default-first-option
               placeholder="请输入关键字搜索"
               size="small"
-              class="yy-input-input"
+             
             >
               <el-option
                 v-for="(item,ind) in fydwdata"
@@ -308,7 +309,8 @@
                 :label="item.mc"
                 :value="item.orgid"
               ></el-option>
-            </el-select>
+            </el-select>&nbsp;
+               <el-checkbox v-model="suborg">含下级单位</el-checkbox>
           </el-col>
           <el-col :sm="24" :md="12" :lg="8" class="input-item">
             <span class="yy-input-text">录入部门</span>
@@ -705,7 +707,8 @@ export default {
       },
       fydwload: [],
       bs: 0,
-      querybnt: true
+      querybnt: true,
+      suborg:false,
     };
   },
   mounted() {
@@ -910,6 +913,12 @@ export default {
       //this.getCheckList();
       //this.changeList();
       //this.getJDXXAB();
+
+      if(this.suborg){
+        this.pd.isEntrySubOrg='1';
+      }else{
+        this.pd.isEntrySubOrg='0';
+      }
       let p = {
         pd: this.pd,
         pageInfo: {

@@ -230,8 +230,6 @@ export default {
                                     this.jjb=this.jblist[0].dm;
                                 }
 
-                                
-                                
 
                                  if(this.addtype=='2'){
                 
@@ -245,6 +243,8 @@ export default {
                                                         this.jjblist=ToArray(r.data);
                                                         
                                             });
+                                    }else{
+                                         this.getTB(this.leveltype,this.code);
                                     }
                             }
                       });
@@ -330,7 +330,7 @@ export default {
                     default:
                         break;
                 }
-                 this.getTB(this.leveltype,this.code);
+            
               }else   if(this.addtype=='3' || this.addtype=='4'){
                
                 switch (this.jb) {

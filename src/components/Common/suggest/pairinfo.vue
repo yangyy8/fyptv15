@@ -17,7 +17,6 @@
                     </el-col> -->
                     </el-row>
                       <el-row class="ah-40">
-                          
                         <el-col :span="12">
                             <span class="yy-input-text trt"> 届别：</span>
                              <el-select v-model="form1.periodType" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >

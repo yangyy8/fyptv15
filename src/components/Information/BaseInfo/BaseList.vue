@@ -45,7 +45,7 @@
                             </el-col>
                              <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属人大</span>
-                             <el-select v-model="pd.orgId"  remote :remote-method="orgremoteMethod" v-el-select-loadmore="orgloadmore" @visible-change="getOrg()"   @change="getWork(pd.orgId,'1');getNJB();getTB(pd.orgId);getWYH()" filterable  clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                             <el-select v-model="pd.orgId"  remote :remote-method="orgremoteMethod" v-el-select-loadmore="orgloadmore" @visible-change="getOrg()"   @change="getWork(pd.orgId,'1');getNJB();getWYH()" filterable  clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                       <el-option
                                         v-for="(item,ind) in ssdwdata"
                                         :key="ind"
@@ -67,7 +67,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">届别</span>
-                           <el-select v-model="pd.periodTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属人大和层级':'无数据'">
+                           <el-select v-model="pd.periodType" @change="getTB(pd.orgId);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属人大和层级':'无数据'">
                                <el-option
                                  v-for="(item,ind) in jblist"
                                  :key="ind"
@@ -78,7 +78,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">团别</span>
-                           <el-select v-model="pd.groupTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属人大':'无数据'">
+                           <el-select v-model="pd.groupTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId && pd.periodTypes?'无数据':'请先选择所属人大和届别'">
                                <el-option
                                  v-for="(item,ind) in tbdata"
                                  :key="ind"
@@ -660,6 +660,7 @@ export default {
         }, 
         //届别
         getNJB(){
+          
           if(this.pd.levelType==null || this.pd.levelType==''){return;}
             let p={
                     'level':this.pd.levelType,
@@ -673,14 +674,17 @@ export default {
         },
         //工作委员会
         getWork(orgid,t){
-          if(orgid==null || orgid==""){
-              // this.$set(this.pd,'levelType','');
-               this.$set(this.pd,'periodTypes','');
-               this.jblist=[];this.worklist=[];
-               this.pd1.is2=false;this.pd1.is3=false;this.pd1.is4=false;
+               this.$set(this.pd,'periodType','');
                this.$set(this.pd,'workCommitteeIds','');
                this.$set(this.pd,'formerRepresentatives','');
                this.$set(this.pd,'formerMembers','');
+               this.$set(this.pd,'groupTypes','');
+          if(orgid==null || orgid==""){
+              // this.$set(this.pd,'levelType','');
+             
+               this.jblist=[];this.worklist=[];
+               this.pd1.is2=false;this.pd1.is3=false;this.pd1.is4=false;
+           
                 return;
           }
          if(t!=null && orgid!=null && orgid!=""){
@@ -961,10 +965,13 @@ export default {
                   obj=this.ssdwdata.find(item =>{
                      return item.orgid===val
                   });
+              
                         
              let p={
                     'level':obj.lvl,
                     'administrativeDivision':obj.xzqh,
+                    'sessionType':this.pd.periodType,
+
                   };
                   this.$api.post(this.Global.aport1+this.Global.tburl,p,
                   r =>{
