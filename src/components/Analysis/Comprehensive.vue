@@ -23,8 +23,8 @@
                         <el-col :span="24">
                             <el-checkbox v-model="rdchecked" @change="getrdclick(0)">人大代表</el-checkbox>
                             <span class="ml-40 ah12" v-if='rdshow[0]'>
-                                <el-checkbox v-model="rd.cj" class="antxt" @change="getrdclick(1,1)">层级</el-checkbox>
-                                <el-select v-model="rd.levelType" :disabled="!rd.cj" @change="getrdclick(1,0,rd.levelType)"  placeholder="请选择" filterable clearable  size="mini" class="aninput">
+                                <el-checkbox v-model="cx.ry.rd.cj" class="antxt" @change="getrdclick(1,1)">层级</el-checkbox>
+                                <el-select v-model="cx.ry.rd.levelType" :disabled="!cx.ry.rd.cj" @change="getrdclick(1,0,cx.ry.rd.levelType)"  placeholder="请选择" filterable clearable  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.jbb"
                                     :key="ind"
@@ -34,8 +34,8 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='rdshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="rd.sjrd" @change="getrdclick(2,1)">四级人大</el-checkbox>
-                                <el-select v-model="rd.orgid" :disabled="!rd.sjrd" @change="getrdclick(2,0,rd.orgid);getNull(rd.orgid,1);getJB(rd.orgid,1);getTB(rd.orgid)" remote :remote-method="rdorgremoteMethod" v-el-select-loadmore="rdorgloadmore" filterable clearable allow-create  placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.ry.rd.sjrd" @change="getrdclick(2,1)">四级人大</el-checkbox>
+                                <el-select v-model="cx.ry.rd.orgid" :disabled="!cx.ry.rd.sjrd" @change="getrdclick(2,0,cx.ry.rd.orgid);getNull(cx.ry.rd.orgid,1);getJB(cx.ry.rd.orgid,1);" remote :remote-method="rdorgremoteMethod" v-el-select-loadmore="rdorgloadmore" filterable clearable   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in rdorglist"
                                     :key="ind"
@@ -43,12 +43,12 @@
                                     :value="item.orgid">
                                     </el-option>
                                 </el-select>
-                               <el-checkbox  v-model="rd.xjrd">含下级人大</el-checkbox>
+                               <el-checkbox  v-model="cx.ry.rd.xjrd">含下级人大</el-checkbox>
                             </span>
 
                             <span class="ah12" v-if='rdshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="rd.jb" @change="getrdclick(3,1)">届别</el-checkbox>
-                             <el-select v-model="rd.periodType"  :disabled="!rd.jb" placeholder="请选择" @change="getrdclick(3,0,rd.periodType)" filterable clearable :no-data-text="rd.orgid?'无数据':'请先选择四级人大'"   size="mini" class="aninput">
+                             <el-checkbox class="ml-20 antxt" v-model="cx.ry.rd.jb" @change="getrdclick(3,1)">届别</el-checkbox>
+                             <el-select v-model="rd.periodType"  :disabled="!cx.ry.rd.jb" placeholder="请选择" @change="getrdclick(3,0,cx.ry.rd.periodType);getTB(cx.ry.rd.orgid,cx.ry.rd.periodType)" filterable clearable :no-data-text="cx.ry.rd.orgid?'无数据':'请先选择四级人大'"   size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in rdjblist"
                                   :key="ind"
@@ -58,8 +58,8 @@
                              </el-select>
                             </span>
                             <span class="ah12" v-if='rdshow[3]'>
-                                <el-checkbox class="ml-20 antxt" v-model="rd.tb" @change="getrdclick(4)">团别</el-checkbox>
-                                <el-select v-model="rd.groupType" :disabled="!rdshow[4]"  placeholder="请选择" filterable clearable :no-data-text="rd.orgid?'无数据':'请先选择四级人大'"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.ry.rd.tb" @change="getrdclick(4)">团别</el-checkbox>
+                                <el-select v-model="cx.ry.rd.groupType" :disabled="!rdshow[4]"  placeholder="请选择" filterable clearable :no-data-text="cx.ry.rd.orgid?'无数据':'请先选择四级人大'"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in tblist"
                                     :key="ind"
@@ -73,8 +73,8 @@
                          <el-col :span="24">
                              <el-checkbox v-model="zxchecked" @change="getzxclick(0)">政协委员</el-checkbox>
                              <span class="ml-40 ah12" v-if='zxshow[0]'>
-                                <el-checkbox v-model="zx.cj" class="antxt" @change="getzxclick(1,1)" >层级</el-checkbox>
-                                <el-select v-model="zx.levelType" :disabled="!zx.cj"  @change="getzxclick(1,0,zx.levelType)"  placeholder="请选择" filterable clearable  size="mini" class="aninput">
+                                <el-checkbox v-model="cx.ry.zx.cj" class="antxt" @change="getzxclick(1,1)" >层级</el-checkbox>
+                                <el-select v-model="cx.ry.zx.levelType" :disabled="!cx.ry.zx.cj"  @change="getzxclick(1,0,cx.ry.zx.levelType)"  placeholder="请选择" filterable clearable  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.jbb"
                                     :key="ind"
@@ -84,8 +84,8 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='zxshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="zx.sjzx" @change="getzxclick(2,1)">四级政协</el-checkbox>
-                                <el-select v-model="zx.orgid" :disabled="!zx.sjzx" filterable clearable allow-create  @change="getzxclick(2,0,zx.orgid);getNull(zx.orgid,2);getJB(zx.orgid,2);" remote :remote-method="zxorgremoteMethod" v-el-select-loadmore="zxorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.ry.zx.sjzx" @change="getzxclick(2,1)">四级政协</el-checkbox>
+                                <el-select v-model="cx.ry.zx.orgid" :disabled="!cx.ry.zx.sjzx" filterable clearable   @change="getzxclick(2,0,cx.ry.zx.orgid);getNull(cx.ry.zx.orgid,2);getJB(cx.ry.zx.orgid,2);" remote :remote-method="zxorgremoteMethod" v-el-select-loadmore="zxorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in zxorglist"
                                     :key="ind"
@@ -96,8 +96,8 @@
                                <el-checkbox  v-model="zx.xjzx">含下级政协</el-checkbox>
                             </span>
                             <span class="ah12" v-if='zxshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="zx.jb" @change="getzxclick(3,1)">届别</el-checkbox>
-                             <el-select v-model="zx.periodType"  :disabled="!zx.jb" filterable clearable @change="getzxclick(3,0,zx.periodType);getJJB(zx.orgid,zx.periodType)" placeholder="请选择" :no-data-text="zx.orgid?'无数据':'请先选择四级政协'" size="mini" class="aninput">
+                             <el-checkbox class="ml-20 antxt" v-model="cx.ry.zx.jb" @change="getzxclick(3,1)">届别</el-checkbox>
+                             <el-select v-model="cx.ry.zx.periodType"  :disabled="!cx.ry.zx.jb" filterable clearable @change="getzxclick(3,0,cx.ry.zx.periodType);getJJB(cx.ry.zx.orgid,cx.ry.zx.periodType)" placeholder="请选择" :no-data-text="cx.ry.zx.orgid?'无数据':'请先选择四级政协'" size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in zxjblist"
                                   :key="ind"
@@ -107,8 +107,8 @@
                              </el-select>
                             </span>
                             <span class="ah12" v-if='zxshow[3]'>
-                                <el-checkbox class="ml-20 antxt" v-model="zx.jjb" @change="getzxclick(4)">界别</el-checkbox>
-                                <el-select v-model="zx.circlesType" :disabled="!zxshow[4]" filterable clearable  placeholder="请选择"  size="mini" :no-data-text="zx.orgid?'无数据':'请先选择届别'" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.ry.zx.jjb" @change="getzxclick(4)">界别</el-checkbox>
+                                <el-select v-model="cx.ry.zx.circlesType" :disabled="!zxshow[4]" filterable clearable  placeholder="请选择"  size="mini" :no-data-text="cx.ry.zx.orgid?'无数据':'请先选择届别'" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in jjblist"
                                     :key="ind"
@@ -121,8 +121,8 @@
                          <el-col :span="24">
                             <el-checkbox v-model="tychecked" @change="gettyclick(0)">特约人员</el-checkbox>
                             <span class="ml-40 ah12" v-if='tyshow[0]'>
-                                <el-checkbox v-model="ty.cj" class="antxt"  @change="gettyclick(1,1)">法院等级</el-checkbox>
-                                <el-select v-model="ty.levelType" :disabled="!ty.cj" @change="gettyclick(1,0,ty.levelType)" filterable clearable   placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="cx.ry.ty.cj" class="antxt"  @change="gettyclick(1,1)">法院等级</el-checkbox>
+                                <el-select v-model="cx.ry.ty.levelType" :disabled="!cx.ry.ty.cj" @change="gettyclick(1,0,cx.ry.ty.levelType)" filterable clearable   placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.fyjb"
                                     :key="ind"
@@ -132,8 +132,8 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='tyshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="ty.sjfy" @change="gettyclick(2,1)">四级法院</el-checkbox>
-                                <el-select v-model="ty.orgid" :disabled="!ty.sjfy" filterable clearable allow-create  @change="gettyclick(2,0,ty.orgid);getNull(ty.orgid,3);getTYLBList(ty.orgid);" remote :remote-method="tyorgremoteMethod" v-el-select-loadmore="tyorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.ry.ty.sjfy" @change="gettyclick(2,1)">四级法院</el-checkbox>
+                                <el-select v-model="cx.ry.ty.orgid" :disabled="!cx.ry.ty.sjfy" filterable clearable   @change="gettyclick(2,0,cx.ry.ty.orgid);getNull(cx.ry.ty.orgid,3);getTYLBList(cx.ry.ty.orgid);" remote :remote-method="tyorgremoteMethod" v-el-select-loadmore="tyorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in tyorglist"
                                     :key="ind"
@@ -141,12 +141,12 @@
                                     :value="item.orgid">
                                     </el-option>
                                 </el-select>
-                               <el-checkbox  v-model="ty.xjfy">含下级法院</el-checkbox>
+                               <el-checkbox  v-model="cx.ry.ty.xjfy">含下级法院</el-checkbox>
                             </span>
                            
                             <span class="ah12" v-if='tyshow[2]'>
-                                <el-checkbox class="ml-20 antxt" v-model="ty.tylb" @change="gettyclick(3,1)">特约类别</el-checkbox>
-                                <el-select v-model="ty.specialType" :disabled="!ty.tylb" filterable clearable @change="gettyclick(3,0,ty.specialType);getTYJB(ty.orgid,ty.specialType)"  placeholder="请选择" :no-data-text="ty.orgid?'无数据':'请先选择四级法院'"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.ry.ty.tylb" @change="gettyclick(3,1)">特约类别</el-checkbox>
+                                <el-select v-model="cx.ry.ty.specialType" :disabled="!cx.ry.ty.tylb" filterable clearable @change="gettyclick(3,0,cx.ry.ty.specialType);getTYJB(cx.ry.ty.orgid,cx.ry.ty.specialType)"  placeholder="请选择" :no-data-text="cx.ry.ty.orgid?'无数据':'请先选择四级法院'"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in tylblist"
                                     :key="ind"
@@ -156,8 +156,8 @@
                                 </el-select>
                              </span>
                               <span class="ah12" v-if='tyshow[3]'>
-                             <el-checkbox class="ml-20 antxt" v-model="ty.jb" @change="gettyclick(4)">届别</el-checkbox>
-                             <el-select v-model="ty.periodType"  :disabled="!tyshow[4]" filterable clearable  placeholder="请选择"  :no-data-text="ty.specialType?'无数据':'请先选择特约类别'" size="mini" class="aninput">
+                             <el-checkbox class="ml-20 antxt" v-model="cx.ry.ty.jb" @change="gettyclick(4)">届别</el-checkbox>
+                             <el-select v-model="cx.ry.ty.periodType"  :disabled="!tyshow[4]" filterable clearable  placeholder="请选择"  :no-data-text="cx.ry.ty.specialType?'无数据':'请先选择特约类别'" size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in tyjblist"
                                   :key="ind"
@@ -187,19 +187,19 @@
                         <el-col :span="24">
                             <el-checkbox v-model="sjchecked" @change="getsjclick(0)">活动时间</el-checkbox>
                             <span class="ml-40 ah12" v-if='sjshow0'>
-                                <el-checkbox v-model="sj.ksrq" class="antxt" @change="getsjclick(1,1)">开始日期</el-checkbox>
+                                <el-checkbox v-model="cx.ll.sj.ksrq" class="antxt" @change="getsjclick(1,1)">开始日期</el-checkbox>
                                  <el-date-picker 
-                                     v-model="sj.begindate" format="yyyy-MM-dd"
+                                     v-model="cx.ll.sj.begindate" format="yyyy-MM-dd"
                                     type="date" size="mini" value-format="yyyy-MM-dd"
-                                    placeholder="开始日期" class="aninput" :disabled="!sj.ksrq"  @change="getsjclick(1,0,sj.begindate)">
+                                    placeholder="开始日期" class="aninput" :disabled="!cx.ll.sj.ksrq"  @change="getsjclick(1,0,cx.ll.sj.begindate)">
                                  </el-date-picker> 
                             </span>
                              <span class="ah12" v-if='sjshow1'>
-                                <el-checkbox v-model="sj.jsrq" class="ml-20 antxt" @change="getsjclick(2)">结束日期</el-checkbox>
+                                <el-checkbox v-model="cx.ll.sj.jsrq" class="ml-20 antxt" @change="getsjclick(2)">结束日期</el-checkbox>
                                  <el-date-picker 
-                                     v-model="sj.enddate" format="yyyy-MM-dd"
+                                     v-model="cx.ll.sj.enddate" format="yyyy-MM-dd"
                                     type="date" size="mini" value-format="yyyy-MM-dd"
-                                    placeholder="结束日期" class="aninput" :disabled="!sj.jsrq">
+                                    placeholder="结束日期" class="aninput" :disabled="!cx.ll.sj.jsrq">
                                  </el-date-picker> 
                             </span>
                         </el-col>
@@ -220,10 +220,11 @@
                 <div class="antext">
                      <el-row class="ah-30">
                         <el-col :span="24">
-                               <el-checkbox v-model="kzdwchecked" @change="getkzdwclick(0)">开展单位</el-checkbox>
-                            <span class="ml-40 ah12" v-if='kzdwshow[0]'>
-                                <el-checkbox v-model="kzdw.fyjb" class="antxt" @change="getkzdwclick(1,1)">层级</el-checkbox>
-                                <el-select v-model="kzdw.levelType" :disabled="!kzdw.fyjb" placeholder="请选择" @change="getkzdwclick(1,0,kzdw.levelType)"  filterable clearable  size="mini" class="aninput">
+                               <el-radio v-model="kzdwchecked" label="0" @change="getkzdwclick(0)">开展单位</el-radio>
+                                <span v-if='kzdwchecked=="0"'>
+                            <span class="ml-40 ah12" v-if='kzdwchecked=="0"'>
+                                <el-checkbox v-model="cx.ll.kz.fyjb" class="antxt" @change="getkzdwclick(1,1)">层级</el-checkbox>
+                                <el-select v-model="cx.ll.kz.levelType" :disabled="!cx.ll.kz.fyjb" placeholder="请选择" @change="getkzdwclick(1,0,cx.ll.kz.levelType)"  filterable clearable  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.jbb"
                                     :key="ind"
@@ -233,8 +234,8 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='kzdwshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="kzdw.fydw" @change="getkzdwclick(2,1)">开展单位</el-checkbox>
-                                <el-select v-model="kzdw.developmentUnitId" :disabled="!kzdw.fydw" filterable clearable allow-create  @change="getkzdwclick(2,0,kzdw.developmentUnitId);getNull(kzdw.developmentUnitId,4);getkzbm(kzdw.developmentUnitId)" remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore"   placeholder="请输入关键字搜索"   size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.ll.kz.fydw" @change="getkzdwclick(2,1)">开展单位</el-checkbox>
+                                <el-select v-model="cx.ll.kz.developmentUnitId" :disabled="!cx.ll.kz.fydw" filterable clearable   @change="getkzdwclick(2,0,cx.ll.kz.developmentUnitId);getNull(cx.ll.kz.developmentUnitId,4);getkzbm(cx.ll.kz.developmentUnitId)" remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore"   placeholder="请输入关键字搜索"   size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in kzdwdata"
                                     :key="ind"
@@ -242,11 +243,11 @@
                                     :value="item.orgid">
                                     </el-option>
                                 </el-select>
-                               <el-checkbox  v-model="kzdw.xjfy">含下级法院</el-checkbox>
+                               <el-checkbox  v-model="cx.ll.kz.xjfy">含下级法院</el-checkbox>
                             </span>
                             <span class="ah12" v-if='kzdwshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="kzdw.kzbm" @change="getkzdwclick(3)">开展部门</el-checkbox>
-                             <el-select v-model="kzdw.devDepartmentId"  :disabled="!kzdwshow[3]" filterable clearable placeholder="请选择" :no-data-text="kzdw.developmentUnitId?'无数据':'请先选择开展单位'"  size="mini" class="aninput">
+                             <el-checkbox class="ml-20 antxt" v-model="cx.ll.kz.kzbm" @change="getkzdwclick(3)">开展部门</el-checkbox>
+                             <el-select v-model="cx.ll.kz.devDepartmentId"  :disabled="!kzdwshow[3]" filterable clearable placeholder="请选择" :no-data-text="cx.ll.kz.developmentUnitId?'无数据':'请先选择开展单位'"  size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in kzbmdata"
                                   :key="ind"
@@ -255,6 +256,7 @@
                                 </el-option>
                              </el-select>
                             </span>
+                              </span>
                             <!-- <span class="ah12" v-if='kzdwshow[3]'>
                                 <el-checkbox class="ml-20 antxt" v-model="kzdw.yld" @change="getkzdwclick(4)">院领导</el-checkbox>
                                 <el-select v-model="kzdw.pairPersonId" :disabled="!kzdwshow[4]"  placeholder="请选择"  size="mini" class="aninput">
@@ -268,10 +270,11 @@
                              </span> -->
                         </el-col>
                          <el-col :span="24">
-                            <el-checkbox v-model="bldwchecked" @change="getbldwclick(0)">办理单位</el-checkbox>
-                            <span class="ml-40 ah12" v-if='bldwshow[0]'>
-                                <el-checkbox v-model="bldw.fyjb" class="antxt" @change="getbldwclick(1,1)">法院级别</el-checkbox>
-                                <el-select v-model="bldw.levelType" :disabled="!bldw.fyjb" filterable clearable @change="getbldwclick(1,0,bldw.levelType)"  placeholder="请选择"  size="mini" class="aninput">
+                            <el-radio v-model="kzdwchecked" label="1" @change="getbldwclick(0)">办理单位</el-radio>
+                            <span v-if='kzdwchecked=="1"'>
+                            <span class="ml-40 ah12" v-if='kzdwchecked=="1"'>
+                                <el-checkbox v-model="cx.gzya.bl.fyjb" class="antxt" @change="getbldwclick(1,1)">法院级别</el-checkbox>
+                                <el-select v-model="cx.gzya.bl.levelType" :disabled="!cx.gzya.bl.fyjb" filterable clearable @change="getbldwclick(1,0,cx.gzya.bl.levelType)"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.fyjb"
                                     :key="ind"
@@ -281,8 +284,8 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='bldwshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="bldw.fydw" @change="getbldwclick(2,1)">法院单位</el-checkbox>
-                                <el-select v-model="bldw.undertakeUnitId" :disabled="!bldw.fydw" filterable clearable allow-create @change="getbldwclick(2,0,bldw.undertakeUnitId);getNull(bldw.undertakeUnitId,5);getblbm(bldw.undertakeUnitId)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.gzya.bl.fydw" @change="getbldwclick(2,1)">法院单位</el-checkbox>
+                                <el-select v-model="cx.gzya.bl.undertakeUnitId" :disabled="!cx.gzya.bl.fydw" filterable clearable  @change="getbldwclick(2,0,cx.gzya.bl.undertakeUnitId);getNull(cx.gzya.bl.undertakeUnitId,5);getblbm(cx.gzya.bl.undertakeUnitId)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in fydwdata"
                                     :key="ind"
@@ -293,8 +296,8 @@
                                <el-checkbox  v-model="bldw.xjfy">含下级法院</el-checkbox>
                             </span>
                             <span class="ah12" v-if='bldwshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="bldw.blbm" @change="getbldwclick(3)">办理部门</el-checkbox>
-                             <el-select v-model="bldw.undertakeDepartmentId"  :disabled="!bldwshow[3]" filterable clearable placeholder="请选择" :no-data-text="bldw.undertakeUnitId?'无数据':'请先选择办理单位'"  size="mini" class="aninput">
+                             <el-checkbox class="ml-20 antxt" v-model="cx.gzya.bl.blbm" @change="getbldwclick(3)">办理部门</el-checkbox>
+                             <el-select v-model="cx.gzya.bl.undertakeDepartmentId"  :disabled="!bldwshow[3]" filterable clearable placeholder="请选择" :no-data-text="cx.gzya.bl.undertakeUnitId?'无数据':'请先选择办理单位'"  size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in blbmdata"
                                   :key="ind"
@@ -303,7 +306,7 @@
                                 </el-option>
                              </el-select>
                             </span>
-                          
+                          </span>
                         </el-col>
                      </el-row>
                 </div>
@@ -324,8 +327,8 @@
                         <el-col :span="24">
                              <el-checkbox v-model="hdddchecked" @change="gethdddclick(0)">活动地点</el-checkbox>
                             <span class="ml-40 ah12" v-if='hdddshow[0]'>
-                                <el-checkbox v-model="hddd.sheng" class="antxt" @change="gethdddclick(1,1)">省</el-checkbox>
-                                <el-select v-model="hddd.province" :disabled="!hddd.sheng" @change="gethdddclick(1,0,hddd.province);getLevel(2,hddd.province,1)" filterable clearable placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="cx.ll.dd.sheng" class="antxt" @change="gethdddclick(1,1)">省</el-checkbox>
+                                <el-select v-model="cx.ll.dd.province" :disabled="!cx.ll.dd.sheng" @change="gethdddclick(1,0,cx.ll.dd.province);getLevel(2,cx.ll.dd.province,1)" filterable clearable placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in shenglist"
                                     :key="ind"
@@ -333,11 +336,10 @@
                                     :value="item.dm">
                                     </el-option>
                                 </el-select>
-
                             </span>
                             <span class="ah12" v-if='hdddshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="hddd.shi" @change="gethdddclick(2,1)">市</el-checkbox>
-                                <el-select v-model="hddd.city" :disabled="!hddd.shi" @change="gethdddclick(2,0,hddd.city);getLevel(3,hddd.city,2)" filterable clearable   placeholder="请选择" :no-data-text="hddd.province?'无数据':'请先选择省'"  size="mini" class="aninput">
+                                <el-checkbox class="ml-20 antxt" v-model="cx.ll.dd.shi" @change="gethdddclick(2,1)">市</el-checkbox>
+                                <el-select v-model="cx.ll.dd.city" :disabled="!cx.ll.dd.shi" @change="gethdddclick(2,0,cx.ll.dd.city);getLevel(3,cx.ll.dd.city,2)" filterable clearable   placeholder="请选择" :no-data-text="cx.ll.dd.province?'无数据':'请先选择省'"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in shilist"
                                     :key="ind"
@@ -347,8 +349,8 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='hdddshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="hddd.qx" @change="gethdddclick(3)">区县</el-checkbox>
-                             <el-select v-model="hddd.county"  :disabled="!hdddshow[3]" placeholder="请选择"  :no-data-text="hddd.city?'无数据':'请先选择市'"   filterable clearable  size="mini" class="aninput">
+                             <el-checkbox class="ml-20 antxt" v-model="cx.ll.dd.qx" @change="gethdddclick(3)">区县</el-checkbox>
+                             <el-select v-model="cx.ll.dd.county"  :disabled="!hdddshow[3]" placeholder="请选择"  :no-data-text="cx.ll.dd.city?'无数据':'请先选择市'"   filterable clearable  size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in  xianlist"
                                   :key="ind"
@@ -377,8 +379,8 @@
                         <el-col :span="24">
                              <el-checkbox v-model="llhdchecked" @change="getllhdclick(0)">联络活动</el-checkbox>
                             <span class="ml-40 ah12" v-if='llhdshow[0]'>
-                                <el-checkbox v-model="llhd.hdfl" class="antxt" @change="getllhdclick(1)">活动分类</el-checkbox>
-                                <el-select v-model="llhd.activityType" :disabled="!llhdshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                                <el-checkbox v-model="cx.ll.ll.hdfl" class="antxt" @change="getllhdclick(1)">活动类型</el-checkbox>
+                                <el-select v-model="cx.ll.ll.activityType" :disabled="!llhdshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.hdlx"
                                     :key="ind"
@@ -405,10 +407,10 @@
                 <div class="antext">
                      <el-row class="ah-30">
                         <el-col :span="24">
-                             <el-checkbox v-model="gzajchecked" @change="getgzajclick(0)">关注案件</el-checkbox>
-                            <span class="ml-40 ah12" v-if='gzajshow[0]'>
-                                <el-checkbox v-model="gzaj.ajlx" class="antxt" @change="getgzajclick(1)">案件类型</el-checkbox>
-                                <el-select v-model="gzaj.caseclass" :disabled="!gzajshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                             <el-radio v-model="gzajchecked" label="0" @change="getgzajclick(0)">关注案件</el-radio>
+                            <span class="ml-40 ah12" v-if='gzajchecked=="0"'>
+                                <el-checkbox v-model="cx.gz.ajlx" class="antxt" @change="getgzajclick(1)">案件类型</el-checkbox>
+                                <el-select v-model="cx.gz.caseclass" :disabled="!gzajshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.ajlx"
                                     :key="ind"
@@ -419,10 +421,10 @@
                             </span>
                         </el-col>
                         <el-col :span="24">
-                             <el-checkbox v-model="yajychecked" @change="getyajyclick(0)">议案建议</el-checkbox>
-                            <span class="ml-40 ah12" v-if='yajyshow[0]'>
-                                <el-checkbox v-model="yajy.yalx" class="antxt" @change="getyajyclick(1)">议案类型</el-checkbox>
-                                <el-select v-model="yajy.proposalType" :disabled="!yajyshow[1]"  placeholder="请选择"  size="mini" class="aninput">
+                             <el-radio v-model="gzajchecked" label="1" @change="getyajyclick(0)">议案建议</el-radio>
+                            <span class="ml-40 ah12" v-if='gzajchecked=="1"'>
+                                <el-checkbox v-model="cx.ya.yalx" class="antxt" @change="getyajyclick(1)">议案类型</el-checkbox>
+                                <el-select v-model="cx.ya.proposalType" :disabled="!yajyshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.yalx"
                                     :key="ind"
@@ -586,7 +588,7 @@
                      </div>
                 </el-col>
                 <el-col :span="24" class="mt-20 mb-20" style="text-align:center"> 
-                         <el-button  type="success" style="width:300px;height:50px;font-size:22px">统计分析查询</el-button>
+                         <el-button  type="success" style="width:300px;height:50px;font-size:22px" @click="submit">统计分析查询</el-button>
                 </el-col>
                <el-col :span="24">
                    <div class="anctitle mt-20">{{title}}</div>
@@ -632,6 +634,12 @@ export default {
            rdchecked:'',
            zxchecked:'',
            tychecked:'',
+           cx:{ry:{rd:{},zx:{},ty:{}},
+               ll:{sj:{},kz:{},dd:{},ll:{}},
+               gzya:{bl:{}},
+               gz:{},
+               ya:{},},
+
            rd:{},
            rdshow:[],
            zx:{},
@@ -997,7 +1005,7 @@ export default {
 
        },
        //团别
-       getTB(val){
+       getTB(val,jb){
               var obj={};
                  obj = this.rdorglist.find(item =>{
                   return item.orgid === val
@@ -1006,6 +1014,7 @@ export default {
                 let p={
                     'level':obj.lvl,
                     'administrativeDivision':obj.xzqh,
+                    'sessionType':jb
                   };
                   this.$api.post(this.Global.aport1+this.Global.tburl,p,
                   r =>{
@@ -1157,6 +1166,7 @@ export default {
             },
 
        getrdclick(t,m,val){
+         
            switch (t) {
               case 0:
                    this.rdshow[0]=!this.rdshow[0];
@@ -1164,16 +1174,17 @@ export default {
                    this.rdshow[2]=false;
                    this.rdshow[3]=false;
                    this.rdshow[4]=false;
-                   this.$set(this.rd, 'cj', false);
-                   this.$set(this.rd, 'sjrd', false);
-                   this.$set(this.rd, 'xjrd', false);
-                   this.$set(this.rd, 'jb', false);
-                   this.$set(this.rd, 'tb', false);
+                   
+                   this.$set(this.cx.ry.rd, 'cj', false);
+                   this.$set(this.cx.ry.rd, 'sjrd', false);
+                   this.$set(this.cx.ry.rd, 'xjrd', false);
+                   this.$set(this.cx.ry.rd, 'jb', false);
+                   this.$set(this.cx.ry.rd, 'tb', false);
 
-                   this.$set(this.rd, 'levelType', '');    
-                   this.$set(this.rd, 'orgid', ''); 
-                   this.$set(this.rd, 'periodType', ''); 
-                   this.$set(this.rd, 'groupType', ''); 
+                   this.$set(this.cx.ry.rd, 'levelType', '');    
+                   this.$set(this.cx.ry.rd, 'orgid', ''); 
+                   this.$set(this.cx.ry.rd, 'periodType', ''); 
+                   this.$set(this.cx.ry.rd, 'groupType', ''); 
                    this.rdorglist=[];
                    this.jblist=[];
                    this.tblist=[];
@@ -1182,7 +1193,7 @@ export default {
               case 1:
                    this.rdshow[1]=false;
                    if(m==1){
-                       this.$set(this.rd, 'levelType', '');
+                       this.$set(this.cx.ry.rd, 'levelType', '');
                       
                    }else if(val){
                         this.rdshow[1]=true;
@@ -1192,14 +1203,14 @@ export default {
                    this.rdshow[2]=false;
                    this.rdshow[3]=false;
                    this.rdshow[4]=false;
-                   this.$set(this.rd, 'sjrd', false);
-                   this.$set(this.rd, 'xjrd', false);
-                   this.$set(this.rd, 'jb', false);
-                   this.$set(this.rd, 'tb', false);
+                   this.$set(this.cx.ry.rd, 'sjrd', false);
+                   this.$set(this.cx.ry.rd, 'xjrd', false);
+                   this.$set(this.cx.ry.rd, 'jb', false);
+                   this.$set(this.cx.ry.rd, 'tb', false);
                  
-                   this.$set(this.rd, 'orgid', ''); 
-                   this.$set(this.rd, 'periodType', ''); 
-                   this.$set(this.rd, 'groupType', ''); 
+                   this.$set(this.cx.ry.rd, 'orgid', ''); 
+                   this.$set(this.cx.ry.rd, 'periodType', ''); 
+                   this.$set(this.cx.ry.rd, 'groupType', ''); 
                    this.rdorglist=[];
                    this.rdjblist=[];
                    this.tblist=[];
@@ -1209,7 +1220,7 @@ export default {
 
                    this.rdshow[2]=false;
                    if(m==1){
-                      this.$set(this.rd, 'orgid', '');
+                      this.$set(this.cx.ry.rd, 'orgid', '');
                       this.rdorglist=[];
                      
                    }else if(val){
@@ -1219,18 +1230,18 @@ export default {
                    
                    this.rdshow[3]=false;
                    this.rdshow[4]=false;
-                   this.$set(this.rd, 'jb', false);
-                   this.$set(this.rd, 'tb', false);
+                   this.$set(this.cx.ry.rd, 'jb', false);
+                   this.$set(this.cx.ry.rd, 'tb', false);
 
-                   this.$set(this.rd, 'periodType', ''); 
-                   this.$set(this.rd, 'groupType', ''); 
+                   this.$set(this.cx.ry.rd, 'periodType', ''); 
+                   this.$set(this.cx.ry.rd, 'groupType', ''); 
                    this.rdjblist=[];
                    this.tblist=[];
                    break;
               case 3:
                     this.rdshow[3]=false;
                   if(m==1){
-                     this.$set(this.rd, 'periodType', '');
+                     this.$set(this.cx.ry.rd, 'periodType', '');
                    
                   }else if(val){
                         this.rdshow[3]=true;
@@ -1238,13 +1249,13 @@ export default {
                   }
                   
                    this.rdshow[4]=false;
-                   this.$set(this.rd, 'tb', false);
+                   this.$set(this.cx.ry.rd, 'tb', false);
                 
-                   this.$set(this.rd, 'groupType', ''); 
+                   this.$set(this.cx.ry.rd, 'groupType', ''); 
                    break;
               case 4:
                    this.rdshow[4]=!this.rdshow[4];
-                   this.$set(this.rd, 'groupType', ''); 
+                   this.$set(this.cx.ry.rd, 'groupType', ''); 
                    break;
                default:
                    break;
@@ -1258,16 +1269,16 @@ export default {
                    this.zxshow[2]=false;
                    this.zxshow[3]=false;
                    this.zxshow[4]=false;
-                   this.$set(this.zx, 'cj', false);
-                   this.$set(this.zx, 'sjzx', false);
-                   this.$set(this.zx, 'xjzx', false);
-                   this.$set(this.zx, 'jb', false);
-                   this.$set(this.zx, 'tb', false);
+                   this.$set(this.cx.ry.zx, 'cj', false);
+                   this.$set(this.cx.ry.zx, 'sjzx', false);
+                   this.$set(this.cx.ry.zx, 'xjzx', false);
+                   this.$set(this.cx.ry.zx, 'jb', false);
+                   this.$set(this.cx.ry.zx, 'tb', false);
 
-                   this.$set(this.zx, 'levelType', ''); 
-                   this.$set(this.zx, 'orgid', ''); 
-                   this.$set(this.zx, 'periodType', ''); 
-                   this.$set(this.zx, 'circlesType', ''); 
+                   this.$set(this.cx.ry.zx, 'levelType', ''); 
+                   this.$set(this.cx.ry.zx, 'orgid', ''); 
+                   this.$set(this.cx.ry.zx, 'periodType', ''); 
+                   this.$set(this.cx.ry.zx, 'circlesType', ''); 
                    this.zxorglist=[];
                    this.zxjblist=[];
                    this.jjblist=[];
@@ -1275,7 +1286,7 @@ export default {
               case 1:
                   this.zxshow[1]=false;
                   if(m==1){
-                       this.$set(this.zx, 'levelType', '');
+                       this.$set(this.cx.ry.zx, 'levelType', '');
                        
                   }else if(val){
                        this.zxshow[1]=true;
@@ -1284,14 +1295,14 @@ export default {
                    this.zxshow[2]=false;
                    this.zxshow[3]=false;
                    this.zxshow[4]=false;
-                   this.$set(this.zx, 'sjzx', false);
-                   this.$set(this.zx, 'xjzx', false);
-                   this.$set(this.zx, 'jb', false);
-                   this.$set(this.zx, 'jjb', false);
+                   this.$set(this.cx.ry.zx, 'sjzx', false);
+                   this.$set(this.cx.ry.zx, 'xjzx', false);
+                   this.$set(this.cx.ry.zx, 'jb', false);
+                   this.$set(this.cx.ry.zx, 'jjb', false);
                    
-                   this.$set(this.zx, 'orgid', ''); 
-                   this.$set(this.zx, 'periodType', ''); 
-                   this.$set(this.zx, 'circlesType', ''); 
+                   this.$set(this.cx.ry.zx, 'orgid', ''); 
+                   this.$set(this.cx.ry.zx, 'periodType', ''); 
+                   this.$set(this.cx.ry.zx, 'circlesType', ''); 
                    this.zxorglist=[];
                    this.zxjblist=[];
                    this.jjblist=[];
@@ -1307,11 +1318,11 @@ export default {
                     }
                    this.zxshow[3]=false;
                    this.zxshow[4]=false;
-                   this.$set(this.zx, 'jb', false);
-                   this.$set(this.zx, 'jjb', false);
+                   this.$set(this.cx.ry.zx, 'jb', false);
+                   this.$set(this.cx.ry.zx, 'jjb', false);
                    
-                   this.$set(this.zx, 'periodType', ''); 
-                   this.$set(this.zx, 'circlesType', ''); 
+                   this.$set(this.cx.ry.zx, 'periodType', ''); 
+                   this.$set(this.cx.ry.zx, 'circlesType', ''); 
                    
                    this.zxjblist=[];
                    this.jjblist=[];
@@ -1319,21 +1330,21 @@ export default {
               case 3:
                       this.zxshow[3]=false;
                    if(m==1){
-                      this.$set(this.zx, 'periodType', '');
+                      this.$set(this.cx.ry.zx, 'periodType', '');
                   
                    }else if(val){
                     this.zxshow[3]=true;
                    }
                    
                    this.zxshow[4]=false;
-                   this.$set(this.zx, 'jjb', false);
+                   this.$set(this.cx.ry.zx, 'jjb', false);
                   
-                   this.$set(this.zx, 'circlesType', ''); 
+                   this.$set(this.cx.ry.zx, 'circlesType', ''); 
                    this.jjblist=[];
                    break;
               case 4:
                    this.zxshow[4]=!this.zxshow[4];
-                    this.$set(this.zx, 'circlesType', ''); 
+                    this.$set(this.cx.ry.zx, 'circlesType', ''); 
                    break;
                default:
                    break;
@@ -1347,16 +1358,16 @@ export default {
                    this.tyshow[2]=false;
                    this.tyshow[3]=false;
                    this.tyshow[4]=false;
-                   this.$set(this.ty, 'cj', false);
-                   this.$set(this.ty, 'sjfy', false);
-                   this.$set(this.ty, 'xjfy', false);
-                   this.$set(this.ty, 'jb', false);
-                   this.$set(this.ty, 'tylb', false);
+                   this.$set(this.cx.ry.ty, 'cj', false);
+                   this.$set(this.cx.ry.ty, 'sjfy', false);
+                   this.$set(this.cx.ry.ty, 'xjfy', false);
+                   this.$set(this.cx.ry.ty, 'jb', false);
+                   this.$set(this.cx.ry.ty, 'tylb', false);
 
-                   this.$set(this.ty, 'levelType', ''); 
-                   this.$set(this.ty, 'orgid', ''); 
-                   this.$set(this.ty, 'specialType', ''); 
-                   this.$set(this.ty, 'periodType', ''); 
+                   this.$set(this.cx.ry.ty, 'levelType', ''); 
+                   this.$set(this.cx.ry.ty, 'orgid', ''); 
+                   this.$set(this.cx.ry.ty, 'specialType', ''); 
+                   this.$set(this.cx.ry.ty, 'periodType', ''); 
                    this.tyorglist=[];
                    this.tyjblist=[];
                    this.tylblist=[];
@@ -1364,7 +1375,7 @@ export default {
               case 1:
                     this.tyshow[1]=false;
                   if(m==1){
-                    this.$set(this.ty, 'levelType', '');
+                    this.$set(this.cx.ry.ty, 'levelType', '');
                   
                   }else if(val){
                     this.tyshow[1]=true;
@@ -1372,14 +1383,14 @@ export default {
                    this.tyshow[2]=false;
                    this.tyshow[3]=false;
                    this.tyshow[4]=false;
-                   this.$set(this.ty, 'sjfy', false);
-                   this.$set(this.ty, 'xjfy', false);
-                   this.$set(this.ty, 'jb', false);
-                   this.$set(this.ty, 'tylb', false);
+                   this.$set(this.cx.ry.ty, 'sjfy', false);
+                   this.$set(this.cx.ry.ty, 'xjfy', false);
+                   this.$set(this.cx.ry.ty, 'jb', false);
+                   this.$set(this.cx.ry.ty, 'tylb', false);
 
-                   this.$set(this.ty, 'orgid', ''); 
-                   this.$set(this.ty, 'specialType', ''); 
-                   this.$set(this.ty, 'periodType', ''); 
+                   this.$set(this.cx.ry.ty, 'orgid', ''); 
+                   this.$set(this.cx.ry.ty, 'specialType', ''); 
+                   this.$set(this.cx.ry.ty, 'periodType', ''); 
                    this.tyorglist=[];
                    this.tyjblist=[];
                    this.tylblist=[];
@@ -1387,7 +1398,7 @@ export default {
               case 2:
                     this.tyshow[2]=false;
                   if(m==1){
-                      this.$set(this.ty, 'orgid', ''); 
+                      this.$set(this.cx.ry.ty, 'orgid', ''); 
                       this.tyorglist=[];
                     
                   }else if(val){
@@ -1396,11 +1407,11 @@ export default {
 
                    this.tyshow[3]=false;
                    this.tyshow[4]=false;
-                   this.$set(this.ty, 'jb', false);
-                   this.$set(this.ty, 'tylb', false);
+                   this.$set(this.cx.ry.ty, 'jb', false);
+                   this.$set(this.cx.ry.ty, 'tylb', false);
                  
-                   this.$set(this.ty, 'specialType', ''); 
-                   this.$set(this.ty, 'periodType', ''); 
+                   this.$set(this.cx.ry.ty, 'specialType', ''); 
+                   this.$set(this.cx.ry.ty, 'periodType', ''); 
                   
                    
                    this.tylblist=[];
@@ -1409,21 +1420,21 @@ export default {
               case 3:
                    this.tyshow[3]=false;
                   if(m==1){
-                       this.$set(this.ty, 'specialType', ''); 
+                       this.$set(this.cx.ry.ty, 'specialType', ''); 
                       
                   }else if(val){
                        this.tyshow[3]=true;
                   }
                    
                    this.tyshow[4]=false;
-                   this.$set(this.ty, 'jb', false);
-                   this.$set(this.ty, 'periodType', '');
+                   this.$set(this.cx.ry.ty, 'jb', false);
+                   this.$set(this.cx.ry.ty, 'periodType', '');
                    this.tyjblist=[];
                    
                    break;
               case 4:
                    this.tyshow[4]=!this.tyshow[4];
-                   this.$set(this.ty, 'periodType', '');
+                   this.$set(this.cx.ry.ty, 'periodType', '');
                    break;
                default:
                    break;
@@ -1435,17 +1446,17 @@ export default {
              case 0:
                  this.sjshow0=!this.sjshow0;
                  this.sjshow1=false;
-                 this.$set(this.sj, 'ksrq', false);
-                 this.$set(this.sj, 'jsrq', false);
+                 this.$set(this.cx.ll.sj, 'ksrq', false);
+                 this.$set(this.cx.ll.sj, 'jsrq', false);
 
-                 this.$set(this.sj, 'begindate', '');
-                 this.$set(this.sj, 'enddate', '');
+                 this.$set(this.cx.ll.sj, 'begindate', '');
+                 this.$set(this.cx.ll.sj, 'enddate', '');
                  break;
              case 1:
                
                    this.sjshow1=false;
                  if(m==1){
-                   this.$set(this.sj, 'begindate', '');
+                   this.$set(this.cx.ll.sj, 'begindate', '');
                    
                  }else{
                      if(val){          
@@ -1454,11 +1465,11 @@ export default {
                      
                  }
                
-                 this.$set(this.sj, 'jsrq', false);
-                 this.$set(this.sj, 'enddate', '');
+                 this.$set(this.cx.ll.sj, 'jsrq', false);
+                 this.$set(this.cx.ll.sj, 'enddate', '');
                  break;
              case 2:
-                 this.$set(this.sj, 'enddate', '');
+                 this.$set(this.cx.ll.sj, 'enddate', '');
                  break;
              default:
                  break;
@@ -1468,26 +1479,30 @@ export default {
         getkzdwclick(t,m,val){
            switch (t) {
               case 0:
-                   this.kzdwshow[0]=!this.kzdwshow[0];
+                  // this.kzdwshow[0]=!this.kzdwshow[0];
                    this.kzdwshow[1]=false;
                    this.kzdwshow[2]=false;
                    this.kzdwshow[3]=false;
                    this.kzdwshow[4]=false;
-                   this.$set(this.kzdw, 'fyjb', false);
-                   this.$set(this.kzdw, 'fydw', false);
-                   this.$set(this.kzdw, 'xjfy', false);
-                   this.$set(this.kzdw, 'kzbm', false);
-                   this.$set(this.kzdw, 'yld', false);
-                   this.$set(this.kzdw,'levelType','')
-                   this.$set(this.kzdw,'developmentUnitId','')
-                   this.$set(this.kzdw,'devDepartmentId','')
+
+
+                   this.$set(this.cx.ll.kz, 'fyjb', false);
+                   this.$set(this.cx.ll.kz, 'fydw', false);
+                   this.$set(this.cx.ll.kz, 'xjfy', false);
+                   this.$set(this.cx.ll.kz, 'kzbm', false);
+                   this.$set(this.cx.ll.kz, 'yld', false);
+                   this.$set(this.cx.ll.kz,'levelType','')
+                   this.$set(this.cx.ll.kz,'developmentUnitId','')
+                   this.$set(this.cx.ll.kz,'devDepartmentId','')
                    this.kzdwdata=[];
                    this.kzbmdata=[];
+                  
+                   
                    break;
               case 1:
                    this.kzdwshow[1]=false;
                   if(m==1){
-                        this.$set(this.kzdw,'levelType','')
+                        this.$set(this.cx.ll.kz,'levelType','')
                        
                   }else if(val){
                         this.kzdwshow[1]=true;
@@ -1496,20 +1511,20 @@ export default {
                    this.kzdwshow[2]=false;
                    this.kzdwshow[3]=false;
                    this.kzdwshow[4]=false;
-                   this.$set(this.kzdw, 'fydw', false);
-                   this.$set(this.kzdw, 'xjfy', false);
-                   this.$set(this.kzdw, 'kzbm', false);
-                   this.$set(this.kzdw, 'yld', false);
+                   this.$set(this.cx.ll.kz, 'fydw', false);
+                   this.$set(this.cx.ll.kz, 'xjfy', false);
+                   this.$set(this.cx.ll.kz, 'kzbm', false);
+                   this.$set(this.cx.ll.kz, 'yld', false);
                    
-                   this.$set(this.kzdw,'developmentUnitId','')
-                   this.$set(this.kzdw,'devDepartmentId','')
+                   this.$set(this.cx.ll.kz,'developmentUnitId','')
+                   this.$set(this.cx.ll.kz,'devDepartmentId','')
                    this.kzdwdata=[];
                    this.kzbmdata=[];
                    break;
               case 2:
                    this.kzdwshow[2]=false;
                   if(m==1){
-                     this.$set(this.kzdw,'developmentUnitId','')
+                     this.$set(this.cx.ll.kz,'developmentUnitId','')
                      this.kzdwdata=[];
                   }else if(val){
                       this.kzdwshow[2]=true;
@@ -1517,18 +1532,18 @@ export default {
                    
                    this.kzdwshow[3]=false;
                    this.kzdwshow[4]=false;
-                   this.$set(this.kzdw, 'kzbm', false);
-                   this.$set(this.kzdw, 'yld', false);
+                   this.$set(this.cx.ll.kz, 'kzbm', false);
+                   this.$set(this.cx.ll.kz, 'yld', false);
                  
-                   this.$set(this.kzdw,'devDepartmentId','')
+                   this.$set(this.cx.ll.kz,'devDepartmentId','')
                    
                    this.kzbmdata=[];
                    break;
               case 3:
                    this.kzdwshow[3]=!this.kzdwshow[3];
                    this.kzdwshow[4]=false;
-                   this.$set(this.kzdw, 'yld', false);
-                   this.$set(this.kzdw,'devDepartmentId','')
+                   this.$set(this.cx.ll.kz, 'yld', false);
+                   this.$set(this.cx.ll.kz,'devDepartmentId','')
                  
                    break;
               case 4:
@@ -1542,24 +1557,27 @@ export default {
         getbldwclick(t,m,val){
            switch (t) {
               case 0:
-                   this.bldwshow[0]=!this.bldwshow[0];
+                  // this.bldwshow[0]=!this.bldwshow[0];
                    this.bldwshow[1]=false;
                    this.bldwshow[2]=false;
                    this.bldwshow[3]=false;
-                   this.$set(this.bldw, 'fyjb', false);
-                   this.$set(this.bldw, 'fydw', false);
-                   this.$set(this.bldw, 'xjfy', false);
-                   this.$set(this.bldw, 'blbm', false);
-                   this.$set(this.bldw,'levelType','')
-                   this.$set(this.bldw,'undertakeUnitId','')
-                   this.$set(this.bldw,'undertakeDepartmentId','')
+                
+                   this.$set(this.cx.gzya.bl, 'fyjb', false);
+                   this.$set(this.cx.gzya.bl, 'fydw', false);
+                   this.$set(this.cx.gzya.bl, 'xjfy', false);
+                   this.$set(this.cx.gzya.bl, 'blbm', false);
+                   this.$set(this.cx.gzya.bl,'levelType','')
+                   this.$set(this.cx.gzya.bl,'undertakeUnitId','')
+                   this.$set(this.cx.gzya.bl,'undertakeDepartmentId','')
                    this.fydwdata=[];
                    this.blbmdata=[];
+                   
+                   
                    break;
               case 1:
                     this.bldwshow[1]=false;
                    if(m==1){
-                       this.$set(this.bldw,'levelType','')
+                       this.$set(this.cx.gzya.bl,'levelType','')
                      
                    }else if(val){
                        this.bldwshow[1]=true;
@@ -1567,31 +1585,31 @@ export default {
                    
                    this.bldwshow[2]=false;
                    this.bldwshow[3]=false;
-                   this.$set(this.bldw, 'fydw', false);
-                   this.$set(this.bldw, 'xjfy', false);
-                   this.$set(this.bldw, 'blbm', false);
+                   this.$set(this.cx.gzya.bl, 'fydw', false);
+                   this.$set(this.cx.gzya.bl, 'xjfy', false);
+                   this.$set(this.cx.gzya.bl, 'blbm', false);
             
-                   this.$set(this.bldw,'undertakeUnitId','')
-                   this.$set(this.bldw,'undertakeDepartmentId','')
+                   this.$set(this.cx.gzya.bl,'undertakeUnitId','')
+                   this.$set(this.cx.gzya.bl,'undertakeDepartmentId','')
                    this.fydwdata=[];
                    this.blbmdata=[];
                    break;
               case 2:
                     this.bldwshow[2]=false;
                    if(m==1){
-                      this.$set(this.bldw,'undertakeUnitId','')
+                      this.$set(this.cx.gzya.bl,'undertakeUnitId','')
                    }else if(val){
                      this.bldwshow[2]=true;
                    }
                    
                    this.bldwshow[3]=false;
-                   this.$set(this.bldw, 'blbm', false);
-                   this.$set(this.bldw,'undertakeDepartmentId','')
+                   this.$set(this.cx.gzya.bl, 'blbm', false);
+                   this.$set(this.cx.gzya.bl,'undertakeDepartmentId','')
                    this.blbmdata=[];
                    break;
               case 3:
                    this.bldwshow[3]=!this.bldwshow[3];
-                    this.$set(this.bldw,'undertakeDepartmentId','')
+                    this.$set(this.cx.gzya.bl,'undertakeDepartmentId','')
                    break;
              
                default:
@@ -1603,7 +1621,7 @@ export default {
           if (quer != '') {
            let p={
               'mc':quer,
-               'orglvl':this.kzdw.levelType
+               'orglvl':this.cx.ll.kz.levelType
            };
           this.$api.post(this.Global.aport1+'/org/getDevelopOrg',p,
                 r =>{
@@ -1709,15 +1727,14 @@ export default {
          //得到行政区划
         getLevel(l,v,t){
                 
-               
                     if(t==1){
 
-                        this.$set(this.hddd,'city','');
-                        this.$set(this.hddd,'county','');
+                        this.$set(this.cx.ll.dd,'city','');
+                        this.$set(this.cx.ll.dd,'county','');
                         this.shilist=[];
                         this.xianlist=[];
                     }else if(t==2){
-                        this.$set(this.hddd,'county','');
+                        this.$set(this.cx.ll.dd,'county','');
                         this.xianlist=[];
                     }
                 
@@ -1749,12 +1766,12 @@ export default {
                    this.hdddshow[1]=false;
                    this.hdddshow[2]=false;
                    this.hdddshow[3]=false;
-                   this.$set(this.hddd, 'sheng', false);
-                   this.$set(this.hddd, 'shi', false);
-                   this.$set(this.hddd, 'qx', false);
-                   this.$set(this.hddd,'province','');
-                   this.$set(this.hddd,'city','');
-                   this.$set(this.hddd,'county','');
+                   this.$set(this.cx.ll.dd, 'sheng', false);
+                   this.$set(this.cx.ll.dd, 'shi', false);
+                   this.$set(this.cx.ll.dd, 'qx', false);
+                   this.$set(this.cx.ll.dd,'province','');
+                   this.$set(this.cx.ll.dd,'city','');
+                   this.$set(this.cx.ll.dd,'county','');
                    this.shenglist=[];
                    this.shilist=[];
                    this.xianlist=[];
@@ -1763,7 +1780,7 @@ export default {
               case 1:
                    this.hdddshow[1]=false;
                   if(m==1){
-                    this.$set(this.hddd,'province','');
+                    this.$set(this.cx.ll.dd,'province','');
                   }else if(val){
                        this.hdddshow[1]=true;
                   } 
@@ -1771,11 +1788,11 @@ export default {
                   
                    this.hdddshow[2]=false;
                    this.hdddshow[3]=false;
-                    this.$set(this.hddd, 'shi', false);
-                   this.$set(this.hddd, 'qx', false);
+                    this.$set(this.cx.ll.dd, 'shi', false);
+                   this.$set(this.cx.ll.dd, 'qx', false);
                    this.getLevel('1');
-                   this.$set(this.hddd,'city','');
-                   this.$set(this.hddd,'county','');
+                   this.$set(this.cx.ll.dd,'city','');
+                   this.$set(this.cx.ll.dd,'county','');
                    this.shilist=[];
                    this.xianlist=[];
                    
@@ -1783,7 +1800,7 @@ export default {
               case 2:
                   this.hdddshow[2]=false;
                   if(m==1){
-                        this.$set(this.hddd,'city','');
+                        this.$set(this.cx.ll.dd,'city','');
                      
                   }else if(val){
                      
@@ -1791,13 +1808,13 @@ export default {
                   }
                   
                    this.hdddshow[3]=false;
-                   this.$set(this.hddd, 'qx', false);
-                   this.$set(this.hddd,'county','');
+                   this.$set(this.cx.ll.dd, 'qx', false);
+                   this.$set(this.cx.ll.dd,'county','');
                    this.xianlist=[];
                    break;
               case 3:
                    this.hdddshow[3]=!this.hdddshow[3];
-                   this.$set(this.hddd,'county','');
+                   this.$set(this.cx.ll.dd,'county','');
                    break;
              
                default:
@@ -1810,13 +1827,13 @@ export default {
               case 0:
                    this.llhdshow[0]=!this.llhdshow[0];
                    this.llhdshow[1]=false;
-                   this.$set(this.llhd, 'hdfl', false);
+                   this.$set(this.cx.ll.ll, 'hdfl', false);
                    this.$store.dispatch('getHdlx');
-                   this.$set(this.llhd, 'activityType', '');
+                   this.$set(this.cx.ll.ll, 'activityType', '');
                    break;
               case 1:
                    this.llhdshow[1]=!this.llhdshow[1];
-                   this.$set(this.llhd, 'activityType', '');
+                   this.$set(this.cx.ll.ll, 'activityType', '');
                    break;
              
                default:
@@ -1827,34 +1844,34 @@ export default {
         getgzajclick(t){
            switch (t) {
               case 0:
-                   this.gzajshow[0]=!this.gzajshow[0];
+                   //this.gzajshow[0]=!this.gzajshow[0];
                    this.gzajshow[1]=false;
-                   this.$set(this.gzaj, 'ajlx', false);
+                   this.$set(this.cx.gz, 'ajlx', false);
                    this.$store.dispatch('getAjlx');
-                   this.$set(this.gzaj, 'caseclass', '');
+                   this.$set(this.cx.gz, 'caseclass', '');
                    break;
               case 1:
                    this.gzajshow[1]=!this.gzajshow[1];
-                   this.$set(this.gzaj, 'caseclass', '');
+                   this.$set(this.cx.gz, 'caseclass', '');
                    break;
              
                default:
                    break;
            }
        },
-         //联络活动
+         //议案建议
         getyajyclick(t){
            switch (t) {
               case 0:
-                   this.yajyshow[0]=!this.yajyshow[0];
+                   //this.yajyshow[0]=!this.yajyshow[0];
                    this.yajyshow[1]=false;
-                   this.$set(this.yajy, 'yalx', false);
+                   this.$set(this.cx.ya, 'yalx', false);
                    this.$store.dispatch('getYalx');
-                   this.$set(this.yajy, 'proposalType', '');
+                   this.$set(this.cx.ya, 'proposalType', '');
                    break;
               case 1:
                    this.yajyshow[1]=!this.yajyshow[1];
-                   this.$set(this.yajy, 'proposalType', '');
+                   this.$set(this.cx.ya, 'proposalType', '');
                    break;
              
                default:
@@ -2294,6 +2311,21 @@ export default {
                     break;
               }
           }
+       },
+       //保存
+       submit(){
+              let p={
+             
+            "Cx":this.cx,
+            
+           };
+          this.$api.post(this.Global.aport1+'/AllSearchController/getAllSearch',p,
+                     r =>{
+                       if(r.code==1){
+                            
+
+                       }
+             });
        },
 
 

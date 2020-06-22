@@ -216,14 +216,22 @@ export default {
                     };
                     this.$api.post(this.Global.jburl,p,
                             r =>{
-                                if(r.code==1 && r.data && r.data.length>0){
+                            
+                                
+                                if(r.code==1){
+
                                 this.jblist=ToArray(r.data,'1');
+                            
+                                
                                 if(this.jjbmc==null || this.jjbmc==""){
                                     this.jjbmc=this.jblist[0].mc;
                                 }
                                  if(this.jjb==null || this.jjb==""){
                                     this.jjb=this.jblist[0].dm;
                                 }
+
+                                
+                                
 
                                  if(this.addtype=='2'){
                 
@@ -488,7 +496,8 @@ export default {
           
                let p={
                     'level':l,
-                    'administrativeDivision':v
+                    'administrativeDivision':v,
+                    'sessionType':this.jjb
                   };
                   this.$api.post(this.Global.aport1+this.Global.tburl,p,
                   r =>{

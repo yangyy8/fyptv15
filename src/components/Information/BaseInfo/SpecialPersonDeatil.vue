@@ -167,6 +167,9 @@
  <el-dialog title="导入文件" :visible.sync="drDialogVisible" :close-on-click-modal='false' width="630px">
       <UPLOAD :url="vvurl" :type="1001"  :urlErr="vvurlErr" :periodType='jkey'  @drfatherMethod="drfatherMethod" :random="new Date().getTime()"></UPLOAD>
    </el-dialog>
+   <div class="depopContainer" v-if='loadshow'>
+      <div class="main"><i class="el-icon-loading" style="font-size:20px;"></i><br/><span style="font-size:12px;">正在加载中...</span></div>
+   </div>
     </div>
 </template>
 <style>
@@ -220,6 +223,7 @@ export default {
           jblist:[],
           leveltype:'',
           diatxt:'特约人员相关文件',
+           loadshow:false,
             
        }
     },
@@ -465,7 +469,7 @@ export default {
         },
         getList(dm,code,jb)
         {
-             
+               this.loadshow=true;
                 let pp={
                         'level':this.jblv,
                         'administrativeDivision':this.code,
@@ -489,6 +493,7 @@ export default {
             };
             this.$api.post(this.Global.aport1+url,p,
              r =>{
+                  this.loadshow=false;
                   this.RYData=r.data;
                   this.count=r.data.length;
                   this.labellist=r.data.tags;

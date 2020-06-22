@@ -18,7 +18,7 @@
                       
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属法院</span>
-                           <el-select v-model="pd.orgIds" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(1)" multiple filterable allow-create clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.orgIds" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore" @focus="getfocus(1)" multiple filterable  clearable default-first-option placeholder="请输入关键字搜索"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in ssfydata"
                                  
@@ -99,7 +99,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">籍贯</span>
-                           <el-select v-model="pd.birthPlaces" multiple  remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore"  @visible-change="getXz()" allow-create filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                           <el-select v-model="pd.birthPlaces" multiple  remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore"  @visible-change="getXz()"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in xzdata"
                                  :key="ind"

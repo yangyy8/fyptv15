@@ -321,7 +321,7 @@
                        
                         <el-col :span="8">
                             <span class="yy-input-text textn">接待人员</span>
-                            <el-select v-model="pd7.receptionistid"  @change="chChange(pd7.receptionistid,6)" filterable clearable allow-create default-first-option placeholder="请先选择接待单位接待部门"  size="small" class="yy-input-input" >
+                            <el-select v-model="pd7.receptionistid"  @change="chChange(pd7.receptionistid,6)" filterable clearable  default-first-option placeholder="请先选择接待单位接待部门"  size="small" class="yy-input-input" >
                                <el-option
                                  v-for="(item,ind) in jdrdata"
                                  :key="ind"
@@ -447,7 +447,7 @@
                    <el-row  class="mt-20" >
                         <el-col :span="12">
                             <span class="yy-input-text" style="width:100px;">法院领导</span>
-                            <el-select v-model="fyld" v-if="!llbnt" filterable allow-create clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
+                            <el-select v-model="fyld" v-if="!llbnt" filterable  clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" style="width:70%!important" >
                                <el-option
                                  v-for="(item,ind) in fydata"
                                  :key="ind"

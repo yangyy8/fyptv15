@@ -110,7 +110,7 @@
               v-el-select-loadmore="jdrloadmorenew"
               multiple
               clearable
-              allow-create
+              
               filterable
               default-first-option
               placeholder="请输入关键字搜索"
@@ -200,7 +200,7 @@
               @change="getcbbm(pd.developmentUnitId,0)"
               filterable
               clearable
-              allow-create
+              
               default-first-option
               placeholder="请输入关键字搜索"
               size="small"
@@ -295,7 +295,7 @@
               v-el-select-loadmore="fyloadmorenew"
               @change="getcbbm(pd.entryUnitId,1)"
               filterable
-              allow-create
+              
               clearable
               default-first-option
               placeholder="请输入关键字搜索"

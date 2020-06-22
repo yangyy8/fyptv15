@@ -18,7 +18,7 @@
                           :value="item.courtPersonId">
                          </el-option>
                         </el-select> -->
-                          <el-select v-model="pd.courtOutUserId" :disabled="llbnt" remote :remote-method="jdrdwremoteMethodnew" v-el-select-loadmore="jdrloadmorenew"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2);getJDcancel(pd.courtOutUserId)"  filterable clearable allow-create default-first-option placeholder="请输入关键字进行搜索"  size="small" class="yy-input-input" >
+                          <el-select v-model="pd.courtOutUserId" :disabled="llbnt" remote :remote-method="jdrdwremoteMethodnew" v-el-select-loadmore="jdrloadmorenew"  @change="getJDXX(pd.courtOutUserId,1);chChange(pd.courtOutUserId,2);getJDcancel(pd.courtOutUserId)"  filterable clearable  default-first-option placeholder="请输入关键字进行搜索"  size="small" class="yy-input-input" >
                          <el-option
                           v-for="(item,ind) in cdrdata"
                           :key="ind"
@@ -41,7 +41,7 @@
                   <el-row class="ah-40">
                      <el-col :span="9">
                          <span class="yy-input-text"><font class="red">*</font> 代表</span>
-                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable allow-create default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.courtOutUserId==''|| pd.courtOutUserId==undefined?'请先选择结对法院领导':'无数据'">
+                         <el-select v-model="pd.courtOutsiderId" :disabled="llbnt" @change="getJDXX(pd.courtOutsiderId,0);chChange(pd.courtOutsiderId,1)" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.courtOutUserId==''|| pd.courtOutUserId==undefined?'请先选择结对法院领导':'无数据'">
                             <el-option
                             v-for="(item,ind) in lxdbdata"
                             :key="ind"
@@ -130,10 +130,19 @@
                                  </el-option>
                             </el-select>
                       </el-col>
-                      
-                        <el-col :span="24" class="input-item mt-10">
+                        <!-- <el-col :span="24" class="input-item mt-10">
                            <span class="yy-input-text txttop" style="width:10.8%;"><font class="red">*</font> 联络内容</span>
                            <el-input placeholder="请输入内容" type="textarea" :disabled="llbnt" :autosize="{ minRows: 3, maxRows: 4}" size="small" clearable v-model="form.contents"  class="yy-input-input" style="width:88%!important;"></el-input>
+                       </el-col> -->
+                         <el-col :span="24" class="input-item1 mt-20">
+                           <span class="yy-input-text" style="width:11%;"><font class="red">*</font> 
+                              联络内容</span>
+                            <div class="yy-input-input" style="width:88%!important;">
+                           <div v-if='llbnt' v-html="form.contents" class="nrcss">
+                             
+                           </div>
+                           <vue-ueditor-wrap v-else v-model="form.contents" :config="myConfig" style="width:100%!important;line-height:20px;"></vue-ueditor-wrap>
+                           </div>
                        </el-col>
                    </el-row>
                     
@@ -970,7 +979,7 @@ export default {
                          this.ListData1=r.data.leadershipIns==null?[]:r.data.leadershipIns;
                          this.filedata0=r.data.actiWorkReport==null?[]:r.data.actiWorkReport
                          this.fits=r.data.imageDataList==null?[]:r.data.imageDataList;
-                         
+                         this.changedate(this.form.startTime);
                          if(r.data.representativeInfo!=null){
                          this.pd.courtOutsiderId=r.data.representativeInfo.personId
                          this.pd.beginBJSJ=r.data.representativeInfo.pairTime;

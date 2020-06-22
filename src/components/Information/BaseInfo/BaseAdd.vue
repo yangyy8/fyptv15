@@ -36,7 +36,7 @@
                                         <el-col :span="12" v-if='ntype!="3"' class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 籍贯</span>
                                         <!-- :filter-method="userFilter" -->
-                                           <el-select v-model="form.birthPlace" remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore" :disabled="ckshow" @change="getNullVlaue(form.birthPlace,1);getZNSB()"  @visible-change="getXz()"  filterable clearable allow-create placeholder="请选择"  size="small" class="yy-input-input" >
+                                           <el-select v-model="form.birthPlace" remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore" :disabled="ckshow" @change="getNullVlaue(form.birthPlace,1);getZNSB()"  @visible-change="getXz()"  filterable clearable  placeholder="请选择"  size="small" class="yy-input-input" >
                                                 <el-option
                                                     v-for="(item,ind) in xzdata"
                                                     :key="ind"
@@ -103,7 +103,7 @@
                                         <span class="yy-input-text"><img src="../../../assets/img/xh.png">  
                                         {{labelorg}}
                                         </span>
-                                        <el-select v-model="form1.orgId" remote :remote-method="ssdwremoteMethod" v-el-select-loadmore="ssdwloadmore"  :disabled="ckshow || dwshow"  @change="getJB(form1.orgId);getBM(form1.orgId,0);getXJDW(form1.orgId,0);getXHFT(form1.orgId,0);getZMWFY(form1.orgId,0);getWorkList(form1.orgId,0);getJDXX(form1.orgId,0);getJJB();getTYLBList()"  filterable allow-create clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
+                                        <el-select v-model="form1.orgId" remote :remote-method="ssdwremoteMethod" v-el-select-loadmore="ssdwloadmore"  :disabled="ckshow || dwshow"  @change="getJB(form1.orgId);getBM(form1.orgId,0);getXJDW(form1.orgId,0);getXHFT(form1.orgId,0);getZMWFY(form1.orgId,0);getWorkList(form1.orgId,0);getJDXX(form1.orgId,0);getJJB();getTYLBList()"  filterable  clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                             <el-option
                                                 v-for="(item,ind) in ssdwdata"
                                                 :key="ind"
@@ -310,7 +310,7 @@
                                       <el-col :span="12" v-if='ntype=="3"' class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 地区</span>
                                         <!-- :filter-method="userFilter" -->
-                                           <el-select v-model="form1.area" :disabled="ckshow"  remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore"  @visible-change="getXz()" @change="getSFZJ(form1.area)"  filterable clearable allow-create  placeholder="请选择"  size="small" class="yy-input-input" >
+                                           <el-select v-model="form1.area" :disabled="ckshow"  remote :remote-method="xzdwremoteMethod" v-el-select-loadmore="xzloadmore"  @visible-change="getXz()" @change="getSFZJ(form1.area)"  filterable clearable   placeholder="请选择"  size="small" class="yy-input-input" >
                                                 <el-option
                                                     v-for="(item,ind) in xzdata"
                                                     :key="ind"
@@ -409,7 +409,7 @@
                                      </el-col>
                                  <el-col :span="12" v-if="ntype=='1' && jdshow" class="input-item">
                                         <span class="yy-input-text"><img src="../../../assets/img/xhw.png"> 结对法院领导</span>
-                                      <el-select v-model="form1.pairPersonId" @change="getClear(form1.pairPersonId)" remote :remote-method="jdxxdwremoteMethod" v-el-select-loadmore="jdxxloadmore" :disabled="ckshow" filterable clearable allow-create default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
+                                      <el-select v-model="form1.pairPersonId" @change="getClear(form1.pairPersonId)" remote :remote-method="jdxxdwremoteMethod" v-el-select-loadmore="jdxxloadmore" :disabled="ckshow" filterable clearable  default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="form1.orgId==''||form1.orgId==undefined?'请先选择'+labelorg:'无数据'">
                                             <el-option
                                                 v-for="(item,ind) in fyrydata"
                                                 :key="ind"
@@ -2229,7 +2229,7 @@ export default {
                              if(r.data.repair=='0272000001'){
                                   this.pd.is11=true;
                              }
-                             if(r.data.fire=='0292000001'){
+                             if(r.data.fire=='0292000002'){
                                   this.pd.is12=true;
                              }
                                if(r.data.formerRepresentative=='0284000001'){
@@ -3259,9 +3259,9 @@ export default {
                     }
                     //解聘
                      if(this.pd.is12){
-                        this.form1.fire="0292000001";
-                    }else{
                         this.form1.fire="0292000002";
+                    }else{
+                        this.form1.fire="0292000001";
                     }
                     //曾任代表
                     if(this.pd.is14){

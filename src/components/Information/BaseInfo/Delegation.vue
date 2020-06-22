@@ -415,12 +415,14 @@ export default {
                 default:
                     break;
             }
-              this.$api.post(this.Global.aport1+url,p,
+           this.$api.post(this.Global.aport1+url,p,
              r =>{
+                  this.loadshow=false;
                   this.RYData=r.data;
                   this.count=r.data.length;
                   this.labellist=r.data.tags;
-                  this.loadshow=false;
+                
+                  
                  
             });
         },
