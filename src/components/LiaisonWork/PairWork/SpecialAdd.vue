@@ -573,7 +573,7 @@
                 v-for="(item,ind) in $store.state.zw"
                 :key="ind"
                 :label="item.mc"
-                :value="item.dm"
+                :value="item.dm+'|'+item.mc"
               ></el-option>
             </el-select>
           </el-col>
@@ -591,7 +591,8 @@
             <el-table ref="multipleTable" :data="ListData7">
               <el-table-column type="index" label="序号" width="50"></el-table-column>
               <el-table-column prop="personName" label="姓名"></el-table-column>
-              <el-table-column prop="sex" label="性别"></el-table-column>
+              <!-- <el-table-column prop="sex" label="性别"></el-table-column> -->
+              <el-table-column prop="orgName" label="单位"></el-table-column>
               <el-table-column prop="subOrgPosition" label="职务"></el-table-column>
               <el-table-column label="操作" v-if="!llbnt">
                 <template slot-scope="scope">
@@ -679,7 +680,6 @@
           <el-col :span="4" v-if="!llbnt" class="input-item">
             <el-button type="success" size="small" plain @click="ChangeZfNameList(fymber)">加入列表</el-button>
           </el-col>
-          
         </el-row>
         <el-row class="ah-40" v-if="addtype=='7'">
           <el-col :span="24" class="input-item">
@@ -1770,7 +1770,7 @@ export default {
       myConfig: {},
       querybnt: true,
       ztpjshow: false,
-      position1:''
+      position1: ""
     };
   },
   watch: {
@@ -2119,26 +2119,36 @@ export default {
     },
 
     ChangeFYNameList(val) {
-      if (this.fydata.length == 0) {
-        if (!this.ssxx.subOrgId || !this.ssxx.orgId || !this.ssxx.position) {
-          this.$message.error("请选择活动时单位，活动时部门，活动时职务！");
-          return;
-        }
-      }
+     
       if (this.fyld == undefined || this.fyld == "") {
         this.$message.error("法院领导不能为空！");
         return;
       }
 
       var obj = {};
-      if(this.fydata.length>0){
+       if (this.jdrdata.find(function(x) {
+          return x.pbId == aa;
+        }) !=undefined) {
         obj = this.fydata.find(item => {
           return item.pbId === val;
         });
-      }else{
-        obj.personName=this.fyld
+      } else {
+        if (!this.ssxx.subOrgId ) {
+          this.$message.error("请选择活动时单位！");
+          return;
+        }
+        if (!this.ssxx.orgId ) {
+          this.$message.error("请选择活动时部门！");
+          return;
+        }
+        if ( !this.ssxx.position) {
+          this.$message.error("请选择活动时职务！");
+          return;
+        }
+
+        obj.personName = this.fyld;
       }
-      console.log(obj)
+      console.log(obj);
       if (this.ssxx.orgId) {
         console.log(obj, this.ssxx.orgId, this.ssxx.orgId.split("|")[0]);
         obj.orgId = this.ssxx.orgId.split("|")[0];
@@ -2186,26 +2196,38 @@ export default {
         this.$message.error("走访人不能为空！");
         return;
       }
-       if (this.fydata.length == 0) {
-        if ( !this.position1) {
-          this.$message.error("请选择活动时职务！");
-          return;
-        }
-      }
-
       var obj = {};
-      if(this.fydata.length >0){
+      let fymber=this.fymber
+      if (
+        this.fydata.find(function(x) {
+          return x.pbId == fymber;
+        }) != undefined
+      ) {
         obj = this.fydata.find(item => {
           return item.pbId === val;
         });
-      }else{
-        obj.personName=this.fymber;
+      } else {
+        if (!this.form.developmentUnitId) {
+          this.$message.error("请选择开展单位！");
+          return;
+        }
+        if (!this.position1) {
+          this.$message.error("请选择活动时职务！");
+          return;
+        }
+        obj.personName = this.fymber;
+        let deve= this.form.developmentUnitId;
+        let deveobj= this.kzdwdata.find(function(i){
+          return i.orgid==deve
+        });
+        obj.orgName = deveobj.mc;
+
       }
-       if (this.position1) {
+      if (this.position1) {
         // obj.position = this.position1.split("|")[0];
         obj.subOrgPosition = this.position1.split("|")[1];
       }
-      console.log(obj)
+      console.log(obj);
       var srr = this.ListDatazf;
       var ff = false;
       for (let i = 0; i < srr.length; i++) {
@@ -2900,6 +2922,8 @@ export default {
 
         this.pd3 = {};
       } else if (t == 4) {
+        console.log(this.pd7)
+        let obj={};
         if (
           this.pd7.receptionistid == undefined ||
           this.pd7.receptionistid == ""
@@ -2907,18 +2931,33 @@ export default {
           this.$message.error("接待人员不能为空!");
           return;
         }
-        if(this.jdrdata.length==0){
-          if(!this.pd7.position){
-          this.$message.error("请选择活动时职务!");
-
+        let aa=this.pd7.receptionistid
+        if (this.jdrdata.find(function(x) {
+          return x.pbId == aa;
+        }) !=undefined){
+          obj=val
+        }else {
+          
+          if (!this.pd7.position) {
+            this.$message.error("请选择活动时职务!");
+            return
           }
+          obj.personName= this.pd7.receptionistid;
+           let recept= this.form.receptionUnitId;
+          let receptobj= this.fydwdata.find(function(i){
+            return i.orgid==recept;
+          });
+          obj.orgName = receptobj.mc;
+          obj.subOrgPosition=this.pd7.position.split("|")[1];
         }
-        this.ListData7.push(val);
-        const res = new Map();
-        var arr = this.ListData7;
-        this.ListData7 = arr.filter(
-          arr => !res.has(arr.personName) && res.set(arr.personName, 1)
-        );
+         
+        this.ListData7.push(obj);
+        console.log(this.ListData7)
+        // const res = new Map();
+        // var arr = this.ListData7;
+        // this.ListData7 = arr.filter(
+        //   arr => !res.has(arr.personName) && res.set(arr.personName, 1)
+        // );
         this.pd7 = {};
         this.count3++;
       }
