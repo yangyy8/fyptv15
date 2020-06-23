@@ -2211,6 +2211,10 @@ export default {
           this.$message.error("请选择开展单位！");
           return;
         }
+        if (!this.form.devDepartmentId) {
+          this.$message.error("请选择开展部门！");
+          return;
+        }
         if (!this.position1) {
           this.$message.error("请选择活动时职务！");
           return;
@@ -2937,7 +2941,14 @@ export default {
         }) !=undefined){
           obj=val
         }else {
-          
+           if (!this.form.receptionUnitId) {
+          this.$message.error("请选择接待单位！");
+          return;
+        }
+         if (!this.form.receptionDepartmentId) {
+          this.$message.error("请选择接待部门！");
+          return;
+        }
           if (!this.pd7.position) {
             this.$message.error("请选择活动时职务!");
             return
