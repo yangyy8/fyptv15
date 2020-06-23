@@ -2126,22 +2126,23 @@ export default {
 
       var obj = {};
       if (
-        this.jdrdata.find(function(x) {
-          return x.pbId == aa;
+        this.fydata.find(function(x) {
+          return x.pbId == val;
         }) != undefined
       ) {
         obj = this.fydata.find(item => {
           return item.pbId === val;
         });
       } else {
-        if (!this.ssxx.subOrgId) {
+        if (!this.ssxx.orgId) {
           this.$message.error("请选择活动时单位！");
           return;
         }
-        if (!this.ssxx.orgId) {
+        if (!this.ssxx.subOrgId) {
           this.$message.error("请选择活动时部门！");
           return;
         }
+
         if (!this.ssxx.position) {
           this.$message.error("请选择活动时职务！");
           return;
