@@ -193,7 +193,7 @@
               v-el-select-loadmore="fyloadmore"
               @focus="getfocus(3)"
               :disabled="llbnt"
-              @change="getcbbm(form.receptionUnitId,3);getJDR(form.receptionUnitId)"
+              @change="getcbbm(form.receptionUnitId,3)"
               filterable
               clearable
               default-first-option
@@ -544,7 +544,7 @@
               placeholder="请选择"
               size="small"
               class="yy-input-input"
-              :no-data-text="form.receptionUnitId==''||form.receptionUnitId==undefined?'请先选择接待单位':'无数据'"
+              :no-data-text="form.receptionDepartmentId==''||form.receptionDepartmentId==undefined?'请先选择接待部门':'无数据'"
             >
               <el-option
                 v-for="(item,ind) in jdrdata"
@@ -810,15 +810,15 @@
             </el-select>-->
             <el-select
               v-model="fyld"
+              allow-create
+              filterable
               remote
               :remote-method="fyrdwremoteMethodnew"
               v-el-select-loadmore="fyrloadmorenew"
               @focus="getfocus(1)"
               @change="getNullVlaue(fyld,2)"
               v-if="!llbnt"
-              filterable
               clearable
-              allow-create
               default-first-option
               placeholder="请输入关键字搜索"
               size="small"
@@ -882,13 +882,13 @@
             <el-select
               v-model="ssxx.subOrgId"
               :disabled="llbnt"
+              allow-create
               filterable
-              clearable
               default-first-option
               placeholder="请选择"
               size="small"
               class="yy-input-input"
-              :no-data-text="ssxx.orgId?'无数据':'请先选择所属单位'"
+              
             >
               <el-option
                 v-for="(item,ind) in fybmdata4"
@@ -2266,6 +2266,7 @@ export default {
       }
 
       this.fymber = "";
+      this.position1="";
       this.fyrquery();
     },
     ChangePSNameList(n) {
