@@ -2119,29 +2119,30 @@ export default {
     },
 
     ChangeFYNameList(val) {
-     
       if (this.fyld == undefined || this.fyld == "") {
         this.$message.error("法院领导不能为空！");
         return;
       }
 
       var obj = {};
-       if (this.jdrdata.find(function(x) {
+      if (
+        this.jdrdata.find(function(x) {
           return x.pbId == aa;
-        }) !=undefined) {
+        }) != undefined
+      ) {
         obj = this.fydata.find(item => {
           return item.pbId === val;
         });
       } else {
-        if (!this.ssxx.subOrgId ) {
+        if (!this.ssxx.subOrgId) {
           this.$message.error("请选择活动时单位！");
           return;
         }
-        if (!this.ssxx.orgId ) {
+        if (!this.ssxx.orgId) {
           this.$message.error("请选择活动时部门！");
           return;
         }
-        if ( !this.ssxx.position) {
+        if (!this.ssxx.position) {
           this.$message.error("请选择活动时职务！");
           return;
         }
@@ -2197,7 +2198,7 @@ export default {
         return;
       }
       var obj = {};
-      let fymber=this.fymber
+      let fymber = this.fymber;
       if (
         this.fydata.find(function(x) {
           return x.pbId == fymber;
@@ -2220,15 +2221,21 @@ export default {
           return;
         }
         obj.personName = this.fymber;
-        let deve= this.form.developmentUnitId;
-        let deveobj= this.kzdwdata.find(function(i){
-          return i.orgid==deve
+        let deve = this.form.developmentUnitId;
+        let deveobj = this.kzdwdata.find(function(i) {
+          return i.orgid == deve;
         });
         obj.orgName = deveobj.mc;
-
-      }
-      if (this.position1) {
-        // obj.position = this.position1.split("|")[0];
+        obj.orgId = deveobj.orgid;
+        obj.orgMC = deveobj.mc;
+        let devDe = this.form.devDepartmentId;
+        let devDeobj = this.fybmdata.find(function(i) {
+          return i.orgid == devDe;
+        });
+        obj.subOrgId = devDeobj.orgid;
+        obj.subOrgMC = devDeobj.mc;
+        obj.position = this.position1.split("|")[0];
+        obj.positionMC = this.position1.split("|")[1];
         obj.subOrgPosition = this.position1.split("|")[1];
       }
       console.log(obj);
@@ -2926,8 +2933,8 @@ export default {
 
         this.pd3 = {};
       } else if (t == 4) {
-        console.log(this.pd7)
-        let obj={};
+        console.log(this.pd7);
+        let obj = {};
         if (
           this.pd7.receptionistid == undefined ||
           this.pd7.receptionistid == ""
@@ -2935,35 +2942,48 @@ export default {
           this.$message.error("接待人员不能为空!");
           return;
         }
-        let aa=this.pd7.receptionistid
-        if (this.jdrdata.find(function(x) {
-          return x.pbId == aa;
-        }) !=undefined){
-          obj=val
-        }else {
-           if (!this.form.receptionUnitId) {
-          this.$message.error("请选择接待单位！");
-          return;
-        }
-         if (!this.form.receptionDepartmentId) {
-          this.$message.error("请选择接待部门！");
-          return;
-        }
+        let aa = this.pd7.receptionistid;
+        if (
+          this.jdrdata.find(function(x) {
+            return x.pbId == aa;
+          }) != undefined
+        ) {
+          obj = val;
+        } else {
+          if (!this.form.receptionUnitId) {
+            this.$message.error("请选择接待单位！");
+            return;
+          }
+          if (!this.form.receptionDepartmentId) {
+            this.$message.error("请选择接待部门！");
+            return;
+          }
           if (!this.pd7.position) {
             this.$message.error("请选择活动时职务!");
-            return
+            return;
           }
-          obj.personName= this.pd7.receptionistid;
-           let recept= this.form.receptionUnitId;
-          let receptobj= this.fydwdata.find(function(i){
-            return i.orgid==recept;
+          obj.personName = this.pd7.receptionistid;
+          let recept = this.form.receptionUnitId;
+          let receptobj = this.fydwdata.find(function(i) {
+            return i.orgid == recept;
           });
           obj.orgName = receptobj.mc;
-          obj.subOrgPosition=this.pd7.position.split("|")[1];
+          obj.orgId = receptobj.orgid;
+          obj.orgMC = receptobj.mc;
+
+          let receptionDe = this.form.receptionDepartmentId;
+          let receptionDeobj = this.fybmdata3.find(function(i) {
+            return i.orgid == receptionDe;
+          });
+          obj.subOrgId = receptionDeobj.orgid;
+          obj.subOrgMC = receptionDeobj.mc;
+
+          obj.position = this.pd7.position.split("|")[0];
+          obj.positionMC = this.pd7.position.split("|")[1];
+          obj.subOrgPosition = this.pd7.position.split("|")[1];
         }
-         
         this.ListData7.push(obj);
-        console.log(this.ListData7)
+        console.log(this.ListData7);
         // const res = new Map();
         // var arr = this.ListData7;
         // this.ListData7 = arr.filter(
