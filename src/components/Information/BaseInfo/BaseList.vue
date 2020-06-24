@@ -67,7 +67,7 @@
                         </el-col>
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">届别</span>
-                           <el-select v-model="pd.periodType" @change="getTB(pd.orgId);" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属人大和层级':'无数据'">
+                           <el-select v-model="pd.periodType" @change="getTB(pd.orgId);"  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId==''||pd.orgId==undefined?'请先选择所属人大和层级':'无数据'">
                                <el-option
                                  v-for="(item,ind) in jblist"
                                  :key="ind"
@@ -78,7 +78,7 @@
                         </el-col>
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">团别</span>
-                           <el-select v-model="pd.groupTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId && pd.periodTypes?'无数据':'请先选择所属人大和届别'">
+                           <el-select v-model="pd.groupTypes" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" :no-data-text="pd.orgId && pd.periodType?'无数据':'请先选择所属人大和届别'">
                                <el-option
                                  v-for="(item,ind) in tbdata"
                                  :key="ind"
@@ -675,10 +675,10 @@ export default {
         //工作委员会
         getWork(orgid,t){
                this.$set(this.pd,'periodType','');
-               this.$set(this.pd,'workCommitteeIds','');
-               this.$set(this.pd,'formerRepresentatives','');
-               this.$set(this.pd,'formerMembers','');
-               this.$set(this.pd,'groupTypes','');
+               this.$set(this.pd,'workCommitteeIds',[]);
+               this.$set(this.pd,'formerRepresentatives',[]);
+               this.$set(this.pd,'formerMembers',[]);
+               this.$set(this.pd,'groupTypes',[]);
           if(orgid==null || orgid==""){
               // this.$set(this.pd,'levelType','');
              
@@ -776,25 +776,38 @@ export default {
           //  if(this.pd.is5){
           //       this.pd.isInStandCommittee="0115000001"
           //  }
+
+      
+          
             //工作委员会委员
            if(this.pd1.is2){
                 this.pd.workCommitteesDistinction="0273000001";
+           }else{
+                this.pd.workCommitteesDistinction=null
            }
             //专门委员会
            if(this.pd1.is1){
                this.pd.isInSpecialCommittees="0216000001"
+           }else{
+              this.pd.isInSpecialCommittees=null
            }
             //曾任代表
            if(this.pd1.is3){
-               this.pd.formerRepresentative="0284000001"
+             this.pd.formerRepresentative="0284000001"
+           }else{
+             this.pd.formerRepresentative=null
            }
             //曾任委员
            if(this.pd1.is4){
                this.pd.formerMember="0285000001"
+           }else{
+              this.pd.formerMember=null
            }
             //补选
            if(this.pd1.is5){
                this.pd.repair="0272000001"
+           }else{
+               this.pd.repair=null
            }
 
            this.activeNum=0;this.inactiveNum=0;
@@ -1000,22 +1013,22 @@ export default {
 
            getZM(){
              if(!this.pd1.is1){
-               this.$set(this.pd,"specialCommitteeIds","")
+               this.$set(this.pd,"specialCommitteeIds",[])
              }
            },
            getGZ(){
               if(!this.pd1.is2){
-                this.$set(this.pd,"workCommitteeIds","")
+                this.$set(this.pd,"workCommitteeIds",[])
               }
            },
            getckdata(t){
              if(t==1){
                if(!this.pd1.is3){
-               this.$set(this.pd,"formerRepresentatives","")
+               this.$set(this.pd,"formerRepresentatives",[])
                }
              }else if(t==2){
                 if(!this.pd1.is4){
-               this.$set(this.pd,"formerMembers","")
+               this.$set(this.pd,"formerMembers",[])
                }
              }else if(t==3){
                 if(!this.pd1.is5){

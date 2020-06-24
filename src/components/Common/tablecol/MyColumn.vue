@@ -16,11 +16,8 @@
 <script>
 export default {
   name: 'MyColumn',
-  props: {
-    col: {
-      type: Object
-    }
-  }
+  props:['col'],
+
 }
 </script>
 <style scoped>

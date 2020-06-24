@@ -554,7 +554,7 @@
               ></el-option>
             </el-select>
           </el-col>
-          <el-col :span="8" class="input-item">
+          <el-col :span="8" class="input-item" v-if="!llbnt">
             <span class="yy-input-text textn">
               <!-- <font class="red">&ensp;</font> -->
               活动时职务
@@ -577,7 +577,7 @@
               ></el-option>
             </el-select>
           </el-col>
-          <el-col :span="4" class="input-item">
+          <el-col :span="4" class="input-item" v-if="!llbnt">
             <el-button
               type="success"
               size="small"
@@ -654,7 +654,7 @@
               ></el-option>
             </el-select>
           </el-col>
-          <el-col :span="8" class="input-item">
+          <el-col :span="8" class="input-item" v-if='!llbnt'>
             <span class="yy-input-text textn">
               <font class="red">&ensp;</font>
               活动时职务
@@ -708,10 +708,10 @@
             </el-table>
           </el-col>
           <el-col :span="8" class="input-item">
-            <span class="yy-input-text" style="width:31%">
+            <span>
               <font class="red">&ensp;</font> 走访人数
             </span>
-            <span style="color:red;font-weight:bold">{{countzf}}</span>人
+            <span style="color:red;font-weight:bold;margin-left:20px">{{countzf}} </span> 人
           </el-col>
         </el-row>
         <el-row class="mt-20">
@@ -787,7 +787,7 @@
             </el-table>
           </el-col>
           <el-col :span="24" class="mt-20">
-            <span class="yy-input-text" style="width:240px;">
+            <span>
               <font class="red">&ensp;</font> 代表、委员以及特约人员人数
             </span>
             <span style="font-weight:bold;color:red;margin-left:20px;">{{count1}}</span> 人
@@ -836,7 +836,7 @@
             &nbsp;
             <el-button type="success" size="small" plain @click="ChangeFYNameList(fyld)">加入列表</el-button>
           </el-col>
-          <el-col :span="14" class="red" style="font-size:12px;padding-top:9px; height:20px;">
+          <el-col :span="14" class="red" v-if='!llbnt' style="font-size:12px;padding-top:9px; height:20px;">
             <span class="ml-20">
               当您选择的
               <span v-if="addtype==11">联系人</span>
@@ -844,7 +844,7 @@
             </span>
           </el-col>
         </el-row>
-        <el-row class="ah-40 mt-10" v-if="addtype!='9' && addtype!='7' && addtype!='8'">
+        <el-row class="ah-40 mt-10" v-if="addtype!='9' && addtype!='7' && addtype!='8' && !llbnt" >
           <el-col :span="8" class="input-item">
             <span class="yy-input-text textn">
               <font class="red">&ensp;</font>
@@ -983,12 +983,12 @@
             </el-table>
           </el-col>
           <el-col :span="8">
-            <span class="yy-input-text" style="width:31%">
+            <span>
               <font class="red">&ensp;</font>
               <span v-if="addtype==11">联系人</span>
               <span v-else>法院院领导</span>人数
             </span>
-            <span style="color:red;font-weight:bold">{{count2}}</span>人
+            <span style="color:red;font-weight:bold;margin-left:20px">{{count2}}</span> 人
           </el-col>
         </el-row>
         <el-row class="ah-40 mt-20">
@@ -1199,8 +1199,14 @@
             <span class="yy-input-text textdt txttop" title="代表、委员及特约人员意见建议">代表、委员及特约人员意见建议</span>
             <div class="yy-input-input inputw">
               <el-row class="mt-10">
-                <el-col :span="24" style="text-align:right;" v-if="!llbnt">
-                  <el-button type="primary" size="small" plain @click="getyj(0)">添加</el-button>
+                <el-col :span="24" style="text-align:right;">
+                    <el-button type="primary" size="small" plain @click="getyj(0,0)" v-if="!llbnt">
+                     添加
+                    </el-button>
+                   <el-button type="primary" size="small" plain @click="getyj(0,1)"  v-else-if="llbnt?dbtableData.length>0?true:false:false">
+                     查看
+                    </el-button>
+                
                 </el-col>
 
                 <!-- <el-button type="success" size="small" plain  :disabled="yjbnt" @click="getyj(1)">修改</el-button>
@@ -1527,7 +1533,7 @@
           v-if="!llbnt &&  querybnt && state==0"
           @click="submit(1)"
         >保存并继续录入</el-button>
-        <el-button type="primary" style="width:130px;" v-if="llbnt && querybnt" :disabled="true">保存中</el-button>
+        <el-button type="primary" style="width:130px;" v-if="llbnt && !querybnt" :disabled="true">保存中</el-button>
 
         <el-button style="width:130px;" @click="goto()">关 闭</el-button>
       </div>
@@ -1571,7 +1577,7 @@
       <SUGGEST
         :data="yjdata"
         :namelist="ListData4"
-        :type="addtype"
+        :type="yjtype"
         @yjsfatherMethod="yjsfatherMethod"
         :random="new Date().getTime()"
       ></SUGGEST>
@@ -1770,7 +1776,8 @@ export default {
       myConfig: {},
       querybnt: true,
       ztpjshow: false,
-      position1: ""
+      position1: "",
+      yjtype:0,
     };
   },
   watch: {
@@ -2400,6 +2407,7 @@ export default {
       this.tempdata = [];
       this.yjtableData = [];
       this.querybnt = true;
+      this.yjtype=0;
       document.body.scrollTop = document.documentElement.scrollTop = 0;
     },
     getinit(val) {
@@ -4034,7 +4042,7 @@ export default {
       });
     },
     //意见建议添修改查看
-    getyj(t) {
+    getyj(t,m) {
       if (t != 0) {
         if (this.pdmult4.length == 0) {
           this.$message.error("请选择一条数据！");
@@ -4049,6 +4057,8 @@ export default {
           return;
         }
       }
+      this.yjtype=m;
+      
       this.yjdata = this.tempdata;
       this.yjsDialogVisible = true;
     },

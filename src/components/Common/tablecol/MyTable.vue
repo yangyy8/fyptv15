@@ -10,14 +10,8 @@
 import MyColumn from '../../Common/tablecol/MyColumn'
 export default {
   name: 'MyTable',
+  props:['col','data'],
   components: {MyColumn},
-  props: {
-    col: {
-      type: Array
-    },
-    data: {
-      type: Array
-    }
-  }
+ 
 }
 </script>

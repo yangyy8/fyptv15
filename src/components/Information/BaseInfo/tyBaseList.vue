@@ -49,7 +49,7 @@
                                         v-for="(item,ind) in ssdwdata"
                                         :key="ind"
                                         :label="item.mc"
-                                        :value="item.orgid">
+                                        :value="item.dm">
                                       </el-option>
                               </el-select>
                         </el-col>  
@@ -677,10 +677,14 @@ export default {
            //补选
            if(this.pd1.is1){
                this.pd.repair="0272000001"
+           }else{
+             this.pd.repair=null
            }
            //补选
            if(this.pd1.is2){
-               this.pd.fire="0292000001"
+               this.pd.fire="0292000002"
+           }else{
+               this.pd.fire=null
            }
           
 

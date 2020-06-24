@@ -39,10 +39,7 @@
                                  </el-option>
                             </el-select>
                         </el-col>
-                    </el-row>
-                    <el-row class="lh" v-if="open">
-                         
-                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">职业类别</span>
                            <el-select v-model="pd.jobType"  multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                <el-option
@@ -75,6 +72,10 @@
                                  </el-option>
                             </el-select>
                         </el-col>
+                    </el-row>
+                    <el-row class="lh" v-if="open">
+                         
+                       
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">民族</span>
                            <el-select v-model="pd.nationalitys" multiple filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -425,8 +426,9 @@ export default {
                       if(r.code==1){
                           this.tableData=r.data.courtPersonList;
                           this.TotalResult=r.data.pageInfo.total;
-                          this.querybnt=true;
+                        
                       }
+                     this.querybnt=true;
                 });
         
         },

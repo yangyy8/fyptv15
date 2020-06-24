@@ -200,11 +200,10 @@
               @change="getcbbm(pd.developmentUnitId,0)"
               filterable
               clearable
-              
+              style="width:40%"
               default-first-option
               placeholder="请输入关键字搜索"
               size="small"
-              class="yy-input-input"
             >
               <el-option
                 v-for="(item,ind) in kzdwdata"
@@ -213,7 +212,8 @@
                 :value="item.orgid"
               ></el-option>
             </el-select>
-         
+            &nbsp;
+               <el-checkbox v-model="suborg" @change="getcanle">含下级单位</el-checkbox>&nbsp;&nbsp;
           </el-col>
           <!-- <el-col :sm="24" :md="12" :lg="8" class="input-item">
             <span class="yy-input-text">是否包括下级单位</span>
@@ -232,7 +232,8 @@
               default-first-option
               placeholder="请选择"
               size="small"
-              class="yy-input-input"
+               :disabled="suborg"
+               class="yy-input-input"
               :no-data-text="pd.developmentUnitId?'无数据':'请先选择开展单位'"
             >
               <el-option
@@ -296,7 +297,7 @@
               v-el-select-loadmore="fyloadmorenew"
               @change="getcbbm(pd.entryUnitId,1)"
               filterable
-              
+              class="yy-input-input"
               clearable
               default-first-option
               placeholder="请输入关键字搜索"
@@ -309,13 +310,12 @@
                 :label="item.mc"
                 :value="item.orgid"
               ></el-option>
-            </el-select>&nbsp;
-               <el-checkbox v-model="suborg">含下级单位</el-checkbox>
+            </el-select>
           </el-col>
           <el-col :sm="24" :md="12" :lg="8" class="input-item">
             <span class="yy-input-text">录入部门</span>
             <el-select
-              :disabled="suborg"
+            
               v-model="pd.entryDepartmentId"
               filterable
               clearable
@@ -448,7 +448,7 @@
           </el-col>
           <el-col :span="4" class="trt">
             {{sname}}总数
-            <b class="sumfont">{{this.TotalResult}}</b> 件
+            <b class="sumfont">{{this.TotalResult}}</b> 次
           </el-col>
         </el-row>
         <el-table
@@ -735,6 +735,7 @@ export default {
           for (let i = 0; i < this.alldata.length; i++) {
             this.allshow[i] = this.global_auth(r.data, this.alldata[i]);
           }
+         this.getCheckList();
         } else if (r.code == 0) {
           this.$router.push({ path: "/limitmsg" });
         }
@@ -746,8 +747,8 @@ export default {
       this.xmload = [];
       this.fyload = [];
       this.getXQ();
-      this.getCheckList();
-      this.getList(this.CurrentPage, this.pageSize, this.pd);
+    
+     // this.getList(this.CurrentPage, this.pageSize, this.pd);
     },
     handleSelectionChange(val) {
       this.multipleSelection = val;
@@ -854,6 +855,7 @@ export default {
     },
     reset() {
       this.pd = {};
+      this.suborg=false;
     },
     getAll(n) {
       if (n == 1) {
@@ -1489,6 +1491,12 @@ export default {
       this.fydata = srr.filter((item, index, arr) => {
         return index < num;
       });
+    },
+    getcanle(){
+  
+      if(this.suborg){
+         this.$set(this.pd,'devDepartmentId','');
+      }
     },
     getfocus(t, val) {
       if (!val) {

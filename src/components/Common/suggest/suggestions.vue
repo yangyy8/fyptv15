@@ -5,7 +5,7 @@
             <el-col :span="24">
                <span class="yy-input-text trt" v-if='type==1'>代表：</span>
                 <span class="yy-input-text trt" v-else title="代表、委员及特约人员">代表、委员及特约人员：</span>
-                   <el-select v-model="rowdata.leaderPerson" :disabled="sbnt"
+                   <el-select v-model="rowdata.leaderPerson" 
                     @change="getReset(rowdata.leaderPerson)" 
                      filterable clearable default-first-option placeholder="请选择" 
                       size="small" class="yy-input-input" ref="selectdb" >
@@ -21,7 +21,7 @@
               <span class="yy-input-text trt topt">意见建议：</span>
               <el-input placeholder="请输入内容" type="textarea" v-model.trim="rowdata.contents"  :disabled="sbnt" :autosize="{ minRows: 6, maxRows: 6}" size="small" clearable  class="yy-input-input inputw" ></el-input>
               </el-col>
-             <el-col :span="24" class="mt-10"  style="text-align: center;">
+             <el-col :span="24" class="mt-10"  style="text-align: center;" v-if="type==0">
                       <el-button type="success" size="small" plain @click="getAdd()">加入列表</el-button>
              </el-col>
              <el-col :span='24' class="mt-10 subtable " style="text-align: center;padding:0px 4%;">
@@ -44,7 +44,7 @@
 
                             </el-table-column>
                               <el-table-column
-                                  label="操作" width="120">
+                                  label="操作" width="120" v-if="type==0">
                                   <template slot-scope="scope">
                                     <div>
                                          <el-button type="text" :disabled="sbnt"  class="a-btn"  title="编辑"  icon="el-icon-edit" @click="edityj(scope.$index)"></el-button>
@@ -65,7 +65,7 @@
         </el-row>
 
          <div slot="footer" class="footcancel">
-              <el-button type="success"  size="small" @click="submit">保 存</el-button> 
+              <el-button type="success"  size="small" @click="submit" v-if="type==0">保 存</el-button> 
               <el-button  size="small" @click="submit(0)">取 消</el-button>           
         </div> 
     </div>
@@ -116,7 +116,9 @@ export default {
     methods:{
         getinit(){
           console.log('namelist',this.namelist);
-          
+          if(this.type==1){
+              this.sbnt=true;
+          }
           this.pbid='';
           this.init=0;
         },

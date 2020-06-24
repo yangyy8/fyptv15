@@ -48,6 +48,7 @@
                               :options="jgdata"
                               :show-all-levels="true"
                               :props="{ checkStrictly: true }"
+                              @visible-change="getLWDW"
                               clearable filterable size="small" class="yy-input-input">
                             </el-cascader>
                             </el-col>
@@ -297,7 +298,7 @@ export default {
             vvurlErr:'',
             lx:'',
             lxtype:'',
-            querybnt:'',
+            querybnt:true,
 
         }
     },
@@ -374,7 +375,10 @@ export default {
             this.lx=val.query.lx;
             this.getXQ(val.query.type);
             this.reset();
-            switch (this.addtype) {
+            
+        },
+        getsq(){
+          switch (this.addtype) {
                   case '1':
                         this.cname="人大系统";
                         this.pd.lb=this.Global.RD
@@ -440,7 +444,7 @@ export default {
                   default:
                       break;
               }
-          this.getLWDW();
+        
           this.getList(this.CurrentPage, this.pageSize, this.pd);
         },
         yhChange(val){
@@ -468,6 +472,8 @@ export default {
            }
            this.querybnt=false;
            this.tableData=[];
+          
+           
            let p={
                'token':this.$store.state.token,
                'pd':this.pd,
@@ -485,6 +491,7 @@ export default {
                          this.TotalResult=r.data.pageInfo.total;
                         
                       }
+                      
                       this.querybnt=true;
                 });
         
@@ -523,8 +530,8 @@ export default {
         },
         reset(){
             this.pd={};
-            this.CurrentPage=1;
-            console.log('this.type',this.type,this.CurrentPage);
+            this.getsq();
+            
         },
         getadd(t){
           if(this.addtype=='4'){

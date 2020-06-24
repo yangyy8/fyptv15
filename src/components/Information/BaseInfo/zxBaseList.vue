@@ -759,18 +759,26 @@ export default {
             //专门委员会
            if(this.pd1.is1){
                this.pd.isInSpecialCommittees="0216000001"
+           }else{
+              this.pd.isInSpecialCommittees=null
            }
             //曾任代表
            if(this.pd1.is3){
                this.pd.formerRepresentative="0284000001"
+           }else{
+              this.pd.formerRepresentative=null
            }
             //曾任委员
            if(this.pd1.is4){
                this.pd.formerMember="0285000001"
+           }else{
+              this.pd.formerMember=null
            }
             //补选
            if(this.pd1.is5){
                this.pd.repair="0272000001"
+           }else{
+             this.pd.repair=null
            }
           let p={
              "pd":this.pd,
