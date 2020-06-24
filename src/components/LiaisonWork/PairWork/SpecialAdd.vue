@@ -593,7 +593,7 @@
               <el-table-column prop="personName" label="姓名"></el-table-column>
               <!-- <el-table-column prop="sex" label="性别"></el-table-column> -->
               <el-table-column prop="orgName" label="单位"></el-table-column>
-              <el-table-column prop="subOrgPosition" label="职务"></el-table-column>
+              <el-table-column prop="subOrgPositionName" label="职务"></el-table-column>
               <el-table-column label="操作" v-if="!llbnt">
                 <template slot-scope="scope">
                   <div>
@@ -2982,7 +2982,7 @@ export default {
 
           obj.position = this.pd7.position.split("|")[0];
           obj.positionMC = this.pd7.position.split("|")[1];
-          obj.subOrgPosition = this.pd7.position.split("|")[1];
+          obj.subOrgPositionName = this.pd7.position.split("|")[1];
         }
         this.ListData7.push(obj);
         console.log(this.ListData7);
