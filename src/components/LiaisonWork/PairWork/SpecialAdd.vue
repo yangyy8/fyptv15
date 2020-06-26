@@ -992,6 +992,104 @@
           </el-col>
         </el-row>
         <el-row class="ah-40 mt-20">
+           <el-col :span="3">
+               <font class="red">&ensp;</font>
+               其他人员
+           </el-col>
+           <el-col :span="19" v-if='!llbnt'>
+              <el-row>
+               
+              <el-col :span="10" class="input-item">
+              <span class="yy-input-text">
+                姓名
+              </span>
+              <el-input
+                placeholder="请输入内容"
+                size="small"
+                :disabled="llbnt"
+                clearable
+                v-model="qt.personName"
+                class="yy-input-input inputw"
+              ></el-input>
+            </el-col>
+             <el-col :span="10" class="input-item ml-40">
+              <span class="yy-input-text">
+               单位
+              </span>
+              <el-input
+                placeholder="请输入内容"
+                size="small"
+                :disabled="llbnt"
+                clearable
+                v-model="qt.orgMC"
+                class="yy-input-input inputw"
+              ></el-input>
+            </el-col>
+             <el-col :span="10" class="input-item">
+              <span class="yy-input-text">
+               部门
+              </span>
+              <el-input
+                placeholder="请输入内容"
+                size="small"
+                :disabled="llbnt"
+                clearable
+                v-model="qt.subOrgMC"
+                class="yy-input-input inputw"
+              ></el-input>
+            </el-col>
+             <el-col :span="10" class="input-item ml-40">
+              <span class="yy-input-text">
+               职务
+              </span>
+              <el-input
+                placeholder="请输入内容"
+                size="small"
+                :disabled="llbnt"
+                clearable
+                v-model="qt.positionMC"
+                class="yy-input-input inputw"
+              ></el-input>
+            </el-col>
+               
+              </el-row>
+           </el-col>
+           <el-col :span="2"  class="pt-40" v-if='!llbnt'>
+              <el-button type="success" size="small" plain @click="ChangeQT(qt)">加入列表</el-button>
+           </el-col>
+           <el-col :span="24" class="input-item">
+            <el-table ref="multipleTable" :data="ListDataQT">
+              <el-table-column type="index" label="序号" width="50"></el-table-column>
+              <el-table-column prop="personName" label="姓名"></el-table-column>
+              <el-table-column prop="orgMC" label="单位"></el-table-column>
+              <el-table-column prop="subOrgMC" label="部门"></el-table-column>
+              <el-table-column prop="positionMC" label="职务"></el-table-column>
+              <el-table-column label="操作" v-if="!llbnt">
+                <template slot-scope="scope">
+                  <div>
+                    <el-button
+                      type="text"
+                      class="a-btn"
+                      title="删除"
+                      icon="el-icon-delete"
+                      @click="delqt(scope.row)"
+                    ></el-button>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-col>
+        <el-col :span="8">
+            <span>
+              <font class="red">&ensp;</font>
+              其他人员人数
+            </span>
+            <span style="color:red;font-weight:bold;margin-left:20px">{{ListDataQT.length}}</span> 人
+          </el-col>
+        </el-row>
+
+
+        <el-row class="ah-40 mt-20">
           <el-col :span="24" class="input-item1">
             <span class="yy-input-text texts">
               <font class="red">*</font>
@@ -1011,7 +1109,9 @@
             <el-checkbox v-model="pd5.ck1" :disabled="llbnt">人民法院各部门组织开展的特约人员活动</el-checkbox>
           </el-col>
           <el-col :span="24" style="margin-left:10.3%;">
-            <el-checkbox v-model="pd5.ck11" @change="getwx()" :disabled="llbnt">建立微信群</el-checkbox>
+            <el-row>
+              <el-col :span="11">
+                   <el-checkbox v-model="pd5.ck11" @change="getwx()" :disabled="llbnt">建立微信群</el-checkbox>
             <el-input
               placeholder="请输入微信群名称"
               size="small"
@@ -1019,10 +1119,21 @@
               v-if="pd5.ck11"
               clearable
               v-model="wxname"
-              style="width:20%;margin-left:10px;"
+              style="width:40%;margin-left:10px;"
             ></el-input>
+              </el-col >
+              <el-col :span="10"  v-if="pd5.ck11" style="font-size:15px;text-align:right">
+               入群代表委员以及特约人员 <span style="color:red;font-size:20px; font-weight:bold"> {{ListDataWX.length}} </span> 人  
+               <el-button type="text" @click="getZK()" class="ml-20">
+                   <span v-if="zkshow">收起</span> 
+                   <span v-else class="ancolor">展开</span> 
+                </el-button>
+              </el-col>
+            </el-row>
+         
+            
           </el-col>
-          <el-col :span="24" style="margin-left:10.5%;" v-if="pd5.ck11">
+          <el-col :span="24" style="margin-left:10.5%;" v-if="pd5.ck11 && zkshow">
             <div :class="llbnt?'yy-input-input wxq':'yy-input-input'" style="width:89%!important;">
               <el-table
                 ref="mlTable"
@@ -1778,6 +1889,10 @@ export default {
       ztpjshow: false,
       position1: "",
       yjtype:0,
+      qtdata:[],
+      zkshow:false,
+      ListDataQT:[],
+      qt:{},
     };
   },
   watch: {
@@ -2199,6 +2314,62 @@ export default {
       this.ssxx = {};
       this.fyld = "";
       this.fydata = [];
+    },
+   //其他人员
+    ChangeQT(){
+      if (!this.qt.personName) {
+          this.$message.error("请输入姓名！");
+          return;
+        }
+      if (!this.qt.orgMC) {
+          this.$message.error("请输入单位！");
+          return;
+        }
+       if (!this.qt.positionMC) {
+          this.$message.error("请输入职务！");
+          return;
+        }
+      var srr=this.ListDataQT;
+       var ff=false;
+      if(srr && srr.length>0){
+       for (let i = 0; i < srr.length; i++) {
+        if (srr[i].personName == this.qt.personName
+        && srr[i].orgMC == this.qt.orgMC
+        && srr[i].subOrgMC == this.qt.subOrgMC
+        && srr[i].positionMC == this.qt.positionMC) {
+          ff=true;
+        this.$alert(srr[i].personName + "已经存在?", "提示", {
+            confirmButtonText: "确定",
+            callback: action => {   }
+          });
+        
+        }
+      }
+
+      }
+      if(!ff){
+        this.ListDataQT.push(this.qt);
+        this.qt={};
+      }
+
+    },
+    //删除其他人员
+    delqt(n){
+      var arr = [];
+        arr.push(n);
+        for (let i = 0; i < arr.length; i++) {
+          var index = this.ListDataQT.findIndex(item => {
+            if (
+              item.personName == arr[i].personName &&
+              item.orgMC == arr[i].orgMC &&
+              item.subOrgMC == arr[i].subOrgMC &&
+              item.positionMC == arr[i].positionMC
+            ) {
+              return true;
+            }
+          });
+          this.ListDataQT.splice(index, 1);
+        }
     },
     ChangeZfNameList(val) {
       if (this.fymber == undefined || this.fymber == "") {
@@ -3551,7 +3722,7 @@ export default {
       }
 
       this.llgzform.suggestionList = this.hdyjdata; //活动意见建议
-
+      this.llgzform.OtherPersons=this.ListDataQT;//其他人员
       //  this.llgzform.actiRelAdvList=this.dbtableData;
       this.$api.post(
         this.Global.aport2 + "/ActivityInfoController/saveActivityInfo",
@@ -4146,18 +4317,12 @@ export default {
     },
     getwx() {
       if (this.ListData4 && this.ListData4.length > 0) {
-        this.ListDataWX = this.ListData4;
-        this.$nextTick(function() {
-          for (let i = 0; i < this.ListDataWX.length; i++) {
-            if (this.pd5.ck11) {
-              this.$refs.mlTable.toggleRowSelection(this.ListDataWX[i], true);
-            }
-          }
-        });
+        this.zkshow=false;
+           this.ListDataWX = this.ListData4;
+     
       } else {
         this.$message.error("请先选择代表、委员以及特约人员！");
-        this.$set(this.pd5, "ck11", false);
-        return;
+        this.$set(this.pd5, "ck11", false);return;
       }
     },
     tableRowClassName({ row, rowIndex }) {
@@ -4196,6 +4361,19 @@ export default {
           this.$set(this.form, "endTime", t);
         }
       }
+    },
+    getZK(){
+       
+      this.zkshow=!this.zkshow;
+      if(this.zkshow){
+         this.$nextTick(function() {
+          for (let i = 0; i < this.ListDataWX.length; i++) {
+           
+              this.$refs.mlTable.toggleRowSelection(this.ListDataWX[i], true);
+           
+          }
+        });
+       }
     },
     getfocus(t) {
       switch (t) {

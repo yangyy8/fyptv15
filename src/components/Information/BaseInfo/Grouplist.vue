@@ -143,6 +143,7 @@ export default {
              try{
               this.info=JSON.parse(Base64.decode(val.query.info));
               
+                         console.log('--',this.info);
                          
                this.addtype=this.info.type;
                this.jb=this.info.jb;
@@ -241,6 +242,11 @@ export default {
                                             this.$api.post(this.Global.jjburl,p,
                                                     r =>{
                                                         this.jjblist=ToArray(r.data);
+                                                         if(r.data.length>0){
+                                                                this.show=true;
+                                                            }else{
+                                                                this.show=false;
+                                                            }
                                                         
                                             });
                                     }else{
@@ -256,6 +262,11 @@ export default {
                     this.$api.post(this.Global.tylburl,p,
                             r =>{
                             this.tylblist=ToArray(r.data);
+                             if(r.data.length>0){
+                                this.show=true;
+                            }else{
+                                this.show=false;
+                            }
                               
                     });
             }
@@ -485,7 +496,7 @@ export default {
                                 this.show=true;
                             }else{
                                 this.show=false;
-                       }
+                            }
                     
                 }
             })

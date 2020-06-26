@@ -13,48 +13,23 @@
       <div class="ptitle mb-20">{{cinfo}}</div>
       <div class="pborder">
         <el-row class="lh" :gutter="2">
-          <el-col :sm="24" :md="12" :lg="8" class="input-item">
-            <span class="yy-input-text">时间</span>
-            <div class="yy-input-input t-flex">
-              <el-date-picker
-                v-model="pd.startTime"
-                format="yyyy-MM-dd"
-                type="date"
-                size="small"
-                value-format="yyyy-MM-dd"
-                placeholder="开始时间"
-              ></el-date-picker>
-              <span class="septum">-</span>
-              <el-date-picker
-                v-model="pd.endTime"
-                format="yyyy-MM-dd"
-                type="date"
-                size="small"
-                value-format="yyyy-MM-dd"
-                placeholder="结束时间"
-              ></el-date-picker>
-            </div>
-          </el-col>
-          <el-col :sm="24" :md="12" :lg="8" class="input-item">
-            <span class="yy-input-text">活动方式</span>
-            <el-select
-              v-model="pd.activityModeArr"
-              multiple
-              filterable
-              clearable
-              default-first-option
-              placeholder="请选择"
-              size="small"
-              class="yy-input-input"
-            >
-              <el-option
-                v-for="(item,ind) in $store.state.hdfs"
-                :key="ind"
-                :label="item.mc"
-                :value="item.dm"
-              ></el-option>
-            </el-select>
-          </el-col>
+              <el-col :sm="24" :md="12" :lg="8" class="input-item">
+                      <span class="yy-input-text">时间</span>
+                      <div class="yy-input-input  t-flex">
+                        <el-date-picker
+                           v-model="pd.startTime" format="yyyy-MM-dd"
+                           type="date" size="small" value-format="yyyy-MM-dd"
+                           placeholder="开始时间" >
+                        </el-date-picker>
+                        <span class="septum">-</span>
+                        <el-date-picker
+                            v-model="pd.endTime" format="yyyy-MM-dd"
+                            type="date" size="small" value-format="yyyy-MM-dd"
+                            placeholder="结束时间" >
+                        </el-date-picker>
+                     </div>
+                 </el-col>
+        
           <el-col :sm="24" :md="12" :lg="8" class="input-item">
             <span class="yy-input-text">活动类型</span>
             <el-select
@@ -66,35 +41,59 @@
               placeholder="请选择"
               size="small"
               class="yy-input-input"
+              @change="getJDLX(pd.activityTypeArr)"
             >
               <el-option
                 v-for="(item,ind) in $store.state.hdlx"
                 :key="ind"
                 :label="item.mc"
                 :value="item.dm"
+                
               ></el-option>
             </el-select>
           </el-col>
+           <el-col :sm="24" :md="12" :lg="8" class="input-item">
+            <span class="yy-input-text">活动方式</span>
+            <el-select
+              v-model="pd.activityModeArr"
+              multiple
+              filterable
+              clearable
+              default-first-option
+              placeholder="请选择"
+              size="small"
+              class="yy-input-input"
+             :disabled="jdshow"
+            >
+              <el-option
+                v-for="(item,ind) in $store.state.hdfs"
+                :key="ind"
+                :label="item.mc"
+                :value="item.dm"
+              ></el-option>
+            </el-select>
+          </el-col>
+          
           <el-col :sm="24" :md="24" :lg="24" class="input-item">
-            <span class="yy-input-text" style="width:9%!important;">主题</span>
+            <span class="yy-input-text mhtxt" >主题</span>
             <el-input
               placeholder="请输入内容"
               size="small"
               clearable
               v-model="pd.theme"
               class="yy-input-input"
-              style="width:86.8%!important;"
+              style="width:86.5%!important;"
             ></el-input>
           </el-col>
           <el-col :sm="24" :md="24" :lg="24" class="input-item">
-            <span class="yy-input-text" style="width:9%!important;">地点</span>
+            <span class="yy-input-text mhtxt">地点</span>
             <el-input
               placeholder="请输入内容"
               size="small"
               clearable
               v-model="pd.location"
               class="yy-input-input"
-              style="width:86.8%!important;"
+              style="width:86.5%!important;"
             ></el-input>
           </el-col>
         </el-row>
@@ -129,7 +128,7 @@
           <el-col :sm="24" :md="12" :lg="16" class="input-item">
             <span
               class="yy-input-text"
-              style="width:18.5%!important"
+              style="width:22%!important"
               title="代表、委员以及特约人员"
             >代表、委员以及特约人员</span>
             <el-select
@@ -146,8 +145,8 @@
               default-first-option
               placeholder="请输入关键字搜索"
               size="small"
-              class="yy-input-input"
-              style="width:75%!important"
+              class="yy-input-input mhinput"
+           
             >
               <el-option
                 v-for="(item,ind) in xmdata"
@@ -200,7 +199,7 @@
               @change="getcbbm(pd.developmentUnitId,0)"
               filterable
               clearable
-              style="width:40%"
+              style="width:35%"
               default-first-option
               placeholder="请输入关键字搜索"
               size="small"
@@ -215,14 +214,7 @@
             &nbsp;
                <el-checkbox v-model="suborg" @change="getcanle">含下级单位</el-checkbox>&nbsp;&nbsp;
           </el-col>
-          <!-- <el-col :sm="24" :md="12" :lg="8" class="input-item">
-            <span class="yy-input-text">是否包括下级单位</span>
-            <div class="yy-input-input">
-
-            <el-radio v-model="pd.isEntrySubOrg" label="1">是</el-radio>
-            <el-radio v-model="pd.isEntrySubOrg" label="0">否</el-radio>
-            </div>
-          </el-col> -->
+        
           <el-col :sm="24" :md="12" :lg="8" class="input-item">
             <span class="yy-input-text">开展部门</span>
             <el-select
@@ -391,7 +383,27 @@
 
       <div class="pborder mt-20">
         <el-row>
-          <el-col :span="20" class="ah-40">
+           <el-col :span="3" style="font-weight:bold;min-width:150px">
+            联络活动共
+            <b class="sumfont">{{this.listnum.activityCount}}</b> 次 
+
+          </el-col>
+          <el-col :span="18" style="font-size:15px">
+            <span class="ml-20">代表
+            <b class="sumfont">{{this.listnum.repCount}}</b> 人次 
+            </span>
+            <span class="ml-20" v-if="jdshow">委员
+            <b class="sumfont">{{this.listnum.repCount}}</b> 人次 
+            </span>
+             <span class="ml-20">特约监督员
+            <b class="sumfont">{{this.listnum.sep1Count}}</b> 人次 
+            </span>
+             <span class="ml-20">特邀咨询员
+            <b class="sumfont">{{this.listnum.sep2Count}}</b> 人次 
+            </span>
+            
+          </el-col>
+          <el-col :span="24" class="mt-30">
             <el-button type="primary" size="small" @click="add('0')" v-if="allshow[0]">添加</el-button>
             <el-button
               type="primary"
@@ -446,10 +458,7 @@
               v-if="allshow[10]"
             >回收</el-button>&nbsp;
           </el-col>
-          <el-col :span="4" class="trt">
-            {{sname}}总数
-            <b class="sumfont">{{this.TotalResult}}</b> 次
-          </el-col>
+       
         </el-row>
         <el-table
           ref="multipleTable"
@@ -710,6 +719,13 @@ export default {
       bs: 0,
       querybnt: true,
       suborg:false,
+      jdshow:true,
+      listnum:{
+        activityCount:'0',//联络活动次数
+        repCount:'0',//代表人次
+        sep1Count:'0',//特约监督员
+        sep2Count:'0',//特邀咨询员
+      },
     };
   },
   mounted() {
@@ -909,6 +925,7 @@ export default {
       }
       this.configHeader = sortByKey(this.configHeader, "sort");
     },
+  
     getList(currentPage, showCount, pd) {
       this.sname = "联络工作";
       this.tableData = [];
@@ -935,6 +952,10 @@ export default {
         r => {
           if (r.code == 1) {
             this.tableData = r.data.activityInfoVOList;
+            if(r.data.statInfo){
+                this.listnum=r.data.statInfo;
+            }
+            
             this.TotalResult = r.data.pageInfo.total;
           } else {
             this.tableData = [];
@@ -1498,6 +1519,20 @@ export default {
          this.$set(this.pd,'devDepartmentId','');
       }
     },
+    getJDLX(val){
+      this.jdshow=true;
+   
+      if(val){
+        
+          if(val.length==1 && val[0]=='0149000001'){
+             this.jdshow=false;
+          }
+          
+        
+      }else{
+        this.$set(this.pd,'activityModeArr',[])
+      }
+    },
     getfocus(t, val) {
       if (!val) {
         switch (t) {
@@ -1526,5 +1561,7 @@ export default {
 .yy-input-text {
   font-size: 14px;
 }
+
 </style>
+
 

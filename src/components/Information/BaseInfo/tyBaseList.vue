@@ -164,7 +164,7 @@
                                  v-for="(item,ind) in tjdwlist"
                                  :key="ind"
                                  :label="item.mc"
-                                 :value="item.orgid">
+                                 :value="item.dm">
                                  </el-option>
                             </el-select>
                         </el-col>
@@ -203,7 +203,7 @@
                         
                         <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">增补
-                                 <el-checkbox v-model="pd1.is1" ></el-checkbox>
+                                 <el-checkbox v-model="pd1.is1" @change="getNull(1)"></el-checkbox>
                             </span>
                             <div class="yy-input-input  t-flex  t-date">
                                 <el-date-picker :disabled="!pd1.is1"
@@ -221,7 +221,7 @@
                         </el-col>
                           <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">解聘
-                                 <el-checkbox v-model="pd1.is2" ></el-checkbox>
+                                 <el-checkbox v-model="pd1.is2"  @change="getNull(2)"></el-checkbox>
                             </span>
                                 <el-select v-model="pd.fireReasons" :disabled="!pd1.is2" multiple  filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
                                                   <el-option
@@ -232,9 +232,6 @@
                                                   </el-option>
                                      </el-select>
                           </el-col>
-                       
-                        
-                         
                          <el-col :sm="24" :md="12" :lg="8" class="input-item">
                             <span class="yy-input-text">所属巡回法庭</span>
                            <el-select v-model="pd.circuitCourtId" @visible-change="getXHFT" filterable clearable default-first-option placeholder="请选择"  size="small" class="yy-input-input" >
@@ -890,6 +887,20 @@ export default {
                        }
                    });
         }
+    },
+    getNull(t){
+      switch (t) {
+        case 1:
+           this.$set(this.pd,'beginRepairTime','')
+           this.$set(this.pd,'endRepairTime','')
+          break;
+       case 2:
+           this.$set(this.pd,'fireReasons',[])
+           
+          break;
+        default:
+          break;
+      }
     },
           
     },

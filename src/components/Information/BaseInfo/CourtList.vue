@@ -26,7 +26,7 @@
                </el-row>
                 <el-row :gutter="2" class="ah-50 pborder mt-20" v-if='show'>
                   <el-col :sm="24" :md="12" :lg="ts.mc.length>20?8:6" v-for="(ts,inds) in areadata" :key="inds">
-                    <span class="address"  @click="goxj(ts.orgid,ts.mc)">{{ts.mc}}</span>
+                    <span class="address"  @click="goxj(ts.orgid,ts.mc,ts.xzqh)">{{ts.mc}}</span>
                   </el-col>
                </el-row>
                 <el-row  class="ah-50 pborder mt-20 mb-20 " style="text-align:center" v-else>
@@ -130,6 +130,24 @@ export default {
                  }
                mid=getmenu(this.addtype,this.jb);
                this.alldata=getdata(this.addtype,this.jb);
+             }else if(this.addtype=='3'){
+                this.cname1="特约人员";
+                
+                 switch (this.jb) {
+                     case 'sj':
+                         this.cname2="高级人民法院特约人员";
+                         break;
+                     case 'ds':
+                         this.cname2="中级人民法院特约人员";
+                         break;
+                     case 'xq':
+                         this.cname2="基层人民法院特约人员";
+                         break;
+                     default:
+                         break;
+                 }
+               mid=getlljgmenu(this.addtype,this.jb);
+               this.alldata=getlljgdata(this.addtype,this.jb);
              }else if(this.addtype=='4'){
                 this.cname1="法院人员";
                 
@@ -147,7 +165,9 @@ export default {
                          break;
                  }
                mid=getlljgmenu(this.addtype,this.jb);
-              this.alldata=getlljgdata(this.addtype,this.jb);
+               this.alldata=getlljgdata(this.addtype,this.jb);
+             }else{
+              this.$router.push({name:'limitmsg',query:{msg:'该地址参数不对！'}});
              }
            
            //权限start
@@ -197,7 +217,7 @@ export default {
                           }
                    });
          },
-         goxj(orgid,mc){
+         goxj(orgid,mc,xzqh){
            
            if((this.lvl==3 && this.jb=='xq')
              || (this.lvl==2 && this.jb=='ds')
@@ -214,12 +234,16 @@ export default {
                         'orgid':orgid,
                         'orgmc':mc,
                         'sorgid':orgid,
-                        'num':1
+                        'num':1,
+                        'code':xzqh,
                         
                     }
                 var str=Base64.encode(JSON.stringify(p));
                 if(this.addtype=='7'){
                   this.$router.push({path:'InstitutionGroup',query:{info:str}});
+                }
+                else if(this.addtype=='3'){
+                    this.$router.push({path:'Grouplist',query:{info:str}});
                 }
                 else if(this.addtype=='4'){
                     this.$router.push({path:'Grouplist',query:{info:str}});

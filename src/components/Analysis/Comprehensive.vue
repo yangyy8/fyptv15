@@ -22,7 +22,7 @@
                     <el-row class="ah-30">
                         <el-col :span="24">
                             <el-checkbox v-model="rdchecked" :disabled="dxshow0" @change="getrdclick(0);getISXS()">人大代表</el-checkbox>
-                            <span class="ml-40 ah12" v-if='rdshow[0]'>
+                            <span class="ml-10 ah12" v-if='rdshow[0]'>
                                 <el-checkbox v-model="rd.cj" class="antxt" @change="getrdclick(1,1)">层级</el-checkbox>
                                 <el-select v-model="cx.cx_ry_rd_levelType" :disabled="!rd.cj" @change="getrdclick(1,0,cx.cx_ry_rd_levelType)"  placeholder="请选择" filterable clearable  size="mini" class="aninput">
                                     <el-option
@@ -34,7 +34,7 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='rdshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="rd.sjrd" @change="getrdclick(2,1)">四级人大</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="rd.sjrd" @change="getrdclick(2,1)">四级人大</el-checkbox>
                                 <el-select v-model="cx.cx_ry_rd_orgid" :disabled="!rd.sjrd" @change="getrdclick(2,0,cx.cx_ry_rd_orgid);getNull(cx.cx_ry_rd_orgid,1);getJB(cx.cx_ry_rd_orgid,1);" remote :remote-method="rdorgremoteMethod" v-el-select-loadmore="rdorgloadmore" filterable clearable   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in rdorglist"
@@ -47,7 +47,7 @@
                             </span>
 
                             <span class="ah12" v-if='rdshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="rd.jb" @change="getrdclick(3,1)">届别</el-checkbox>
+                             <el-checkbox class="ml-10 antxt" v-model="rd.jb" @change="getrdclick(3,1)">届别</el-checkbox>
                              <el-select v-model="cx.cx_ry_rd_periodType"  :disabled="!rd.jb" placeholder="请选择" @change="getrdclick(3,0,cx.cx_ry_rd_periodType);getTB(cx.cx_ry_rd_orgid,cx.cx_ry_rd_periodType)" filterable clearable :no-data-text="cx.cx_ry_rd_orgid?'无数据':'请先选择四级人大'"   size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in rdjblist"
@@ -58,7 +58,7 @@
                              </el-select>
                             </span>
                             <span class="ah12" v-if='rdshow[3]'>
-                                <el-checkbox class="ml-20 antxt" v-model="rd.tb" @change="getrdclick(4)">团别</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="rd.tb" @change="getrdclick(4)">团别</el-checkbox>
                                 <el-select v-model="cx.cx_ry_rd_groupType" :disabled="!rdshow[4]"  placeholder="请选择" filterable clearable :no-data-text="cx.cx_ry_rd_periodType?'无数据':'请先选择届别'"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in tblist"
@@ -72,7 +72,7 @@
                         </el-col>
                          <el-col :span="24">
                              <el-checkbox v-model="zxchecked" :disabled="dxshow1" @change="getzxclick(0);getISXS()">政协委员</el-checkbox>
-                             <span class="ml-40 ah12" v-if='zxshow[0]'>
+                             <span class="ml-10 ah12" v-if='zxshow[0]'>
                                 <el-checkbox v-model="zx.cj" class="antxt" @change="getzxclick(1,1)" >层级</el-checkbox>
                                 <el-select v-model="cx.cx_ry_zx_levelType" :disabled="!zx.cj"  @change="getzxclick(1,0,cx.cx_ry_zx_levelType)"  placeholder="请选择" filterable clearable  size="mini" class="aninput">
                                     <el-option
@@ -84,7 +84,7 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='zxshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="zx.sjzx" @change="getzxclick(2,1)">四级政协</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="zx.sjzx" @change="getzxclick(2,1)">四级政协</el-checkbox>
                                 <el-select v-model="cx.cx_ry_zx_orgid" :disabled="!zx.sjzx" filterable clearable   @change="getzxclick(2,0,cx.cx_ry_zx_orgid);getNull(cx.cx_ry_zx_orgid,2);getJB(cx.cx_ry_zx_orgid,2);" remote :remote-method="zxorgremoteMethod" v-el-select-loadmore="zxorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in zxorglist"
@@ -96,7 +96,7 @@
                                <el-checkbox  v-model="cx.cx_ry_zx_xjzx">含下级政协</el-checkbox>
                             </span>
                             <span class="ah12" v-if='zxshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="zx.jb" @change="getzxclick(3,1)">届别</el-checkbox>
+                             <el-checkbox class="ml-10 antxt" v-model="zx.jb" @change="getzxclick(3,1)">届别</el-checkbox>
                              <el-select v-model="cx.cx_ry_zx_periodType"  :disabled="!zx.jb" filterable clearable @change="getzxclick(3,0,cx.cx_ry_zx_periodType);getJJB(cx.cx_ry_zx_orgid,cx.cx_ry_zx_periodType)" placeholder="请选择" :no-data-text="cx.cx_ry_zx_orgid?'无数据':'请先选择四级政协'" size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in zxjblist"
@@ -107,7 +107,7 @@
                              </el-select>
                             </span>
                             <span class="ah12" v-if='zxshow[3]'>
-                                <el-checkbox class="ml-20 antxt" v-model="zx.jjb" @change="getzxclick(4)">界别</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="zx.jjb" @change="getzxclick(4)">界别</el-checkbox>
                                 <el-select v-model="cx.cx_ry_zx_circlesType" :disabled="!zxshow[4]" filterable clearable  placeholder="请选择"  size="mini" :no-data-text="cx.cx_ry_zx_periodType?'无数据':'请先选择届别'" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in jjblist"
@@ -120,7 +120,7 @@
                         </el-col>
                          <el-col :span="24">
                             <el-checkbox v-model="tychecked" :disabled="dxshow2" @change="gettyclick(0);getISXS()">特约人员</el-checkbox>
-                            <span class="ml-40 ah12" v-if='tyshow[0]'>
+                            <span class="ml-10 ah12" v-if='tyshow[0]'>
                                 <el-checkbox v-model="ty.cj" class="antxt"  @change="gettyclick(1,1)">法院等级</el-checkbox>
                                 <el-select v-model="cx.cx_ry_ty_levelType" :disabled="!ty.cj" @change="gettyclick(1,0,cx.cx_ry_ty_levelType)" filterable clearable   placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
@@ -132,7 +132,7 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='tyshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="ty.sjfy" @change="gettyclick(2,1)">四级法院</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="ty.sjfy" @change="gettyclick(2,1)">四级法院</el-checkbox>
                                 <el-select v-model="cx.cx_ry_ty_orgid" :disabled="!ty.sjfy" filterable clearable   @change="gettyclick(2,0,cx.cx_ry_ty_orgid);getNull(cx.cx_ry_ty_orgid,3);getTYLBList(cx.cx_ry_ty_orgid);" remote :remote-method="tyorgremoteMethod" v-el-select-loadmore="tyorgloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in tyorglist"
@@ -145,7 +145,7 @@
                             </span>
                            
                             <span class="ah12" v-if='tyshow[2]'>
-                                <el-checkbox class="ml-20 antxt" v-model="ty.tylb" @change="gettyclick(3,1)">特约类别</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="ty.tylb" @change="gettyclick(3,1)">特约类别</el-checkbox>
                                 <el-select v-model="cx.cx_ry_ty_specialType" :disabled="!ty.tylb" filterable clearable @change="gettyclick(3,0,cx.cx_ry_ty_specialType);getTYJB(cx.cx_ry_ty_orgid,cx.cx_ry_ty_specialType)"  placeholder="请选择" :no-data-text="cx.cx_ry_ty_orgid?'无数据':'请先选择四级法院'"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in tylblist"
@@ -156,7 +156,7 @@
                                 </el-select>
                              </span>
                               <span class="ah12" v-if='tyshow[3]'>
-                             <el-checkbox class="ml-20 antxt" v-model="ty.jb" @change="gettyclick(4)">届别</el-checkbox>
+                             <el-checkbox class="ml-10 antxt" v-model="ty.jb" @change="gettyclick(4)">届别</el-checkbox>
                              <el-select v-model="cx.cx_ry_ty_periodType"  :disabled="!tyshow[4]" filterable clearable  placeholder="请选择"  :no-data-text="cx.cx_ry_ty_specialType?'无数据':'请先选择特约类别'" size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in tyjblist"
@@ -186,7 +186,7 @@
                      <el-row class="ah-30">
                         <el-col :span="24">
                             <el-checkbox v-model="sjchecked" :disabled="hdshow0" @change="getsjclick(0);getISXS()">活动时间</el-checkbox>
-                            <span class="ml-40 ah12" v-if='sjshow0'>
+                            <span class="ml-10 ah12" v-if='sjshow0'>
                                 <el-checkbox v-model="sj.ksrq" class="antxt" @change="getsjclick(1,1)">开始日期</el-checkbox>
                                  <el-date-picker 
                                      v-model="cx.cx_ll_sj_ksrq" format="yyyy-MM-dd"
@@ -195,7 +195,7 @@
                                  </el-date-picker> 
                             </span>
                              <span class="ah12" v-if='sjshow1'>
-                                <el-checkbox v-model="sj.jsrq" class="ml-20 antxt" @change="getsjclick(2)">结束日期</el-checkbox>
+                                <el-checkbox v-model="sj.jsrq" class="ml-10 antxt" @change="getsjclick(2)">结束日期</el-checkbox>
                                  <el-date-picker 
                                      v-model="cx.cx_ll_sj_jsrq" format="yyyy-MM-dd"
                                     type="date" size="mini" value-format="yyyy-MM-dd"
@@ -222,7 +222,7 @@
                         <el-col :span="24">
                             <el-checkbox v-model="kzdwchecked" :disabled="hdshow3" @change="getkzdwclick(0);getISXS()">开展单位</el-checkbox>
                              <span v-if='kzdwshow[0]'>
-                            <span class="ml-40 ah12" v-if='kzdwshow[0]'>
+                            <span class="ml-10 ah12" v-if='kzdwshow[0]'>
                                 <el-checkbox v-model="kzdw.fyjb" class="antxt" @change="getkzdwclick(1,1)">层级</el-checkbox>
                                 <el-select v-model="cx.cx_ll_kz_levelType" :disabled="!kzdw.fyjb" placeholder="请选择" @change="getkzdwclick(1,0,cx.cx_ll_kz_levelType)"  filterable clearable  size="mini" class="aninput">
                                     <el-option
@@ -234,7 +234,7 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='kzdwshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="kzdw.fydw" @change="getkzdwclick(2,1)">开展单位</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="kzdw.fydw" @change="getkzdwclick(2,1)">开展单位</el-checkbox>
                                 <el-select v-model="cx.cx_ll_kz_developmentUnitId" :disabled="!kzdw.fydw" filterable clearable   @change="getkzdwclick(2,0,cx.cx_ll_kz_developmentUnitId);getNull(cx.cx_ll_kz_developmentUnitId,4);getkzbm(cx.cx_ll_kz_developmentUnitId)" remote :remote-method="kzdwremoteMethod" v-el-select-loadmore="kzloadmore"   placeholder="请输入关键字搜索"   size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in kzdwdata"
@@ -246,7 +246,7 @@
                                <el-checkbox  v-model="cx.cx_ll_kz_xjfy">含下级法院</el-checkbox>
                             </span>
                             <span class="ah12" v-if='kzdwshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="kzdw.kzbm" @change="getkzdwclick(3)">开展部门</el-checkbox>
+                             <el-checkbox class="ml-10 antxt" v-model="kzdw.kzbm" @change="getkzdwclick(3)">开展部门</el-checkbox>
                              <el-select v-model="cx.cx_ll_kz_devDepartmentId"  :disabled="!kzdwshow[3]" filterable clearable placeholder="请选择" :no-data-text="cx.cx_ll_kz_developmentUnitId?'无数据':'请先选择开展单位'"  size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in kzbmdata"
@@ -258,7 +258,7 @@
                             </span>
                               </span>
                             <!-- <span class="ah12" v-if='kzdwshow[3]'>
-                                <el-checkbox class="ml-20 antxt" v-model="kzdw.yld" @change="getkzdwclick(4)">院领导</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="kzdw.yld" @change="getkzdwclick(4)">院领导</el-checkbox>
                                 <el-select v-model="kzdw.pairPersonId" :disabled="!kzdwshow[4]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in $store.state.jbb"
@@ -272,7 +272,7 @@
                          <el-col :span="24">
                             <el-checkbox v-model="bldwchecked"  :disabled="blshow" @change="getbldwclick(0);getISXS()">办理单位</el-checkbox>
                             <span v-if='bldwshow[0]'>
-                            <span class="ml-40 ah12" v-if='bldwshow[0]'>
+                            <span class="ml-10 ah12" v-if='bldwshow[0]'>
                                 <el-checkbox v-model="bldw.fyjb" class="antxt" @change="getbldwclick(1,1)">法院级别</el-checkbox>
                                 <el-select v-model="cx.cx_gzya_bl_levelType" :disabled="!bldw.fyjb" filterable clearable @change="getbldwclick(1,0,cx.cx_gzya_bl_levelType)"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
@@ -284,7 +284,7 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='bldwshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="bldw.fydw" @change="getbldwclick(2,1)">法院单位</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="bldw.fydw" @change="getbldwclick(2,1)">法院单位</el-checkbox>
                                 <el-select v-model="cx.cx_gzya_bl_undertakeUnitId" :disabled="!bldw.fydw" filterable clearable  @change="getbldwclick(2,0,cx.cx_gzya_bl_undertakeUnitId);getNull(cx.cx_gzya_bl_undertakeUnitId,5);getblbm(cx.cx_gzya_bl_undertakeUnitId)" remote :remote-method="fydwremoteMethod" v-el-select-loadmore="fyloadmore"   placeholder="请输入关键字搜索"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in fydwdata"
@@ -296,7 +296,7 @@
                                <el-checkbox  v-model="cx.cx_gzya_bl_xjfy">含下级法院</el-checkbox>
                             </span>
                             <span class="ah12" v-if='bldwshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="bldw.blbm" @change="getbldwclick(3)">办理部门</el-checkbox>
+                             <el-checkbox class="ml-10 antxt" v-model="bldw.blbm" @change="getbldwclick(3)">办理部门</el-checkbox>
                              <el-select v-model="cx.cx_gzya_bl_undertakeDepartmentId"  :disabled="!bldwshow[3]" filterable clearable placeholder="请选择" :no-data-text="cx.cx_gzya_bl_undertakeUnitId?'无数据':'请先选择办理单位'"  size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in blbmdata"
@@ -326,7 +326,7 @@
                      <el-row class="ah-30">
                         <el-col :span="24">
                              <el-checkbox v-model="hdddchecked" :disabled="hdshow1" @change="gethdddclick(0);getISXS()">活动地点</el-checkbox>
-                            <span class="ml-40 ah12" v-if='hdddshow[0]'>
+                            <span class="ml-10 ah12" v-if='hdddshow[0]'>
                                 <el-checkbox v-model="hddd.sheng" class="antxt" @change="gethdddclick(1,1)">省</el-checkbox>
                                 <el-select v-model="cx.cx_ll_dd_province" :disabled="!hddd.sheng" @change="gethdddclick(1,0,cx.cx_ll_dd_province);getLevel(2,cx.cx_ll_dd_province,1)" filterable clearable placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
@@ -338,7 +338,7 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='hdddshow[1]'>
-                                <el-checkbox class="ml-20 antxt" v-model="hddd.shi" @change="gethdddclick(2,1)">市</el-checkbox>
+                                <el-checkbox class="ml-10 antxt" v-model="hddd.shi" @change="gethdddclick(2,1)">市</el-checkbox>
                                 <el-select v-model="cx.cx_ll_dd_city" :disabled="!hddd.shi" @change="gethdddclick(2,0,cx.cx_ll_dd_city);getLevel(3,cx.cx_ll_dd_city,2)" filterable clearable   placeholder="请选择" :no-data-text="cx.cx_ll_dd_province?'无数据':'请先选择省'"  size="mini" class="aninput">
                                     <el-option
                                     v-for="(item,ind) in shilist"
@@ -349,8 +349,8 @@
                                 </el-select>
                             </span>
                             <span class="ah12" v-if='hdddshow[2]'>
-                             <el-checkbox class="ml-20 antxt" v-model="hddd.qx" @change="gethdddclick(3)">区县</el-checkbox>
-                             <el-select v-model="cx.cx_ll_dd_county"  :disabled="!hdddshow[3]" placeholder="请选择"  :no-data-text="cx.ll.dd.city?'无数据':'请先选择市'"   filterable clearable  size="mini" class="aninput">
+                             <el-checkbox class="ml-10 antxt" v-model="hddd.qx" @change="gethdddclick(3)">区县</el-checkbox>
+                             <el-select v-model="cx.cx_ll_dd_county"  :disabled="!hdddshow[3]" placeholder="请选择"  :no-data-text="cx.cx_ll_dd_city?'无数据':'请先选择市'"   filterable clearable  size="mini" class="aninput">
                                 <el-option
                                  v-for="(item,ind) in  xianlist"
                                   :key="ind"
@@ -378,7 +378,7 @@
                      <el-row class="ah-30">
                         <el-col :span="24">
                              <el-checkbox v-model="llhdchecked" :disabled="hdshow2" @change="getllhdclick(0);getISXS()">联络活动</el-checkbox>
-                            <span class="ml-40 ah12" v-if='llhdshow[0]'>
+                            <span class="ml-10 ah12" v-if='llhdshow[0]'>
                                 <el-checkbox v-model="llhd.hdfl" class="antxt" @change="getllhdclick(1)">活动类型</el-checkbox>
                                 <el-select v-model="cx.cx_ll_ll_activityType" :disabled="!llhdshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
@@ -408,7 +408,7 @@
                      <el-row class="ah-30">
                         <el-col :span="24">
                              <el-checkbox v-model="gzajchecked" label="0" :disabled="gzshow" @change="getgzajclick(0);getISXS()">关注案件</el-checkbox>
-                            <span class="ml-40 ah12" v-if='gzajshow[0]'>
+                            <span class="ml-10 ah12" v-if='gzajshow[0]'>
                                 <el-checkbox v-model="gzaj.ajlx" class="antxt" @change="getgzajclick(1)">案件类型</el-checkbox>
                                 <el-select v-model="cx.cx_gz_caseclass" :disabled="!gzajshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
@@ -422,7 +422,7 @@
                         </el-col>
                         <el-col :span="24">
                              <el-checkbox v-model="yajychecked" label="1" :disabled="yashow" @change="getyajyclick(0);getISXS()">议案建议</el-checkbox>
-                            <span class="ml-40 ah12" v-if='yajyshow[0]'>
+                            <span class="ml-10 ah12" v-if='yajyshow[0]'>
                                 <el-checkbox v-model="yajy.yalx" class="antxt" @change="getyajyclick(1)">议案类型</el-checkbox>
                                 <el-select v-model="cx.cx_ya_proposalType" :disabled="!yajyshow[1]"  placeholder="请选择"  size="mini" class="aninput">
                                     <el-option
@@ -442,7 +442,7 @@
         </div>
 
         <div class="ptitle mt-50" style="line-height:50px;border-bottom:1px solid #eeeeee">输出项目</div>
-        <div class="ml-20  mt-30">
+        <div class="ml-10  mt-30">
             <el-row>
                 <el-col :span="24" class="input-item">
                      <span class="yy-input-text antxtsc"><font class="red">*</font> 统计方式</span>
@@ -497,7 +497,7 @@
                                         </div>
                                       </div>
                                        <div  v-if='pp.show8'>
-                                        <el-radio v-model="hhdw.dwadio" label="dx7" @change="getscdx(7)">初步建议</el-radio>
+                                        <el-radio v-model="hhdw.dwadio" label="dx7" @change="getscdx(7)">议案建议</el-radio>
                                         <div class="pl-20 anbackcolor" v-if='hrshow7'>
                                            <el-radio v-model="hhzx.radio" v-for="(t,ind) in dwinfo3" :key="ind" :label="t.itemCode">{{t.itemName}}</el-radio>
                                         </div>
@@ -521,7 +521,7 @@
                                 </div>
                                 <div class="anboder pl-40" v-if='hrshow9'>
                                      <!-- <el-radio v-model="hhdw.dxadio" label="dx9" @change="getscdx(10)">案件类型</el-radio>
-                                      <span class="ml-20" v-if='hrshow10'> -->
+                                      <span class="ml-10" v-if='hrshow10'> -->
                                            <el-radio v-model="hhzx.radio" v-for="(t,ind) in ajlxinfo" :key="ind" :label="t.value">{{t.name}}</el-radio>
                                         <!-- </span> -->
                                 </div>
@@ -529,11 +529,11 @@
                             </el-col>
                             <el-col :span="24"  v-if='pp.show5'>
                                  <div class="anline">
-                                  <el-radio v-model="hradio" label="dx11" @change="getscdx(11)">初步建议</el-radio>
+                                  <el-radio v-model="hradio" label="dx11" @change="getscdx(11)">议案建议</el-radio>
                                 </div>
                                  <div class="anboder pl-40" v-if='hrshow11'>
                                      <!-- <el-radio v-model="hhdw.yqadio" label="dx12" @change="getscdx(12)">预期类型</el-radio>
-                                      <span class="ml-20" v-if='hrshow12'> -->
+                                      <span class="ml-10" v-if='hrshow12'> -->
                                            <el-radio v-model="hhzx.radio" v-for="(t,ind) in yqlxinfo" :key="ind" :label="t.value">{{t.name}}</el-radio>
                                       <!-- </span> -->
                                 </div>
@@ -747,10 +747,10 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:false},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:false},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:false},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:false},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:false},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:false},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:false},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:false},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:false},
            ],
 
            hradio:'',
@@ -1751,7 +1751,7 @@ export default {
           if (quer != '') {
            let p={
               'mc':quer,
-               'orglvl':this.cx.ll.kz.levelType
+              'orglvl':this.cx.cx_ll_kz_levelType
            };
           this.$api.post(this.Global.aport1+'/org/getDevelopOrg',p,
                 r =>{
@@ -2417,10 +2417,10 @@ export default {
               this.pp.show2=false;//单位
               this.pp.show3=false;//联络活动
               this.pp.show4=false;//关注案件
-              this.pp.show5=false;//初步建议
+              this.pp.show5=false;//议案建议
               this.pp.show6=false;//单位（联络活动）
               this.pp.show7=false;//单位（关注案件）
-              this.pp.show8=false;//单位（初步建议）
+              this.pp.show8=false;//单位（议案建议）
              
         switch (this.tjnum) {
             case 0://对象  
@@ -2444,7 +2444,7 @@ export default {
                     this.pp.show2=true;
                     this.pp.show4=true;
                     this.pp.show7=true;//单位（关注案件）
-              }else if(t==4){//初步建议件数
+              }else if(t==4){//议案建议件数
                     this.pp.show1=true;
                     this.pp.show2=true;
                     this.pp.show5=true;
@@ -2459,7 +2459,7 @@ export default {
                     this.pp.show2=true;
                     this.pp.show4=true;
                     this.pp.show7=true;//单位（关注案件）
-              }else if(t==7){//提议建议人次
+              }else if(t==7){//提出建议人次
                     this.pp.show1=true;
                     this.pp.show2=true;
                     this.pp.show5=true;
@@ -2491,9 +2491,9 @@ export default {
                
                     this.pp.show2=true;//单位
                     this.pp.show3=true;//联络活动
-                    this.pp.show5=true;//初步建议
+                    this.pp.show5=true;//议案建议
                     this.pp.show6=true;//单位（联络活动）
-                    this.pp.show8=true;//单位（初步建议）
+                    this.pp.show8=true;//单位（议案建议）
                 break;
             case 5://活动和关注
                   
@@ -2512,8 +2512,8 @@ export default {
             case 7://议案
                     this.pp.show1=true;//对象
                     this.pp.show2=true;//单位
-                    this.pp.show5=true;//初步建议
-                    this.pp.show8=true;//单位（初步建议）
+                    this.pp.show5=true;//议案建议
+                    this.pp.show8=true;//单位（议案建议）
                 break;
             case 8://关注
                     this.pp.show1=true;//对象
@@ -2540,7 +2540,7 @@ export default {
             case 'tj_gz_cs'://关注案件件数
                  this.getTJNUM(3);
                  break;
-            case 'tj_ya_cs'://初步建议件数
+            case 'tj_ya_cs'://议案建议件数
                  this.getTJNUM(4);
                  break;
             case 'tj_ryll_rc'://参加活动人次
@@ -2549,7 +2549,7 @@ export default {
             case 'tj_rygz_rc'://关注案件人次
                  this.getTJNUM(6);
                  break;
-            case 'tj_ryya_rc'://提议建议人次
+            case 'tj_ryya_rc'://提出建议人次
                 this.getTJNUM(7);
                  break;
              default:
@@ -2625,14 +2625,14 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:false},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:false},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:true},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:true},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:true},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:false},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:true},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:true},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:true},
                 ]
                 this.tjnum=1;
             }
-           //二。对象和议案 (统计人数、初步建议件数、提议建议人次)
+           //二。对象和议案 (统计人数、议案建议件数、提出建议人次)
            else  if((this.rdchecked || this.zxchecked || this.tychecked)
             && (this.yajychecked || this.bldwchecked)){
 
@@ -2646,10 +2646,10 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:false},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:true},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:true},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:false},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:false},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:true},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:true},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:false},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:false},
                 ]
                    this.tjnum=2;
             }
@@ -2667,15 +2667,15 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:false},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:true},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:false},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:true},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:true},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:true},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:false},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:true},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:true},
                 ]
                    this.tjnum=3;
             }
 
-           //四。活动和议案  (联络活动件数、初步建议件数)
+           //四。活动和议案  (联络活动件数、议案建议件数)
             else  if((this.sjchecked || this.hdddchecked || this.llhdchecked || this.kzdwchecke)
             && (this.yajychecked || this.bldwchecked)){
 
@@ -2687,10 +2687,10 @@ export default {
                      {name:'统计人数',value:'tj_ry_rs',istrue:true},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:false},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:true},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:false},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:false},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:true},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:true},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:true},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:true},
                 ]
                    this.tjnum=4;
             }
@@ -2706,10 +2706,10 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:true},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:false},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:false},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:true},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:true},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:true},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:true},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:true},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:true},
                 ]
                    this.tjnum=5;
             }
@@ -2725,14 +2725,14 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:false},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:false},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:true},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:true},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:true},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:false},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:true},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:true},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:true},
                 ]
                    this.tjnum=6;
             }
-           // 七、议案（初步建议件数、统计人数、提议建议人次）
+           // 七、议案（议案建议件数、统计人数、提出建议人次）
           else  if(this.yajychecked || this.bldwchecked ){
 
                 if(this.yajychecked){
@@ -2753,10 +2753,10 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:false},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:true},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:true},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:false},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:false},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:true},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:true},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:false},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:false},
                 ]
                    this.tjnum=7;
             }
@@ -2777,10 +2777,10 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:false},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:true},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:false},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:true},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:true},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:true},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:false},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:true},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:true},
                 ]
              this.tjnum=8;
             }else if(this.rdchecked || this.zxchecked || this.tychecked){
@@ -2789,10 +2789,10 @@ export default {
                     {name:'统计人数',value:'tj_ry_rs',istrue:false},
                     {name:'联络活动件数',value:'tj_ll_cs',istrue:false},
                     {name:'关注案件件数',value:'tj_gz_cs',istrue:false},
-                    {name:'初步建议件数',value:'tj_ya_cs',istrue:false},
+                    {name:'议案建议件数',value:'tj_ya_cs',istrue:false},
                     {name:'参加活动人次',value:'tj_ryll_rc',istrue:false},
                     {name:'关注案件人次',value:'tj_rygz_rc',istrue:false},
-                    {name:'提议建议人次',value:'tj_ryya_rc',istrue:false},
+                    {name:'提出建议人次',value:'tj_ryya_rc',istrue:false},
                 ]
                
             }else{
@@ -2852,7 +2852,7 @@ export default {
 .antext{ margin-bottom: 10px;font-size: 14px;}
 .anbnt{float: right; padding: 3px 0}
 .antitle{font-size: 18px;font-weight: bold;color: #888888;}
-.antxt{width: 5%;}
+.antxt{width: 6%;}
 .antxtsc{width: 100px;}
 .aninput{width: 12%;}
 .ancard{padding:5px 20px 0 20px;}

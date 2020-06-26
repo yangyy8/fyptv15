@@ -61,7 +61,7 @@
 
    /* 1440 */
 @media screen and (max-width: 1440px) {
- 
+
    .ba{padding: 0px 50px 0px 50px; }
    .inba{margin: 80px 80px 90px 200px;}
    .inba1{margin: 30px 80px 90px 200px;}
@@ -247,5 +247,16 @@
 }
 
 .wxq .el-table__header-wrapper .el-checkbox{display: none;}
+
+
+@media screen and (min-height: 900px){
+  .mhtxt{width:10%!important;}
+  .mhinput{width:72.5%!important}
+}
+@media screen and (max-height: 900px){
+  .mhtxt{width:9%!important;}
+  .mhinput{width:71.5%!important}
+
+}
 
 
