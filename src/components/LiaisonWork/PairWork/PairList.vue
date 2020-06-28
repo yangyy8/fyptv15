@@ -383,17 +383,17 @@
 
       <div class="pborder mt-20">
         <el-row>
-           <el-col :span="3" style="font-weight:bold;min-width:150px">
+           <el-col :span="4" style="font-weight:bold;min-width:180px">
             联络活动共
             <b class="sumfont">{{this.listnum.activityCount}}</b> 次 
 
           </el-col>
-          <el-col :span="18" style="font-size:15px">
+          <el-col :span="20" style="font-size:15px">
             <span class="ml-20">代表
             <b class="sumfont">{{this.listnum.repCount}}</b> 人次 
             </span>
             <span class="ml-20" v-if="jdshow">委员
-            <b class="sumfont">{{this.listnum.repCount}}</b> 人次 
+            <b class="sumfont">{{this.listnum.cppcCount}}</b> 人次 
             </span>
              <span class="ml-20">特约监督员
             <b class="sumfont">{{this.listnum.sep1Count}}</b> 人次 
@@ -723,6 +723,7 @@ export default {
       listnum:{
         activityCount:'0',//联络活动次数
         repCount:'0',//代表人次
+        cppcCount:'0',
         sep1Count:'0',//特约监督员
         sep2Count:'0',//特邀咨询员
       },
@@ -960,6 +961,14 @@ export default {
           } else {
             this.tableData = [];
             this.TotalResult = 0;
+
+             this.listnum={
+                activityCount:'0',//联络活动次数
+                repCount:'0',//代表人次
+                cppcCount:'0',
+                sep1Count:'0',//特约监督员
+                sep2Count:'0',//特邀咨询员
+              }
             //this.$message.error(r.message);
           }
           this.querybnt = true;

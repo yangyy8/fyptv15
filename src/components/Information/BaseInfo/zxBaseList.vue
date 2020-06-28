@@ -557,7 +557,7 @@ export default {
         }, 
        getZM(){
              if(!this.pd1.is1){
-               this.$set(this.pd,"specialCommitteeIds","")
+               this.$set(this.pd,"specialCommitteeIds",[])
              }
            },
       //获取行政区划
@@ -913,7 +913,7 @@ export default {
           },
            getZM(){
              if(!this.pd.is3){
-               this.$set(this.pd,"specialCommitteeIds","")
+               this.$set(this.pd,"specialCommitteeIds",[])
              }
            },
            getOrg(){
@@ -983,17 +983,21 @@ export default {
                           this.activeNum=r.data.activeNum;
                           this.inactiveNum=r.data.inActiveNum;
                       }
+                      else{
+                        this.activeNum=0;
+                          this.inactiveNum=0;
+                      }
                 });
     
            },
          getckdata(t){
              if(t==1){
                if(!this.pd1.is3){
-               this.$set(this.pd,"formerRepresentatives","")
+               this.$set(this.pd,"formerRepresentatives",[])
                }
              }else if(t==2){
                 if(!this.pd1.is4){
-               this.$set(this.pd,"formerMembers","")
+               this.$set(this.pd,"formerMembers",[])
                }
              }else if(t==3){
                 if(!this.pd1.is5){

@@ -1105,6 +1105,10 @@ export default {
                          this.getJDXXAB(this.pd.courtOutUserId);
                          this.getJDXX(this.pd.courtOutUserId,1);
                          }
+
+                         if(r.data.OtherPersons){
+                            this.ListDataQT=r.data.OtherPersons;
+                          }
                          this.yjtableData=r.data.actiRelAdvList==null?[]:r.data.actiRelAdvList;
                          this.hdlabel="修改定向结对";
                        

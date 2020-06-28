@@ -2748,7 +2748,10 @@ export default {
                 //  this.getcbbm(this.form.developmentUnitId,0,'1');
                 this.getkzbm(this.form.developmentUnitId, 0);
               }
-
+              
+              if(r.data.OtherPersons){
+                this.ListDataQT=r.data.OtherPersons;
+              }
               if (
                 this.addtype == "4" ||
                 this.addtype == "5" ||
